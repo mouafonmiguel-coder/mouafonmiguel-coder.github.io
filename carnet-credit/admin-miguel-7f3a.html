@@ -59,6 +59,16 @@ button:active{opacity:.85}
       💡 Vérifiez d'abord le Mobile Money (sauf code gratuit 🎁). Le code ne marche que pour CE numéro, CE mois-ci, UNE seule fois.<br>
       ⚠️ Si le boutiquier a déjà utilisé son code « 1 mois » ce mois-ci (ex : il a payé ET gagné un mois de parrainage), envoyez le 2ᵉ code au début du mois prochain.
     </div>
+
+    <hr style="margin:20px 0;border:0;border-top:2px solid #e4eee6">
+    <h1 style="font-size:1.05rem">📱 Créer une page pour un NOUVEL admin</h1>
+    <label>Prénom du nouvel admin</label>
+    <input id="nname" placeholder="Ex : Jean">
+    <label>Son mot de passe (6 caractères minimum)</label>
+    <input id="npw" placeholder="Ex : jean2026">
+    <button onclick="makePage()">⬇️ Créer et télécharger sa page</button>
+    <div class="err" id="mkerr"></div>
+    <div class="hint" id="mkout" style="display:none;background:#eef7f0;border:2px solid #bfe0c8;border-radius:10px;padding:12px"></div>
   </div>
 </div>
 
@@ -109,6 +119,38 @@ async function gen(){
     : '✅ Paiement reçu, merci ! Voici votre code d\'activation CARNET CRÉDIT ('+(months===6?'6 mois':'1 mois')+') : '+code+' — Ouvrez l\'application, carte « Payer / Renouveler », entrez le code et appuyez sur Activer. Il est valable ce mois-ci, une seule fois. — MIGUEL';
   document.getElementById('walink').href='https://wa.me/'+p+'?text='+encodeURIComponent(msg);
   document.getElementById('box').style.display='block';
+}
+const TPL="<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<meta name=\"robots\" content=\"noindex, nofollow\">\n<title>🔑 Codes — Admin<\/title>\n<style>\n*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}\nbody{background:#0b3d20;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}\n.card{background:#fff;border-radius:16px;padding:26px 22px;max-width:420px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.4)}\nh1{color:#14532d;font-size:1.2rem;margin-bottom:4px}\n.sub{color:#5a6e5f;font-size:.85rem;margin-bottom:18px}\nlabel{display:block;font-size:.82rem;font-weight:700;color:#14532d;margin:12px 0 4px}\ninput,select{width:100%;padding:12px;border:2px solid #cfe0d2;border-radius:10px;font-size:1rem}\ninput:focus,select:focus{outline:none;border-color:#14532d}\nbutton{width:100%;margin-top:16px;padding:14px;border:0;border-radius:10px;background:#14532d;color:#fff;font-size:1.05rem;font-weight:800;cursor:pointer}\nbutton:active{opacity:.85}\n.err{color:#b42318;font-size:.85rem;margin-top:10px;font-weight:700;min-height:1.2em}\n.codebox{display:none;margin-top:18px;text-align:center;background:#fdf3dd;border:3px dashed #d99a06;border-radius:14px;padding:18px}\n.codebox .lbl{font-size:.8rem;color:#8a6200;font-weight:700}\n.codebox .code{font-size:2.6rem;font-weight:900;color:#14532d;letter-spacing:8px;margin:6px 0}\n.codebox .for{font-size:.85rem;color:#5a4a10;margin-bottom:12px}\n.wa{display:inline-block;text-decoration:none;background:#25D366;color:#fff;font-weight:800;padding:12px 22px;border-radius:10px;font-size:.95rem}\n.hint{font-size:.78rem;color:#5a6e5f;margin-top:14px;line-height:1.5}\n#gen{display:none}\n<\/style>\n<\/head>\n<body>\n<div class=\"card\">\n  <h1>🔑 Générateur de codes d'activation<\/h1>\n  <div class=\"sub\">CARNET CRÉDIT — page de __ADMIN_NAME__<\/div>\n\n  <div id=\"lock\">\n    <label>Mot de passe administrateur<\/label>\n    <input type=\"password\" id=\"pw\" placeholder=\"••••••••\">\n    <button onclick=\"unlock()\">Déverrouiller<\/button>\n    <div class=\"err\" id=\"lockerr\"><\/div>\n  <\/div>\n\n  <div id=\"gen\">\n    <label>📱 Numéro du boutiquier (ex : 677123456)<\/label>\n    <input type=\"tel\" id=\"phone\" placeholder=\"6XXXXXXXX\">\n    <label>💳 Pack payé<\/label>\n    <select id=\"months\">\n      <option value=\"1\">💰 1 mois — 500 F<\/option>\n      <option value=\"6\">💎 6 mois — 2 500 F<\/option>\n      <option value=\"1g\">🎁 1 mois GRATUIT (récompense parrain)<\/option>\n    <\/select>\n    <button onclick=\"gen()\">Générer le code<\/button>\n    <div class=\"err\" id=\"generr\"><\/div>\n    <div class=\"codebox\" id=\"box\">\n      <div class=\"lbl\">CODE À ENVOYER (valable ce mois-ci, 1 seule fois)<\/div>\n      <div class=\"code\" id=\"code\"><\/div>\n      <div class=\"for\" id=\"for\"><\/div>\n      <a class=\"wa\" id=\"walink\" target=\"_blank\">📤 Envoyer par WhatsApp<\/a>\n    <\/div>\n    <div class=\"hint\">\n      💡 Vérifiez d'abord le Mobile Money (sauf code gratuit 🎁). Le code ne marche que pour CE numéro, CE mois-ci, UNE seule fois.<br>\n      ⚠️ Si le boutiquier a déjà utilisé son code « 1 mois » ce mois-ci (ex : il a payé ET gagné un mois de parrainage), envoyez le 2ᵉ code au début du mois prochain.\n    <\/div>\n  <\/div>\n<\/div>\n\n<script>\nconst SALT='__SALT__', IV='__IV__',\n      CT='__CT__';\nlet SECRET=null;\nconst b=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));\nconst enc=new TextEncoder();\n\nasync function unlock(){\n  const pw=document.getElementById('pw').value;\n  document.getElementById('lockerr').textContent='';\n  try{\n    const km=await crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveKey']);\n    const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b(SALT),iterations:150000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);\n    const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:b(IV)},key,b(CT));\n    SECRET=new TextDecoder().decode(pt);\n    document.getElementById('lock').style.display='none';\n    document.getElementById('gen').style.display='block';\n  }catch(e){\n    document.getElementById('lockerr').textContent='Mot de passe incorrect.';\n  }\n}\n\nasync function activationCode(phone,months,ym){\n  const key=await crypto.subtle.importKey('raw',enc.encode(SECRET),{name:'HMAC',hash:'SHA-256'},false,['sign']);\n  const sig=await crypto.subtle.sign('HMAC',key,enc.encode(phone+':'+months+':'+ym));\n  const hex=[...new Uint8Array(sig)].map(x=>x.toString(16).padStart(2,'0')).join('');\n  return String(parseInt(hex.slice(0,12),16)%1000000).padStart(6,'0');\n}\n\nasync function gen(){\n  const ge=document.getElementById('generr'); ge.textContent='';\n  document.getElementById('box').style.display='none';\n  let p=document.getElementById('phone').value.replace(/\\D/g,'');\n  if(p.length===9&&p.startsWith('6'))p='237'+p;\n  if(!(p.length===12&&p.startsWith('2376'))){ge.textContent='Numéro invalide (ex : 677123456).';return;}\n  const sel=document.getElementById('months').value;\n  const months=sel==='6'?6:1;\n  const free=sel==='1g';\n  const ym=new Date().toISOString().slice(0,7);\n  const code=await activationCode(p,months,ym);\n  document.getElementById('code').textContent=code;\n  document.getElementById('for').textContent='Pour le '+p+' — '+(free?'🎁 1 mois GRATUIT (parrainage)':(months===6?'Pack 6 mois (2 500 F)':'1 mois (500 F)'))+' — mois : '+ym;\n  const msg=free\n    ? '🎁 Félicitations ! Un boutiquier que vous avez parrainé a payé son abonnement CARNET CRÉDIT. Voici votre code pour 1 MOIS GRATUIT : '+code+' — Ouvrez l\\'application, carte « Payer / Renouveler », entrez le code et appuyez sur Activer. Merci de recommander CARNET CRÉDIT ! — MIGUEL'\n    : '✅ Paiement reçu, merci ! Voici votre code d\\'activation CARNET CRÉDIT ('+(months===6?'6 mois':'1 mois')+') : '+code+' — Ouvrez l\\'application, carte « Payer / Renouveler », entrez le code et appuyez sur Activer. Il est valable ce mois-ci, une seule fois. — MIGUEL';\n  document.getElementById('walink').href='https://wa.me/'+p+'?text='+encodeURIComponent(msg);\n  document.getElementById('box').style.display='block';\n}\ndocument.getElementById('pw').addEventListener('keydown',e=>{if(e.key==='Enter')unlock();});\n<\/script>\n<\/body>\n<\/html>\n";
+async function makePage(){
+  const err=document.getElementById('mkerr');err.textContent='';
+  const out=document.getElementById('mkout');out.style.display='none';
+  const name=document.getElementById('nname').value.trim();
+  const pw=document.getElementById('npw').value;
+  if(name.length<2||name.length>30){err.textContent='Prénom : entre 2 et 30 caractères.';return;}
+  if(pw.length<6){err.textContent='Mot de passe : 6 caractères minimum.';return;}
+  const salt=crypto.getRandomValues(new Uint8Array(16));
+  const iv=crypto.getRandomValues(new Uint8Array(12));
+  const km=await crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveKey']);
+  const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:150000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['encrypt']);
+  const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},key,enc.encode(SECRET)));
+  const b64=a=>btoa(String.fromCharCode(...a));
+  const safe=name.replace(/[<>&"]/g,'');
+  const html=TPL.replace('__SALT__',b64(salt)).replace('__IV__',b64(iv)).replace('__CT__',b64(ct)).split('__ADMIN_NAME__').join(safe);
+  const slug=name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')||'admin';
+  const rnd=crypto.getRandomValues(new Uint8Array(2));
+  const fname='admin-'+slug+'-'+[...rnd].map(x=>x.toString(16).padStart(2,'0')).join('')+'.html';
+  const blob=new Blob([html],{type:'text/html'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;
+  document.body.appendChild(a);a.click();a.remove();
+  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[new File([blob],fname,{type:'text/html'})]})){
+    try{await navigator.share({files:[new File([blob],fname,{type:'text/html'})],title:fname});}catch(e){}
+  }
+  out.style.display='block';
+  out.innerHTML='✅ Page créée et téléchargée : <b>'+fname+'</b><br><br>'
+    +'1️⃣ Mettez ce fichier sur GitHub, dans le dossier <b>carnet-credit</b>.<br>'
+    +'2️⃣ Son lien secret sera :<br><b style="word-break:break-all">mouafonmiguel-coder.github.io/carnet-credit/'+fname+'</b><br>'
+    +'3️⃣ Donnez le lien + le mot de passe à <b>'+safe+'</b> UNIQUEMENT.<br>'
+    +'🗑️ Pour retirer son accès plus tard : supprimez son fichier sur GitHub.';
 }
 document.getElementById('pw').addEventListener('keydown',e=>{if(e.key==='Enter')unlock();});
 </script>
