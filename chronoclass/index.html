@@ -64,7 +64,7 @@ button.ghost{background:#fff;color:#b42318;border:2px solid #b42318}
 #toast.ok{background:#14532d}
 #toast.show{opacity:1}
 .pv{border-collapse:collapse;width:100%}.pv th,.pv td{border:1px solid #cdd9cf;padding:4px;font-size:.72rem;text-align:center}.pv th{background:#0b3d20;color:#fff}.pv .s{font-weight:800}.pv .t2{color:#555;font-size:.65rem}
-@media print{.topbar,.demo-note,.tabs,.hint,#toast{display:none!important}#app{background:#fff}.gridbox{box-shadow:none;padding:0}body{background:#fff}}
+@media print{@page{margin:0}.topbar,.demo-note,.tabs,.hint,#toast{display:none!important}#app{background:#fff}.wrap{padding:0;margin:0;max-width:none}.gridbox{box-shadow:none;padding:10mm}body{background:#fff}body.bw #grid td{background:#fff!important;color:#000}body.bw #grid .s{color:#000}body.bw #grid .t2{color:#000}}
 </style>
 </head>
 <body>
@@ -162,6 +162,10 @@ button.ghost{background:#fff;color:#b42318;border:2px solid #b42318}
   <div class="card">
     <h2 style="color:#0b3d20;font-size:1.05rem">🖨 Imprimer / Print</h2>
     <p style="font-size:.85rem;color:#5a6e5f;margin:6px 0 10px">La date d'impression sera écrite sur le document.<br>The printing date will be written on the document.</p>
+    <div style="display:flex;gap:16px;margin:4px 0 10px;font-size:.92rem;color:#0b3d20">
+      <label style="font-weight:800;display:flex;align-items:center;gap:6px"><input type="radio" name="pcol" value="col" checked> 🎨 En couleurs / Colour</label>
+      <label style="font-weight:800;display:flex;align-items:center;gap:6px"><input type="radio" name="pcol" value="bw"> ⚫ Noir sur blanc / Black on white</label>
+    </div>
     <button class="big" onclick="doPrint('fr')">🇫🇷 Imprimer en français</button>
     <button class="big" style="background:#14532d" onclick="doPrint('en')">🇬🇧 Print in English</button>
     <button class="big ghost" onclick="closeOv('prov')">Annuler / Cancel</button>
@@ -573,6 +577,8 @@ function loadSample(k){
 /* ---------- impression bilingue + date ---------- */
 function doPrint(lang){
   closeOv('prov');
+  const bw=(document.querySelector('input[name="pcol"]:checked')||{value:'col'}).value==='bw';
+  if(bw)document.body.classList.add('bw');else document.body.classList.remove('bw');
   const days=lang==='en'?DAYS_EN:DAYS;
   render(days);
   const d=new Date();
@@ -583,7 +589,7 @@ function doPrint(lang){
     ?('Printed on '+ds+' at '+p2(d.getHours())+':'+p2(d.getMinutes())+' — ChronoClass')
     :('Imprimé le '+ds+' à '+p2(d.getHours())+'h'+p2(d.getMinutes())+' — ChronoClass');
   f.style.display='block';
-  const done=()=>{f.style.display='none';render();window.onafterprint=null};
+  const done=()=>{f.style.display='none';document.body.classList.remove('bw');render();window.onafterprint=null};
   window.onafterprint=done;
   setTimeout(()=>{window.print();setTimeout(done,1500)},80);
 }
@@ -696,26 +702,6 @@ function editPeriod(i){
 }
 function delPeriod(i){
   if(!confirm('Supprimer l\u2019heure '+ST.periods[i]+' ? Les cours placés à cette heure seront effacés.'))return;
-  ST.periods.splice(i,1);
-  const nt={};
-  for(const[k,v]of Object.entries(ST.tt)){
-    const[cid,d,p]=k.split('|');const pn=Number(p);
-    if(pn===i)continue;
-    nt[cid+'|'+d+'|'+(pn>i?pn-1:pn)]=v;
-  }
-  ST.tt=nt;save();renderMg();render();toast('Heure supprimée.',1);
-}
-
-/* ---------- boot ---------- */
-load();
-const u=localStorage.getItem('chrono_demo_user');
-if(u)start(u);
-document.getElementById('lpw').addEventListener('keydown',e=>{if(e.key==='Enter')submitAuth()});
-document.getElementById('lname').addEventListener('keydown',e=>{if(e.key==='Enter')submitAuth()});
-</script>
-</body>
-</html>
-upprimer l\u2019heure '+ST.periods[i]+' ? Les cours placés à cette heure seront effacés.'))return;
   ST.periods.splice(i,1);
   const nt={};
   for(const[k,v]of Object.entries(ST.tt)){
