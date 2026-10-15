@@ -25,7 +25,7 @@ button.big:active{opacity:.85}
 /* ---- app ---- */
 #app{display:none;background:#f1f6f2;min-height:100vh}
 .topbar{background:#0b3d20;color:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.topbar .t{font-weight:900;font-size:1.05rem}
+.topbar .t{font-weight:900;font-size:1rem}
 .topbar .t span{color:#d99a06}
 .topbar .who{font-size:.85rem;opacity:.9;margin-left:auto}
 .topbar button{border:0;border-radius:8px;padding:8px 14px;font-weight:800;cursor:pointer}
@@ -34,6 +34,7 @@ button.big:active{opacity:.85}
 .tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .tabs button{border:2px solid #14532d;background:#fff;color:#14532d;border-radius:999px;padding:8px 18px;font-weight:800;cursor:pointer}
 .tabs button.on{background:#14532d;color:#fff}
+.tabs button.cfg{border-color:#d99a06;color:#8a6200}
 .gridbox{background:#fff;border-radius:14px;padding:12px;box-shadow:0 3px 14px rgba(11,61,32,.1);overflow-x:auto}
 table{width:100%;border-collapse:collapse;min-width:640px}
 th{background:#0b3d20;color:#fff;padding:9px 6px;font-size:.8rem}
@@ -43,19 +44,24 @@ td:hover:not(.h){outline:3px solid #d99a06;outline-offset:-3px}
 td .s{font-weight:800}
 td .t2{font-size:.72rem;color:#405247}
 .hint{font-size:.82rem;color:#5a6e5f;margin:12px 2px;line-height:1.5}
-.toolrow{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-.toolrow button{border:0;border-radius:10px;padding:12px 18px;font-weight:800;cursor:pointer;font-size:.95rem}
 /* modal */
-#ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50;align-items:center;justify-content:center;padding:16px}
-#ov .card{max-width:360px}
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50;align-items:center;justify-content:center;padding:16px;overflow:auto}
+.ov .card{max-width:380px}
 .rowbtn{display:flex;gap:10px}
 .rowbtn button{flex:1}
 button.ghost{background:#fff;color:#b42318;border:2px solid #b42318}
+.mg-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #eef3ef;font-size:.92rem}
+.mg-item .nm{flex:1;font-weight:700;color:#14532d}
+.mg-item button{border:0;border-radius:8px;padding:7px 10px;cursor:pointer;font-weight:800}
+.mg-add{display:flex;gap:8px;margin-top:10px}
+.mg-add input{flex:1}
+.mg-add button{border:0;border-radius:10px;background:#14532d;color:#fff;font-weight:800;padding:0 16px;cursor:pointer}
+.mg-h{color:#0b3d20;font-size:1rem;font-weight:900;margin:16px 0 4px}
 /* toast */
 #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;background:#b42318;color:#fff;padding:13px 18px;border-radius:12px;font-size:.9rem;font-weight:700;max-width:92%;opacity:0;transition:.3s;z-index:99;pointer-events:none}
 #toast.ok{background:#14532d}
 #toast.show{opacity:1}
-@media print{.topbar,.demo-note,.tabs,.toolrow,.hint,#toast{display:none!important}#app{background:#fff}.gridbox{box-shadow:none;padding:0}body{background:#fff}}
+@media print{.topbar,.demo-note,.tabs,.hint,#toast{display:none!important}#app{background:#fff}.gridbox{box-shadow:none;padding:0}body{background:#fff}}
 </style>
 </head>
 <body>
@@ -80,7 +86,7 @@ button.ghost{background:#fff;color:#b42318;border:2px solid #b42318}
   </div>
 </div>
 
-<!-- ================= APPLICATION DÉMO ================= -->
+<!-- ================= APPLICATION ================= -->
 <div id="app">
   <div class="topbar">
     <div class="t">🕒 Chrono<span>Class</span> — Gestion d'emploi du temps scolaire</div>
@@ -88,17 +94,17 @@ button.ghost{background:#fff;color:#b42318;border:2px solid #b42318}
     <button style="background:#d99a06;color:#19270c" onclick="window.print()">🖨 Imprimer</button>
     <button style="background:#fff;color:#0b3d20" onclick="quit()">Quitter</button>
   </div>
-  <div class="demo-note">🎮 Vous essayez la DÉMO (3 classes, vos essais restent dans cet appareil). La version complète pour votre établissement : WhatsApp <b>692 168 264</b> — <a href="decouvrir.html" style="color:#6b4e00">en savoir plus</a></div>
+  <div class="demo-note">📱 Version mobile ChronoClass — vos emplois du temps restent dans cet appareil. Version complète établissement (import photo, comptes enseignants) : WhatsApp <b>692 168 264</b> — <a href="decouvrir.html" style="color:#6b4e00">en savoir plus</a></div>
   <div class="wrap">
     <div class="tabs" id="tabs"></div>
     <div class="gridbox"><table id="grid"></table></div>
-    <div class="hint">👆 <b>Cliquez sur une case</b> pour placer une matière et un enseignant.<br>
-    💡 <b>Essayez le gardien anti-conflits :</b> M. FOTSO fait Maths en <b>6e</b> le Lundi à 7h30. Allez en <b>5e</b>, cliquez Lundi 7h30 et mettez aussi M. FOTSO… ChronoClass va refuser ! ⛔</div>
+    <div class="hint">👆 <b>Cliquez sur une case</b> pour placer une matière et un enseignant. ⛔ Un enseignant déjà occupé dans une autre classe à la même heure sera refusé.<br>
+    ⚙️ <b>Classes & horaires</b> : ajoutez VOS classes et VOS heures de cours — ChronoClass s'adapte à votre établissement.</div>
   </div>
 </div>
 
-<!-- modal -->
-<div id="ov">
+<!-- modal case -->
+<div class="ov" id="ov">
   <div class="card">
     <h2 style="color:#0b3d20;font-size:1.05rem" id="mtitle"></h2>
     <label>Matière</label>
@@ -108,33 +114,50 @@ button.ghost{background:#fff;color:#b42318;border:2px solid #b42318}
     <button class="big" onclick="saveCell()">Enregistrer</button>
     <div class="rowbtn" style="margin-top:10px">
       <button class="big ghost" style="margin-top:0" onclick="clearCell()">Effacer la case</button>
-      <button class="big" style="margin-top:0;background:#5a6e5f" onclick="closeOv()">Annuler</button>
+      <button class="big" style="margin-top:0;background:#5a6e5f" onclick="closeOv('ov')">Annuler</button>
     </div>
+  </div>
+</div>
+
+<!-- modal gestion classes & horaires -->
+<div class="ov" id="mg">
+  <div class="card">
+    <h2 style="color:#0b3d20;font-size:1.1rem">⚙️ Classes & horaires</h2>
+    <div class="mg-h">🏫 Mes classes</div>
+    <div id="mgClasses"></div>
+    <div class="mg-add"><input id="nCl" placeholder="Ex : Tle C"><button onclick="addClass()">＋</button></div>
+    <div class="mg-h">⏰ Mes heures de cours</div>
+    <div id="mgPeriods"></div>
+    <div class="mg-add"><input id="nPd" placeholder="Ex : 12h20"><button onclick="addPeriod()">＋</button></div>
+    <button class="big" onclick="closeOv('mg')">Fermer</button>
   </div>
 </div>
 
 <div id="toast"></div>
 
 <script>
-const CLASSES=['6e','5e','Form 1'];
 const DAYS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi'];
-const PERIODS=['7h30','8h25','9h20','10h30','11h25'];
 const PAL=['#dff1e3','#fdeeca','#e3e9fb','#fde3e3','#eae3fb','#d9f3f0','#fbe3f1'];
-let DATA={},CUR=0,SEL=null;
+let ST=null,CUR=null,SEL=null,SEQ=1;
 
-function seed(){
-  DATA={};
-  const put=(c,d,p,s,t)=>DATA[c+'|'+d+'|'+p]={s,t};
-  put(0,0,0,'Maths','M. FOTSO');put(0,1,0,'Français','Mme NGO');put(0,0,1,'Anglais','M. TABI');
-  put(1,0,1,'Maths','M. FOTSO');put(1,2,0,'SVT','Mme ABENA');
-  put(2,0,0,'English','Mr TABI');
-  save();
+function defState(){
+  return {seq:4,
+    classes:[{id:'c1',name:'6e'},{id:'c2',name:'5e'},{id:'c3',name:'Form 1'}],
+    periods:['7h30','8h25','9h20','10h30','11h25'],
+    tt:{'c1|0|0':{s:'Maths',t:'M. FOTSO'},'c1|1|0':{s:'Français',t:'Mme NGO'},'c1|0|1':{s:'Anglais',t:'M. TABI'},
+        'c2|0|1':{s:'Maths',t:'M. FOTSO'},'c2|2|0':{s:'SVT',t:'Mme ABENA'},'c3|0|0':{s:'English',t:'Mr TABI'}}};
 }
-function load(){try{DATA=JSON.parse(localStorage.getItem('chrono_demo')||'null')||null}catch(e){DATA=null}if(!DATA)seed();}
-function save(){localStorage.setItem('chrono_demo',JSON.stringify(DATA))}
+function load(){
+  try{ST=JSON.parse(localStorage.getItem('chrono_state_v2')||'null')}catch(e){ST=null}
+  if(!ST||!ST.classes||!ST.classes.length)ST=defState();
+  CUR=ST.classes[0].id;
+}
+function save(){localStorage.setItem('chrono_state_v2',JSON.stringify(ST))}
 function colorOf(s){let h=0;for(const c of s.toLowerCase())h=(h*31+c.charCodeAt(0))>>>0;return PAL[h%PAL.length]}
-function toast(m,ok){const t=document.getElementById('toast');t.textContent=m;t.className=(ok?'ok ':'')+'show';setTimeout(()=>t.className=ok?'ok':'',ok?2500:5000)}
+function toast(m,ok){const t=document.getElementById('toast');t.textContent=m;t.className=(ok?'ok ':'')+'show';setTimeout(()=>t.className=ok?'ok':'',ok?2500:5500)}
+function esc(x){return String(x).replace(/[<>&"]/g,'')}
 
+/* ---------- auth ---------- */
 let MODE='login';
 function setMode(m){
   MODE=m;
@@ -180,30 +203,35 @@ function start(n){
 }
 function quit(){localStorage.removeItem('chrono_demo_user');location.reload()}
 
+/* ---------- rendu ---------- */
 function render(){
-  document.getElementById('tabs').innerHTML=CLASSES.map((c,i)=>`<button class="${i===CUR?'on':''}" onclick="CUR=${i};render()">Classe ${c}</button>`).join('');
+  if(!ST.classes.find(c=>c.id===CUR))CUR=ST.classes.length?ST.classes[0].id:null;
+  document.getElementById('tabs').innerHTML=
+    ST.classes.map(c=>`<button class="${c.id===CUR?'on':''}" onclick="CUR='${c.id}';render()">${esc(c.name)}</button>`).join('')
+    +`<button class="cfg" onclick="openMg()">⚙️ Classes & horaires</button>`;
   let h='<tr><th></th>'+DAYS.map(d=>'<th>'+d+'</th>').join('')+'</tr>';
-  PERIODS.forEach((p,pi)=>{
-    h+='<tr><td class="h">'+p+'</td>'+DAYS.map((d,di)=>{
-      const v=DATA[CUR+'|'+di+'|'+pi];
-      return v?`<td style="background:${colorOf(v.s)}" onclick="openOv(${di},${pi})"><div class="s">${v.s}</div><div class="t2">${v.t}</div></td>`
+  ST.periods.forEach((p,pi)=>{
+    h+='<tr><td class="h">'+esc(p)+'</td>'+DAYS.map((d,di)=>{
+      const v=ST.tt[CUR+'|'+di+'|'+pi];
+      return v?`<td style="background:${colorOf(v.s)}" onclick="openOv(${di},${pi})"><div class="s">${esc(v.s)}</div><div class="t2">${esc(v.t)}</div></td>`
               :`<td onclick="openOv(${di},${pi})"></td>`;
     }).join('')+'</tr>';
   });
-  document.getElementById('grid').innerHTML=h;
+  document.getElementById('grid').innerHTML=CUR?h:'<tr><td style="padding:30px">Ajoutez une classe avec ⚙️</td></tr>';
 }
 
+/* ---------- case ---------- */
 function openOv(di,pi){
   SEL=[di,pi];
-  const v=DATA[CUR+'|'+di+'|'+pi]||{s:'',t:''};
-  document.getElementById('mtitle').textContent='Classe '+CLASSES[CUR]+' — '+DAYS[di]+' '+PERIODS[pi];
+  const v=ST.tt[CUR+'|'+di+'|'+pi]||{s:'',t:''};
+  const cn=ST.classes.find(c=>c.id===CUR).name;
+  document.getElementById('mtitle').textContent=cn+' — '+DAYS[di]+' '+ST.periods[pi];
   document.getElementById('msubj').value=v.s;
   document.getElementById('mteach').value=v.t;
   document.getElementById('ov').style.display='flex';
 }
-function closeOv(){document.getElementById('ov').style.display='none'}
-function clearCell(){delete DATA[CUR+'|'+SEL[0]+'|'+SEL[1]];save();closeOv();render();toast('Case effacée.',1)}
-
+function closeOv(id){document.getElementById(id).style.display='none'}
+function clearCell(){delete ST.tt[CUR+'|'+SEL[0]+'|'+SEL[1]];save();closeOv('ov');render();toast('Case effacée.',1)}
 function saveCell(){
   const s=document.getElementById('msubj').value.trim();
   const t=document.getElementById('mteach').value.trim();
@@ -211,19 +239,78 @@ function saveCell(){
   const[di,pi]=SEL;
   if(t){
     const norm=x=>x.toLowerCase().replace(/\s+/g,' ').trim();
-    for(let c=0;c<CLASSES.length;c++){
-      if(c===CUR)continue;
-      const v=DATA[c+'|'+di+'|'+pi];
+    for(const c of ST.classes){
+      if(c.id===CUR)continue;
+      const v=ST.tt[c.id+'|'+di+'|'+pi];
       if(v&&v.t&&norm(v.t)===norm(t)){
-        toast('⛔ CONFLIT REFUSÉ : '+t+' est déjà en classe '+CLASSES[c]+' le '+DAYS[di]+' à '+PERIODS[pi]+' ('+v.s+'). Un enseignant ne peut pas être dans 2 classes à la même heure !');
+        toast('⛔ CONFLIT REFUSÉ : '+t+' est déjà en '+c.name+' le '+DAYS[di]+' à '+ST.periods[pi]+' ('+v.s+'). Un enseignant ne peut pas être dans 2 classes à la même heure !');
         return;
       }
     }
   }
-  DATA[CUR+'|'+di+'|'+pi]={s,t};
-  save();closeOv();render();toast('Enregistré ✔',1);
+  ST.tt[CUR+'|'+di+'|'+pi]={s,t};
+  save();closeOv('ov');render();toast('Enregistré ✔',1);
 }
 
+/* ---------- gestion classes & horaires ---------- */
+function openMg(){renderMg();document.getElementById('mg').style.display='flex'}
+function renderMg(){
+  document.getElementById('mgClasses').innerHTML=ST.classes.map(c=>
+    `<div class="mg-item"><div class="nm">${esc(c.name)}</div>
+     <button style="background:#e3e9fb" onclick="renameClass('${c.id}')">✎</button>
+     <button style="background:#fde3e3" onclick="delClass('${c.id}')">🗑</button></div>`).join('')||'<div class="hint">Aucune classe.</div>';
+  document.getElementById('mgPeriods').innerHTML=ST.periods.map((p,i)=>
+    `<div class="mg-item"><div class="nm">${esc(p)}</div>
+     <button style="background:#e3e9fb" onclick="editPeriod(${i})">✎</button>
+     <button style="background:#fde3e3" onclick="delPeriod(${i})">🗑</button></div>`).join('');
+}
+function addClass(){
+  const n=document.getElementById('nCl').value.trim();
+  if(n.length<1){toast('Écrivez le nom de la classe.');return;}
+  if(ST.classes.find(c=>c.name.toLowerCase()===n.toLowerCase())){toast('Cette classe existe déjà.');return;}
+  ST.seq=(ST.seq||10)+1;
+  ST.classes.push({id:'c'+ST.seq,name:n});
+  document.getElementById('nCl').value='';
+  save();renderMg();render();toast('Classe '+n+' ajoutée ✔',1);
+}
+function renameClass(id){
+  const c=ST.classes.find(x=>x.id===id);
+  const n=prompt('Nouveau nom de la classe :',c.name);
+  if(!n||!n.trim())return;
+  c.name=n.trim();save();renderMg();render();toast('Classe renommée ✔',1);
+}
+function delClass(id){
+  const c=ST.classes.find(x=>x.id===id);
+  if(!confirm('Supprimer la classe '+c.name+' et son emploi du temps ?'))return;
+  ST.classes=ST.classes.filter(x=>x.id!==id);
+  for(const k of Object.keys(ST.tt))if(k.startsWith(id+'|'))delete ST.tt[k];
+  save();renderMg();render();toast('Classe supprimée.',1);
+}
+function addPeriod(){
+  const p=document.getElementById('nPd').value.trim();
+  if(!p){toast('Écrivez l\u2019heure (ex : 12h20).');return;}
+  ST.periods.push(p);
+  document.getElementById('nPd').value='';
+  save();renderMg();render();toast('Heure ajoutée ✔',1);
+}
+function editPeriod(i){
+  const p=prompt('Nouvelle heure :',ST.periods[i]);
+  if(!p||!p.trim())return;
+  ST.periods[i]=p.trim();save();renderMg();render();toast('Heure modifiée ✔',1);
+}
+function delPeriod(i){
+  if(!confirm('Supprimer l\u2019heure '+ST.periods[i]+' ? Les cours placés à cette heure seront effacés.'))return;
+  ST.periods.splice(i,1);
+  const nt={};
+  for(const[k,v]of Object.entries(ST.tt)){
+    const[cid,d,p]=k.split('|');const pn=Number(p);
+    if(pn===i)continue;
+    nt[cid+'|'+d+'|'+(pn>i?pn-1:pn)]=v;
+  }
+  ST.tt=nt;save();renderMg();render();toast('Heure supprimée.',1);
+}
+
+/* ---------- boot ---------- */
 load();
 const u=localStorage.getItem('chrono_demo_user');
 if(u)start(u);
