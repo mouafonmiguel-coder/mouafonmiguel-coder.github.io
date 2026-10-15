@@ -1,0 +1,6 @@
+{
+  "appId": "cm.miguel.chronoclass",
+  "appName": "ChronoClass",
+  "webDir": "www",
+  "android": { "allowMixedContent": false }
+}
