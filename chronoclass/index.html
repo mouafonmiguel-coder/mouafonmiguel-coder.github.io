@@ -15,6 +15,8 @@ body{background:#0b3d20;min-height:100vh;color:#1c2b20}
 label{display:block;font-size:.82rem;font-weight:700;color:#14532d;margin:12px 0 4px}
 input{width:100%;padding:12px;border:2px solid #cfe0d2;border-radius:10px;font-size:1rem}
 input:focus{outline:none;border-color:#14532d}
+select{width:100%;padding:12px;border:2px solid #cfe0d2;border-radius:10px;font-size:1rem;background:#fff}
+select:focus{outline:none;border-color:#14532d}
 button.big{width:100%;margin-top:16px;padding:14px;border:0;border-radius:10px;background:#14532d;color:#fff;font-size:1.05rem;font-weight:800;cursor:pointer}
 button.big:active{opacity:.85}
 .err{color:#b42318;font-size:.85rem;margin-top:8px;font-weight:700;min-height:1.1em}
@@ -79,6 +81,17 @@ button.ghost{background:#fff;color:#b42318;border:2px solid #b42318}
     <input id="lname" placeholder="Ex : M. FOTSO">
     <label>Mot de passe</label>
     <input id="lpw" type="password" placeholder="••••••">
+    <div id="regExtra" style="display:none">
+      <label>Nom de l'établissement</label>
+      <input id="lsch" placeholder="Ex : Lycée Bilingue de Deido">
+      <label>Type d'enseignement</label>
+      <select id="ltype">
+        <option value="general">Enseignement général</option>
+        <option value="technique">Enseignement technique</option>
+        <option value="bilingue">Établissement bilingue</option>
+        <option value="polyvalent">Général + Technique (polyvalent)</option>
+      </select>
+    </div>
     <button class="big" id="lbtn" onclick="submitAuth()">Se connecter</button>
     <div class="err" id="lerr"></div>
     <div style="font-size:.78rem;color:#5a6e5f;margin-top:6px" id="lhint">Première visite ? Appuyez sur « S'inscrire » pour créer votre compte.</div>
@@ -122,7 +135,17 @@ button.ghost{background:#fff;color:#b42318;border:2px solid #b42318}
 <!-- modal gestion classes & horaires -->
 <div class="ov" id="mg">
   <div class="card">
-    <h2 style="color:#0b3d20;font-size:1.1rem">⚙️ Classes & horaires</h2>
+    <h2 style="color:#0b3d20;font-size:1.1rem">⚙️ Mon établissement</h2>
+    <label>Nom de l'établissement</label>
+    <input id="mgSch">
+    <label>Type d'enseignement</label>
+    <select id="mgType">
+      <option value="general">Enseignement général</option>
+      <option value="technique">Enseignement technique</option>
+      <option value="bilingue">Établissement bilingue</option>
+      <option value="polyvalent">Général + Technique (polyvalent)</option>
+    </select>
+    <button class="big" style="margin-top:10px" onclick="saveSchool()">Enregistrer l'établissement</button>
     <div class="mg-h">🏫 Mes classes</div>
     <div id="mgClasses"></div>
     <div class="mg-add"><input id="nCl" placeholder="Ex : Tle C"><button onclick="addClass()">＋</button></div>
@@ -137,11 +160,17 @@ button.ghost{background:#fff;color:#b42318;border:2px solid #b42318}
 
 <script>
 const DAYS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi'];
+const SEEDS={
+  general:['6e','5e','4e','3e','2nde','1ère','Tle'],
+  technique:['1ère année','2e année','3e année','4e année','2nde F','1ère F','Tle F'],
+  bilingue:['6e','5e','4e','3e','Form 1','Form 2','Form 3','Form 4','Form 5'],
+  polyvalent:['6e','5e','4e','3e','2nde','1ère','Tle','1ère année','2e année','3e année','4e année']
+};
 const PAL=['#dff1e3','#fdeeca','#e3e9fb','#fde3e3','#eae3fb','#d9f3f0','#fbe3f1'];
 let ST=null,CUR=null,SEL=null,SEQ=1;
 
 function defState(){
-  return {seq:4,
+  return {seq:4,school:{name:'',type:'general'},
     classes:[{id:'c1',name:'6e'},{id:'c2',name:'5e'},{id:'c3',name:'Form 1'}],
     periods:['7h30','8h25','9h20','10h30','11h25'],
     tt:{'c1|0|0':{s:'Maths',t:'M. FOTSO'},'c1|1|0':{s:'Français',t:'Mme NGO'},'c1|0|1':{s:'Anglais',t:'M. TABI'},
@@ -149,7 +178,8 @@ function defState(){
 }
 function load(){
   try{ST=JSON.parse(localStorage.getItem('chrono_state_v2')||'null')}catch(e){ST=null}
-  if(!ST||!ST.classes||!ST.classes.length)ST=defState();
+  if(!ST||!ST.classes)ST=defState();
+  if(!ST.school)ST.school={name:'',type:'general'};
   CUR=ST.classes[0].id;
 }
 function save(){localStorage.setItem('chrono_state_v2',JSON.stringify(ST))}
@@ -164,6 +194,8 @@ function setMode(m){
   document.getElementById('tbL').className=m==='login'?'on':'';
   document.getElementById('tbR').className=m==='reg'?'on':'';
   document.getElementById('lbtn').textContent=m==='reg'?'Créer mon compte':'Se connecter';
+  document.getElementById('regExtra').style.display=m==='reg'?'block':'none';
+  if(m==='reg'&&ST.school.name){document.getElementById('lsch').value=ST.school.name;document.getElementById('ltype').value=ST.school.type;}
   document.getElementById('lhint').textContent=m==='reg'
     ?'Choisissez un nom et un mot de passe : votre compte sera créé sur cet appareil.'
     :'Première visite ? Appuyez sur « S\u2019inscrire » pour créer votre compte.';
@@ -183,6 +215,16 @@ async function submitAuth(){
   const U=allUsers(),k=n.toLowerCase();
   if(MODE==='reg'){
     if(U[k]){err.textContent='Ce compte existe déjà sur cet appareil. Appuyez sur « Se connecter ».';return;}
+    const sch=document.getElementById('lsch').value.trim();
+    const typ=document.getElementById('ltype').value;
+    if(sch.length<2){err.textContent='Écrivez le nom de votre établissement.';return;}
+    const first=!ST.school.name;
+    ST.school={name:sch,type:typ};
+    if(first){
+      ST.classes=SEEDS[typ].map((nm,i)=>({id:'s'+(i+1),name:nm}));
+      ST.seq=SEEDS[typ].length+1;ST.tt={};CUR=ST.classes[0].id;
+    }
+    save();
     U[k]={n,h:await hashPw(p)};
     localStorage.setItem('chrono_demo_users',JSON.stringify(U));
     localStorage.setItem('chrono_demo_user',n);
@@ -198,7 +240,8 @@ async function submitAuth(){
 function start(n){
   document.getElementById('login').style.display='none';
   document.getElementById('app').style.display='block';
-  document.getElementById('who').textContent='👤 '+n;
+  document.getElementById('who').textContent=(ST.school.name?'🏫 '+ST.school.name+' · ':'')+'👤 '+n;
+  window.UNAME=n;
   render();
 }
 function quit(){localStorage.removeItem('chrono_demo_user');location.reload()}
@@ -254,7 +297,17 @@ function saveCell(){
 
 /* ---------- gestion classes & horaires ---------- */
 function openMg(){renderMg();document.getElementById('mg').style.display='flex'}
+function saveSchool(){
+  const n=document.getElementById('mgSch').value.trim();
+  if(n.length<2){toast('Écrivez le nom de votre établissement.');return;}
+  ST.school.name=n;ST.school.type=document.getElementById('mgType').value;
+  save();
+  document.getElementById('who').textContent='🏫 '+ST.school.name+' · 👤 '+(window.UNAME||'');
+  toast('Établissement enregistré ✔ (le type ne change pas vos classes déjà créées)',1);
+}
 function renderMg(){
+  document.getElementById('mgSch').value=ST.school.name||'';
+  document.getElementById('mgType').value=ST.school.type||'general';
   document.getElementById('mgClasses').innerHTML=ST.classes.map(c=>
     `<div class="mg-item"><div class="nm">${esc(c.name)}</div>
      <button style="background:#e3e9fb" onclick="renameClass('${c.id}')">✎</button>
