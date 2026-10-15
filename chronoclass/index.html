@@ -141,6 +141,22 @@ button.ghost{background:#fff;color:#b42318;border:2px solid #b42318}
   </div>
 </div>
 
+<!-- modal aperçu analyse -->
+<div class="ov" id="pvov">
+  <div class="card" style="width:min(94vw,680px);max-width:680px">
+    <h2 style="color:#0b3d20;font-size:1.05rem">🔎 Analyse du document</h2>
+    <div id="pvinfo" style="font-size:.85rem;color:#14532d;font-weight:700;margin:4px 0"></div>
+    <div style="overflow:auto;max-height:40vh;margin:8px 0;border:1px solid #e3eae4;border-radius:8px"><table class="pv" id="pvtable"></table></div>
+    <label style="font-weight:800;font-size:.85rem;color:#0b3d20">🎯 Classe de destination / Destination class :</label>
+    <select id="pvclass" onchange="pvClassChange()"></select>
+    <input id="pvnew" placeholder="Nom de la nouvelle classe (ex : 2nde F2, Form 1, 1ère année)" style="display:none;margin-top:8px">
+    <div class="rowbtn" style="margin-top:10px">
+      <button class="big" style="margin-top:0" onclick="acceptImport()">✅ Accepter</button>
+      <button class="big" style="margin-top:0;background:#8a1d1d" onclick="PENDING=null;closeOv('pvov')">❌ Refuser</button>
+    </div>
+  </div>
+</div>
+
 <!-- modal impression -->
 <div class="ov" id="prov">
   <div class="card">
@@ -449,7 +465,6 @@ function validTT(p){
 }
 async function importTT(inp){
   const f=inp.files[0];if(!f)return;inp.value='';
-  if(!CUR){alert('Ajoutez d\'abord une classe avec ⚙️ Classes & horaires.');return;}
   const ext=f.name.toLowerCase().split('.').pop();
   try{
     let p=null;
@@ -463,8 +478,12 @@ async function importTT(inp){
 function showPreview(p){
   PENDING=p;
   let lessons=0;p.data.forEach(e=>{for(const k in e)lessons++;});
-  const cname=ST.classes.find(c=>c.id===CUR).name;
-  document.getElementById('pvinfo').textContent='✅ Emploi du temps détecté : '+p.periods.length+' heures de cours, '+lessons+' cours. Vérifiez puis Accepter → il sera placé dans la classe '+cname+'.';
+  const sel=document.getElementById('pvclass');
+  sel.innerHTML=ST.classes.map(c=>'<option value="'+c.id+'"'+(c.id===CUR?' selected':'')+'>'+esc(c.name)+'</option>').join('')
+    +'<option value="__new">➕ Créer une nouvelle classe… / Create a new class…</option>';
+  if(!ST.classes.length)sel.value='__new';
+  pvClassChange();
+  document.getElementById('pvinfo').textContent='✅ Emploi du temps détecté : '+p.periods.length+' heures de cours, '+lessons+' cours. Choisissez la classe de destination, vérifiez, puis Accepter.';
   let h='<tr><th></th>'+DAYS.map(d=>'<th>'+d+'</th>').join('')+'</tr>';
   p.periods.forEach((lab,pi)=>{
     h+='<tr><td style="font-weight:800;background:#eef3ee">'+esc(lab)+'</td>';
@@ -478,8 +497,26 @@ function showPreview(p){
   closeOv('docov');
   document.getElementById('pvov').style.display='flex';
 }
+function pvClassChange(){
+  document.getElementById('pvnew').style.display=document.getElementById('pvclass').value==='__new'?'block':'none';
+}
 function acceptImport(){
-  const p=PENDING;if(!p)return;PENDING=null;closeOv('pvov');
+  const p=PENDING;if(!p)return;
+  let target=document.getElementById('pvclass').value;
+  if(target==='__new'){
+    const nm=document.getElementById('pvnew').value.trim();
+    if(nm.length<2){alert('Écrivez le nom de la nouvelle classe (ex : 2nde F2, Form 1).');return;}
+    const ex=ST.classes.find(c=>c.name.toLowerCase()===nm.toLowerCase());
+    if(ex)target=ex.id;
+    else{
+      ST.seq=(ST.seq||10)+1;
+      const id='c'+ST.seq;
+      ST.classes.push({id:id,name:nm});
+      target=id;
+    }
+  }
+  CUR=target;
+  PENDING=null;closeOv('pvov');
   const cname=ST.classes.find(c=>c.id===CUR).name;
   if(JSON.stringify(p.periods)!==JSON.stringify(ST.periods)){
     if(confirm('Les horaires du document ('+p.periods[0]+' → '+p.periods[p.periods.length-1]+') sont différents des vôtres.\nOK = adopter les horaires du document pour tout l\'établissement.\nAnnuler = garder vos horaires actuels.'))ST.periods=p.periods.slice();
@@ -530,7 +567,6 @@ const SAMPLES={
  ]
 };
 function loadSample(k){
-  if(!CUR){alert('Ajoutez d\'abord une classe avec ⚙️ Classes & horaires.');return;}
   showPreview({periods:SAMPLE_PERIODS.slice(),data:SAMPLES[k].map(e=>JSON.parse(JSON.stringify(e)))});
 }
 
