@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/png" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<meta name="theme-color" content="#0b3d20">
+<title>ChronoClass — Gestion d'emploi du temps scolaire</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+body{background:#0b3d20;min-height:100vh;color:#1c2b20}
+.center{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.card{background:#fff;border-radius:16px;padding:28px 24px;max-width:430px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.logo{text-align:center;font-size:1.7rem;font-weight:900;color:#0b3d20;margin-bottom:2px}
+.logo span{color:#d99a06}
+.subt{text-align:center;color:#5a6e5f;font-size:.88rem;margin-bottom:20px}
+label{display:block;font-size:.82rem;font-weight:700;color:#14532d;margin:12px 0 4px}
+input{width:100%;padding:12px;border:2px solid #cfe0d2;border-radius:10px;font-size:1rem}
+input:focus{outline:none;border-color:#14532d}
+select{width:100%;padding:12px;border:2px solid #cfe0d2;border-radius:10px;font-size:1rem;background:#fff}
+select:focus{outline:none;border-color:#14532d}
+button.big{width:100%;margin-top:16px;padding:14px;border:0;border-radius:10px;background:#14532d;color:#fff;font-size:1.05rem;font-weight:800;cursor:pointer}
+button.big:active{opacity:.85}
+.err{color:#b42318;font-size:.85rem;margin-top:8px;font-weight:700;min-height:1.1em}
+.ltabs{display:flex;gap:8px;margin:6px 0 4px}
+.ltabs button{flex:1;padding:10px;border:2px solid #14532d;background:#fff;color:#14532d;border-radius:10px;font-weight:800;cursor:pointer}
+.ltabs button.on{background:#14532d;color:#fff}
+.more{display:block;text-align:center;margin-top:16px;color:#14532d;font-size:.88rem;font-weight:700;text-decoration:none}
+/* ---- app ---- */
+#app{display:none;background:#f1f6f2;min-height:100vh}
+.topbar{background:#0b3d20;color:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.topbar .t{font-weight:900;font-size:1rem}
+.topbar .t span{color:#d99a06}
+.topbar .who{font-size:.85rem;opacity:.9;margin-left:auto}
+.topbar button{border:0;border-radius:8px;padding:8px 14px;font-weight:800;cursor:pointer}
+.demo-note{background:#fdf3dd;border-bottom:2px solid #d99a06;color:#6b4e00;padding:9px 16px;font-size:.85rem;font-weight:600}
+.wrap{max-width:1000px;margin:0 auto;padding:18px 14px 50px}
+.tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tabs button{border:2px solid #14532d;background:#fff;color:#14532d;border-radius:999px;padding:8px 18px;font-weight:800;cursor:pointer}
+.tabs button.on{background:#14532d;color:#fff}
+.tabs button.cfg{border-color:#d99a06;color:#8a6200}
+.gridbox{background:#fff;border-radius:14px;padding:12px;box-shadow:0 3px 14px rgba(11,61,32,.1);overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th{background:#0b3d20;color:#fff;padding:9px 6px;font-size:.8rem}
+td{border:1px solid #e0eae2;height:62px;text-align:center;font-size:.8rem;cursor:pointer;vertical-align:middle;padding:3px}
+td.h{background:#f1f6f2;font-weight:800;cursor:default;width:86px;font-size:.75rem}
+td:hover:not(.h){outline:3px solid #d99a06;outline-offset:-3px}
+td .s{font-weight:800}
+td .t2{font-size:.72rem;color:#405247}
+.hint{font-size:.82rem;color:#5a6e5f;margin:12px 2px;line-height:1.5}
+/* modal */
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50;align-items:center;justify-content:center;padding:16px;overflow:auto}
+.ov .card{max-width:380px}
+.rowbtn{display:flex;gap:10px}
+.rowbtn button{flex:1}
+button.ghost{background:#fff;color:#b42318;border:2px solid #b42318}
+.mg-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #eef3ef;font-size:.92rem}
+.mg-item .nm{flex:1;font-weight:700;color:#14532d}
+.mg-item button{border:0;border-radius:8px;padding:7px 10px;cursor:pointer;font-weight:800}
+.mg-add{display:flex;gap:8px;margin-top:10px}
+.mg-add input{flex:1}
+.mg-add button{border:0;border-radius:10px;background:#14532d;color:#fff;font-weight:800;padding:0 16px;cursor:pointer}
+.mg-h{color:#0b3d20;font-size:1rem;font-weight:900;margin:16px 0 4px}
+/* toast */
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;background:#b42318;color:#fff;padding:13px 18px;border-radius:12px;font-size:.9rem;font-weight:700;max-width:92%;opacity:0;transition:.3s;z-index:99;pointer-events:none}
+#toast.ok{background:#14532d}
+#toast.show{opacity:1}
+.pv{border-collapse:collapse;width:100%}.pv th,.pv td{border:1px solid #cdd9cf;padding:4px;font-size:.72rem;text-align:center}.pv th{background:#0b3d20;color:#fff}.pv .s{font-weight:800}.pv .t2{color:#555;font-size:.65rem}
+@media print{@page{margin:0}.topbar,.demo-note,.tabs,.hint,#toast{display:none!important}#app{background:#fff}.wrap{padding:0;margin:0;max-width:none}.gridbox{box-shadow:none;padding:10mm}body{background:#fff}body.bw #grid td{background:#fff!important;color:#000}body.bw #grid .s{color:#000}body.bw #grid .t2{color:#000}}
+</style>
+</head>
+<body>
+
+<!-- ================= CONNEXION / INSCRIPTION ================= -->
+<div class="center" id="login">
+  <div class="card">
+    <div class="logo">🕒 Chrono<span>Class</span></div>
+    <div class="subt">Gestion d'emploi du temps scolaire<br>School timetable management</div>
+    <div class="ltabs">
+      <button id="tbL" class="on" onclick="setMode('login')">Se connecter</button>
+      <button id="tbR" onclick="setMode('reg')">S'inscrire</button>
+    </div>
+    <label>Nom d'utilisateur</label>
+    <input id="lname" placeholder="Ex : M. FOTSO">
+    <label>Mot de passe</label>
+    <input id="lpw" type="password" placeholder="••••••">
+    <div id="regExtra" style="display:none">
+      <label>Nom de l'établissement</label>
+      <input id="lsch" placeholder="Ex : Lycée Bilingue de Deido">
+      <label>Type d'enseignement</label>
+      <select id="ltype">
+        <option value="general">Enseignement général</option>
+        <option value="technique">Enseignement technique</option>
+        <option value="bilingue">Établissement bilingue</option>
+        <option value="polyvalent">Général + Technique (polyvalent)</option>
+      </select>
+    </div>
+    <button class="big" id="lbtn" onclick="submitAuth()">Se connecter</button>
+    <div class="err" id="lerr"></div>
+    <div style="font-size:.78rem;color:#5a6e5f;margin-top:6px" id="lhint">Première visite ? Appuyez sur « S'inscrire » pour créer votre compte.</div>
+    <a class="more" href="decouvrir.html">📖 Découvrir ChronoClass (fonctionnalités)</a>
+    <a class="more" href="https://wa.me/237692168264" style="color:#14532d"><svg viewBox="0 0 448 512" width="20" height="20" style="vertical-align:-4px;margin-right:7px"><path fill="#25D366" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>692 168 264</a>
+  </div>
+</div>
+
+<!-- ================= APPLICATION ================= -->
+<div id="app">
+  <div class="topbar">
+    <div class="t">🕒 Chrono<span>Class</span> — Gestion d'emploi du temps scolaire</div>
+    <div class="who" id="who"></div>
+    <button style="background:#fff;color:#0b3d20" onclick="openDoc()">📄 Document</button>
+    <button style="background:#d99a06;color:#19270c" onclick="openPrint()">🖨 Imprimer</button>
+    <button style="background:#fff;color:#0b3d20" onclick="quit()">Quitter</button>
+  </div>
+  <div class="wrap">
+    <div class="tabs" id="tabs"></div>
+    <div class="gridbox"><table id="grid"></table><div id="pfoot" style="display:none;margin-top:8px;font-size:.8rem;color:#333;text-align:right"></div></div>
+    <div class="hint">👆 <b>Cliquez sur une case</b> pour placer une matière et un enseignant. ⛔ Un enseignant déjà occupé dans une autre classe à la même heure sera refusé.<br>
+    ⚙️ <b>Classes & horaires</b> : ajoutez VOS classes et VOS heures de cours — ChronoClass s'adapte à votre établissement.</div>
+  </div>
+</div>
+
+<!-- modal document -->
+<div class="ov" id="docov">
+  <div class="card">
+    <h2 style="color:#0b3d20;font-size:1.05rem">📄 Document</h2>
+    <button class="big" onclick="saveDoc()">💾 Enregistrer le document (fichier)</button>
+    <button class="big" style="background:#14532d" onclick="document.getElementById('docfile').click()">📂 Importer un document</button>
+    <input type="file" id="docfile" accept=".json,application/json" style="display:none" onchange="importDoc(this)">
+    <button class="big" style="background:#1b4e89" onclick="document.getElementById('wordfile').click()">📥 Importer un emploi du temps Word (.docx) → classe affichée</button>
+    <input type="file" id="wordfile" accept=".docx" style="display:none" onchange="importWord(this)">
+    <p style="font-size:.8rem;color:#5a6e5f;margin-top:10px">💾 Le fichier contient TOUT : votre établissement, vos classes, vos horaires et tous les emplois du temps. Gardez-le comme sauvegarde, ou envoyez-le à un collègue sur WhatsApp — il l'importe ici et retrouve tout, avec la date d'enregistrement.<br><br>
+    📥 <b>Word</b> : le document doit contenir un tableau avec les jours (Lundi…Vendredi ou Monday…Friday) en haut et les heures dans la première colonne.<br>
+    📄 <b>PDF</b> : un PDF vient presque toujours d'un fichier Word — importez le fichier .docx d'origine. La lecture PDF/photo par intelligence artificielle est disponible dans ChronoClass Ordinateur.</p>
+    <div style="margin-top:10px;border-top:1px solid #e3eae4;padding-top:10px">
+      <b style="font-size:.85rem;color:#0b3d20">📋 Modèles Cameroun — voir un exemple d'emploi du temps :</b>
+      <div class="rowbtn" style="margin-top:8px">
+        <button class="big" style="margin-top:0" onclick="loadSample('g')">🎓 Enseignement général</button>
+        <button class="big" style="margin-top:0;background:#6b3fa0" onclick="loadSample('t')">🔧 Enseignement technique</button>
+      </div>
+    </div>
+    <button class="big ghost" onclick="closeOv('docov')">Fermer</button>
+  </div>
+</div>
+
+<!-- modal aperçu analyse -->
+<div class="ov" id="pvov">
+  <div class="card" style="width:min(94vw,680px);max-width:680px">
+    <h2 style="color:#0b3d20;font-size:1.05rem">🔎 Analyse du document</h2>
+    <div id="pvinfo" style="font-size:.85rem;color:#14532d;font-weight:700;margin:4px 0"></div>
+    <div style="overflow:auto;max-height:40vh;margin:8px 0;border:1px solid #e3eae4;border-radius:8px"><table class="pv" id="pvtable"></table></div>
+    <label style="font-weight:800;font-size:.85rem;color:#0b3d20">🎯 Classe de destination / Destination class :</label>
+    <select id="pvclass" onchange="pvClassChange()"></select>
+    <input id="pvnew" placeholder="Nom de la nouvelle classe (ex : 2nde F2, Form 1, 1ère année)" style="display:none;margin-top:8px">
+    <div class="rowbtn" style="margin-top:10px">
+      <button class="big" style="margin-top:0" onclick="acceptImport()">✅ Accepter</button>
+      <button class="big" style="margin-top:0;background:#8a1d1d" onclick="PENDING=null;closeOv('pvov')">❌ Refuser</button>
+    </div>
+  </div>
+</div>
+
+<!-- modal impression -->
+<div class="ov" id="prov">
+  <div class="card">
+    <h2 style="color:#0b3d20;font-size:1.05rem">🖨 Imprimer / Print</h2>
+    <p style="font-size:.85rem;color:#5a6e5f;margin:6px 0 10px">La date d'impression sera écrite sur le document.<br>The printing date will be written on the document.</p>
+    <div style="display:flex;gap:16px;margin:4px 0 10px;font-size:.92rem;color:#0b3d20">
+      <label style="font-weight:800;display:flex;align-items:center;gap:6px"><input type="radio" name="pcol" value="col" checked> 🎨 En couleurs / Colour</label>
+      <label style="font-weight:800;display:flex;align-items:center;gap:6px"><input type="radio" name="pcol" value="bw"> ⚫ Noir sur blanc / Black on white</label>
+    </div>
+    <button class="big" onclick="doPrint('fr')">🇫🇷 Imprimer en français</button>
+    <button class="big" style="background:#14532d" onclick="doPrint('en')">🇬🇧 Print in English</button>
+    <div style="border-top:1px solid #e3eae4;margin-top:10px;padding-top:10px">
+      <b style="font-size:.85rem;color:#0b3d20">📄 Sans fenêtre d'impression — fichier PDF direct :</b>
+      <div class="rowbtn" style="margin-top:8px">
+        <button class="big" style="margin-top:0;background:#1b4e89" onclick="downloadPdf('fr')">📄 PDF (français)</button>
+        <button class="big" style="margin-top:0;background:#1b4e89" onclick="downloadPdf('en')">📄 PDF (English)</button>
+      </div>
+      <p style="font-size:.75rem;color:#5a6e5f;margin:6px 0 0">Le PDF se télécharge directement : imprimable partout, partageable sur WhatsApp.</p>
+    </div>
+    <button class="big ghost" onclick="closeOv('prov')">Annuler / Cancel</button>
+  </div>
+</div>
+
+<!-- modal case -->
+<div class="ov" id="ov">
+  <div class="card">
+    <h2 style="color:#0b3d20;font-size:1.05rem" id="mtitle"></h2>
+    <label>Matière</label>
+    <input id="msubj" placeholder="Ex : Mathématiques">
+    <label>Nom de l'enseignant</label>
+    <input id="mteach" placeholder="Ex : M. FOTSO">
+    <button class="big" onclick="saveCell()">Enregistrer</button>
+    <div class="rowbtn" style="margin-top:10px">
+      <button class="big ghost" style="margin-top:0" onclick="clearCell()">Effacer la case</button>
+      <button class="big" style="margin-top:0;background:#5a6e5f" onclick="closeOv('ov')">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- modal gestion classes & horaires -->
+<div class="ov" id="mg">
+  <div class="card">
+    <h2 style="color:#0b3d20;font-size:1.1rem">⚙️ Mon établissement</h2>
+    <label>Nom de l'établissement</label>
+    <input id="mgSch">
+    <label>Type d'enseignement</label>
+    <select id="mgType">
+      <option value="general">Enseignement général</option>
+      <option value="technique">Enseignement technique</option>
+      <option value="bilingue">Établissement bilingue</option>
+      <option value="polyvalent">Général + Technique (polyvalent)</option>
+    </select>
+    <button class="big" style="margin-top:10px" onclick="saveSchool()">Enregistrer l'établissement</button>
+    <div class="mg-h">🏫 Mes classes</div>
+    <div id="mgClasses"></div>
+    <div class="mg-add"><input id="nCl" placeholder="Ex : Tle C"><button onclick="addClass()">＋</button></div>
+    <div class="mg-h">⏰ Mes heures de cours</div>
+    <div id="mgPeriods"></div>
+    <div class="mg-add"><input id="nPd" placeholder="Ex : 12h20"><button onclick="addPeriod()">＋</button></div>
+    <button class="big" onclick="closeOv('mg')">Fermer</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const DAYS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi'];
+const SEEDS={
+  general:['6e','5e','4e','3e','2nde','1ère','Tle'],
+  technique:['1ère année','2e année','3e année','4e année','2nde F','1ère F','Tle F'],
+  bilingue:['6e','5e','4e','3e','Form 1','Form 2','Form 3','Form 4','Form 5'],
+  polyvalent:['6e','5e','4e','3e','2nde','1ère','Tle','1ère année','2e année','3e année','4e année']
+};
+const PAL=['#dff1e3','#fdeeca','#e3e9fb','#fde3e3','#eae3fb','#d9f3f0','#fbe3f1'];
+let ST=null,CUR=null,SEL=null,SEQ=1;
+
+function defState(){
+  return {seq:4,school:{name:'',type:'general'},
+    classes:[{id:'c1',name:'6e'},{id:'c2',name:'5e'},{id:'c3',name:'Form 1'}],
+    periods:['7h30','8h25','9h20','10h30','11h25'],
+    tt:{'c1|0|0':{s:'Maths',t:'M. FOTSO'},'c1|1|0':{s:'Français',t:'Mme NGO'},'c1|0|1':{s:'Anglais',t:'M. TABI'},
+        'c2|0|1':{s:'Maths',t:'M. FOTSO'},'c2|2|0':{s:'SVT',t:'Mme ABENA'},'c3|0|0':{s:'English',t:'Mr TABI'}}};
+}
+function load(){
+  try{ST=JSON.parse(localStorage.getItem('chrono_state_v2')||'null')}catch(e){ST=null}
+  if(!ST||!ST.classes)ST=defState();
+  if(!ST.school)ST.school={name:'',type:'general'};
+  CUR=ST.classes[0].id;
+}
+function save(){localStorage.setItem('chrono_state_v2',JSON.stringify(ST))}
+function colorOf(s){let h=0;for(const c of s.toLowerCase())h=(h*31+c.charCodeAt(0))>>>0;return PAL[h%PAL.length]}
+function toast(m,ok){const t=document.getElementById('toast');t.textContent=m;t.className=(ok?'ok ':'')+'show';setTimeout(()=>t.className=ok?'ok':'',ok?2500:5500)}
+function esc(x){return String(x).replace(/[<>&"]/g,'')}
+
+/* ---------- auth ---------- */
+let MODE='login';
+function setMode(m){
+  MODE=m;
+  document.getElementById('tbL').className=m==='login'?'on':'';
+  document.getElementById('tbR').className=m==='reg'?'on':'';
+  document.getElementById('lbtn').textContent=m==='reg'?'Créer mon compte':'Se connecter';
+  document.getElementById('regExtra').style.display=m==='reg'?'block':'none';
+  if(m==='reg'&&ST.school.name){document.getElementById('lsch').value=ST.school.name;document.getElementById('ltype').value=ST.school.type;}
+  document.getElementById('lhint').textContent=m==='reg'
+    ?'Choisissez un nom et un mot de passe : votre compte sera créé sur cet appareil.'
+    :'Première visite ? Appuyez sur « S\u2019inscrire » pour créer votre compte.';
+  document.getElementById('lerr').textContent='';
+}
+async function hashPw(x){
+  const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('chrono|'+x));
+  return [...new Uint8Array(d)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+function allUsers(){try{return JSON.parse(localStorage.getItem('chrono_demo_users')||'{}')}catch(e){return{}}}
+async function submitAuth(){
+  const err=document.getElementById('lerr');err.textContent='';
+  const n=document.getElementById('lname').value.trim();
+  const p=document.getElementById('lpw').value;
+  if(n.length<2){err.textContent='Entrez votre nom (2 lettres minimum).';return;}
+  if(p.length<4){err.textContent='Mot de passe : 4 caractères minimum.';return;}
+  const U=allUsers(),k=n.toLowerCase();
+  if(MODE==='reg'){
+    if(U[k]){err.textContent='Ce compte existe déjà sur cet appareil. Appuyez sur « Se connecter ».';return;}
+    const sch=document.getElementById('lsch').value.trim();
+    const typ=document.getElementById('ltype').value;
+    if(sch.length<2){err.textContent='Écrivez le nom de votre établissement.';return;}
+    const first=!ST.school.name;
+    ST.school={name:sch,type:typ};
+    if(first){
+      ST.classes=SEEDS[typ].map((nm,i)=>({id:'s'+(i+1),name:nm}));
+      ST.seq=SEEDS[typ].length+1;ST.tt={};CUR=ST.classes[0].id;
+    }
+    save();
+    U[k]={n,h:await hashPw(p)};
+    localStorage.setItem('chrono_demo_users',JSON.stringify(U));
+    localStorage.setItem('chrono_demo_user',n);
+    start(n);toast('Compte créé ✔ Bienvenue '+n+' !',1);
+  }else{
+    const u=U[k];
+    if(!u){err.textContent='Compte introuvable. Appuyez sur « S\u2019inscrire » pour le créer.';return;}
+    if(u.h!==await hashPw(p)){err.textContent='Mot de passe incorrect.';return;}
+    localStorage.setItem('chrono_demo_user',u.n);
+    start(u.n);
+  }
+}
+function start(n){
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('who').textContent=(ST.school.name?'🏫 '+ST.school.name+' · ':'')+'👤 '+n;
+  window.UNAME=n;
+  render();
+}
+function quit(){localStorage.removeItem('chrono_demo_user');location.reload()}
+
+/* ---------- document : enregistrer / importer ---------- */
+const DAYS_EN=['Monday','Tuesday','Wednesday','Thursday','Friday'];
+function openDoc(){document.getElementById('docov').style.display='flex'}
+function openPrint(){document.getElementById('prov').style.display='flex'}
+function saveDoc(){
+  const data={app:'ChronoClass',v:2,date:new Date().toISOString(),state:ST};
+  const name='ChronoClass_'+((ST.school.name||'document').replace(/[^A-Za-z0-9]+/g,'_'))+'.json';
+  const a=document.createElement('a');
+  a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(data));
+  a.download=name;document.body.appendChild(a);a.click();a.remove();
+  closeOv('docov');toast('💾 Document enregistré : '+name);
+}
+function importDoc(inp){
+  const f=inp.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const d=JSON.parse(r.result);
+      const st=(d.state&&d.state.tt!==undefined)?d.state:((d.tt!==undefined&&d.classes)?d:null);
+      if(!st||!st.classes||!st.periods)throw 0;
+      const dt=d.date?new Date(d.date).toLocaleDateString('fr-FR'):'';
+      if(!confirm('Importer ce document'+(dt?' (enregistré le '+dt+')':'')+' ?\nIl remplacera les données actuelles de ce téléphone.'))return;
+      ST=st;save();CUR=ST.classes.length?ST.classes[0].id:null;render();
+      document.getElementById('who').textContent=(ST.school.name?'🏫 '+ST.school.name+' · ':'')+'👤 '+(window.UNAME||'');
+      closeOv('docov');toast('📂 Document importé ✔');
+    }catch(e){alert('Fichier non reconnu.\nChoisissez un document enregistré par ChronoClass (fichier .json).')}
+  };
+  r.readAsText(f);inp.value='';
+}
+
+/* ---------- import Word/PDF : analyse -> aperçu -> accepter/refuser ---------- */
+let PENDING=null;
+const DAYMAP={lundi:0,monday:0,mardi:1,tuesday:1,mercredi:2,wednesday:2,jeudi:3,thursday:3,vendredi:4,friday:4};
+const dkey=x=>(x||'').toLowerCase().replace(/[^a-z]/g,'');
+function loadJSZip(){
+  return new Promise((ok,ko)=>{
+    if(window.JSZip)return ok();
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+    s.onload=()=>ok();s.onerror=()=>ko(new Error('Connexion internet nécessaire pour la première utilisation.'));
+    document.body.appendChild(s);
+  });
+}
+function loadPdfJs(){
+  return new Promise((ok,ko)=>{
+    if(window.pdfjsLib)return ok();
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    s.onload=()=>{window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';ok()};
+    s.onerror=()=>ko(new Error('Connexion internet nécessaire pour la première utilisation.'));
+    document.body.appendChild(s);
+  });
+}
+async function parseWord(f){
+  const zip=await JSZip.loadAsync(f);
+  const entry=zip.file('word/document.xml');
+  if(!entry)throw new Error('Ce fichier n\'est pas un document Word (.docx).');
+  const xml=await entry.async('string');
+  const doc=new DOMParser().parseFromString(xml,'text/xml');
+  const txt=el=>{
+    const lines=[];
+    for(const pp of el.getElementsByTagNameNS('*','p')){
+      let t='';
+      for(const tn of pp.getElementsByTagNameNS('*','t'))t+=tn.textContent;
+      t=t.trim();if(t)lines.push(t);
+    }
+    return lines;
+  };
+  for(const tb of doc.getElementsByTagNameNS('*','tbl')){
+    const rows=[];
+    for(const tr of tb.getElementsByTagNameNS('*','tr')){
+      const cells=[];
+      for(const tc of tr.getElementsByTagNameNS('*','tc'))cells.push(txt(tc));
+      rows.push(cells);
+    }
+    let hi=-1,map=null;
+    rows.forEach((r,i)=>{
+      if(hi>=0)return;
+      const m={};let cnt=0;
+      r.forEach((c,ci)=>{const k=dkey(c[0]);if(k in DAYMAP){m[ci]=DAYMAP[k];cnt++;}});
+      if(cnt>=3){hi=i;map=m;}
+    });
+    if(hi<0)continue;
+    const periods=[],data=[];
+    for(let i=hi+1;i<rows.length;i++){
+      const r=rows[i];
+      const label=(r[0]&&r[0][0])||'';
+      if(!label)continue;
+      const e={};
+      for(const ci in map){const c=r[ci];if(c&&c[0])e[map[ci]]={s:c[0],t:c.slice(1).join(' ')};}
+      periods.push(label);data.push(e);
+    }
+    if(periods.length)return{periods,data};
+  }
+  return null;
+}
+async function parsePdf(f){
+  const buf=await f.arrayBuffer();
+  const pdf=await pdfjsLib.getDocument({data:buf}).promise;
+  let any=false;
+  for(let pn=1;pn<=Math.min(pdf.numPages,5);pn++){
+    const page=await pdf.getPage(pn);
+    const tc=await page.getTextContent();
+    const items=[];
+    for(const it of tc.items){const t=(it.str||'').trim();if(t)items.push({s:t,x:it.transform[4],y:it.transform[5]});}
+    if(items.length)any=true;
+    const r=gridFromItems(items);
+    if(r)return r;
+  }
+  if(!any)throw new Error('⛔ Ce PDF est un scan (photo) : aucun texte lisible dedans.\nLa lecture par intelligence artificielle est disponible dans ChronoClass Ordinateur.');
+  return null;
+}
+function gridFromItems(items){
+  const hdrs=items.filter(i=>dkey(i.s) in DAYMAP);
+  if(hdrs.length<3)return null;
+  let best=null;
+  for(const h of hdrs){
+    const grp=hdrs.filter(o=>Math.abs(o.y-h.y)<6);
+    if(!best||grp.length>best.length)best=grp;
+  }
+  if(best.length<3)return null;
+  const cols={};
+  for(const h of best){const di=DAYMAP[dkey(h.s)];if(!(di in cols))cols[di]=h.x;}
+  const hdrY=best[0].y;
+  const leftX=Math.min.apply(null,Object.values(cols));
+  const below=items.filter(i=>i.y<hdrY-4);
+  const labs=below.filter(i=>i.x<leftX-8).sort((a,b)=>b.y-a.y);
+  const bands=[];
+  for(const l of labs){
+    const b=bands.find(b=>Math.abs(b.y-l.y)<7);
+    if(b)b.parts.push(l);else bands.push({y:l.y,parts:[l]});
+  }
+  if(bands.length<2)return null;
+  bands.forEach(b=>{b.parts.sort((p,q)=>p.x-q.x);b.label=b.parts.map(p=>p.s).join(' ');});
+  const periods=bands.map(b=>b.label),data=bands.map(()=>({}));
+  const raw=bands.map(()=>({}));
+  for(const it of below){
+    if(it.x<leftX-8)continue;
+    let bi=0,bbd=1e9;
+    for(let i=0;i<bands.length;i++){const d=Math.abs(it.y-bands[i].y);if(d<bbd){bbd=d;bi=i;}}
+    let bd=1e9,bdi=null;
+    for(const di in cols){const d=Math.abs(cols[di]-it.x);if(d<bd){bd=d;bdi=di;}}
+    if(bdi===null)continue;
+    (raw[bi][bdi]=raw[bi][bdi]||[]).push(it);
+  }
+  let lessons=0;
+  for(let pi=0;pi<raw.length;pi++){
+    for(const di in raw[pi]){
+      const L=raw[pi][di].sort((a,b)=>b.y-a.y||a.x-b.x);
+      const lines=[];
+      for(const it of L){
+        const r=lines.find(r=>Math.abs(r.y-it.y)<4);
+        if(r)r.txt+=' '+it.s;else lines.push({y:it.y,txt:it.s});
+      }
+      data[pi][di]={s:lines[0].txt,t:lines.slice(1).map(r=>r.txt).join(' ')};lessons++;
+    }
+  }
+  return lessons?{periods,data}:null;
+}
+function validTT(p){
+  if(!p||!p.periods||p.periods.length<2)return false;
+  let lessons=0;const ds={};
+  p.data.forEach(e=>{for(const di in e){lessons++;ds[di]=1;}});
+  return lessons>=2&&Object.keys(ds).length>=2;
+}
+async function importTT(inp){
+  const f=inp.files[0];if(!f)return;inp.value='';
+  const ext=f.name.toLowerCase().split('.').pop();
+  try{
+    let p=null;
+    if(ext==='docx'){await loadJSZip();p=await parseWord(f);}
+    else if(ext==='pdf'){await loadPdfJs();p=await parsePdf(f);}
+    else{alert('Choisissez un fichier Word (.docx) ou PDF (.pdf).');return;}
+    if(!validTT(p)){alert('⛔ Document REFUSÉ.\n\nCe fichier ne ressemble pas à un emploi du temps scolaire : il faut un tableau avec les jours (Lundi…Vendredi / Monday…Friday), les heures de cours, et des matières.');return;}
+    showPreview(p);
+  }catch(e){alert((e&&e.message)||'Fichier non reconnu.');}
+}
+function showPreview(p){
+  PENDING=p;
+  let lessons=0;p.data.forEach(e=>{for(const k in e)lessons++;});
+  const sel=document.getElementById('pvclass');
+  sel.innerHTML=ST.classes.map(c=>'<option value="'+c.id+'"'+(c.id===CUR?' selected':'')+'>'+esc(c.name)+'</option>').join('')
+    +'<option value="__new">➕ Créer une nouvelle classe… / Create a new class…</option>';
+  if(!ST.classes.length)sel.value='__new';
+  pvClassChange();
+  document.getElementById('pvinfo').textContent='✅ Emploi du temps détecté : '+p.periods.length+' heures de cours, '+lessons+' cours. Choisissez la classe de destination, vérifiez, puis Accepter.';
+  let h='<tr><th></th>'+DAYS.map(d=>'<th>'+d+'</th>').join('')+'</tr>';
+  p.periods.forEach((lab,pi)=>{
+    h+='<tr><td style="font-weight:800;background:#eef3ee">'+esc(lab)+'</td>';
+    for(let di=0;di<5;di++){
+      const v=p.data[pi][di];
+      h+='<td>'+(v?'<div class="s">'+esc(v.s)+'</div><div class="t2">'+esc(v.t||'')+'</div>':'')+'</td>';
+    }
+    h+='</tr>';
+  });
+  document.getElementById('pvtable').innerHTML=h;
+  closeOv('docov');
+  document.getElementById('pvov').style.display='flex';
+}
+function pvClassChange(){
+  document.getElementById('pvnew').style.display=document.getElementById('pvclass').value==='__new'?'block':'none';
+}
+function acceptImport(){
+  const p=PENDING;if(!p)return;
+  let target=document.getElementById('pvclass').value;
+  if(target==='__new'){
+    const nm=document.getElementById('pvnew').value.trim();
+    if(nm.length<2){alert('Écrivez le nom de la nouvelle classe (ex : 2nde F2, Form 1).');return;}
+    const ex=ST.classes.find(c=>c.name.toLowerCase()===nm.toLowerCase());
+    if(ex)target=ex.id;
+    else{
+      ST.seq=(ST.seq||10)+1;
+      const id='c'+ST.seq;
+      ST.classes.push({id:id,name:nm});
+      target=id;
+    }
+  }
+  CUR=target;
+  PENDING=null;closeOv('pvov');
+  const cname=ST.classes.find(c=>c.id===CUR).name;
+  if(JSON.stringify(p.periods)!==JSON.stringify(ST.periods)){
+    if(confirm('Les horaires du document ('+p.periods[0]+' → '+p.periods[p.periods.length-1]+') sont différents des vôtres.\nOK = adopter les horaires du document pour tout l\'établissement.\nAnnuler = garder vos horaires actuels.'))ST.periods=p.periods.slice();
+  }
+  for(const k of Object.keys(ST.tt))if(k.startsWith(CUR+'|'))delete ST.tt[k];
+  const norm=x=>x.toLowerCase().replace(/\s+/g,' ').trim();
+  const n=Math.min(ST.periods.length,p.data.length);
+  let placed=0;const skipped=[];
+  for(let pi=0;pi<n;pi++){
+    for(const di in p.data[pi]){
+      const v=p.data[pi][di];let clash=null;
+      if(v.t){
+        for(const c of ST.classes){
+          if(c.id===CUR)continue;
+          const o=ST.tt[c.id+'|'+di+'|'+pi];
+          if(o&&o.t&&norm(o.t)===norm(v.t)){clash=c.name;break;}
+        }
+      }
+      if(clash){skipped.push(v.s+' ('+v.t+') — '+DAYS[di]+' '+ST.periods[pi]+' : déjà en '+clash);continue;}
+      ST.tt[CUR+'|'+di+'|'+pi]={s:v.s,t:v.t};placed++;
+    }
+  }
+  save();render();
+  toast('📥 '+placed+' cours importés dans '+cname+(skipped.length?' — ⛔ '+skipped.length+' conflit(s) ignoré(s)':''));
+  if(skipped.length)alert('⛔ Conflits ignorés (enseignant déjà occupé dans une autre classe à la même heure) :\n\n'+skipped.slice(0,8).join('\n'));
+}
+
+/* ---------- modèles Cameroun (format MINESEC) ---------- */
+const SAMPLE_PERIODS=['07h30 - 08h25','08h25 - 09h20','09h20 - 10h15','10h30 - 11h25','11h25 - 12h20','12h55 - 13h50','13h50 - 14h45'];
+const SAMPLES={
+ g:[
+  {0:{s:'Mathématiques',t:'M. FOTSO'},1:{s:'Français',t:'Mme NGO BILONG'},2:{s:'Anglais',t:'Mr TABI'},3:{s:'PCT',t:'M. KAMGA'},4:{s:'Mathématiques',t:'M. FOTSO'}},
+  {0:{s:'Français',t:'Mme NGO BILONG'},1:{s:'Mathématiques',t:'M. FOTSO'},2:{s:'SVTEEHB',t:'Mme ADA'},3:{s:'Histoire-Géographie',t:'M. ESSOMBA'},4:{s:'Français',t:'Mme NGO BILONG'}},
+  {0:{s:'Anglais',t:'Mr TABI'},1:{s:'SVTEEHB',t:'Mme ADA'},2:{s:'Mathématiques',t:'M. FOTSO'},3:{s:'Français',t:'Mme NGO BILONG'},4:{s:'Espagnol',t:'Mme TCHOUMI'}},
+  {0:{s:'Histoire-Géographie',t:'M. ESSOMBA'},1:{s:'Espagnol',t:'Mme TCHOUMI'},2:{s:'PCT',t:'M. KAMGA'},3:{s:'Mathématiques',t:'M. FOTSO'},4:{s:'SVTEEHB',t:'Mme ADA'}},
+  {0:{s:'PCT',t:'M. KAMGA'},1:{s:'ECM',t:'M. ESSOMBA'},2:{s:'Informatique',t:'M. TALLA'},3:{s:'Anglais',t:'Mr TABI'},4:{s:'Histoire-Géographie',t:'M. ESSOMBA'}},
+  {0:{s:'EPS',t:'M. BIYA'},1:{s:'Informatique',t:'M. TALLA'},2:{s:'Français',t:'Mme NGO BILONG'},3:{s:'SVTEEHB',t:'Mme ADA'},4:{s:'Anglais',t:'Mr TABI'}},
+  {0:{s:'Travail Manuel',t:'M. BIYA'},2:{s:'ECM',t:'M. ESSOMBA'},3:{s:'EPS',t:'M. BIYA'}}
+ ],
+ t:[
+  {0:{s:'Atelier Électrotechnique',t:'M. WAFO'},1:{s:'Mathématiques',t:'M. FOTSO'},2:{s:'Dessin Technique',t:'M. NANA'},3:{s:'Technologie Professionnelle',t:'M. WAFO'},4:{s:'Électrotechnique',t:'M. KUATE'}},
+  {0:{s:'Atelier Électrotechnique',t:'M. WAFO'},1:{s:'Sciences Physiques',t:'M. KAMGA'},2:{s:'Dessin Technique',t:'M. NANA'},3:{s:'Mathématiques',t:'M. FOTSO'},4:{s:'Électrotechnique',t:'M. KUATE'}},
+  {0:{s:'Atelier Électrotechnique',t:'M. WAFO'},1:{s:'Français',t:'Mme NGO BILONG'},2:{s:'Schéma Électrique',t:'M. KUATE'},3:{s:'Sciences Physiques',t:'M. KAMGA'},4:{s:'Mathématiques',t:'M. FOTSO'}},
+  {0:{s:'Mathématiques',t:'M. FOTSO'},1:{s:'Atelier Électrotechnique',t:'M. WAFO'},2:{s:'Anglais',t:'Mr TABI'},3:{s:'Schéma Électrique',t:'M. KUATE'},4:{s:'Français',t:'Mme NGO BILONG'}},
+  {0:{s:'Français',t:'Mme NGO BILONG'},1:{s:'Atelier Électrotechnique',t:'M. WAFO'},2:{s:'Technologie Professionnelle',t:'M. WAFO'},3:{s:'Informatique',t:'M. TALLA'},4:{s:'Anglais',t:'Mr TABI'}},
+  {0:{s:'Législation',t:'M. MBALLA'},1:{s:'EPS',t:'M. BIYA'},2:{s:'Sciences Physiques',t:'M. KAMGA'},3:{s:'Dessin Technique',t:'M. NANA'},4:{s:'Informatique',t:'M. TALLA'}},
+  {0:{s:'Anglais',t:'Mr TABI'},2:{s:'EPS',t:'M. BIYA'},3:{s:'Législation',t:'M. MBALLA'}}
+ ]
+};
+function loadSample(k){
+  showPreview({periods:SAMPLE_PERIODS.slice(),data:SAMPLES[k].map(e=>JSON.parse(JSON.stringify(e)))});
+}
+
+/* ---------- PDF direct (sans fenetre d'impression) ---------- */
+function loadJsPDF(){
+  return new Promise((ok,ko)=>{
+    if(window.jspdf&&window.JSPDF_AT)return ok();
+    const s1=document.createElement('script');
+    s1.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    s1.onload=()=>{
+      const s2=document.createElement('script');
+      s2.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js';
+      s2.onload=()=>{window.JSPDF_AT=1;ok()};
+      s2.onerror=()=>ko(new Error('net'));
+      document.body.appendChild(s2);
+    };
+    s1.onerror=()=>ko(new Error('net'));
+    document.body.appendChild(s1);
+  });
+}
+const hex2rgb=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+async function downloadPdf(lang){
+  if(!CUR){alert('Aucune classe affichée.');return;}
+  closeOv('prov');
+  try{await loadJsPDF()}catch(e){alert('Connexion internet nécessaire pour la première utilisation du PDF.');return;}
+  const bw=(document.querySelector('input[name="pcol"]:checked')||{value:'col'}).value==='bw';
+  const days=lang==='en'?DAYS_EN:DAYS;
+  const doc=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+  const body=ST.periods.map((pp,pi)=>[pp].concat(days.map((d,di)=>{
+    const v=ST.tt[CUR+'|'+di+'|'+pi];
+    return v?(v.s+(v.t?'\n'+v.t:'')):'';
+  })));
+  doc.autoTable({
+    head:[[''].concat(days)],
+    body:body,
+    startY:12,
+    margin:{left:10,right:10},
+    styles:{fontSize:9,halign:'center',valign:'middle',lineColor:[150,160,150],lineWidth:0.2,textColor:[0,0,0],cellPadding:2.5},
+    headStyles:{fillColor:bw?[255,255,255]:[11,61,32],textColor:bw?[0,0,0]:[255,255,255],fontStyle:'bold',lineColor:[150,160,150],lineWidth:0.2},
+    columnStyles:{0:{fontStyle:'bold',fillColor:bw?[255,255,255]:[238,243,238],cellWidth:34}},
+    didParseCell:function(d2){
+      if(!bw&&d2.section==='body'&&d2.column.index>0&&d2.cell.raw){
+        d2.cell.styles.fillColor=hex2rgb(colorOf(String(d2.cell.raw).split('\n')[0]));
+      }
+    }
+  });
+  const dnow=new Date(),p2=n=>('0'+n).slice(-2);
+  const ds=p2(dnow.getDate())+'/'+p2(dnow.getMonth()+1)+'/'+dnow.getFullYear();
+  const ft=lang==='en'?('Printed on '+ds+' at '+p2(dnow.getHours())+':'+p2(dnow.getMinutes())+' - ChronoClass')
+                      :('Imprime le '+ds+' a '+p2(dnow.getHours())+'h'+p2(dnow.getMinutes())+' - ChronoClass');
+  doc.setFontSize(8);doc.setTextColor(90);
+  doc.text(ft,287,202,{align:'right'});
+  const cname=(ST.classes.find(c=>c.id===CUR)||{name:'classe'}).name;
+  doc.save(((lang==='en'?'Timetable_':'EmploiDuTemps_')+cname).replace(/[^A-Za-z0-9_-]+/g,'_')+'.pdf');
+  toast('📄 PDF téléchargé ✔',1);
+}
+
+/* ---------- impression bilingue + date ---------- */
+function doPrint(lang){
+  closeOv('prov');
+  const bw=(document.querySelector('input[name="pcol"]:checked')||{value:'col'}).value==='bw';
+  if(bw)document.body.classList.add('bw');else document.body.classList.remove('bw');
+  const days=lang==='en'?DAYS_EN:DAYS;
+  render(days);
+  const d=new Date();
+  const p2=n=>('0'+n).slice(-2);
+  const ds=p2(d.getDate())+'/'+p2(d.getMonth()+1)+'/'+d.getFullYear();
+  const f=document.getElementById('pfoot');
+  f.textContent=lang==='en'
+    ?('Printed on '+ds+' at '+p2(d.getHours())+':'+p2(d.getMinutes())+' — ChronoClass')
+    :('Imprimé le '+ds+' à '+p2(d.getHours())+'h'+p2(d.getMinutes())+' — ChronoClass');
+  f.style.display='block';
+  const done=()=>{f.style.display='none';document.body.classList.remove('bw');render();window.onafterprint=null};
+  window.onafterprint=done;
+  setTimeout(()=>{window.print();setTimeout(done,1500)},80);
+}
+
+/* ---------- rendu ---------- */
+function render(days){
+  days=days||DAYS;
+  if(!ST.classes.find(c=>c.id===CUR))CUR=ST.classes.length?ST.classes[0].id:null;
+  document.getElementById('tabs').innerHTML=
+    ST.classes.map(c=>`<button class="${c.id===CUR?'on':''}" onclick="CUR='${c.id}';render()">${esc(c.name)}</button>`).join('')
+    +`<button class="cfg" onclick="openMg()">⚙️ Classes & horaires</button>`;
+  let h='<tr><th></th>'+days.map(d=>'<th>'+d+'</th>').join('')+'</tr>';
+  ST.periods.forEach((p,pi)=>{
+    h+='<tr><td class="h">'+esc(p)+'</td>'+days.map((d,di)=>{
+      const v=ST.tt[CUR+'|'+di+'|'+pi];
+      return v?`<td style="background:${colorOf(v.s)}" onclick="openOv(${di},${pi})"><div class="s">${esc(v.s)}</div><div class="t2">${esc(v.t)}</div></td>`
+              :`<td onclick="openOv(${di},${pi})"></td>`;
+    }).join('')+'</tr>';
+  });
+  document.getElementById('grid').innerHTML=CUR?h:'<tr><td style="padding:30px">Ajoutez une classe avec ⚙️</td></tr>';
+}
+
+/* ---------- case ---------- */
+function openOv(di,pi){
+  SEL=[di,pi];
+  const v=ST.tt[CUR+'|'+di+'|'+pi]||{s:'',t:''};
+  const cn=ST.classes.find(c=>c.id===CUR).name;
+  document.getElementById('mtitle').textContent=cn+' — '+DAYS[di]+' '+ST.periods[pi];
+  document.getElementById('msubj').value=v.s;
+  document.getElementById('mteach').value=v.t;
+  document.getElementById('ov').style.display='flex';
+}
+function closeOv(id){document.getElementById(id).style.display='none'}
+function clearCell(){delete ST.tt[CUR+'|'+SEL[0]+'|'+SEL[1]];save();closeOv('ov');render();toast('Case effacée.',1)}
+function saveCell(){
+  const s=document.getElementById('msubj').value.trim();
+  const t=document.getElementById('mteach').value.trim();
+  if(!s){toast('Écrivez la matière.');return;}
+  const[di,pi]=SEL;
+  if(t){
+    const norm=x=>x.toLowerCase().replace(/\s+/g,' ').trim();
+    for(const c of ST.classes){
+      if(c.id===CUR)continue;
+      const v=ST.tt[c.id+'|'+di+'|'+pi];
+      if(v&&v.t&&norm(v.t)===norm(t)){
+        toast('⛔ CONFLIT REFUSÉ : '+t+' est déjà en '+c.name+' le '+DAYS[di]+' à '+ST.periods[pi]+' ('+v.s+'). Un enseignant ne peut pas être dans 2 classes à la même heure !');
+        return;
+      }
+    }
+  }
+  ST.tt[CUR+'|'+di+'|'+pi]={s,t};
+  save();closeOv('ov');render();toast('Enregistré ✔',1);
+}
+
+/* ---------- gestion classes & horaires ---------- */
+function openMg(){renderMg();document.getElementById('mg').style.display='flex'}
+function saveSchool(){
+  const n=document.getElementById('mgSch').value.trim();
+  if(n.length<2){toast('Écrivez le nom de votre établissement.');return;}
+  ST.school.name=n;ST.school.type=document.getElementById('mgType').value;
+  save();
+  document.getElementById('who').textContent='🏫 '+ST.school.name+' · 👤 '+(window.UNAME||'');
+  toast('Établissement enregistré ✔ (le type ne change pas vos classes déjà créées)',1);
+}
+function renderMg(){
+  document.getElementById('mgSch').value=ST.school.name||'';
+  document.getElementById('mgType').value=ST.school.type||'general';
+  document.getElementById('mgClasses').innerHTML=ST.classes.map(c=>
+    `<div class="mg-item"><div class="nm">${esc(c.name)}</div>
+     <button style="background:#e3e9fb" onclick="renameClass('${c.id}')">✎</button>
+     <button style="background:#fde3e3" onclick="delClass('${c.id}')">🗑</button></div>`).join('')||'<div class="hint">Aucune classe.</div>';
+  document.getElementById('mgPeriods').innerHTML=ST.periods.map((p,i)=>
+    `<div class="mg-item"><div class="nm">${esc(p)}</div>
+     <button style="background:#e3e9fb" onclick="editPeriod(${i})">✎</button>
+     <button style="background:#fde3e3" onclick="delPeriod(${i})">🗑</button></div>`).join('');
+}
+function addClass(){
+  const n=document.getElementById('nCl').value.trim();
+  if(n.length<1){toast('Écrivez le nom de la classe.');return;}
+  if(ST.classes.find(c=>c.name.toLowerCase()===n.toLowerCase())){toast('Cette classe existe déjà.');return;}
+  ST.seq=(ST.seq||10)+1;
+  ST.classes.push({id:'c'+ST.seq,name:n});
+  document.getElementById('nCl').value='';
+  save();renderMg();render();toast('Classe '+n+' ajoutée ✔',1);
+}
+function renameClass(id){
+  const c=ST.classes.find(x=>x.id===id);
+  const n=prompt('Nouveau nom de la classe :',c.name);
+  if(!n||!n.trim())return;
+  c.name=n.trim();save();renderMg();render();toast('Classe renommée ✔',1);
+}
+function delClass(id){
+  const c=ST.classes.find(x=>x.id===id);
+  if(!confirm('Supprimer la classe '+c.name+' et son emploi du temps ?'))return;
+  ST.classes=ST.classes.filter(x=>x.id!==id);
+  for(const k of Object.keys(ST.tt))if(k.startsWith(id+'|'))delete ST.tt[k];
+  save();renderMg();render();toast('Classe supprimée.',1);
+}
+function addPeriod(){
+  const p=document.getElementById('nPd').value.trim();
+  if(!p){toast('Écrivez l\u2019heure (ex : 12h20).');return;}
+  ST.periods.push(p);
+  document.getElementById('nPd').value='';
+  save();renderMg();render();toast('Heure ajoutée ✔',1);
+}
+function editPeriod(i){
+  const p=prompt('Nouvelle heure :',ST.periods[i]);
+  if(!p||!p.trim())return;
+  ST.periods[i]=p.trim();save();renderMg();render();toast('Heure modifiée ✔',1);
+}
+function delPeriod(i){
+  if(!confirm('Supprimer l\u2019heure '+ST.periods[i]+' ? Les cours placés à cette heure seront effacés.'))return;
+  ST.periods.splice(i,1);
+  const nt={};
+  for(const[k,v]of Object.entries(ST.tt)){
+    const[cid,d,p]=k.split('|');const pn=Number(p);
+    if(pn===i)continue;
+    nt[cid+'|'+d+'|'+(pn>i?pn-1:pn)]=v;
+  }
+  ST.tt=nt;save();renderMg();render();toast('Heure supprimée.',1);
+}
+
+/* ---------- boot ---------- */
+load();
+const u=localStorage.getItem('chrono_demo_user');
+if(u)start(u);
+document.getElementById('lpw').addEventListener('keydown',e=>{if(e.key==='Enter')submitAuth()});
+document.getElementById('lname').addEventListener('keydown',e=>{if(e.key==='Enter')submitAuth()});
+
+/* ---------- PWA : installation sur telephone ---------- */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{})});
+}
+</script>
+</body>
+</html>
