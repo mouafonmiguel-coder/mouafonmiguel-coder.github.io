@@ -105,14 +105,38 @@ button.ghost{background:#fff;color:#b42318;border:2px solid #b42318}
   <div class="topbar">
     <div class="t">🕒 Chrono<span>Class</span> — Gestion d'emploi du temps scolaire</div>
     <div class="who" id="who"></div>
-    <button style="background:#d99a06;color:#19270c" onclick="window.print()">🖨 Imprimer</button>
+    <button style="background:#fff;color:#0b3d20" onclick="openDoc()">📄 Document</button>
+    <button style="background:#d99a06;color:#19270c" onclick="openPrint()">🖨 Imprimer</button>
     <button style="background:#fff;color:#0b3d20" onclick="quit()">Quitter</button>
   </div>
   <div class="wrap">
     <div class="tabs" id="tabs"></div>
-    <div class="gridbox"><table id="grid"></table></div>
+    <div class="gridbox"><table id="grid"></table><div id="pfoot" style="display:none;margin-top:8px;font-size:.8rem;color:#333;text-align:right"></div></div>
     <div class="hint">👆 <b>Cliquez sur une case</b> pour placer une matière et un enseignant. ⛔ Un enseignant déjà occupé dans une autre classe à la même heure sera refusé.<br>
     ⚙️ <b>Classes & horaires</b> : ajoutez VOS classes et VOS heures de cours — ChronoClass s'adapte à votre établissement.</div>
+  </div>
+</div>
+
+<!-- modal document -->
+<div class="ov" id="docov">
+  <div class="card">
+    <h2 style="color:#0b3d20;font-size:1.05rem">📄 Document</h2>
+    <button class="big" onclick="saveDoc()">💾 Enregistrer le document (fichier)</button>
+    <button class="big" style="background:#14532d" onclick="document.getElementById('docfile').click()">📂 Importer un document</button>
+    <input type="file" id="docfile" accept=".json,application/json" style="display:none" onchange="importDoc(this)">
+    <p style="font-size:.8rem;color:#5a6e5f;margin-top:10px">💾 Le fichier contient TOUT : votre établissement, vos classes, vos horaires et tous les emplois du temps. Gardez-le comme sauvegarde, ou envoyez-le à un collègue sur WhatsApp — il l'importe ici et retrouve tout, avec la date d'enregistrement.</p>
+    <button class="big ghost" onclick="closeOv('docov')">Fermer</button>
+  </div>
+</div>
+
+<!-- modal impression -->
+<div class="ov" id="prov">
+  <div class="card">
+    <h2 style="color:#0b3d20;font-size:1.05rem">🖨 Imprimer / Print</h2>
+    <p style="font-size:.85rem;color:#5a6e5f;margin:6px 0 10px">La date d'impression sera écrite sur le document.<br>The printing date will be written on the document.</p>
+    <button class="big" onclick="doPrint('fr')">🇫🇷 Imprimer en français</button>
+    <button class="big" style="background:#14532d" onclick="doPrint('en')">🇬🇧 Print in English</button>
+    <button class="big ghost" onclick="closeOv('prov')">Annuler / Cancel</button>
   </div>
 </div>
 
@@ -246,15 +270,64 @@ function start(n){
 }
 function quit(){localStorage.removeItem('chrono_demo_user');location.reload()}
 
+/* ---------- document : enregistrer / importer ---------- */
+const DAYS_EN=['Monday','Tuesday','Wednesday','Thursday','Friday'];
+function openDoc(){document.getElementById('docov').style.display='flex'}
+function openPrint(){document.getElementById('prov').style.display='flex'}
+function saveDoc(){
+  const data={app:'ChronoClass',v:2,date:new Date().toISOString(),state:ST};
+  const name='ChronoClass_'+((ST.school.name||'document').replace(/[^A-Za-z0-9]+/g,'_'))+'.json';
+  const a=document.createElement('a');
+  a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(data));
+  a.download=name;document.body.appendChild(a);a.click();a.remove();
+  closeOv('docov');toast('💾 Document enregistré : '+name);
+}
+function importDoc(inp){
+  const f=inp.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const d=JSON.parse(r.result);
+      const st=(d.state&&d.state.tt!==undefined)?d.state:((d.tt!==undefined&&d.classes)?d:null);
+      if(!st||!st.classes||!st.periods)throw 0;
+      const dt=d.date?new Date(d.date).toLocaleDateString('fr-FR'):'';
+      if(!confirm('Importer ce document'+(dt?' (enregistré le '+dt+')':'')+' ?\nIl remplacera les données actuelles de ce téléphone.'))return;
+      ST=st;save();CUR=ST.classes.length?ST.classes[0].id:null;render();
+      document.getElementById('who').textContent=(ST.school.name?'🏫 '+ST.school.name+' · ':'')+'👤 '+(window.UNAME||'');
+      closeOv('docov');toast('📂 Document importé ✔');
+    }catch(e){alert('Fichier non reconnu.\nChoisissez un document enregistré par ChronoClass (fichier .json).')}
+  };
+  r.readAsText(f);inp.value='';
+}
+
+/* ---------- impression bilingue + date ---------- */
+function doPrint(lang){
+  closeOv('prov');
+  const days=lang==='en'?DAYS_EN:DAYS;
+  render(days);
+  const d=new Date();
+  const p2=n=>('0'+n).slice(-2);
+  const ds=p2(d.getDate())+'/'+p2(d.getMonth()+1)+'/'+d.getFullYear();
+  const f=document.getElementById('pfoot');
+  f.textContent=lang==='en'
+    ?('Printed on '+ds+' at '+p2(d.getHours())+':'+p2(d.getMinutes())+' — ChronoClass')
+    :('Imprimé le '+ds+' à '+p2(d.getHours())+'h'+p2(d.getMinutes())+' — ChronoClass');
+  f.style.display='block';
+  const done=()=>{f.style.display='none';render();window.onafterprint=null};
+  window.onafterprint=done;
+  setTimeout(()=>{window.print();setTimeout(done,1500)},80);
+}
+
 /* ---------- rendu ---------- */
-function render(){
+function render(days){
+  days=days||DAYS;
   if(!ST.classes.find(c=>c.id===CUR))CUR=ST.classes.length?ST.classes[0].id:null;
   document.getElementById('tabs').innerHTML=
     ST.classes.map(c=>`<button class="${c.id===CUR?'on':''}" onclick="CUR='${c.id}';render()">${esc(c.name)}</button>`).join('')
     +`<button class="cfg" onclick="openMg()">⚙️ Classes & horaires</button>`;
-  let h='<tr><th></th>'+DAYS.map(d=>'<th>'+d+'</th>').join('')+'</tr>';
+  let h='<tr><th></th>'+days.map(d=>'<th>'+d+'</th>').join('')+'</tr>';
   ST.periods.forEach((p,pi)=>{
-    h+='<tr><td class="h">'+esc(p)+'</td>'+DAYS.map((d,di)=>{
+    h+='<tr><td class="h">'+esc(p)+'</td>'+days.map((d,di)=>{
       const v=ST.tt[CUR+'|'+di+'|'+pi];
       return v?`<td style="background:${colorOf(v.s)}" onclick="openOv(${di},${pi})"><div class="s">${esc(v.s)}</div><div class="t2">${esc(v.t)}</div></td>`
               :`<td onclick="openOv(${di},${pi})"></td>`;
