@@ -124,7 +124,11 @@ button.ghost{background:#fff;color:#b42318;border:2px solid #b42318}
     <button class="big" onclick="saveDoc()">💾 Enregistrer le document (fichier)</button>
     <button class="big" style="background:#14532d" onclick="document.getElementById('docfile').click()">📂 Importer un document</button>
     <input type="file" id="docfile" accept=".json,application/json" style="display:none" onchange="importDoc(this)">
-    <p style="font-size:.8rem;color:#5a6e5f;margin-top:10px">💾 Le fichier contient TOUT : votre établissement, vos classes, vos horaires et tous les emplois du temps. Gardez-le comme sauvegarde, ou envoyez-le à un collègue sur WhatsApp — il l'importe ici et retrouve tout, avec la date d'enregistrement.</p>
+    <button class="big" style="background:#1b4e89" onclick="document.getElementById('wordfile').click()">📥 Importer un emploi du temps Word (.docx) → classe affichée</button>
+    <input type="file" id="wordfile" accept=".docx" style="display:none" onchange="importWord(this)">
+    <p style="font-size:.8rem;color:#5a6e5f;margin-top:10px">💾 Le fichier contient TOUT : votre établissement, vos classes, vos horaires et tous les emplois du temps. Gardez-le comme sauvegarde, ou envoyez-le à un collègue sur WhatsApp — il l'importe ici et retrouve tout, avec la date d'enregistrement.<br><br>
+    📥 <b>Word</b> : le document doit contenir un tableau avec les jours (Lundi…Vendredi ou Monday…Friday) en haut et les heures dans la première colonne.<br>
+    📄 <b>PDF</b> : un PDF vient presque toujours d'un fichier Word — importez le fichier .docx d'origine. La lecture PDF/photo par intelligence artificielle est disponible dans ChronoClass Ordinateur.</p>
     <button class="big ghost" onclick="closeOv('docov')">Fermer</button>
   </div>
 </div>
@@ -298,6 +302,98 @@ function importDoc(inp){
     }catch(e){alert('Fichier non reconnu.\nChoisissez un document enregistré par ChronoClass (fichier .json).')}
   };
   r.readAsText(f);inp.value='';
+}
+
+/* ---------- import Word (.docx) : tableau -> classe affichée ---------- */
+function loadJSZip(){
+  return new Promise((ok,ko)=>{
+    if(window.JSZip)return ok();
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+    s.onload=()=>ok();s.onerror=()=>ko(new Error('net'));
+    document.body.appendChild(s);
+  });
+}
+async function importWord(inp){
+  const f=inp.files[0];if(!f)return;inp.value='';
+  if(!CUR){alert('Ajoutez d\'abord une classe avec ⚙️ Classes & horaires.');return;}
+  try{await loadJSZip()}catch(e){alert('Connexion internet nécessaire pour la première utilisation de l\'import Word.');return;}
+  try{
+    const zip=await JSZip.loadAsync(f);
+    const entry=zip.file('word/document.xml');
+    if(!entry)throw new Error('Ce fichier n\'est pas un document Word (.docx).');
+    const xml=await entry.async('string');
+    const doc=new DOMParser().parseFromString(xml,'text/xml');
+    const dayNames={lundi:0,monday:0,mardi:1,tuesday:1,mercredi:2,wednesday:2,jeudi:3,thursday:3,vendredi:4,friday:4};
+    const txt=el=>{
+      const lines=[];
+      for(const p of el.getElementsByTagNameNS('*','p')){
+        let s='';
+        for(const t of p.getElementsByTagNameNS('*','t'))s+=t.textContent;
+        s=s.trim();if(s)lines.push(s);
+      }
+      return lines;
+    };
+    let periods=null,data=null;
+    for(const tb of doc.getElementsByTagNameNS('*','tbl')){
+      const rows=[];
+      for(const tr of tb.getElementsByTagNameNS('*','tr')){
+        const cells=[];
+        for(const tc of tr.getElementsByTagNameNS('*','tc'))cells.push(txt(tc));
+        rows.push(cells);
+      }
+      let hi=-1,map=null;
+      rows.forEach((r,i)=>{
+        if(hi>=0)return;
+        const m={};let cnt=0;
+        r.forEach((c,ci)=>{const k=(c[0]||'').toLowerCase().trim();if(k in dayNames){m[ci]=dayNames[k];cnt++;}});
+        if(cnt>=3){hi=i;map=m;}
+      });
+      if(hi<0)continue;
+      periods=[];data=[];
+      for(let i=hi+1;i<rows.length;i++){
+        const r=rows[i];
+        const label=(r[0]&&r[0][0])||'';
+        if(!label)continue;
+        const e={};
+        for(const ci in map){
+          const c=r[ci];
+          if(c&&c[0])e[map[ci]]={s:c[0],t:c[1]||''};
+        }
+        periods.push(label);data.push(e);
+      }
+      if(periods.length)break;
+    }
+    if(!periods||!periods.length)throw new Error('Je n\'ai pas trouvé de tableau avec les jours (Lundi…Vendredi / Monday…Friday) dans ce document.');
+    const cname=ST.classes.find(c=>c.id===CUR).name;
+    if(!confirm('Importer cet emploi du temps ('+periods.length+' heures de cours) dans la classe '+cname+' ?'))return;
+    if(JSON.stringify(periods)!==JSON.stringify(ST.periods)){
+      if(confirm('Les horaires du document ('+periods[0]+' → '+periods[periods.length-1]+') sont différents des vôtres.\nOK = adopter les horaires du document pour tout l\'établissement.\nAnnuler = garder vos horaires actuels.')){
+        ST.periods=periods;
+      }
+    }
+    for(const k of Object.keys(ST.tt))if(k.startsWith(CUR+'|'))delete ST.tt[k];
+    const norm=x=>x.toLowerCase().replace(/\s+/g,' ').trim();
+    const n=Math.min(ST.periods.length,data.length);
+    let placed=0;const skipped=[];
+    for(let pi=0;pi<n;pi++){
+      for(const di in data[pi]){
+        const v=data[pi][di];let clash=null;
+        if(v.t){
+          for(const c of ST.classes){
+            if(c.id===CUR)continue;
+            const o=ST.tt[c.id+'|'+di+'|'+pi];
+            if(o&&o.t&&norm(o.t)===norm(v.t)){clash=c.name;break;}
+          }
+        }
+        if(clash){skipped.push(v.s+' ('+v.t+') — '+DAYS[di]+' '+ST.periods[pi]+' : déjà en '+clash);continue;}
+        ST.tt[CUR+'|'+di+'|'+pi]={s:v.s,t:v.t};placed++;
+      }
+    }
+    save();render();closeOv('docov');
+    toast('📥 '+placed+' cours importés dans '+cname+(skipped.length?' — ⛔ '+skipped.length+' conflit(s) ignoré(s)':''));
+    if(skipped.length)alert('⛔ Conflits ignorés (enseignant déjà occupé dans une autre classe) :\n\n'+skipped.slice(0,8).join('\n'));
+  }catch(e){alert((e&&e.message)||'Fichier Word non reconnu.');}
 }
 
 /* ---------- impression bilingue + date ---------- */
