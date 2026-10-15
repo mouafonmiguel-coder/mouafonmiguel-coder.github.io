@@ -63,6 +63,7 @@ button.ghost{background:#fff;color:#b42318;border:2px solid #b42318}
 #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;background:#b42318;color:#fff;padding:13px 18px;border-radius:12px;font-size:.9rem;font-weight:700;max-width:92%;opacity:0;transition:.3s;z-index:99;pointer-events:none}
 #toast.ok{background:#14532d}
 #toast.show{opacity:1}
+.pv{border-collapse:collapse;width:100%}.pv th,.pv td{border:1px solid #cdd9cf;padding:4px;font-size:.72rem;text-align:center}.pv th{background:#0b3d20;color:#fff}.pv .s{font-weight:800}.pv .t2{color:#555;font-size:.65rem}
 @media print{.topbar,.demo-note,.tabs,.hint,#toast{display:none!important}#app{background:#fff}.gridbox{box-shadow:none;padding:0}body{background:#fff}}
 </style>
 </head>
@@ -304,96 +305,199 @@ function importDoc(inp){
   r.readAsText(f);inp.value='';
 }
 
-/* ---------- import Word (.docx) : tableau -> classe affichée ---------- */
+/* ---------- import Word/PDF : analyse -> aperçu -> accepter/refuser ---------- */
+let PENDING=null;
+const DAYMAP={lundi:0,monday:0,mardi:1,tuesday:1,mercredi:2,wednesday:2,jeudi:3,thursday:3,vendredi:4,friday:4};
+const dkey=x=>(x||'').toLowerCase().replace(/[^a-z]/g,'');
 function loadJSZip(){
   return new Promise((ok,ko)=>{
     if(window.JSZip)return ok();
     const s=document.createElement('script');
     s.src='https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
-    s.onload=()=>ok();s.onerror=()=>ko(new Error('net'));
+    s.onload=()=>ok();s.onerror=()=>ko(new Error('Connexion internet nécessaire pour la première utilisation.'));
     document.body.appendChild(s);
   });
 }
-async function importWord(inp){
+function loadPdfJs(){
+  return new Promise((ok,ko)=>{
+    if(window.pdfjsLib)return ok();
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    s.onload=()=>{window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';ok()};
+    s.onerror=()=>ko(new Error('Connexion internet nécessaire pour la première utilisation.'));
+    document.body.appendChild(s);
+  });
+}
+async function parseWord(f){
+  const zip=await JSZip.loadAsync(f);
+  const entry=zip.file('word/document.xml');
+  if(!entry)throw new Error('Ce fichier n\'est pas un document Word (.docx).');
+  const xml=await entry.async('string');
+  const doc=new DOMParser().parseFromString(xml,'text/xml');
+  const txt=el=>{
+    const lines=[];
+    for(const pp of el.getElementsByTagNameNS('*','p')){
+      let t='';
+      for(const tn of pp.getElementsByTagNameNS('*','t'))t+=tn.textContent;
+      t=t.trim();if(t)lines.push(t);
+    }
+    return lines;
+  };
+  for(const tb of doc.getElementsByTagNameNS('*','tbl')){
+    const rows=[];
+    for(const tr of tb.getElementsByTagNameNS('*','tr')){
+      const cells=[];
+      for(const tc of tr.getElementsByTagNameNS('*','tc'))cells.push(txt(tc));
+      rows.push(cells);
+    }
+    let hi=-1,map=null;
+    rows.forEach((r,i)=>{
+      if(hi>=0)return;
+      const m={};let cnt=0;
+      r.forEach((c,ci)=>{const k=dkey(c[0]);if(k in DAYMAP){m[ci]=DAYMAP[k];cnt++;}});
+      if(cnt>=3){hi=i;map=m;}
+    });
+    if(hi<0)continue;
+    const periods=[],data=[];
+    for(let i=hi+1;i<rows.length;i++){
+      const r=rows[i];
+      const label=(r[0]&&r[0][0])||'';
+      if(!label)continue;
+      const e={};
+      for(const ci in map){const c=r[ci];if(c&&c[0])e[map[ci]]={s:c[0],t:c.slice(1).join(' ')};}
+      periods.push(label);data.push(e);
+    }
+    if(periods.length)return{periods,data};
+  }
+  return null;
+}
+async function parsePdf(f){
+  const buf=await f.arrayBuffer();
+  const pdf=await pdfjsLib.getDocument({data:buf}).promise;
+  let any=false;
+  for(let pn=1;pn<=Math.min(pdf.numPages,5);pn++){
+    const page=await pdf.getPage(pn);
+    const tc=await page.getTextContent();
+    const items=[];
+    for(const it of tc.items){const t=(it.str||'').trim();if(t)items.push({s:t,x:it.transform[4],y:it.transform[5]});}
+    if(items.length)any=true;
+    const r=gridFromItems(items);
+    if(r)return r;
+  }
+  if(!any)throw new Error('⛔ Ce PDF est un scan (photo) : aucun texte lisible dedans.\nLa lecture par intelligence artificielle est disponible dans ChronoClass Ordinateur.');
+  return null;
+}
+function gridFromItems(items){
+  const hdrs=items.filter(i=>dkey(i.s) in DAYMAP);
+  if(hdrs.length<3)return null;
+  let best=null;
+  for(const h of hdrs){
+    const grp=hdrs.filter(o=>Math.abs(o.y-h.y)<6);
+    if(!best||grp.length>best.length)best=grp;
+  }
+  if(best.length<3)return null;
+  const cols={};
+  for(const h of best){const di=DAYMAP[dkey(h.s)];if(!(di in cols))cols[di]=h.x;}
+  const hdrY=best[0].y;
+  const leftX=Math.min.apply(null,Object.values(cols));
+  const below=items.filter(i=>i.y<hdrY-4);
+  const labs=below.filter(i=>i.x<leftX-8).sort((a,b)=>b.y-a.y);
+  const bands=[];
+  for(const l of labs){
+    const b=bands.find(b=>Math.abs(b.y-l.y)<7);
+    if(b)b.parts.push(l);else bands.push({y:l.y,parts:[l]});
+  }
+  if(bands.length<2)return null;
+  bands.forEach(b=>{b.parts.sort((p,q)=>p.x-q.x);b.label=b.parts.map(p=>p.s).join(' ');});
+  const periods=bands.map(b=>b.label),data=bands.map(()=>({}));
+  const raw=bands.map(()=>({}));
+  for(const it of below){
+    if(it.x<leftX-8)continue;
+    let bi=0,bbd=1e9;
+    for(let i=0;i<bands.length;i++){const d=Math.abs(it.y-bands[i].y);if(d<bbd){bbd=d;bi=i;}}
+    let bd=1e9,bdi=null;
+    for(const di in cols){const d=Math.abs(cols[di]-it.x);if(d<bd){bd=d;bdi=di;}}
+    if(bdi===null)continue;
+    (raw[bi][bdi]=raw[bi][bdi]||[]).push(it);
+  }
+  let lessons=0;
+  for(let pi=0;pi<raw.length;pi++){
+    for(const di in raw[pi]){
+      const L=raw[pi][di].sort((a,b)=>b.y-a.y||a.x-b.x);
+      const lines=[];
+      for(const it of L){
+        const r=lines.find(r=>Math.abs(r.y-it.y)<4);
+        if(r)r.txt+=' '+it.s;else lines.push({y:it.y,txt:it.s});
+      }
+      data[pi][di]={s:lines[0].txt,t:lines.slice(1).map(r=>r.txt).join(' ')};lessons++;
+    }
+  }
+  return lessons?{periods,data}:null;
+}
+function validTT(p){
+  if(!p||!p.periods||p.periods.length<2)return false;
+  let lessons=0;const ds={};
+  p.data.forEach(e=>{for(const di in e){lessons++;ds[di]=1;}});
+  return lessons>=2&&Object.keys(ds).length>=2;
+}
+async function importTT(inp){
   const f=inp.files[0];if(!f)return;inp.value='';
   if(!CUR){alert('Ajoutez d\'abord une classe avec ⚙️ Classes & horaires.');return;}
-  try{await loadJSZip()}catch(e){alert('Connexion internet nécessaire pour la première utilisation de l\'import Word.');return;}
+  const ext=f.name.toLowerCase().split('.').pop();
   try{
-    const zip=await JSZip.loadAsync(f);
-    const entry=zip.file('word/document.xml');
-    if(!entry)throw new Error('Ce fichier n\'est pas un document Word (.docx).');
-    const xml=await entry.async('string');
-    const doc=new DOMParser().parseFromString(xml,'text/xml');
-    const dayNames={lundi:0,monday:0,mardi:1,tuesday:1,mercredi:2,wednesday:2,jeudi:3,thursday:3,vendredi:4,friday:4};
-    const txt=el=>{
-      const lines=[];
-      for(const p of el.getElementsByTagNameNS('*','p')){
-        let s='';
-        for(const t of p.getElementsByTagNameNS('*','t'))s+=t.textContent;
-        s=s.trim();if(s)lines.push(s);
-      }
-      return lines;
-    };
-    let periods=null,data=null;
-    for(const tb of doc.getElementsByTagNameNS('*','tbl')){
-      const rows=[];
-      for(const tr of tb.getElementsByTagNameNS('*','tr')){
-        const cells=[];
-        for(const tc of tr.getElementsByTagNameNS('*','tc'))cells.push(txt(tc));
-        rows.push(cells);
-      }
-      let hi=-1,map=null;
-      rows.forEach((r,i)=>{
-        if(hi>=0)return;
-        const m={};let cnt=0;
-        r.forEach((c,ci)=>{const k=(c[0]||'').toLowerCase().trim();if(k in dayNames){m[ci]=dayNames[k];cnt++;}});
-        if(cnt>=3){hi=i;map=m;}
-      });
-      if(hi<0)continue;
-      periods=[];data=[];
-      for(let i=hi+1;i<rows.length;i++){
-        const r=rows[i];
-        const label=(r[0]&&r[0][0])||'';
-        if(!label)continue;
-        const e={};
-        for(const ci in map){
-          const c=r[ci];
-          if(c&&c[0])e[map[ci]]={s:c[0],t:c[1]||''};
+    let p=null;
+    if(ext==='docx'){await loadJSZip();p=await parseWord(f);}
+    else if(ext==='pdf'){await loadPdfJs();p=await parsePdf(f);}
+    else{alert('Choisissez un fichier Word (.docx) ou PDF (.pdf).');return;}
+    if(!validTT(p)){alert('⛔ Document REFUSÉ.\n\nCe fichier ne ressemble pas à un emploi du temps scolaire : il faut un tableau avec les jours (Lundi…Vendredi / Monday…Friday), les heures de cours, et des matières.');return;}
+    showPreview(p);
+  }catch(e){alert((e&&e.message)||'Fichier non reconnu.');}
+}
+function showPreview(p){
+  PENDING=p;
+  let lessons=0;p.data.forEach(e=>{for(const k in e)lessons++;});
+  const cname=ST.classes.find(c=>c.id===CUR).name;
+  document.getElementById('pvinfo').textContent='✅ Emploi du temps détecté : '+p.periods.length+' heures de cours, '+lessons+' cours. Vérifiez puis Accepter → il sera placé dans la classe '+cname+'.';
+  let h='<tr><th></th>'+DAYS.map(d=>'<th>'+d+'</th>').join('')+'</tr>';
+  p.periods.forEach((lab,pi)=>{
+    h+='<tr><td style="font-weight:800;background:#eef3ee">'+esc(lab)+'</td>';
+    for(let di=0;di<5;di++){
+      const v=p.data[pi][di];
+      h+='<td>'+(v?'<div class="s">'+esc(v.s)+'</div><div class="t2">'+esc(v.t||'')+'</div>':'')+'</td>';
+    }
+    h+='</tr>';
+  });
+  document.getElementById('pvtable').innerHTML=h;
+  closeOv('docov');
+  document.getElementById('pvov').style.display='flex';
+}
+function acceptImport(){
+  const p=PENDING;if(!p)return;PENDING=null;closeOv('pvov');
+  const cname=ST.classes.find(c=>c.id===CUR).name;
+  if(JSON.stringify(p.periods)!==JSON.stringify(ST.periods)){
+    if(confirm('Les horaires du document ('+p.periods[0]+' → '+p.periods[p.periods.length-1]+') sont différents des vôtres.\nOK = adopter les horaires du document pour tout l\'établissement.\nAnnuler = garder vos horaires actuels.'))ST.periods=p.periods.slice();
+  }
+  for(const k of Object.keys(ST.tt))if(k.startsWith(CUR+'|'))delete ST.tt[k];
+  const norm=x=>x.toLowerCase().replace(/\s+/g,' ').trim();
+  const n=Math.min(ST.periods.length,p.data.length);
+  let placed=0;const skipped=[];
+  for(let pi=0;pi<n;pi++){
+    for(const di in p.data[pi]){
+      const v=p.data[pi][di];let clash=null;
+      if(v.t){
+        for(const c of ST.classes){
+          if(c.id===CUR)continue;
+          const o=ST.tt[c.id+'|'+di+'|'+pi];
+          if(o&&o.t&&norm(o.t)===norm(v.t)){clash=c.name;break;}
         }
-        periods.push(label);data.push(e);
       }
-      if(periods.length)break;
+      if(clash){skipped.push(v.s+' ('+v.t+') — '+DAYS[di]+' '+ST.periods[pi]+' : déjà en '+clash);continue;}
+      ST.tt[CUR+'|'+di+'|'+pi]={s:v.s,t:v.t};placed++;
     }
-    if(!periods||!periods.length)throw new Error('Je n\'ai pas trouvé de tableau avec les jours (Lundi…Vendredi / Monday…Friday) dans ce document.');
-    const cname=ST.classes.find(c=>c.id===CUR).name;
-    if(!confirm('Importer cet emploi du temps ('+periods.length+' heures de cours) dans la classe '+cname+' ?'))return;
-    if(JSON.stringify(periods)!==JSON.stringify(ST.periods)){
-      if(confirm('Les horaires du document ('+periods[0]+' → '+periods[periods.length-1]+') sont différents des vôtres.\nOK = adopter les horaires du document pour tout l\'établissement.\nAnnuler = garder vos horaires actuels.')){
-        ST.periods=periods;
-      }
-    }
-    for(const k of Object.keys(ST.tt))if(k.startsWith(CUR+'|'))delete ST.tt[k];
-    const norm=x=>x.toLowerCase().replace(/\s+/g,' ').trim();
-    const n=Math.min(ST.periods.length,data.length);
-    let placed=0;const skipped=[];
-    for(let pi=0;pi<n;pi++){
-      for(const di in data[pi]){
-        const v=data[pi][di];let clash=null;
-        if(v.t){
-          for(const c of ST.classes){
-            if(c.id===CUR)continue;
-            const o=ST.tt[c.id+'|'+di+'|'+pi];
-            if(o&&o.t&&norm(o.t)===norm(v.t)){clash=c.name;break;}
-          }
-        }
-        if(clash){skipped.push(v.s+' ('+v.t+') — '+DAYS[di]+' '+ST.periods[pi]+' : déjà en '+clash);continue;}
-        ST.tt[CUR+'|'+di+'|'+pi]={s:v.s,t:v.t};placed++;
-      }
-    }
-    save();render();closeOv('docov');
-    toast('📥 '+placed+' cours importés dans '+cname+(skipped.length?' — ⛔ '+skipped.length+' conflit(s) ignoré(s)':''));
-    if(skipped.length)alert('⛔ Conflits ignorés (enseignant déjà occupé dans une autre classe) :\n\n'+skipped.slice(0,8).join('\n'));
-  }catch(e){alert((e&&e.message)||'Fichier Word non reconnu.');}
+  }
+  save();render();
+  toast('📥 '+placed+' cours importés dans '+cname+(skipped.length?' — ⛔ '+skipped.length+' conflit(s) ignoré(s)':''));
+  if(skipped.length)alert('⛔ Conflits ignorés (enseignant déjà occupé dans une autre classe à la même heure) :\n\n'+skipped.slice(0,8).join('\n'));
 }
 
 /* ---------- impression bilingue + date ---------- */
@@ -522,6 +626,26 @@ function editPeriod(i){
 }
 function delPeriod(i){
   if(!confirm('Supprimer l\u2019heure '+ST.periods[i]+' ? Les cours placés à cette heure seront effacés.'))return;
+  ST.periods.splice(i,1);
+  const nt={};
+  for(const[k,v]of Object.entries(ST.tt)){
+    const[cid,d,p]=k.split('|');const pn=Number(p);
+    if(pn===i)continue;
+    nt[cid+'|'+d+'|'+(pn>i?pn-1:pn)]=v;
+  }
+  ST.tt=nt;save();renderMg();render();toast('Heure supprimée.',1);
+}
+
+/* ---------- boot ---------- */
+load();
+const u=localStorage.getItem('chrono_demo_user');
+if(u)start(u);
+document.getElementById('lpw').addEventListener('keydown',e=>{if(e.key==='Enter')submitAuth()});
+document.getElementById('lname').addEventListener('keydown',e=>{if(e.key==='Enter')submitAuth()});
+</script>
+</body>
+</html>
+upprimer l\u2019heure '+ST.periods[i]+' ? Les cours placés à cette heure seront effacés.'))return;
   ST.periods.splice(i,1);
   const nt={};
   for(const[k,v]of Object.entries(ST.tt)){
