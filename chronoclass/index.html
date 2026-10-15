@@ -18,6 +18,9 @@ input:focus{outline:none;border-color:#14532d}
 button.big{width:100%;margin-top:16px;padding:14px;border:0;border-radius:10px;background:#14532d;color:#fff;font-size:1.05rem;font-weight:800;cursor:pointer}
 button.big:active{opacity:.85}
 .err{color:#b42318;font-size:.85rem;margin-top:8px;font-weight:700;min-height:1.1em}
+.ltabs{display:flex;gap:8px;margin:6px 0 4px}
+.ltabs button{flex:1;padding:10px;border:2px solid #14532d;background:#fff;color:#14532d;border-radius:10px;font-weight:800;cursor:pointer}
+.ltabs button.on{background:#14532d;color:#fff}
 .more{display:block;text-align:center;margin-top:16px;color:#14532d;font-size:.88rem;font-weight:700;text-decoration:none}
 /* ---- app ---- */
 #app{display:none;background:#f1f6f2;min-height:100vh}
@@ -57,19 +60,22 @@ button.ghost{background:#fff;color:#b42318;border:2px solid #b42318}
 </head>
 <body>
 
-<!-- ================= CONNEXION ================= -->
+<!-- ================= CONNEXION / INSCRIPTION ================= -->
 <div class="center" id="login">
   <div class="card">
     <div class="logo">🕒 Chrono<span>Class</span></div>
     <div class="subt">Gestion d'emploi du temps scolaire<br>School timetable management</div>
-    <h2 style="color:#0b3d20;font-size:1.1rem;margin-bottom:2px">Connexion</h2>
-    <div style="font-size:.8rem;color:#5a6e5f">Démo libre : entrez simplement votre nom pour essayer.</div>
-    <label>Votre nom</label>
+    <div class="ltabs">
+      <button id="tbL" class="on" onclick="setMode('login')">Se connecter</button>
+      <button id="tbR" onclick="setMode('reg')">S'inscrire</button>
+    </div>
+    <label>Nom d'utilisateur</label>
     <input id="lname" placeholder="Ex : M. FOTSO">
     <label>Mot de passe</label>
-    <input id="lpw" type="password" placeholder="(libre pour la démo)">
-    <button class="big" onclick="enter()">Se connecter</button>
+    <input id="lpw" type="password" placeholder="••••••">
+    <button class="big" id="lbtn" onclick="submitAuth()">Se connecter</button>
     <div class="err" id="lerr"></div>
+    <div style="font-size:.78rem;color:#5a6e5f;margin-top:6px" id="lhint">Première visite ? Appuyez sur « S'inscrire » pour créer votre compte.</div>
     <a class="more" href="decouvrir.html">📖 Découvrir ChronoClass (fonctionnalités)</a>
   </div>
 </div>
@@ -129,11 +135,42 @@ function save(){localStorage.setItem('chrono_demo',JSON.stringify(DATA))}
 function colorOf(s){let h=0;for(const c of s.toLowerCase())h=(h*31+c.charCodeAt(0))>>>0;return PAL[h%PAL.length]}
 function toast(m,ok){const t=document.getElementById('toast');t.textContent=m;t.className=(ok?'ok ':'')+'show';setTimeout(()=>t.className=ok?'ok':'',ok?2500:5000)}
 
-function enter(){
+let MODE='login';
+function setMode(m){
+  MODE=m;
+  document.getElementById('tbL').className=m==='login'?'on':'';
+  document.getElementById('tbR').className=m==='reg'?'on':'';
+  document.getElementById('lbtn').textContent=m==='reg'?'Créer mon compte':'Se connecter';
+  document.getElementById('lhint').textContent=m==='reg'
+    ?'Choisissez un nom et un mot de passe : votre compte sera créé sur cet appareil.'
+    :'Première visite ? Appuyez sur « S\u2019inscrire » pour créer votre compte.';
+  document.getElementById('lerr').textContent='';
+}
+async function hashPw(x){
+  const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('chrono|'+x));
+  return [...new Uint8Array(d)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+function allUsers(){try{return JSON.parse(localStorage.getItem('chrono_demo_users')||'{}')}catch(e){return{}}}
+async function submitAuth(){
+  const err=document.getElementById('lerr');err.textContent='';
   const n=document.getElementById('lname').value.trim();
-  if(n.length<2){document.getElementById('lerr').textContent='Entrez votre nom (2 lettres minimum).';return;}
-  localStorage.setItem('chrono_demo_user',n);
-  start(n);
+  const p=document.getElementById('lpw').value;
+  if(n.length<2){err.textContent='Entrez votre nom (2 lettres minimum).';return;}
+  if(p.length<4){err.textContent='Mot de passe : 4 caractères minimum.';return;}
+  const U=allUsers(),k=n.toLowerCase();
+  if(MODE==='reg'){
+    if(U[k]){err.textContent='Ce compte existe déjà sur cet appareil. Appuyez sur « Se connecter ».';return;}
+    U[k]={n,h:await hashPw(p)};
+    localStorage.setItem('chrono_demo_users',JSON.stringify(U));
+    localStorage.setItem('chrono_demo_user',n);
+    start(n);toast('Compte créé ✔ Bienvenue '+n+' !',1);
+  }else{
+    const u=U[k];
+    if(!u){err.textContent='Compte introuvable. Appuyez sur « S\u2019inscrire » pour le créer.';return;}
+    if(u.h!==await hashPw(p)){err.textContent='Mot de passe incorrect.';return;}
+    localStorage.setItem('chrono_demo_user',u.n);
+    start(u.n);
+  }
 }
 function start(n){
   document.getElementById('login').style.display='none';
@@ -190,8 +227,8 @@ function saveCell(){
 load();
 const u=localStorage.getItem('chrono_demo_user');
 if(u)start(u);
-document.getElementById('lpw').addEventListener('keydown',e=>{if(e.key==='Enter')enter()});
-document.getElementById('lname').addEventListener('keydown',e=>{if(e.key==='Enter')enter()});
+document.getElementById('lpw').addEventListener('keydown',e=>{if(e.key==='Enter')submitAuth()});
+document.getElementById('lname').addEventListener('keydown',e=>{if(e.key==='Enter')submitAuth()});
 </script>
 </body>
 </html>
