@@ -1,15 +1,17 @@
 {
-  "name": "CARNET CRÉDIT",
+  "name": "CARNET CRÉDIT — le carnet intelligent de votre boutique",
   "short_name": "Carnet Crédit",
-  "description": "Le carnet de crédits du boutiquier — fini le cahier !",
-  "start_url": "./",
-  "scope": "./",
+  "description": "Gérez les crédits de vos clients, votre caisse et vos rappels de dettes. Fini le cahier !",
+  "lang": "fr",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0b3d20",
   "theme_color": "#0b3d20",
-  "lang": "fr",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
