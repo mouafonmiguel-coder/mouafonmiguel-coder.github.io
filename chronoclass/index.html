@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/png" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<meta name="theme-color" content="#0b3d20">
 <title>ChronoClass — Gestion d'emploi du temps scolaire</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
@@ -780,6 +784,11 @@ const u=localStorage.getItem('chrono_demo_user');
 if(u)start(u);
 document.getElementById('lpw').addEventListener('keydown',e=>{if(e.key==='Enter')submitAuth()});
 document.getElementById('lname').addEventListener('keydown',e=>{if(e.key==='Enter')submitAuth()});
+
+/* ---------- PWA : installation sur telephone ---------- */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{})});
+}
 </script>
 </body>
 </html>
