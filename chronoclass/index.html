@@ -3,102 +3,195 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ChronoClass — Gestion d'emploi du temps scolaire | School Timetable Management</title>
-<meta name="description" content="ChronoClass : le logiciel qui gère l'emploi du temps de votre établissement. Grilles interactives, détection des conflits, import par photo, impression professionnelle. Bilingue FR/EN.">
+<title>ChronoClass — Gestion d'emploi du temps scolaire</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
-body{background:#f4f8f5;color:#1c2b20}
-.band{background:#0b3d20;color:#fff;padding:46px 20px 54px;text-align:center}
-.band .logo{font-size:2.1rem;font-weight:900;letter-spacing:.5px}
-.band .logo span{color:#d99a06}
-.band .tag{margin-top:10px;font-size:1.15rem;font-weight:600}
-.band .tag-en{margin-top:4px;font-size:.92rem;opacity:.85}
-.cta{display:inline-block;margin:22px 8px 0;padding:14px 26px;border-radius:12px;text-decoration:none;font-weight:800;font-size:1rem}
-.cta.gold{background:#d99a06;color:#19270c}
-.cta.ghost{border:2px solid #fff;color:#fff}
-.wrap{max-width:980px;margin:0 auto;padding:34px 18px}
-h2{color:#0b3d20;font-size:1.45rem;margin-bottom:4px;border-bottom:3px solid #d99a06;display:inline-block;padding-bottom:4px}
-.sub{color:#5a6e5f;font-size:.9rem;margin-bottom:22px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px;margin-top:18px}
-.card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 3px 14px rgba(11,61,32,.08)}
-.card .ic{font-size:1.9rem}
-.card h3{color:#0b3d20;font-size:1.02rem;margin:8px 0 6px}
-.card p{font-size:.88rem;line-height:1.5;color:#3d4f43}
-.card p .en{display:block;margin-top:6px;font-size:.8rem;color:#7b8a80;font-style:italic}
-.steps{counter-reset:s}
-.step{background:#fff;border-left:5px solid #d99a06;border-radius:0 12px 12px 0;padding:16px 18px;margin-top:12px;box-shadow:0 2px 10px rgba(11,61,32,.07)}
-.step b{color:#0b3d20}
-.step p{font-size:.9rem;margin-top:4px;color:#3d4f43;line-height:1.5}
-.demo{background:#0b3d20;border-radius:18px;color:#fff;padding:30px 22px;text-align:center;margin-top:34px}
-.demo h2{color:#fff;border-color:#d99a06}
-.demo p{margin:12px auto 0;max-width:620px;font-size:.95rem;line-height:1.6}
-.price{font-size:1.25rem;font-weight:900;color:#d99a06;margin-top:10px}
-.tt{margin:22px auto 0;max-width:680px;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.25)}
-.tt table{width:100%;border-collapse:collapse;font-size:.72rem}
-.tt th{background:#0b3d20;color:#fff;padding:7px 4px;font-size:.7rem}
-.tt td{border:1px solid #e3ece5;padding:7px 4px;text-align:center;color:#1c2b20}
-.m1{background:#dff1e3}.m2{background:#fdeeca}.m3{background:#e3e9fb}.m4{background:#fde3e3}.m5{background:#eae3fb}
-footer{background:#07271434;background:#072714;color:#cfe0d2;text-align:center;padding:26px 16px;font-size:.85rem;margin-top:40px}
-footer a{color:#d99a06;text-decoration:none;font-weight:700}
-@media(max-width:560px){.band .logo{font-size:1.6rem}.band .tag{font-size:1rem}}
+body{background:#0b3d20;min-height:100vh;color:#1c2b20}
+.center{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.card{background:#fff;border-radius:16px;padding:28px 24px;max-width:430px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.logo{text-align:center;font-size:1.7rem;font-weight:900;color:#0b3d20;margin-bottom:2px}
+.logo span{color:#d99a06}
+.subt{text-align:center;color:#5a6e5f;font-size:.88rem;margin-bottom:20px}
+label{display:block;font-size:.82rem;font-weight:700;color:#14532d;margin:12px 0 4px}
+input{width:100%;padding:12px;border:2px solid #cfe0d2;border-radius:10px;font-size:1rem}
+input:focus{outline:none;border-color:#14532d}
+button.big{width:100%;margin-top:16px;padding:14px;border:0;border-radius:10px;background:#14532d;color:#fff;font-size:1.05rem;font-weight:800;cursor:pointer}
+button.big:active{opacity:.85}
+.err{color:#b42318;font-size:.85rem;margin-top:8px;font-weight:700;min-height:1.1em}
+.more{display:block;text-align:center;margin-top:16px;color:#14532d;font-size:.88rem;font-weight:700;text-decoration:none}
+/* ---- app ---- */
+#app{display:none;background:#f1f6f2;min-height:100vh}
+.topbar{background:#0b3d20;color:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.topbar .t{font-weight:900;font-size:1.05rem}
+.topbar .t span{color:#d99a06}
+.topbar .who{font-size:.85rem;opacity:.9;margin-left:auto}
+.topbar button{border:0;border-radius:8px;padding:8px 14px;font-weight:800;cursor:pointer}
+.demo-note{background:#fdf3dd;border-bottom:2px solid #d99a06;color:#6b4e00;padding:9px 16px;font-size:.85rem;font-weight:600}
+.wrap{max-width:1000px;margin:0 auto;padding:18px 14px 50px}
+.tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tabs button{border:2px solid #14532d;background:#fff;color:#14532d;border-radius:999px;padding:8px 18px;font-weight:800;cursor:pointer}
+.tabs button.on{background:#14532d;color:#fff}
+.gridbox{background:#fff;border-radius:14px;padding:12px;box-shadow:0 3px 14px rgba(11,61,32,.1);overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th{background:#0b3d20;color:#fff;padding:9px 6px;font-size:.8rem}
+td{border:1px solid #e0eae2;height:62px;text-align:center;font-size:.8rem;cursor:pointer;vertical-align:middle;padding:3px}
+td.h{background:#f1f6f2;font-weight:800;cursor:default;width:86px;font-size:.75rem}
+td:hover:not(.h){outline:3px solid #d99a06;outline-offset:-3px}
+td .s{font-weight:800}
+td .t2{font-size:.72rem;color:#405247}
+.hint{font-size:.82rem;color:#5a6e5f;margin:12px 2px;line-height:1.5}
+.toolrow{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.toolrow button{border:0;border-radius:10px;padding:12px 18px;font-weight:800;cursor:pointer;font-size:.95rem}
+/* modal */
+#ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50;align-items:center;justify-content:center;padding:16px}
+#ov .card{max-width:360px}
+.rowbtn{display:flex;gap:10px}
+.rowbtn button{flex:1}
+button.ghost{background:#fff;color:#b42318;border:2px solid #b42318}
+/* toast */
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;background:#b42318;color:#fff;padding:13px 18px;border-radius:12px;font-size:.9rem;font-weight:700;max-width:92%;opacity:0;transition:.3s;z-index:99;pointer-events:none}
+#toast.ok{background:#14532d}
+#toast.show{opacity:1}
+@media print{.topbar,.demo-note,.tabs,.toolrow,.hint,#toast{display:none!important}#app{background:#fff}.gridbox{box-shadow:none;padding:0}body{background:#fff}}
 </style>
 </head>
 <body>
 
-<div class="band">
-  <div class="logo">🕒 Chrono<span>Class</span></div>
-  <div class="tag">Fini les conflits d'emploi du temps. Fini les nuits blanches de rentrée.</div>
-  <div class="tag-en">The complete timetable management system for your school — bilingual English / French.</div>
-  <a class="cta gold" href="https://wa.me/237692168264?text=Bonjour%20MIGUEL%2C%20je%20veux%20une%20d%C3%A9mo%20gratuite%20de%20ChronoClass%20pour%20mon%20%C3%A9tablissement.">📅 Démo GRATUITE pour votre établissement</a>
-  <a class="cta ghost" href="https://wa.me/237692168264">💬 WhatsApp : 692 168 264</a>
-
-  <div class="tt">
-    <table>
-      <tr><th></th><th>Lundi</th><th>Mardi</th><th>Mercredi</th><th>Jeudi</th><th>Vendredi</th></tr>
-      <tr><td><b>7h30</b></td><td class="m1">Maths<br>M. FOTSO</td><td class="m2">Français<br>Mme NGO</td><td class="m1">Maths<br>M. FOTSO</td><td class="m3">Anglais<br>M. TABI</td><td class="m4">SVT<br>Mme ABENA</td></tr>
-      <tr><td><b>8h25</b></td><td class="m2">Français<br>Mme NGO</td><td class="m5">Physique<br>M. KAMGA</td><td class="m3">Anglais<br>M. TABI</td><td class="m1">Maths<br>M. FOTSO</td><td class="m2">Français<br>Mme NGO</td></tr>
-      <tr><td><b>9h20</b></td><td class="m4">SVT<br>Mme ABENA</td><td class="m1">Maths<br>M. FOTSO</td><td class="m5">Physique<br>M. KAMGA</td><td class="m2">Français<br>Mme NGO</td><td class="m3">Anglais<br>M. TABI</td></tr>
-    </table>
+<!-- ================= CONNEXION ================= -->
+<div class="center" id="login">
+  <div class="card">
+    <div class="logo">🕒 Chrono<span>Class</span></div>
+    <div class="subt">Gestion d'emploi du temps scolaire<br>School timetable management</div>
+    <h2 style="color:#0b3d20;font-size:1.1rem;margin-bottom:2px">Connexion</h2>
+    <div style="font-size:.8rem;color:#5a6e5f">Démo libre : entrez simplement votre nom pour essayer.</div>
+    <label>Votre nom</label>
+    <input id="lname" placeholder="Ex : M. FOTSO">
+    <label>Mot de passe</label>
+    <input id="lpw" type="password" placeholder="(libre pour la démo)">
+    <button class="big" onclick="enter()">Se connecter</button>
+    <div class="err" id="lerr"></div>
+    <a class="more" href="decouvrir.html">📖 Découvrir ChronoClass (fonctionnalités)</a>
   </div>
 </div>
 
-<div class="wrap">
-  <h2>Ce que ChronoClass fait pour votre établissement</h2>
-  <div class="sub">What ChronoClass does for your school</div>
-  <div class="grid">
-    <div class="card"><div class="ic">🧩</div><h3>Grilles interactives par classe</h3><p>Chaque classe a sa grille. On clique sur un créneau, on écrit la matière et le nom de l'enseignant, c'est enregistré. Simple comme un cahier, puissant comme un logiciel.<span class="en">Interactive grid per class: tap a slot, type the subject and teacher, done.</span></p></div>
-    <div class="card"><div class="ic">🚫</div><h3>Détection automatique des conflits</h3><p>Un enseignant ne peut pas être dans deux classes à la même heure : ChronoClass bloque l'erreur AVANT qu'elle n'arrive. Fini les classes sans professeur.<span class="en">Clash prevention: a teacher cannot be in two classes at the same time — the app blocks the mistake.</span></p></div>
-    <div class="card"><div class="ic">📷</div><h3>Import par PHOTO</h3><p>Vous avez déjà un emploi du temps sur papier ? Prenez-le en photo : ChronoClass lit la photo et remplit la grille tout seul. Des heures de saisie économisées.<span class="en">Photo import: the app reads a photo of your paper timetable and fills the grid automatically.</span></p></div>
-    <div class="card"><div class="ic">🖨️</div><h3>Impression professionnelle</h3><p>Imprimez l'emploi du temps de chaque classe avec les couleurs de votre choix par matière — prêt à afficher ou à distribuer aux élèves.<span class="en">Professional printing with your own colour per subject — ready to post on the wall.</span></p></div>
-    <div class="card"><div class="ic">🏫</div><h3>Vos classes, vos horaires</h3><p>Lycées généraux, techniques, collèges : ajoutez vos propres classes (6e à Tle, Form 1 à U6) et vos propres heures de cours. ChronoClass s'adapte à VOTRE établissement.<span class="en">Add your own classes and period times — ChronoClass adapts to YOUR school.</span></p></div>
-    <div class="card"><div class="ic">🗂️</div><h3>Dossiers des enseignants</h3><p>L'administration gère les enseignants et leurs dossiers (certificats, documents) dans un espace séparé et sécurisé.<span class="en">Admin area to manage teachers and their certificate files, separate and secure.</span></p></div>
-    <div class="card"><div class="ic">🇬🇧🇫🇷</div><h3>100 % bilingue</h3><p>Toute l'application existe en français ET en anglais — parfaite pour les établissements bilingues du Cameroun.<span class="en">Fully bilingual — perfect for Cameroon's bilingual schools.</span></p></div>
-    <div class="card"><div class="ic">🔌</div><h3>Marche SANS internet</h3><p>Installé sur l'ordinateur de l'établissement : aucune connexion nécessaire pour travailler, aucune donnée ne quitte votre école.<span class="en">Runs without internet on the school's computer — your data never leaves your school.</span></p></div>
+<!-- ================= APPLICATION DÉMO ================= -->
+<div id="app">
+  <div class="topbar">
+    <div class="t">🕒 Chrono<span>Class</span> — Gestion d'emploi du temps scolaire</div>
+    <div class="who" id="who"></div>
+    <button style="background:#d99a06;color:#19270c" onclick="window.print()">🖨 Imprimer</button>
+    <button style="background:#fff;color:#0b3d20" onclick="quit()">Quitter</button>
   </div>
-
-  <div style="margin-top:38px"><h2>Comment ça se passe</h2></div>
-  <div class="sub">How it works</div>
-  <div class="steps">
-    <div class="step"><b>1. Vous demandez la démo gratuite 💬</b><p>Un message WhatsApp suffit. Je vous montre ChronoClass en direct, avec VOS classes et VOS horaires.</p></div>
-    <div class="step"><b>2. Installation dans votre établissement 💻</b><p>ChronoClass est installé sur l'ordinateur de l'administration. Vos données restent chez vous, en sécurité.</p></div>
-    <div class="step"><b>3. Les enseignants s'y connectent 📱</b><p>Sur le réseau WiFi de l'établissement, les enseignants autorisés ouvrent ChronoClass depuis leur téléphone ou tout ordinateur — chacun avec son propre compte.</p></div>
-    <div class="step"><b>4. Formation et accompagnement 🎓</b><p>Je forme votre équipe et je reste disponible. Vous recevez le logiciel complet, qui vous appartient.</p></div>
-  </div>
-
-  <div class="demo">
-    <h2>📅 Démo gratuite — sans engagement</h2>
-    <p>Voyez ChronoClass fonctionner avec vos propres classes avant toute décision. Installation complète, formation incluse.</p>
-    <div class="price">Contactez-moi pour une offre adaptée à votre établissement</div>
-    <a class="cta gold" href="https://wa.me/237692168264?text=Bonjour%20MIGUEL%2C%20je%20veux%20une%20d%C3%A9mo%20gratuite%20de%20ChronoClass%20pour%20mon%20%C3%A9tablissement.">💬 Réserver ma démo gratuite</a>
+  <div class="demo-note">🎮 Vous essayez la DÉMO (3 classes, vos essais restent dans cet appareil). La version complète pour votre établissement : WhatsApp <b>692 168 264</b> — <a href="decouvrir.html" style="color:#6b4e00">en savoir plus</a></div>
+  <div class="wrap">
+    <div class="tabs" id="tabs"></div>
+    <div class="gridbox"><table id="grid"></table></div>
+    <div class="hint">👆 <b>Cliquez sur une case</b> pour placer une matière et un enseignant.<br>
+    💡 <b>Essayez le gardien anti-conflits :</b> M. FOTSO fait Maths en <b>6e</b> le Lundi à 7h30. Allez en <b>5e</b>, cliquez Lundi 7h30 et mettez aussi M. FOTSO… ChronoClass va refuser ! ⛔</div>
   </div>
 </div>
 
-<footer>
-  🕒 ChronoClass — un logiciel de <b>MIGUEL MOUAFON</b>, Douala, Cameroun<br>
-  <a href="https://wa.me/237692168264">WhatsApp : +237 692 168 264</a> ·
-  <a href="https://mouafonmiguel-coder.github.io">mouafonmiguel-coder.github.io</a><br>
-  <span style="opacity:.7">Aussi disponible : 📒 CARNET CRÉDIT — le carnet intelligent des boutiques — <a href="https://mouafonmiguel-coder.github.io/carnet-credit/">essai gratuit ici</a></span>
-</footer>
+<!-- modal -->
+<div id="ov">
+  <div class="card">
+    <h2 style="color:#0b3d20;font-size:1.05rem" id="mtitle"></h2>
+    <label>Matière</label>
+    <input id="msubj" placeholder="Ex : Mathématiques">
+    <label>Nom de l'enseignant</label>
+    <input id="mteach" placeholder="Ex : M. FOTSO">
+    <button class="big" onclick="saveCell()">Enregistrer</button>
+    <div class="rowbtn" style="margin-top:10px">
+      <button class="big ghost" style="margin-top:0" onclick="clearCell()">Effacer la case</button>
+      <button class="big" style="margin-top:0;background:#5a6e5f" onclick="closeOv()">Annuler</button>
+    </div>
+  </div>
+</div>
 
+<div id="toast"></div>
+
+<script>
+const CLASSES=['6e','5e','Form 1'];
+const DAYS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi'];
+const PERIODS=['7h30','8h25','9h20','10h30','11h25'];
+const PAL=['#dff1e3','#fdeeca','#e3e9fb','#fde3e3','#eae3fb','#d9f3f0','#fbe3f1'];
+let DATA={},CUR=0,SEL=null;
+
+function seed(){
+  DATA={};
+  const put=(c,d,p,s,t)=>DATA[c+'|'+d+'|'+p]={s,t};
+  put(0,0,0,'Maths','M. FOTSO');put(0,1,0,'Français','Mme NGO');put(0,0,1,'Anglais','M. TABI');
+  put(1,0,1,'Maths','M. FOTSO');put(1,2,0,'SVT','Mme ABENA');
+  put(2,0,0,'English','Mr TABI');
+  save();
+}
+function load(){try{DATA=JSON.parse(localStorage.getItem('chrono_demo')||'null')||null}catch(e){DATA=null}if(!DATA)seed();}
+function save(){localStorage.setItem('chrono_demo',JSON.stringify(DATA))}
+function colorOf(s){let h=0;for(const c of s.toLowerCase())h=(h*31+c.charCodeAt(0))>>>0;return PAL[h%PAL.length]}
+function toast(m,ok){const t=document.getElementById('toast');t.textContent=m;t.className=(ok?'ok ':'')+'show';setTimeout(()=>t.className=ok?'ok':'',ok?2500:5000)}
+
+function enter(){
+  const n=document.getElementById('lname').value.trim();
+  if(n.length<2){document.getElementById('lerr').textContent='Entrez votre nom (2 lettres minimum).';return;}
+  localStorage.setItem('chrono_demo_user',n);
+  start(n);
+}
+function start(n){
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('who').textContent='👤 '+n;
+  render();
+}
+function quit(){localStorage.removeItem('chrono_demo_user');location.reload()}
+
+function render(){
+  document.getElementById('tabs').innerHTML=CLASSES.map((c,i)=>`<button class="${i===CUR?'on':''}" onclick="CUR=${i};render()">Classe ${c}</button>`).join('');
+  let h='<tr><th></th>'+DAYS.map(d=>'<th>'+d+'</th>').join('')+'</tr>';
+  PERIODS.forEach((p,pi)=>{
+    h+='<tr><td class="h">'+p+'</td>'+DAYS.map((d,di)=>{
+      const v=DATA[CUR+'|'+di+'|'+pi];
+      return v?`<td style="background:${colorOf(v.s)}" onclick="openOv(${di},${pi})"><div class="s">${v.s}</div><div class="t2">${v.t}</div></td>`
+              :`<td onclick="openOv(${di},${pi})"></td>`;
+    }).join('')+'</tr>';
+  });
+  document.getElementById('grid').innerHTML=h;
+}
+
+function openOv(di,pi){
+  SEL=[di,pi];
+  const v=DATA[CUR+'|'+di+'|'+pi]||{s:'',t:''};
+  document.getElementById('mtitle').textContent='Classe '+CLASSES[CUR]+' — '+DAYS[di]+' '+PERIODS[pi];
+  document.getElementById('msubj').value=v.s;
+  document.getElementById('mteach').value=v.t;
+  document.getElementById('ov').style.display='flex';
+}
+function closeOv(){document.getElementById('ov').style.display='none'}
+function clearCell(){delete DATA[CUR+'|'+SEL[0]+'|'+SEL[1]];save();closeOv();render();toast('Case effacée.',1)}
+
+function saveCell(){
+  const s=document.getElementById('msubj').value.trim();
+  const t=document.getElementById('mteach').value.trim();
+  if(!s){toast('Écrivez la matière.');return;}
+  const[di,pi]=SEL;
+  if(t){
+    const norm=x=>x.toLowerCase().replace(/\s+/g,' ').trim();
+    for(let c=0;c<CLASSES.length;c++){
+      if(c===CUR)continue;
+      const v=DATA[c+'|'+di+'|'+pi];
+      if(v&&v.t&&norm(v.t)===norm(t)){
+        toast('⛔ CONFLIT REFUSÉ : '+t+' est déjà en classe '+CLASSES[c]+' le '+DAYS[di]+' à '+PERIODS[pi]+' ('+v.s+'). Un enseignant ne peut pas être dans 2 classes à la même heure !');
+        return;
+      }
+    }
+  }
+  DATA[CUR+'|'+di+'|'+pi]={s,t};
+  save();closeOv();render();toast('Enregistré ✔',1);
+}
+
+load();
+const u=localStorage.getItem('chrono_demo_user');
+if(u)start(u);
+document.getElementById('lpw').addEventListener('keydown',e=>{if(e.key==='Enter')enter()});
+document.getElementById('lname').addEventListener('keydown',e=>{if(e.key==='Enter')enter()});
+</script>
 </body>
 </html>
