@@ -130,6 +130,13 @@ button.ghost{background:#fff;color:#b42318;border:2px solid #b42318}
     <p style="font-size:.8rem;color:#5a6e5f;margin-top:10px">💾 Le fichier contient TOUT : votre établissement, vos classes, vos horaires et tous les emplois du temps. Gardez-le comme sauvegarde, ou envoyez-le à un collègue sur WhatsApp — il l'importe ici et retrouve tout, avec la date d'enregistrement.<br><br>
     📥 <b>Word</b> : le document doit contenir un tableau avec les jours (Lundi…Vendredi ou Monday…Friday) en haut et les heures dans la première colonne.<br>
     📄 <b>PDF</b> : un PDF vient presque toujours d'un fichier Word — importez le fichier .docx d'origine. La lecture PDF/photo par intelligence artificielle est disponible dans ChronoClass Ordinateur.</p>
+    <div style="margin-top:10px;border-top:1px solid #e3eae4;padding-top:10px">
+      <b style="font-size:.85rem;color:#0b3d20">📋 Modèles Cameroun — voir un exemple d'emploi du temps :</b>
+      <div class="rowbtn" style="margin-top:8px">
+        <button class="big" style="margin-top:0" onclick="loadSample('g')">🎓 Enseignement général</button>
+        <button class="big" style="margin-top:0;background:#6b3fa0" onclick="loadSample('t')">🔧 Enseignement technique</button>
+      </div>
+    </div>
     <button class="big ghost" onclick="closeOv('docov')">Fermer</button>
   </div>
 </div>
@@ -498,6 +505,33 @@ function acceptImport(){
   save();render();
   toast('📥 '+placed+' cours importés dans '+cname+(skipped.length?' — ⛔ '+skipped.length+' conflit(s) ignoré(s)':''));
   if(skipped.length)alert('⛔ Conflits ignorés (enseignant déjà occupé dans une autre classe à la même heure) :\n\n'+skipped.slice(0,8).join('\n'));
+}
+
+/* ---------- modèles Cameroun (format MINESEC) ---------- */
+const SAMPLE_PERIODS=['07h30 - 08h25','08h25 - 09h20','09h20 - 10h15','10h30 - 11h25','11h25 - 12h20','12h55 - 13h50','13h50 - 14h45'];
+const SAMPLES={
+ g:[
+  {0:{s:'Mathématiques',t:'M. FOTSO'},1:{s:'Français',t:'Mme NGO BILONG'},2:{s:'Anglais',t:'Mr TABI'},3:{s:'PCT',t:'M. KAMGA'},4:{s:'Mathématiques',t:'M. FOTSO'}},
+  {0:{s:'Français',t:'Mme NGO BILONG'},1:{s:'Mathématiques',t:'M. FOTSO'},2:{s:'SVTEEHB',t:'Mme ADA'},3:{s:'Histoire-Géographie',t:'M. ESSOMBA'},4:{s:'Français',t:'Mme NGO BILONG'}},
+  {0:{s:'Anglais',t:'Mr TABI'},1:{s:'SVTEEHB',t:'Mme ADA'},2:{s:'Mathématiques',t:'M. FOTSO'},3:{s:'Français',t:'Mme NGO BILONG'},4:{s:'Espagnol',t:'Mme TCHOUMI'}},
+  {0:{s:'Histoire-Géographie',t:'M. ESSOMBA'},1:{s:'Espagnol',t:'Mme TCHOUMI'},2:{s:'PCT',t:'M. KAMGA'},3:{s:'Mathématiques',t:'M. FOTSO'},4:{s:'SVTEEHB',t:'Mme ADA'}},
+  {0:{s:'PCT',t:'M. KAMGA'},1:{s:'ECM',t:'M. ESSOMBA'},2:{s:'Informatique',t:'M. TALLA'},3:{s:'Anglais',t:'Mr TABI'},4:{s:'Histoire-Géographie',t:'M. ESSOMBA'}},
+  {0:{s:'EPS',t:'M. BIYA'},1:{s:'Informatique',t:'M. TALLA'},2:{s:'Français',t:'Mme NGO BILONG'},3:{s:'SVTEEHB',t:'Mme ADA'},4:{s:'Anglais',t:'Mr TABI'}},
+  {0:{s:'Travail Manuel',t:'M. BIYA'},2:{s:'ECM',t:'M. ESSOMBA'},3:{s:'EPS',t:'M. BIYA'}}
+ ],
+ t:[
+  {0:{s:'Atelier Électrotechnique',t:'M. WAFO'},1:{s:'Mathématiques',t:'M. FOTSO'},2:{s:'Dessin Technique',t:'M. NANA'},3:{s:'Technologie Professionnelle',t:'M. WAFO'},4:{s:'Électrotechnique',t:'M. KUATE'}},
+  {0:{s:'Atelier Électrotechnique',t:'M. WAFO'},1:{s:'Sciences Physiques',t:'M. KAMGA'},2:{s:'Dessin Technique',t:'M. NANA'},3:{s:'Mathématiques',t:'M. FOTSO'},4:{s:'Électrotechnique',t:'M. KUATE'}},
+  {0:{s:'Atelier Électrotechnique',t:'M. WAFO'},1:{s:'Français',t:'Mme NGO BILONG'},2:{s:'Schéma Électrique',t:'M. KUATE'},3:{s:'Sciences Physiques',t:'M. KAMGA'},4:{s:'Mathématiques',t:'M. FOTSO'}},
+  {0:{s:'Mathématiques',t:'M. FOTSO'},1:{s:'Atelier Électrotechnique',t:'M. WAFO'},2:{s:'Anglais',t:'Mr TABI'},3:{s:'Schéma Électrique',t:'M. KUATE'},4:{s:'Français',t:'Mme NGO BILONG'}},
+  {0:{s:'Français',t:'Mme NGO BILONG'},1:{s:'Atelier Électrotechnique',t:'M. WAFO'},2:{s:'Technologie Professionnelle',t:'M. WAFO'},3:{s:'Informatique',t:'M. TALLA'},4:{s:'Anglais',t:'Mr TABI'}},
+  {0:{s:'Législation',t:'M. MBALLA'},1:{s:'EPS',t:'M. BIYA'},2:{s:'Sciences Physiques',t:'M. KAMGA'},3:{s:'Dessin Technique',t:'M. NANA'},4:{s:'Informatique',t:'M. TALLA'}},
+  {0:{s:'Anglais',t:'Mr TABI'},2:{s:'EPS',t:'M. BIYA'},3:{s:'Législation',t:'M. MBALLA'}}
+ ]
+};
+function loadSample(k){
+  if(!CUR){alert('Ajoutez d\'abord une classe avec ⚙️ Classes & horaires.');return;}
+  showPreview({periods:SAMPLE_PERIODS.slice(),data:SAMPLES[k].map(e=>JSON.parse(JSON.stringify(e)))});
 }
 
 /* ---------- impression bilingue + date ---------- */
