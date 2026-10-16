@@ -788,5 +788,25 @@ if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{})});
 }
 </script>
+<script>
+(function(){
+  var APK_VERSION = 2;
+  if (location.hostname !== 'localhost') return; /* uniquement dans l'APK */
+  fetch('https://mouafonmiguel-coder.github.io/chronoclass-apk/version.json?t='+Date.now(),{cache:'no-store'})
+    .then(function(r){return r.json();})
+    .then(function(v){
+      if (v && v.version > APK_VERSION) {
+        var b=document.createElement('div');
+        b.style.cssText='position:fixed;bottom:0;left:0;right:0;background:#14532d;color:#fff;padding:12px 14px;z-index:9999;font-family:sans-serif;font-size:14px;display:flex;align-items:center;gap:10px;box-shadow:0 -4px 14px rgba(0,0,0,.3)';
+        b.innerHTML='<span style="flex:1">\ud83d\udd04 Nouvelle version disponible ! / New version available!</span>'
+          +'<button id="ccUpGo" style="background:#f2c14e;color:#14532d;border:0;border-radius:8px;padding:9px 12px;font-weight:800">T\u00e9l\u00e9charger</button>'
+          +'<button id="ccUpNo" style="background:transparent;color:#bcd8c3;border:0;font-size:18px">\u2715</button>';
+        document.body.appendChild(b);
+        document.getElementById('ccUpGo').onclick=function(){ window.open(v.url,'_blank'); };
+        document.getElementById('ccUpNo').onclick=function(){ b.remove(); };
+      }
+    }).catch(function(){});
+})();
+</script>
 </body>
 </html>
