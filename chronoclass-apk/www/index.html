@@ -369,22 +369,35 @@ async function parseWord(f){
     }
     return lines;
   };
-  let docTeacher='';
-  {
-    const all=[];
-    for(const pp of doc.getElementsByTagNameNS('*','p')){
-      let t='';for(const tn of pp.getElementsByTagNameNS('*','t'))t+=tn.textContent;
-      if(t.trim())all.push(t.trim());
+  const bodyEl=doc.getElementsByTagNameNS('*','body')[0]||doc.documentElement;
+  const seq=[];
+  (function walk(n){
+    for(let ch=n.firstChild;ch;ch=ch.nextSibling){
+      if(ch.nodeType!==1)continue;
+      const ln=ch.localName;
+      if(ln==='tbl')seq.push({k:'t',el:ch});
+      else if(ln==='p'){
+        let t='';for(const tn of ch.getElementsByTagNameNS('*','t'))t+=tn.textContent;
+        if(t.trim())seq.push({k:'p',t:t.trim()});
+      } else walk(ch);
     }
-    const m=all.join(' ').match(/PRENOM\s*:?\s*(.+?)\s*(Grade|Matricule|Discipline|Heures|$)/i);
-    if(m)docTeacher=m[1].replace(/[:\s]+/g,' ').trim();
-  }
-  let ccTbls=0,ccBestDays=0;
+  })(bodyEl);
+  const grabTeacher=t=>{
+    const m=t.match(/PRENOM\s*:?\s*(.+?)\s*(Grade|Matricule|Discipline|Heures|$)/i);
+    return m&&m[1].trim()?m[1].replace(/[:\s]+/g,' ').trim():'';
+  };
+  let lastTeacher='';let ccTbls=0,ccBestDays=0;
+  const indiv=[];
   window.CC_DIAG='';
-  for(const tb of doc.getElementsByTagNameNS('*','tbl')){
+  for(const node of seq){
+    if(node.k==='p'){
+      const tt=grabTeacher(node.t);
+      if(tt)lastTeacher=tt;
+      continue;
+    }
     ccTbls++;
     const rows=[];
-    for(const tr of tb.getElementsByTagNameNS('*','tr')){
+    for(const tr of node.el.getElementsByTagNameNS('*','tr')){
       const cells=[];
       for(const tc of tr.getElementsByTagNameNS('*','tc')){
         const cell=txt(tc);
@@ -394,11 +407,15 @@ async function parseWord(f){
       }
       rows.push(cells);
     }
+    for(const r of rows){
+      const tt=grabTeacher(r.map(c=>(c||[]).join(' ')).join(' '));
+      if(tt){lastTeacher=tt;break;}
+    }
     let hi=-1,map=null;
     rows.forEach((r,i)=>{
       if(hi>=0)return;
       const m={};let cnt=0;
-      r.forEach((c,ci)=>{const k=dkey(c[0]);if(k in DAYMAP){m[ci]=DAYMAP[k];cnt++;}});
+      r.forEach((c,ci)=>{const k=dkey(c&&c[0]);if(k in DAYMAP){m[ci]=DAYMAP[k];cnt++;}});
       if(cnt>=3){hi=i;map=m;}
     });
     if(hi>=0){
@@ -411,23 +428,31 @@ async function parseWord(f){
         for(const ci in map){const c=r[ci];if(c&&c[0])e[map[ci]]={s:c[0],t:c.slice(1).join(' ')};}
         periods.push(label);data.push(e);
       }
-      if(periods.length)return{periods,data};
+      if(periods.length&&!indiv.length)return{periods:periods,data:data};
       continue;
     }
     const dayRows=[];
     rows.forEach((r,ri)=>{const k=dkey((r[0]&&r[0][0])||'');if(k in DAYMAP)dayRows.push(ri);});
     if(dayRows.length>ccBestDays)ccBestDays=dayRows.length;
-    window.CC_DIAG='Word : '+ccTbls+' tableau(x), jours trouvés dans le meilleur tableau : '+ccBestDays;
     if(dayRows.length>=3&&dayRows[0]>0){
-      const hdr=rows[dayRows[0]-1];
+      const h0=Math.max(0,dayRows[0]-3);
+      const width=Math.max.apply(null,rows.map(r=>r.length));
       const periods=[];
-      for(let ci=1;ci<hdr.length;ci++)periods.push((hdr[ci]||[]).join(' ').replace(/\s+/g,''));
+      for(let ci=1;ci<width;ci++){
+        let lab='';
+        for(let ri=h0;ri<dayRows[0];ri++){const c=rows[ri][ci];if(c&&c.length)lab+=c.join('');}
+        periods.push(lab.replace(/\s+/g,''));
+      }
       const isCls=t=>/\d/.test(t)&&t.replace(/\s+/g,'').length<=14;
       const entries=[];const cs={};
-      for(const ri of dayRows){
-        const di=DAYMAP[dkey(rows[ri][0][0])];
-        for(let ci=1;ci<rows[ri].length&&ci-1<periods.length;ci++){
-          const lines=(rows[ri][ci]||[]).filter(Boolean);
+      for(let d=0;d<dayRows.length;d++){
+        const ri0=dayRows[d];
+        const ri1=d+1<dayRows.length?dayRows[d+1]:rows.length;
+        const di=DAYMAP[dkey(rows[ri0][0][0])];
+        for(let ci=1;ci<width&&ci-1<periods.length;ci++){
+          let lines=[];
+          for(let ri=ri0;ri<ri1;ri++){const c=rows[ri][ci];if(c&&c.length)lines=lines.concat(c);}
+          lines=lines.filter(Boolean);
           if(lines.length<2)continue;
           let cls='';const subj=[];
           for(const ln of lines){if(isCls(ln)&&!cls)cls=ln;else subj.push(ln);}
@@ -435,9 +460,14 @@ async function parseWord(f){
           entries.push({d:di,p:ci-1,s:subj.join(' '),cls:cls});cs[cls]=1;
         }
       }
-      if(entries.length>=2)return{individual:true,list:[{teacher:docTeacher,periods:periods,entries:entries,classes:Object.keys(cs)}]};
+      if(entries.length>=2){
+        indiv.push({teacher:lastTeacher,periods:periods,entries:entries,classes:Object.keys(cs)});
+        lastTeacher='';
+      }
     }
   }
+  window.CC_DIAG='Word : '+ccTbls+' tableau(x), jours trouvés dans le meilleur tableau : '+ccBestDays+', enseignants détectés : '+indiv.length;
+  if(indiv.length)return{individual:true,list:indiv};
   return null;
 }
 // ---------- emploi du temps INDIVIDUEL (PDF) : moteur d'analyse ----------
@@ -1065,7 +1095,7 @@ if('serviceWorker' in navigator){
 </script>
 <script>
 (function(){
-  var APK_VERSION = 4;
+  var APK_VERSION = 5;
   if (location.hostname !== 'localhost') return; /* uniquement dans l'APK */
   fetch('https://mouafonmiguel-coder.github.io/chronoclass-apk/version.json?t='+Date.now(),{cache:'no-store'})
     .then(function(r){return r.json();})
