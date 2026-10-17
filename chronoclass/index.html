@@ -379,7 +379,10 @@ async function parseWord(f){
     const m=all.join(' ').match(/PRENOM\s*:?\s*(.+?)\s*(Grade|Matricule|Discipline|Heures|$)/i);
     if(m)docTeacher=m[1].replace(/[:\s]+/g,' ').trim();
   }
+  let ccTbls=0,ccBestDays=0;
+  window.CC_DIAG='';
   for(const tb of doc.getElementsByTagNameNS('*','tbl')){
+    ccTbls++;
     const rows=[];
     for(const tr of tb.getElementsByTagNameNS('*','tr')){
       const cells=[];
@@ -413,6 +416,8 @@ async function parseWord(f){
     }
     const dayRows=[];
     rows.forEach((r,ri)=>{const k=dkey((r[0]&&r[0][0])||'');if(k in DAYMAP)dayRows.push(ri);});
+    if(dayRows.length>ccBestDays)ccBestDays=dayRows.length;
+    window.CC_DIAG='Word : '+ccTbls+' tableau(x), jours trouvés dans le meilleur tableau : '+ccBestDays;
     if(dayRows.length>=3&&dayRows[0]>0){
       const hdr=rows[dayRows[0]-1];
       const periods=[];
@@ -579,6 +584,7 @@ async function parsePdf(f){
   const buf=await f.arrayBuffer();
   const pdf=await pdfjsLib.getDocument({data:buf}).promise;
   let any=false;const list=[];let ctx=null;
+  let pTxt=0,dSum=0,aSum=0;
   const maxP=Math.min(pdf.numPages,95);
   for(let pn=1;pn<=maxP;pn++){
     const page=await pdf.getPage(pn);
@@ -586,7 +592,9 @@ async function parsePdf(f){
     const items=[];
     for(const it of tc.items){const t=(it.str||'').trim();if(t)items.push({s:t,x:it.transform[4],y:it.transform[5],w:it.width});}
     if(!items.length)continue;
-    any=true;
+    any=true;pTxt++;
+    dSum+=items.filter(i=>dkey(i.s) in DAYMAP).length;
+    aSum+=items.filter(i=>/PRENOM/i.test(i.s)).length;
     if(!list.length&&!ctx&&pn<=5){
       const r=gridFromItems(items);
       if(r)return r;
@@ -594,6 +602,7 @@ async function parsePdf(f){
     ctx=ccIndivScan(items,ctx,list);
   }
   ccIndivFlush(ctx,list);
+  window.CC_DIAG='PDF : '+pdf.numPages+' page(s), '+pTxt+' avec du texte lisible, étiquettes de jours trouvées : '+dSum+', lignes « NOM ET PRENOM » : '+aSum+', enseignants détectés : '+list.length;
   if(list.length)return{individual:true,list:list};
   if(!any)throw new Error('⛔ Ce PDF est un scan (photo) : aucun texte lisible dedans.\nLa lecture par intelligence artificielle est disponible dans ChronoClass Ordinateur.');
   return null;
@@ -660,7 +669,7 @@ async function importTT(inp){
     if(ext==='docx'){await loadJSZip();p=await parseWord(f);}
     else if(ext==='pdf'){await loadPdfJs();p=await parsePdf(f);}
     else{alert('Choisissez un fichier Word (.docx) ou PDF (.pdf).');return;}
-    if(!validTT(p)){alert('⛔ Document REFUSÉ.\n\nCe fichier ne ressemble pas à un emploi du temps scolaire : il faut un tableau avec les jours (Lundi…Vendredi / Monday…Friday), les heures de cours, et des matières.');return;}
+    if(!validTT(p)){alert('⛔ Document REFUSÉ.\n\nCe fichier ne ressemble pas à un emploi du temps scolaire : il faut un tableau avec les jours (Lundi…Vendredi / Monday…Friday), les heures de cours, et des matières.'+(window.CC_DIAG?'\n\n🔬 Analyse technique (montrez ceci au support) :\n'+window.CC_DIAG:'\n\n🔬 (ancienne version de la page — fermez tout et rechargez avec Ctrl+F5)'));return;}
     showPreview(p);
   }catch(e){alert((e&&e.message)||'Fichier non reconnu.');}
 }
