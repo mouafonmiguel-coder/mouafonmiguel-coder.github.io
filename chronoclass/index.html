@@ -736,6 +736,7 @@ function addClass(){
   if(ST.classes.find(c=>c.name.toLowerCase()===n.toLowerCase())){toast('Cette classe existe déjà.');return;}
   ST.seq=(ST.seq||10)+1;
   ST.classes.push({id:'c'+ST.seq,name:n});
+  CUR='c'+ST.seq;
   document.getElementById('nCl').value='';
   save();renderMg();render();toast('Classe '+n+' ajoutée ✔',1);
 }
