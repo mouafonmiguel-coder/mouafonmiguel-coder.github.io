@@ -1,37 +1,12 @@
-// CARNET CRÉDIT — service worker version LIEN (GitHub Pages)
-// Réseau d'abord (mises à jour auto) + cache de secours (marche SANS internet)
-const CACHE = 'carnet-credit-lien-v1';
-
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE)
-      .then(c => c.addAll(['./', './manifest.webmanifest', './icon-192.png', './icon-512.png']))
-      .then(() => self.skipWaiting())
-  );
-});
-
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys()
-      .then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k))))
-      .then(() => self.clients.claim())
-  );
-});
-
-self.addEventListener('fetch', e => {
-  if (e.request.method !== 'GET') return;
-  e.respondWith(
-    fetch(e.request)
-      .then(r => {
-        if (r && r.ok) {
-          const copy = r.clone();
-          caches.open(CACHE).then(c => c.put(e.request, copy));
-        }
-        return r;
-      })
-      .catch(() =>
-        caches.match(e.request, { ignoreSearch: true })
-          .then(m => m || caches.match('./'))
-      )
-  );
+const CACHE="cc-v36";
+self.addEventListener("install",function(e){self.skipWaiting()});
+self.addEventListener("activate",function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==CACHE}).map(function(k){return caches.delete(k)}))}).then(function(){return self.clients.claim()}))});
+self.addEventListener("fetch",function(e){
+  var u=new URL(e.request.url);
+  if(u.origin!==location.origin||e.request.method!=="GET")return;
+  if(e.request.mode==="navigate"){
+    e.respondWith(fetch(e.request).then(function(r){var c=r.clone();caches.open(CACHE).then(function(x){x.put(e.request,c)});return r}).catch(function(){return caches.match(e.request)}));
+    return;
+  }
+  e.respondWith(caches.match(e.request).then(function(hit){return hit||fetch(e.request).then(function(r){if(r&&r.status===200){var c=r.clone();caches.open(CACHE).then(function(x){x.put(e.request,c)})}return r})}));
 });
