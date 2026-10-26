@@ -1,0 +1,14 @@
+{
+  "name": "carnet-credit-apk",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CARNET CREDIT - le carnet de credits du boutiquier, 100% dans le telephone",
+  "dependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/core": "^6.2.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.2.0",
+    "@capacitor/assets": "^3.0.5"
+  }
+}
