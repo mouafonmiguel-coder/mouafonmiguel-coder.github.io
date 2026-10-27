@@ -1,32 +1,12 @@
-// CARNET CRÉDIT — service worker
-// Stratégie RÉSEAU D'ABORD : l'app est toujours à jour dès que le serveur change,
-// et le cache sert seulement quand il n'y a pas de connexion (mode hors-ligne).
-const VERSION = 'carnetcredit-v1';
-
-self.addEventListener('install', () => self.skipWaiting());
-self.addEventListener('activate', e => {
-  e.waitUntil((async () => {
-    const keys = await caches.keys();
-    await Promise.all(keys.filter(k => k !== VERSION).map(k => caches.delete(k)));
-    await self.clients.claim();
-  })());
-});
-
-self.addEventListener('fetch', e => {
-  const req = e.request;
-  if (req.method !== 'GET') return; // jamais de cache pour les écritures
-  e.respondWith((async () => {
-    try {
-      const res = await fetch(req);
-      try {
-        const cache = await caches.open(VERSION);
-        cache.put(req, res.clone());
-      } catch (err) { /* ignore */ }
-      return res;
-    } catch (err) {
-      const cached = await caches.match(req);
-      if (cached) return cached;
-      throw err;
-    }
-  })());
+const CACHE="cc-v37";
+self.addEventListener("install",function(e){self.skipWaiting()});
+self.addEventListener("activate",function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==CACHE}).map(function(k){return caches.delete(k)}))}).then(function(){return self.clients.claim()}))});
+self.addEventListener("fetch",function(e){
+  var u=new URL(e.request.url);
+  if(u.origin!==location.origin||e.request.method!=="GET")return;
+  if(e.request.mode==="navigate"){
+    e.respondWith(fetch(e.request).then(function(r){var c=r.clone();caches.open(CACHE).then(function(x){x.put(e.request,c)});return r}).catch(function(){return caches.match(e.request)}));
+    return;
+  }
+  e.respondWith(caches.match(e.request).then(function(hit){return hit||fetch(e.request).then(function(r){if(r&&r.status===200){var c=r.clone();caches.open(CACHE).then(function(x){x.put(e.request,c)})}return r})}));
 });
