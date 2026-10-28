@@ -55,6 +55,14 @@
   .rowbtn button, .rowbtn a { flex: 1; }
   a { text-decoration: none; }
   .badge { background: linear-gradient(135deg,#d99a06,#ffd54f); color: #4a3500; border-radius: 14px; padding: 12px; text-align: center; font-weight: 900; margin-bottom: 12px; }
+  .tabs { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #d7e0f2; display: flex; z-index: 60; }
+  .tabs button { flex: 1; background: none; border: 0; padding: 9px 4px 11px; font-size: .72rem; font-weight: 800; color: #7a87a3; cursor: pointer; }
+  .tabs button .tic { display: block; font-size: 1.35rem; margin-bottom: 2px; }
+  .tabs button.on { color: #0d2b66; }
+  .pline { display: flex; align-items: center; gap: 10px; background: #fff; border-radius: 12px; padding: 12px; margin-bottom: 8px; box-shadow: 0 2px 8px rgba(13,43,102,.06); cursor: pointer; }
+  .pline .pi { font-size: 1.4rem; }
+  .pline .pt { flex: 1; font-weight: 700; font-size: .88rem; }
+  .yearhead { font-weight: 900; color: #0d2b66; margin: 14px 2px 8px; }
   .toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); background: #16213a; color: #fff; padding: 11px 18px; border-radius: 999px; font-size: .88rem; font-weight: 700; z-index: 99; box-shadow: 0 4px 14px rgba(0,0,0,.3); }
 </style>
 </head>
@@ -64,7 +72,13 @@
   <button onclick="go('premium')" id="topBtn">⭐ Premium</button>
 </div>
 <div class="wrap" id="app"></div>
+<div class="tabs">
+  <button id="tabQuiz" onclick="go('home')"><span class="tic">🧠</span>Quiz</button>
+  <button id="tabPap" onclick="go('papers')"><span class="tic">📄</span>Épreuves</button>
+  <button id="tabPrem" onclick="go('premium')"><span class="tic">⭐</span>Premium</button>
+</div>
 <script src="./questions.js"></script>
+<script src="./papers.js"></script>
 <script>
 // ---------- etat local ----------
 var S = { phone: '', premiumYear: 0, scores: {}, examDate: '', examName: '' };
@@ -136,6 +150,7 @@ function renderHome() {
            '</div>';
     });
   });
+  h += '<div class="card" style="margin-top:16px" onclick="go(\'papers\')"><h3>📄 Anciennes épreuves 2005 → 2026</h3><p class="hint">CEP, BEPC, Probatoire, BAC, GCE, CAP, ENAM, ENS, Police, Douanes... Appuie ici pour voir les épreuves PDF !</p><button class="big ghost">📄 Voir les épreuves</button></div>';
   h += '<div class="card" style="margin-top:16px"><h3>📣 Partage avec tes camarades</h3>' +
        '<p class="hint">Plus vous révisez ensemble, plus vous réussissez ensemble !</p>' +
        '<a href="https://wa.me/?text=' + encodeURIComponent('🎓 Je révise mon examen avec cette application : quiz + corrections expliquées, même sans connexion ! Essaie : https://mouafonmiguel-coder.github.io/examen/') + '"><button class="big green">📲 Partager sur WhatsApp</button></a></div>';
@@ -248,6 +263,61 @@ async function activate() {
   }
 }
 
+var selLevel = null, selExam = null;
+function renderPapers() {
+  var h = '<div class="hero" style="padding:18px"><h1 style="font-size:1.2rem">📄 Anciennes épreuves <b>2005 → 2026</b></h1>' +
+          '<p>Primaire, Secondaire, GCE, Technique, Université & Grands concours. Choisis ton niveau :</p></div>';
+  LEVELS.forEach(function (L) {
+    var nb = PAPERS.filter(function (p2) { return L.exams.indexOf(p2.exam) >= 0; }).length;
+    h += '<div class="quiz" onclick="openLevel(\'' + L.id + '\')"><div class="ic">' + L.name.split(' ')[0] + '</div>' +
+         '<div class="ti">' + esc(L.name.slice(L.name.indexOf(' ') + 1)) + '<div class="sc" style="color:#5a6880">' + L.exams.length + ' examens · ' + nb + ' épreuve(s) disponible(s)</div></div>' +
+         '<span style="font-size:1.2rem">➜</span></div>';
+  });
+  h += '<div class="card" style="margin-top:14px"><h3>🤝 Tu as des anciennes épreuves ?</h3>' +
+       '<p class="hint">Envoie tes PDF ou photos sur WhatsApp <b>692 168 264</b> — elles seront ajoutées dans l\u2019application pour aider tout le monde !</p></div>';
+  return h;
+}
+function openLevel(id) { selLevel = LEVELS.find(function (L) { return L.id === id; }); go('papExam'); }
+function renderPapExam() {
+  var h = '<button class="back" onclick="go(\'papers\')">← Niveaux</button>';
+  h += '<div class="cat">' + esc(selLevel.name) + '</div>';
+  selLevel.exams.forEach(function (ex) {
+    var nb = PAPERS.filter(function (p2) { return p2.exam === ex; }).length;
+    h += '<div class="quiz" onclick="openExam(\'' + ex.replace(/'/g, "\\'") + '\')"><div class="ic">📄</div>' +
+         '<div class="ti">' + esc(ex) + '<div class="sc" style="color:#5a6880">' + (nb > 0 ? nb + ' épreuve(s)' : 'bientôt disponible') + '</div></div>' +
+         '<span style="font-size:1.2rem">➜</span></div>';
+  });
+  return h;
+}
+function openExam(ex) { selExam = ex; go('papList'); }
+function renderPapList() {
+  var h = '<button class="back" onclick="go(\'papExam\')">← ' + esc(selLevel.name.slice(selLevel.name.indexOf(' ') + 1)) + '</button>';
+  h += '<div class="cat">📄 ' + esc(selExam) + ' — épreuves ' + YEAR_MIN + ' à ' + YEAR_MAX + '</div>';
+  var list = PAPERS.filter(function (p2) { return p2.exam === selExam; });
+  if (list.length === 0) {
+    h += '<div class="card"><h3>⏳ Bientôt disponible !</h3><p class="hint">Les épreuves de <b>' + esc(selExam) + '</b> sont en cours d\u2019ajout (de ' + YEAR_MIN + ' à ' + YEAR_MAX + ').<br><br>Tu en as chez toi ? Envoie-les sur WhatsApp <b>692 168 264</b> et gagne un accès Premium ! 🎁</p></div>';
+    return h;
+  }
+  var years = [];
+  list.forEach(function (p2) { if (years.indexOf(p2.year) < 0) years.push(p2.year); });
+  years.sort(function (a2, b2) { return b2 - a2; });
+  years.forEach(function (yr) {
+    h += '<div class="yearhead">📅 ' + yr + '</div>';
+    list.filter(function (p2) { return p2.year === yr; }).forEach(function (p2) {
+      var unlocked = p2.free || isPremium();
+      h += '<div class="pline" onclick="openPaper(' + PAPERS.indexOf(p2) + ')"><div class="pi">' + (unlocked ? '📥' : '🔒') + '</div>' +
+           '<div class="pt">' + esc(p2.subject) + '</div>' +
+           (unlocked ? '<span class="tagfree">' + (p2.free ? 'GRATUIT' : 'PREMIUM ✓') + '</span>' : '<span class="tagpro">🔒 PREMIUM</span>') + '</div>';
+    });
+  });
+  h += '<p class="hint" style="margin-top:10px">Le PDF s\u2019ouvre dans ton téléphone — tu peux le lire et le garder.</p>';
+  return h;
+}
+function openPaper(i) {
+  var p2 = PAPERS[i];
+  if (!p2.free && !isPremium()) { go('premium'); toast('🔒 Cette épreuve est réservée au Premium'); return; }
+  window.open('./' + p2.file, '_blank');
+}
 function render() {
   document.getElementById('topBtn').textContent = isPremium() ? '⭐ Actif' : '⭐ Premium';
   if (view === 'home') app.innerHTML = renderHome();
@@ -255,6 +325,15 @@ function render() {
   else if (view === 'result') app.innerHTML = renderResult();
   else if (view === 'date') app.innerHTML = renderDate();
   else if (view === 'premium') app.innerHTML = renderPremium();
+  else if (view === 'papers') app.innerHTML = renderPapers();
+  else if (view === 'papExam') app.innerHTML = renderPapExam();
+  else if (view === 'papList') app.innerHTML = renderPapList();
+  var tq = document.getElementById('tabQuiz'), tp = document.getElementById('tabPap'), tpr = document.getElementById('tabPrem');
+  if (tq) {
+    tq.className = (view === 'home' || view === 'quiz' || view === 'result' || view === 'date') ? 'on' : '';
+    tp.className = (view === 'papers' || view === 'papExam' || view === 'papList') ? 'on' : '';
+    tpr.className = (view === 'premium') ? 'on' : '';
+  }
 }
 render();
 
