@@ -102,11 +102,12 @@ var TR = {
     lPhoto: 'Photo (facultatif mais conseillé)', photoOk: '✔ Photo enregistrée', photoToast: 'Photo ajoutée ✔',
     profilT: '📝 Mon profil (2-3 phrases)',
     pProfil: 'Ex. : Comptable rigoureuse avec 3 ans d\u2019expérience. Maîtrise de Excel et Sage. Disponible immédiatement.',
+    aiBtn: '🤖 L\u2019IA écrit mon profil pour moi', aiToast: '🤖 Profil écrit par l\u2019IA ! Tu peux encore le modifier.',
     expT: '💼 Mes expériences',
     lEposte: 'Nom du poste occupé', pEposte: 'Ex. : Caissière',
     lElieu: 'Entreprise / Lieu', pElieu: 'Ex. : Boutique Chez Paul, Douala',
     lEper: 'Période', pEper: 'Ex. : 2022 – 2024',
-    lEdesc: 'Tes tâches dans ce poste (facultatif)', pEdesc: 'Ex. : Encaisser les clients, gérer le stock, ouvrir et fermer la boutique.',
+    aiExpHint: '🤖 Pas besoin d\u2019écrire les tâches : l\u2019IA les écrit automatiquement sur ton CV selon le nom du poste.',
     rmExp: '🗑 Retirer cette expérience', addExp: '➕ Ajouter une expérience',
     eduT: '🎓 Mes diplômes & formations',
     lDip: 'Diplôme / Formation', pDip: 'Ex. : BAC D / CAP Couture / Licence',
@@ -157,11 +158,12 @@ var TR = {
     lPhoto: 'Photo (optional but recommended)', photoOk: '✔ Photo saved', photoToast: 'Photo added ✔',
     profilT: '📝 My profile (2-3 sentences)',
     pProfil: 'E.g.: Hardworking accountant with 3 years of experience. Good knowledge of Excel and Sage. Available immediately.',
+    aiBtn: '🤖 Let the AI write my profile for me', aiToast: '🤖 Profile written by the AI! You can still edit it.',
     expT: '💼 My work experience',
     lEposte: 'Job title you held', pEposte: 'E.g.: Cashier',
     lElieu: 'Company / Place', pElieu: 'E.g.: Chez Paul Shop, Douala',
     lEper: 'Period', pEper: 'E.g.: 2022 – 2024',
-    lEdesc: 'Your tasks in this job (optional)', pEdesc: 'E.g.: Serving customers, managing stock, opening and closing the shop.',
+    aiExpHint: '🤖 No need to write the tasks: the AI writes them automatically on your CV from the job title.',
     rmExp: '🗑 Remove this experience', addExp: '➕ Add an experience',
     eduT: '🎓 My diplomas & training',
     lDip: 'Diploma / Training', pDip: 'E.g.: GCE A Level / Advanced Level / Degree',
@@ -261,7 +263,7 @@ function grab() {
   c.ville = F('f_ville'); c.profil = F('f_profil'); c.comp = F('f_comp');
   c.langues = F('f_lang'); c.interets = F('f_int');
   c.exp = c.exp.map(function (x, i) {
-    return { poste: F('e_poste' + i), lieu: F('e_lieu' + i), periode: F('e_per' + i), desc: F('e_desc' + i) };
+    return { poste: F('e_poste' + i), lieu: F('e_lieu' + i), periode: F('e_per' + i), desc: x.desc || '' };
   });
   c.edu = c.edu.map(function (x, i) {
     return { dip: F('d_dip' + i), ecole: F('d_eco' + i), annee: F('d_an' + i) };
@@ -305,6 +307,66 @@ function photoPick(ev) {
 
 function setTpl(tp) { grabSafe(); CV().tpl = tp; save(); render(); }
 
+// ---------- IA INTEGREE (hors-ligne) ----------
+var AI_JOBS = [
+  { k: ['caissi', 'cashier', 'caisse'], fr: 'Encaissement des clients, gestion de la caisse et des recettes journalières, accueil et service de la clientèle.', en: 'Serving customers at the till, handling cash and daily takings, welcoming and assisting clients.' },
+  { k: ['vendeu', 'vente', 'seller', 'sales', 'commercial'], fr: 'Vente et conseil aux clients, présentation des produits, gestion du stock et des commandes, atteinte des objectifs de vente.', en: 'Selling and advising customers, presenting products, managing stock and orders, meeting sales targets.' },
+  { k: ['chauffeur', 'driver', 'taxi', 'conducteur'], fr: 'Conduite prudente et ponctuelle, transport des personnes ou des marchandises, entretien courant du véhicule, respect du code de la route.', en: 'Safe and punctual driving, transporting people or goods, basic vehicle maintenance, respecting traffic rules.' },
+  { k: ['secretai', 'secretar', 'assistant'], fr: 'Accueil des visiteurs, gestion des appels et du courrier, saisie et classement des documents, organisation des rendez-vous.', en: 'Welcoming visitors, handling calls and mail, typing and filing documents, organising appointments.' },
+  { k: ['comptab', 'accountant', 'finance', 'caissier comptable'], fr: 'Tenue de la comptabilité, enregistrement des factures, suivi des paiements, préparation des états financiers.', en: 'Bookkeeping, recording invoices, following up payments, preparing financial statements.' },
+  { k: ['electric', 'electrici'], fr: 'Installation et réparation des circuits électriques, câblage, diagnostic des pannes, respect des normes de sécurité.', en: 'Installing and repairing electrical circuits, wiring, fault diagnosis, following safety standards.' },
+  { k: ['plombier', 'plumber', 'plomberie'], fr: 'Installation et réparation de la tuyauterie, détection des fuites, pose des équipements sanitaires.', en: 'Installing and repairing pipes, detecting leaks, fitting sanitary equipment.' },
+  { k: ['couturi', 'tailor', 'seamstress', 'couture'], fr: 'Prise des mesures, coupe et couture des vêtements, retouches, conseil des clients sur les modèles et tissus.', en: 'Taking measurements, cutting and sewing clothes, alterations, advising clients on styles and fabrics.' },
+  { k: ['serveu', 'waiter', 'waitress', 'barman', 'barmaid'], fr: 'Accueil et service des clients, prise des commandes, encaissement, entretien de la salle.', en: 'Welcoming and serving customers, taking orders, handling payments, keeping the room clean.' },
+  { k: ['securit', 'vigile', 'gardien', 'security', 'guard'], fr: 'Surveillance des lieux, contrôle des entrées et sorties, rondes régulières, rédaction des rapports d\u2019incident.', en: 'Guarding the premises, controlling entries and exits, regular patrols, writing incident reports.' },
+  { k: ['enseignant', 'professeur', 'teacher', 'maitre', 'repetiteur', 'instituteur'], fr: 'Préparation et animation des cours, suivi et évaluation des élèves, encadrement et discipline de la classe.', en: 'Preparing and delivering lessons, monitoring and assessing students, classroom management.' },
+  { k: ['menag', 'housekeep', 'nounou', 'nanny', 'domestique'], fr: 'Entretien de la maison, lessive et repassage, préparation des repas, garde et soin des enfants.', en: 'Housekeeping, laundry and ironing, preparing meals, looking after children.' },
+  { k: ['coiffeu', 'coiffure', 'hairdress', 'barber'], fr: 'Coupe, coiffure et soins capillaires, tressage, accueil et fidélisation de la clientèle, hygiène du matériel.', en: 'Cutting and styling hair, braiding, hair care, welcoming and retaining clients, keeping tools clean.' },
+  { k: ['macon', 'mason', 'bricklayer', 'maconnerie'], fr: 'Construction des murs et fondations, préparation du béton, lecture des plans, finitions.', en: 'Building walls and foundations, preparing concrete, reading plans, finishing works.' },
+  { k: ['mecanic', 'mechanic', 'garagiste'], fr: 'Diagnostic et réparation des pannes, entretien des moteurs, remplacement des pièces, essais des véhicules.', en: 'Diagnosing and repairing faults, engine maintenance, replacing parts, testing vehicles.' },
+  { k: ['livreur', 'delivery', 'coursier', 'livraison'], fr: 'Livraison rapide et soignée des commandes, encaissement, bon contact avec les clients, respect des délais.', en: 'Fast and careful delivery of orders, collecting payments, good customer contact, meeting deadlines.' },
+  { k: ['gerant', 'manager', 'gestionnaire', 'directeur'], fr: 'Gestion quotidienne de l\u2019activité, encadrement du personnel, suivi du stock et de la caisse, relation avec les fournisseurs.', en: 'Day-to-day management of the business, supervising staff, monitoring stock and cash, dealing with suppliers.' },
+  { k: ['reception', 'hotesse', 'hôtesse'], fr: 'Accueil physique et téléphonique, information et orientation des clients, gestion des réservations.', en: 'Welcoming visitors and answering calls, informing and directing clients, managing bookings.' },
+  { k: ['informatic', 'developpeur', 'developer', 'programmeur', ' it ', 'web'], fr: 'Installation et maintenance du matériel et des logiciels, assistance aux utilisateurs, développement et mise à jour des applications.', en: 'Installing and maintaining hardware and software, user support, developing and updating applications.' },
+  { k: ['infirmi', 'nurse', 'aide-soignant', 'sante'], fr: 'Soins et suivi des patients, prise des paramètres, administration des traitements, hygiène et stérilisation.', en: 'Caring for and monitoring patients, taking vital signs, administering treatments, hygiene and sterilisation.' },
+  { k: ['cuisini', 'cook', 'chef', 'restaurat'], fr: 'Préparation des repas, gestion des provisions, respect de l\u2019hygiène alimentaire, création des menus.', en: 'Preparing meals, managing food supplies, respecting food hygiene, creating menus.' },
+  { k: ['agricult', 'farmer', 'planteur', 'eleveur'], fr: 'Préparation des champs, semis et récoltes, entretien des cultures ou du bétail, vente des produits.', en: 'Preparing fields, planting and harvesting, caring for crops or livestock, selling produce.' },
+  { k: ['photograph', 'camera', 'video'], fr: 'Prises de vue photo et vidéo, retouche et montage, couverture des événements, livraison des fichiers aux clients.', en: 'Photo and video shooting, editing and retouching, covering events, delivering files to clients.' },
+  { k: ['soudeur', 'welder', 'soudure'], fr: 'Soudure et assemblage des pièces métalliques, lecture des plans, finition et contrôle de la qualité.', en: 'Welding and assembling metal parts, reading plans, finishing and quality control.' },
+  { k: ['menuisier', 'carpenter', 'menuiserie', 'ebeniste'], fr: 'Fabrication et pose des meubles et ouvrages en bois, prise des mesures, finitions et vernissage.', en: 'Making and fitting furniture and woodwork, taking measurements, finishing and varnishing.' },
+  { k: ['boutiqu', 'shopkeep', 'call-box', 'callbox', 'commercant'], fr: 'Tenue de la boutique, vente et encaissement, gestion du stock et des crédits clients, ouverture et fermeture.', en: 'Running the shop, selling and collecting payments, managing stock and customer credits, opening and closing.' }
+];
+function aiNorm(x) { return (' ' + String(x || '').toLowerCase() + ' ').normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+function aiTasks(poste) {
+  var n = aiNorm(poste);
+  if (!n.trim()) return '';
+  for (var i = 0; i < AI_JOBS.length; i++) {
+    for (var j = 0; j < AI_JOBS[i].k.length; j++) {
+      if (n.indexOf(AI_JOBS[i].k[j]) >= 0) return AI_JOBS[i][S.lang];
+    }
+  }
+  return S.lang === 'fr'
+    ? 'Exécution sérieuse des tâches du poste, respect des horaires et des consignes, bon contact avec les clients et l\u2019équipe.'
+    : 'Carrying out the duties of the position seriously, respecting schedules and instructions, good contact with customers and the team.';
+}
+function aiProfil() {
+  grab();
+  var c = CV();
+  var p = (c.poste || '').trim();
+  var exps = c.exp.filter(function (x) { return x.poste; });
+  var out;
+  if (S.lang === 'fr') {
+    out = (p ? p : 'Professionnel(le)') + ' motivé(e), sérieux(se) et ponctuel(le)';
+    if (exps.length) out += ', avec de l\u2019expérience comme ' + exps.map(function (x) { return x.poste; }).join(', ');
+    out += '. Travailleur(se) et honnête, j\u2019apprends vite et je respecte les consignes. Disponible immédiatement.';
+  } else {
+    out = (p ? p : 'Professional') + ', motivated, serious and punctual';
+    if (exps.length) out += ', with experience as ' + exps.map(function (x) { return x.poste; }).join(', ');
+    out += '. Hardworking and honest, I learn fast and follow instructions. Available immediately.';
+  }
+  c.profil = out; save(); render(); toast(t().aiToast);
+}
+
 function wantPdf() {
   if (isPaid()) { window.print(); return; }
   go('pay');
@@ -336,14 +398,14 @@ function renderForm() {
     '<label>' + T.lPhoto + '</label><input type="file" accept="image/*" onchange="photoPick(event)">' +
     (c.photo ? '<p class="hint">' + T.photoOk + '</p>' : '') + '</div>';
   h += '<div class="card"><h3>' + T.profilT + '</h3>' +
-    '<textarea id="f_profil" placeholder="' + T.pProfil + '">' + esc(c.profil) + '</textarea></div>';
-  h += '<div class="card"><h3>' + T.expT + '</h3>';
+    '<textarea id="f_profil" placeholder="' + T.pProfil + '">' + esc(c.profil) + '</textarea>' +
+    '<button class="big ghost" style="margin-top:8px" onclick="aiProfil()">' + T.aiBtn + '</button></div>';
+  h += '<div class="card"><h3>' + T.expT + '</h3><p class="hint">' + T.aiExpHint + '</p>';
   c.exp.forEach(function (x, i) {
     h += '<div class="expbox">' +
       '<label>' + T.lEposte + '</label><input id="e_poste' + i + '" value="' + esc(x.poste) + '" placeholder="' + T.pEposte + '">' +
       '<label>' + T.lElieu + '</label><input id="e_lieu' + i + '" value="' + esc(x.lieu) + '" placeholder="' + T.pElieu + '">' +
       '<label>' + T.lEper + '</label><input id="e_per' + i + '" value="' + esc(x.periode) + '" placeholder="' + T.pEper + '">' +
-      '<label>' + T.lEdesc + '</label><textarea id="e_desc' + i + '" placeholder="' + T.pEdesc + '">' + esc(x.desc) + '</textarea>' +
       (c.exp.length > 1 ? '<button class="mini" style="margin-top:8px" onclick="rmExp(' + i + ')">' + T.rmExp + '</button>' : '') +
       '</div>';
   });
@@ -380,7 +442,8 @@ function cvHTML() {
   if (exps.length) {
     h += '<div class="cvsec"><h2>' + T.cvExp + '</h2>';
     exps.forEach(function (x) {
-      h += '<div class="cvitem"><div class="t1">' + esc(x.poste) + '</div><div class="t2">' + esc(x.lieu) + (x.periode ? ' · ' + esc(x.periode) : '') + '</div>' + (x.desc ? '<p>' + nl(x.desc) + '</p>' : '') + '</div>';
+      var d = (x.desc && String(x.desc).trim()) ? x.desc : aiTasks(x.poste);
+      h += '<div class="cvitem"><div class="t1">' + esc(x.poste) + '</div><div class="t2">' + esc(x.lieu) + (x.periode ? ' · ' + esc(x.periode) : '') + '</div>' + (d ? '<p>' + nl(d) + '</p>' : '') + '</div>';
     });
     h += '</div>';
   }
