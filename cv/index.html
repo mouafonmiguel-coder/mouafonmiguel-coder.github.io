@@ -37,11 +37,15 @@
   .step .n { background: #0b5e55; color: #fff; min-width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; }
   .step p { font-size: .9rem; line-height: 1.5; }
   .rowbtn { display: flex; gap: 8px; } .rowbtn button, .rowbtn a { flex: 1; } a { text-decoration: none; }
-  .badge { background: linear-gradient(135deg,#d99a06,#ffd54f); color: #4a3500; border-radius: 14px; padding: 12px; text-align: center; font-weight: 900; margin-bottom: 12px; cursor: pointer; }
   .toast { position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%); background: #15302b; color: #fff; padding: 11px 18px; border-radius: 999px; font-size: .88rem; font-weight: 700; z-index: 99; }
   .tplpick { display: flex; gap: 8px; margin-top: 8px; }
   .tplpick div { flex: 1; border: 3px solid #cfe5e0; border-radius: 10px; padding: 10px 4px; text-align: center; font-size: .75rem; font-weight: 800; cursor: pointer; }
   .tplpick div.on { border-color: #0b5e55; background: #e7f3f1; }
+  .cvrow { display: flex; align-items: center; gap: 10px; border: 2px solid #cfe5e0; border-radius: 12px; padding: 12px; margin-top: 10px; }
+  .cvrow .inf { flex: 1; cursor: pointer; }
+  .cvrow .nm { font-weight: 900; color: #0b5e55; }
+  .cvrow .jb { font-size: .8rem; color: #5a7a72; margin-top: 2px; }
+  .cvrow .del { background: #fdecea; border: 0; border-radius: 10px; font-size: 1.15rem; padding: 9px 11px; cursor: pointer; }
 
   /* ---------- LE CV ---------- */
   .cvpage { background: #fff; width: 100%; max-width: 760px; margin: 0 auto; box-shadow: 0 4px 18px rgba(0,0,0,.14); position: relative; overflow: hidden; }
@@ -59,7 +63,6 @@
   .cvitem .t2 { font-size: .8rem; color: var(--ac); font-weight: 700; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .chips span { background: #f0f0f0; border-left: 4px solid var(--ac); padding: 4px 10px; border-radius: 4px; font-size: .8rem; font-weight: 700; }
-  .wm { position: absolute; bottom: 8px; left: 0; right: 0; text-align: center; font-size: .72rem; color: #999; }
   .cv-bleu { --ac: #1b4e89; } .cv-vert { --ac: #0b5e55; } .cv-bordeaux { --ac: #7a1f3d; } .cv-noir { --ac: #222222; }
 
   @media print {
@@ -74,22 +77,21 @@
 <body>
 <div class="top noprint">
   <div class="brand">📄 CV <span>RAPIDE</span></div>
-  <div style="display:flex;gap:8px">
-    <button class="lng" id="lngBtn" onclick="toggleLang()">🌐 EN</button>
-    <button onclick="go('premium')" id="topBtn">⭐ Premium</button>
-  </div>
+  <button class="lng" id="lngBtn" onclick="toggleLang()">🌐 EN</button>
 </div>
 <div class="wrap" id="app"></div>
 <div class="tabs noprint">
+  <button id="tabList" onclick="go('list')"><span class="tic">📂</span><span id="tabListL">Mes CV</span></button>
   <button id="tabForm" onclick="go('form')"><span class="tic">✏️</span><span id="tabFormL">Remplir</span></button>
   <button id="tabPrev" onclick="go('prev')"><span class="tic">👁️</span><span id="tabPrevL">Mon CV</span></button>
-  <button id="tabPrem" onclick="go('premium')"><span class="tic">⭐</span><span id="tabPremL">Premium</span></button>
 </div>
 <script>
+// Lien de paiement Fapshi « CV RAPIDE — 1000 F » (colle le lien ici quand il est cree)
+var FAPSHI_LINK = '';
+
 var TR = {
   fr: {
-    tabForm: 'Remplir', tabPrev: 'Mon CV', tabPrem: 'Premium',
-    premBtn: '⭐ Premium', premOn: '⭐ Actif', lngBtn: '🌐 EN',
+    tabList: 'Mes CV', tabForm: 'Remplir', tabPrev: 'Mon CV', lngBtn: '🌐 EN',
     heroT: 'Ton CV professionnel,<br><b>prêt en 5 minutes !</b>',
     heroP: 'Remplis les cases, choisis ton modèle, et télécharge ton CV en PDF — directement sur ton téléphone.',
     infoT: '👤 Mes informations',
@@ -101,10 +103,10 @@ var TR = {
     profilT: '📝 Mon profil (2-3 phrases)',
     pProfil: 'Ex. : Comptable rigoureuse avec 3 ans d\u2019expérience. Maîtrise de Excel et Sage. Disponible immédiatement.',
     expT: '💼 Mes expériences',
-    lEposte: 'Poste occupé', pEposte: 'Ex. : Caissière',
+    lEposte: 'Nom du poste occupé', pEposte: 'Ex. : Caissière',
     lElieu: 'Entreprise / Lieu', pElieu: 'Ex. : Boutique Chez Paul, Douala',
     lEper: 'Période', pEper: 'Ex. : 2022 – 2024',
-    lEdesc: 'Ce que tu faisais (facultatif)', pEdesc: 'Ex. : Encaissement, gestion du stock, service client.',
+    lEdesc: 'Tes tâches dans ce poste (facultatif)', pEdesc: 'Ex. : Encaisser les clients, gérer le stock, ouvrir et fermer la boutique.',
     rmExp: '🗑 Retirer cette expérience', addExp: '➕ Ajouter une expérience',
     eduT: '🎓 Mes diplômes & formations',
     lDip: 'Diplôme / Formation', pDip: 'Ex. : BAC D / CAP Couture / Licence',
@@ -117,34 +119,34 @@ var TR = {
     seeCv: '👁️ VOIR MON CV ➜',
     cvName: 'TON NOM ICI', cvProfil: 'PROFIL', cvExp: 'EXPÉRIENCE PROFESSIONNELLE', cvEdu: 'FORMATION',
     cvComp: 'COMPÉTENCES', cvLang: 'LANGUES', cvInt: 'CENTRES D\u2019INTÉRÊT',
-    wm: 'CV créé gratuitement avec CV RAPIDE — WhatsApp 692 168 264',
-    tplT: '🎨 Choisis ton modèle', free: 'Gratuit', premOk: 'Premium ✓', premLock: '🔒 Premium',
-    tplHint: '⭐ Premium : modèles VERT, BORDEAUX et NOIR + <b>suppression du filigrane</b> en bas du CV.',
+    tplT: '🎨 Choisis ton modèle',
     dlBtn: '📄 TÉLÉCHARGER EN PDF',
     dlHint: 'Dans la fenêtre qui s\u2019ouvre, choisis <b>« Enregistrer au format PDF »</b> — puis envoie ton CV sur WhatsApp ou par email !',
     editBtn: '✏️ Modifier mon CV',
-    badge: '⭐ Enlever le filigrane + modèles PRO — appuie ici',
-    lockToast: '🔒 Ce modèle est réservé au Premium',
-    premActiveT: '⭐ Premium actif',
-    premActiveP: function (y) { return 'Ton Premium est actif pour toute l\u2019année ' + y + ' : filigrane supprimé + tous les modèles débloqués. Bon courage pour tes candidatures ! 💼'; },
-    seeMyCv: '👁️ Voir mon CV',
-    premT: '⭐ Premium — 1 000 F pour TOUTE l\u2019année',
-    premList: '✔ Filigrane supprimé (CV 100 % propre)<br>✔ Modèles VERT, BORDEAUX et NOIR débloqués<br>✔ Modifie et retélécharge ton CV autant de fois que tu veux, toute l\u2019année.',
-    step1: 'Envoie <b>1 000 F</b> par Mobile Money à <b>MIGUEL MOUAFON</b> :<br>🟠 Orange Money : <b>692 168 264</b><br>🟡 MTN MoMo : <b>653 596 305</b>',
+    listT: '📂 Mes CV',
+    listHint: 'Tu peux créer plusieurs CV (un par métier, un en français, un en anglais...). Appuie sur un CV pour l\u2019ouvrir, ou sur 🗑 pour le supprimer.',
+    noName: 'CV sans nom', newCv: '➕ Créer un nouveau CV',
+    delConfirm: 'Supprimer définitivement ce CV ?', delToast: '🗑 CV supprimé',
+    payT: '📄 Télécharger en PDF — 1 000 F pour TOUTE l\u2019année',
+    payList: '✔ Télécharge TOUS tes CV en PDF, autant de fois que tu veux<br>✔ Valable toute l\u2019année, sur tous tes CV<br>✔ Les 4 modèles de couleurs inclus',
+    payOnline: '💳 PAYER EN LIGNE (MTN MoMo / Orange Money)',
+    payOnlineHint: 'Paiement sécurisé par Fapshi — tu reçois l\u2019ID de la transaction par SMS.',
+    step1b: 'Ou envoie directement <b>1 000 F</b> par Mobile Money à <b>MIGUEL MOUAFON</b> :<br>🟠 Orange Money : <b>692 168 264</b><br>🟡 MTN MoMo : <b>653 596 305</b>',
     dial1: '🟠 Composer #150#', dial2: '🟡 Composer *126#',
-    step2: 'Après le paiement, tu reçois un <b>SMS de confirmation</b> avec l\u2019<b>ID de la transaction</b> (ex. : PP250118.1234.A12345 ou MP240118...).',
-    step3: 'Entre ton numéro et cet ID ici → le Premium s\u2019active <b>immédiatement</b> :',
+    step2: 'Après le paiement, tu reçois un <b>SMS de confirmation</b> avec l\u2019<b>ID de la transaction</b> (ex. : PP250118.1234.A12345).',
+    step3: 'Entre ton numéro et cet ID ici → le téléchargement se débloque <b>immédiatement</b> :',
     phPhone: 'Ton numéro (ex. 6XXXXXXXX)', phTxn: 'ID de la transaction (dans le SMS reçu)',
-    actBtn: '🔓 Activer mon Premium maintenant',
-    warn: '⚠️ L\u2019ID doit être exact : chaque activation est vérifiée par MIGUEL avec les reçus Orange/MTN. Une fausse déclaration = Premium annulé.',
+    actBtn: '🔓 Débloquer le téléchargement',
+    warn: '⚠️ L\u2019ID doit être exact : chaque déblocage est vérifié par MIGUEL avec les reçus. Une fausse déclaration = accès annulé.',
     help: 'Un souci ? Écris sur WhatsApp : <b>692 168 264</b>',
     errPhone: 'Entre ton numéro complet (9 chiffres).',
     errTxn: 'Cet ID de transaction est trop court. Recopie exactement l\u2019ID du SMS de confirmation.',
-    actToast: '⭐ Premium activé ! Ton CV est maintenant 100 % propre.'
+    actToast: '✅ Téléchargement débloqué pour toute l\u2019année !',
+    dlPay: 'Le téléchargement PDF coûte <b>1 000 F pour toute l\u2019année</b> (CV illimités). Appuie sur le bouton vert pour payer et télécharger.',
+    step1: 'Envoie <b>1 000 F</b> par Mobile Money à <b>MIGUEL MOUAFON</b> :<br>🟠 Orange Money : <b>692 168 264</b><br>🟡 MTN MoMo : <b>653 596 305</b>'
   },
   en: {
-    tabForm: 'Fill in', tabPrev: 'My CV', tabPrem: 'Premium',
-    premBtn: '⭐ Premium', premOn: '⭐ Active', lngBtn: '🌐 FR',
+    tabList: 'My CVs', tabForm: 'Fill in', tabPrev: 'My CV', lngBtn: '🌐 FR',
     heroT: 'Your professional CV,<br><b>ready in 5 minutes!</b>',
     heroP: 'Fill in the boxes, pick your template, and download your CV as a PDF — right on your phone.',
     infoT: '👤 My information',
@@ -156,10 +158,10 @@ var TR = {
     profilT: '📝 My profile (2-3 sentences)',
     pProfil: 'E.g.: Hardworking accountant with 3 years of experience. Good knowledge of Excel and Sage. Available immediately.',
     expT: '💼 My work experience',
-    lEposte: 'Position held', pEposte: 'E.g.: Cashier',
+    lEposte: 'Job title you held', pEposte: 'E.g.: Cashier',
     lElieu: 'Company / Place', pElieu: 'E.g.: Chez Paul Shop, Douala',
     lEper: 'Period', pEper: 'E.g.: 2022 – 2024',
-    lEdesc: 'What you did (optional)', pEdesc: 'E.g.: Cash handling, stock management, customer service.',
+    lEdesc: 'Your tasks in this job (optional)', pEdesc: 'E.g.: Serving customers, managing stock, opening and closing the shop.',
     rmExp: '🗑 Remove this experience', addExp: '➕ Add an experience',
     eduT: '🎓 My diplomas & training',
     lDip: 'Diploma / Training', pDip: 'E.g.: GCE A Level / Advanced Level / Degree',
@@ -172,48 +174,65 @@ var TR = {
     seeCv: '👁️ SEE MY CV ➜',
     cvName: 'YOUR NAME HERE', cvProfil: 'PROFILE', cvExp: 'WORK EXPERIENCE', cvEdu: 'EDUCATION',
     cvComp: 'SKILLS', cvLang: 'LANGUAGES', cvInt: 'INTERESTS',
-    wm: 'CV created for free with CV RAPIDE — WhatsApp 692 168 264',
-    tplT: '🎨 Pick your template', free: 'Free', premOk: 'Premium ✓', premLock: '🔒 Premium',
-    tplHint: '⭐ Premium: GREEN, BURGUNDY and BLACK templates + <b>watermark removed</b> at the bottom of the CV.',
+    tplT: '🎨 Pick your template',
     dlBtn: '📄 DOWNLOAD AS PDF',
     dlHint: 'In the window that opens, choose <b>“Save as PDF”</b> — then send your CV on WhatsApp or by email!',
     editBtn: '✏️ Edit my CV',
-    badge: '⭐ Remove the watermark + PRO templates — tap here',
-    lockToast: '🔒 This template is for Premium only',
-    premActiveT: '⭐ Premium active',
-    premActiveP: function (y) { return 'Your Premium is active for the whole year ' + y + ': watermark removed + all templates unlocked. Good luck with your applications! 💼'; },
-    seeMyCv: '👁️ See my CV',
-    premT: '⭐ Premium — 1,000 F for the WHOLE year',
-    premList: '✔ Watermark removed (100% clean CV)<br>✔ GREEN, BURGUNDY and BLACK templates unlocked<br>✔ Edit and re-download your CV as many times as you want, all year long.',
-    step1: 'Send <b>1,000 F</b> by Mobile Money to <b>MIGUEL MOUAFON</b>:<br>🟠 Orange Money: <b>692 168 264</b><br>🟡 MTN MoMo: <b>653 596 305</b>',
+    listT: '📂 My CVs',
+    listHint: 'You can create several CVs (one per job, one in English, one in French...). Tap a CV to open it, or 🗑 to delete it.',
+    noName: 'Untitled CV', newCv: '➕ Create a new CV',
+    delConfirm: 'Delete this CV permanently?', delToast: '🗑 CV deleted',
+    payT: '📄 Download as PDF — 1,000 F for the WHOLE year',
+    payList: '✔ Download ALL your CVs as PDF, as many times as you want<br>✔ Valid all year, on all your CVs<br>✔ All 4 colour templates included',
+    payOnline: '💳 PAY ONLINE (MTN MoMo / Orange Money)',
+    payOnlineHint: 'Secure payment by Fapshi — you receive the transaction ID by SMS.',
+    step1b: 'Or send <b>1,000 F</b> directly by Mobile Money to <b>MIGUEL MOUAFON</b>:<br>🟠 Orange Money: <b>692 168 264</b><br>🟡 MTN MoMo: <b>653 596 305</b>',
     dial1: '🟠 Dial #150#', dial2: '🟡 Dial *126#',
-    step2: 'After payment, you receive a <b>confirmation SMS</b> with the <b>transaction ID</b> (e.g.: PP250118.1234.A12345 or MP240118...).',
-    step3: 'Enter your number and that ID here → Premium activates <b>immediately</b>:',
+    step2: 'After payment, you receive a <b>confirmation SMS</b> with the <b>transaction ID</b> (e.g.: PP250118.1234.A12345).',
+    step3: 'Enter your number and that ID here → downloading unlocks <b>immediately</b>:',
     phPhone: 'Your number (e.g. 6XXXXXXXX)', phTxn: 'Transaction ID (from the SMS you received)',
-    actBtn: '🔓 Activate my Premium now',
-    warn: '⚠️ The ID must be exact: every activation is checked by MIGUEL against the Orange/MTN receipts. A false declaration = Premium cancelled.',
+    actBtn: '🔓 Unlock downloading',
+    warn: '⚠️ The ID must be exact: every unlock is checked by MIGUEL against the receipts. A false declaration = access cancelled.',
     help: 'Any problem? Write on WhatsApp: <b>692 168 264</b>',
     errPhone: 'Enter your full number (9 digits).',
     errTxn: 'This transaction ID is too short. Copy the exact ID from the confirmation SMS.',
-    actToast: '⭐ Premium activated! Your CV is now 100% clean.'
+    actToast: '✅ Downloading unlocked for the whole year!',
+    dlPay: 'PDF download costs <b>1,000 F for the whole year</b> (unlimited CVs). Press the green button to pay and download.',
+    step1: 'Send <b>1,000 F</b> by Mobile Money to <b>MIGUEL MOUAFON</b>:<br>🟠 Orange Money: <b>692 168 264</b><br>🟡 MTN MoMo: <b>653 596 305</b>'
   }
 };
 
-var S = {
-  nom: '', poste: '', tel: '', email: '', ville: '', photo: '',
-  profil: '', comp: '', langues: '', interets: '',
-  exp: [{ poste: '', lieu: '', periode: '', desc: '' }],
-  edu: [{ dip: '', ecole: '', annee: '' }],
-  tpl: 'bleu', phone: '', premiumYear: 0, lang: 'fr'
-};
-try { var sv = localStorage.getItem('cv_state_v1'); if (sv) S = Object.assign(S, JSON.parse(sv)); } catch (e) {}
+function blankCv() {
+  return { nom: '', poste: '', tel: '', email: '', ville: '', photo: '', profil: '', comp: '', langues: '', interets: '',
+    exp: [{ poste: '', lieu: '', periode: '', desc: '' }], edu: [{ dip: '', ecole: '', annee: '' }], tpl: 'bleu' };
+}
+var S = { lang: 'fr', phone: '', paidYear: 0, cur: 0, cvs: [blankCv()] };
+try {
+  var sv = localStorage.getItem('cv_state_v1');
+  if (sv) {
+    var o = JSON.parse(sv);
+    if (o && o.cvs && o.cvs.length) { S = Object.assign(S, o); }
+    else if (o) {
+      // migration ancien format (1 seul CV + premium)
+      var c = blankCv();
+      ['nom','poste','tel','email','ville','photo','profil','comp','langues','interets','exp','edu','tpl'].forEach(function (k) { if (o[k] !== undefined) c[k] = o[k]; });
+      S.cvs = [c]; S.cur = 0;
+      if (o.lang) S.lang = o.lang;
+      if (o.phone) S.phone = o.phone;
+      if (o.premiumYear) S.paidYear = o.premiumYear;
+    }
+  }
+} catch (e) {}
 if (S.lang !== 'fr' && S.lang !== 'en') S.lang = 'fr';
+if (!S.cvs || !S.cvs.length) { S.cvs = [blankCv()]; S.cur = 0; }
+if (S.cur >= S.cvs.length) S.cur = 0;
+function CV() { return S.cvs[S.cur]; }
 function t() { return TR[S.lang]; }
 function save() { try { localStorage.setItem('cv_state_v1', JSON.stringify(S)); } catch (e) {} }
-function isPremium() { return S.premiumYear === new Date().getFullYear(); }
+function isPaid() { return S.paidYear === new Date().getFullYear(); }
 function toggleLang() { grabSafe(); S.lang = (S.lang === 'fr' ? 'en' : 'fr'); save(); render(); }
 
-// Registre central de MIGUEL : chaque activation y est notee automatiquement
+// Registre central de MIGUEL : chaque deblocage y est note automatiquement
 var CC_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSc8B9D32bIRco4H2AXkrnemNy_55aw8OoYg04ZVDsos1_u_Og/formResponse';
 var CC_ENTRY = 'entry.1876005044';
 function regSend(info) {
@@ -237,22 +256,34 @@ function go(v) { grabSafe(); view = v; window.scrollTo(0, 0); render(); }
 
 function F(id) { var el = document.getElementById(id); return el ? el.value : ''; }
 function grab() {
-  S.nom = F('f_nom'); S.poste = F('f_poste'); S.tel = F('f_tel'); S.email = F('f_email');
-  S.ville = F('f_ville'); S.profil = F('f_profil'); S.comp = F('f_comp');
-  S.langues = F('f_lang'); S.interets = F('f_int');
-  S.exp = S.exp.map(function (x, i) {
+  var c = CV();
+  c.nom = F('f_nom'); c.poste = F('f_poste'); c.tel = F('f_tel'); c.email = F('f_email');
+  c.ville = F('f_ville'); c.profil = F('f_profil'); c.comp = F('f_comp');
+  c.langues = F('f_lang'); c.interets = F('f_int');
+  c.exp = c.exp.map(function (x, i) {
     return { poste: F('e_poste' + i), lieu: F('e_lieu' + i), periode: F('e_per' + i), desc: F('e_desc' + i) };
   });
-  S.edu = S.edu.map(function (x, i) {
+  c.edu = c.edu.map(function (x, i) {
     return { dip: F('d_dip' + i), ecole: F('d_eco' + i), annee: F('d_an' + i) };
   });
   save();
 }
 function grabSafe() { if (view === 'form' && document.getElementById('f_nom')) grab(); }
-function addExp() { grab(); S.exp.push({ poste: '', lieu: '', periode: '', desc: '' }); save(); render(); }
-function rmExp(i) { grab(); S.exp.splice(i, 1); if (!S.exp.length) S.exp.push({ poste: '', lieu: '', periode: '', desc: '' }); save(); render(); }
-function addEdu() { grab(); S.edu.push({ dip: '', ecole: '', annee: '' }); save(); render(); }
-function rmEdu(i) { grab(); S.edu.splice(i, 1); if (!S.edu.length) S.edu.push({ dip: '', ecole: '', annee: '' }); save(); render(); }
+function addExp() { grab(); CV().exp.push({ poste: '', lieu: '', periode: '', desc: '' }); save(); render(); }
+function rmExp(i) { grab(); var c = CV(); c.exp.splice(i, 1); if (!c.exp.length) c.exp.push({ poste: '', lieu: '', periode: '', desc: '' }); save(); render(); }
+function addEdu() { grab(); CV().edu.push({ dip: '', ecole: '', annee: '' }); save(); render(); }
+function rmEdu(i) { grab(); var c = CV(); c.edu.splice(i, 1); if (!c.edu.length) c.edu.push({ dip: '', ecole: '', annee: '' }); save(); render(); }
+
+// ---------- MES CV (liste + corbeille) ----------
+function newCv() { grabSafe(); S.cvs.push(blankCv()); S.cur = S.cvs.length - 1; save(); view = 'form'; window.scrollTo(0, 0); render(); }
+function openCv(i) { S.cur = i; save(); view = 'form'; window.scrollTo(0, 0); render(); }
+function delCv(i) {
+  if (!confirm(t().delConfirm)) return;
+  S.cvs.splice(i, 1);
+  if (!S.cvs.length) S.cvs.push(blankCv());
+  if (S.cur >= S.cvs.length) S.cur = S.cvs.length - 1;
+  save(); toast(t().delToast); render();
+}
 
 function photoPick(ev) {
   var f = ev.target.files[0]; if (!f) return;
@@ -264,7 +295,7 @@ function photoPick(ev) {
       var s2 = Math.min(img.width, img.height);
       c.width = 300; c.height = 300;
       c.getContext('2d').drawImage(img, (img.width - s2) / 2, (img.height - s2) / 2, s2, s2, 0, 0, 300, 300);
-      S.photo = c.toDataURL('image/jpeg', 0.82);
+      CV().photo = c.toDataURL('image/jpeg', 0.82);
       save(); toast(t().photoToast); render();
     };
     img.src = r.result;
@@ -272,65 +303,80 @@ function photoPick(ev) {
   r.readAsDataURL(f);
 }
 
-function setTpl(tp, locked) {
-  if (locked && !isPremium()) { go('premium'); toast(t().lockToast); return; }
-  grabSafe(); S.tpl = tp; save(); render();
+function setTpl(tp) { grabSafe(); CV().tpl = tp; save(); render(); }
+
+function wantPdf() {
+  if (isPaid()) { window.print(); return; }
+  go('pay');
+}
+
+function renderList() {
+  var T = t();
+  var h = '<div class="card"><h3>' + T.listT + '</h3><p class="hint">' + T.listHint + '</p>';
+  S.cvs.forEach(function (c, i) {
+    var name = c.nom || c.poste || T.noName;
+    h += '<div class="cvrow' + '">' +
+      '<div class="inf" onclick="openCv(' + i + ')"><div class="nm">' + (i === S.cur ? '👉 ' : '') + esc(name) + '</div>' +
+      (c.poste ? '<div class="jb">' + esc(c.poste) + '</div>' : '') + '</div>' +
+      '<button class="del" onclick="delCv(' + i + ')">🗑</button></div>';
+  });
+  h += '<button class="big ghost" onclick="newCv()">' + T.newCv + '</button></div>';
+  return h;
 }
 
 function renderForm() {
-  var T = t();
+  var T = t(); var c = CV();
   var h = '<div class="hero"><h1>' + T.heroT + '</h1><p>' + T.heroP + '</p></div>';
   h += '<div class="card"><h3>' + T.infoT + '</h3>' +
-    '<label>' + T.lNom + '</label><input id="f_nom" value="' + esc(S.nom) + '" placeholder="' + T.pNom + '">' +
-    '<label>' + T.lPoste + '</label><input id="f_poste" value="' + esc(S.poste) + '" placeholder="' + T.pPoste + '">' +
-    '<label>' + T.lTel + '</label><input id="f_tel" inputmode="tel" value="' + esc(S.tel) + '" placeholder="6XX XXX XXX">' +
-    '<label>' + T.lEmail + '</label><input id="f_email" value="' + esc(S.email) + '" placeholder="exemple@gmail.com">' +
-    '<label>' + T.lVille + '</label><input id="f_ville" value="' + esc(S.ville) + '" placeholder="' + T.pVille + '">' +
+    '<label>' + T.lNom + '</label><input id="f_nom" value="' + esc(c.nom) + '" placeholder="' + T.pNom + '">' +
+    '<label>' + T.lPoste + '</label><input id="f_poste" value="' + esc(c.poste) + '" placeholder="' + T.pPoste + '">' +
+    '<label>' + T.lTel + '</label><input id="f_tel" inputmode="tel" value="' + esc(c.tel) + '" placeholder="6XX XXX XXX">' +
+    '<label>' + T.lEmail + '</label><input id="f_email" value="' + esc(c.email) + '" placeholder="exemple@gmail.com">' +
+    '<label>' + T.lVille + '</label><input id="f_ville" value="' + esc(c.ville) + '" placeholder="' + T.pVille + '">' +
     '<label>' + T.lPhoto + '</label><input type="file" accept="image/*" onchange="photoPick(event)">' +
-    (S.photo ? '<p class="hint">' + T.photoOk + '</p>' : '') + '</div>';
+    (c.photo ? '<p class="hint">' + T.photoOk + '</p>' : '') + '</div>';
   h += '<div class="card"><h3>' + T.profilT + '</h3>' +
-    '<textarea id="f_profil" placeholder="' + T.pProfil + '">' + esc(S.profil) + '</textarea></div>';
+    '<textarea id="f_profil" placeholder="' + T.pProfil + '">' + esc(c.profil) + '</textarea></div>';
   h += '<div class="card"><h3>' + T.expT + '</h3>';
-  S.exp.forEach(function (x, i) {
+  c.exp.forEach(function (x, i) {
     h += '<div class="expbox">' +
       '<label>' + T.lEposte + '</label><input id="e_poste' + i + '" value="' + esc(x.poste) + '" placeholder="' + T.pEposte + '">' +
       '<label>' + T.lElieu + '</label><input id="e_lieu' + i + '" value="' + esc(x.lieu) + '" placeholder="' + T.pElieu + '">' +
       '<label>' + T.lEper + '</label><input id="e_per' + i + '" value="' + esc(x.periode) + '" placeholder="' + T.pEper + '">' +
       '<label>' + T.lEdesc + '</label><textarea id="e_desc' + i + '" placeholder="' + T.pEdesc + '">' + esc(x.desc) + '</textarea>' +
-      (S.exp.length > 1 ? '<button class="mini" style="margin-top:8px" onclick="rmExp(' + i + ')">' + T.rmExp + '</button>' : '') +
+      (c.exp.length > 1 ? '<button class="mini" style="margin-top:8px" onclick="rmExp(' + i + ')">' + T.rmExp + '</button>' : '') +
       '</div>';
   });
   h += '<button class="big ghost" onclick="addExp()">' + T.addExp + '</button></div>';
   h += '<div class="card"><h3>' + T.eduT + '</h3>';
-  S.edu.forEach(function (x, i) {
+  c.edu.forEach(function (x, i) {
     h += '<div class="expbox">' +
       '<label>' + T.lDip + '</label><input id="d_dip' + i + '" value="' + esc(x.dip) + '" placeholder="' + T.pDip + '">' +
       '<label>' + T.lEco + '</label><input id="d_eco' + i + '" value="' + esc(x.ecole) + '" placeholder="' + T.pEco + '">' +
       '<label>' + T.lAn + '</label><input id="d_an' + i + '" value="' + esc(x.annee) + '" placeholder="Ex. : 2021">' +
-      (S.edu.length > 1 ? '<button class="mini" style="margin-top:8px" onclick="rmEdu(' + i + ')">' + T.rmEdu + '</button>' : '') +
+      (c.edu.length > 1 ? '<button class="mini" style="margin-top:8px" onclick="rmEdu(' + i + ')">' + T.rmEdu + '</button>' : '') +
       '</div>';
   });
   h += '<button class="big ghost" onclick="addEdu()">' + T.addEdu + '</button></div>';
   h += '<div class="card"><h3>' + T.skillT + '</h3>' +
-    '<label>' + T.lComp + '</label><input id="f_comp" value="' + esc(S.comp) + '" placeholder="' + T.pComp + '">' +
-    '<label>' + T.lLang + '</label><input id="f_lang" value="' + esc(S.langues) + '" placeholder="' + T.pLang + '">' +
-    '<label>' + T.lInt + '</label><input id="f_int" value="' + esc(S.interets) + '" placeholder="' + T.pInt + '"></div>';
+    '<label>' + T.lComp + '</label><input id="f_comp" value="' + esc(c.comp) + '" placeholder="' + T.pComp + '">' +
+    '<label>' + T.lLang + '</label><input id="f_lang" value="' + esc(c.langues) + '" placeholder="' + T.pLang + '">' +
+    '<label>' + T.lInt + '</label><input id="f_int" value="' + esc(c.interets) + '" placeholder="' + T.pInt + '"></div>';
   h += '<button class="big" onclick="grab(); go(\'prev\')">' + T.seeCv + '</button>';
   return h;
 }
 
 function cvHTML() {
-  var T = t();
-  var premium = isPremium();
-  var h = '<div class="cvpage cv-' + S.tpl + '"><div class="cvin">';
+  var T = t(); var c = CV();
+  var h = '<div class="cvpage cv-' + c.tpl + '"><div class="cvin">';
   h += '<div class="cvhead">';
-  if (S.photo) h += '<img class="ph" src="' + S.photo + '">';
-  h += '<div><h1>' + (esc(S.nom) || T.cvName) + '</h1>' +
-    '<div class="job">' + esc(S.poste) + '</div>' +
-    '<div class="cont">' + [S.tel ? '📞 ' + esc(S.tel) : '', S.email ? '✉️ ' + esc(S.email) : '', S.ville ? '📍 ' + esc(S.ville) : ''].filter(Boolean).join(' &nbsp; ') + '</div>' +
+  if (c.photo) h += '<img class="ph" src="' + c.photo + '">';
+  h += '<div><h1>' + (esc(c.nom) || T.cvName) + '</h1>' +
+    '<div class="job">' + esc(c.poste) + '</div>' +
+    '<div class="cont">' + [c.tel ? '📞 ' + esc(c.tel) : '', c.email ? '✉️ ' + esc(c.email) : '', c.ville ? '📍 ' + esc(c.ville) : ''].filter(Boolean).join(' &nbsp; ') + '</div>' +
     '</div></div>';
-  if (S.profil) h += '<div class="cvsec"><h2>' + T.cvProfil + '</h2><p>' + nl(S.profil) + '</p></div>';
-  var exps = S.exp.filter(function (x) { return x.poste || x.lieu; });
+  if (c.profil) h += '<div class="cvsec"><h2>' + T.cvProfil + '</h2><p>' + nl(c.profil) + '</p></div>';
+  var exps = c.exp.filter(function (x) { return x.poste || x.lieu; });
   if (exps.length) {
     h += '<div class="cvsec"><h2>' + T.cvExp + '</h2>';
     exps.forEach(function (x) {
@@ -338,7 +384,7 @@ function cvHTML() {
     });
     h += '</div>';
   }
-  var edus = S.edu.filter(function (x) { return x.dip || x.ecole; });
+  var edus = c.edu.filter(function (x) { return x.dip || x.ecole; });
   if (edus.length) {
     h += '<div class="cvsec"><h2>' + T.cvEdu + '</h2>';
     edus.forEach(function (x) {
@@ -346,52 +392,45 @@ function cvHTML() {
     });
     h += '</div>';
   }
-  if (S.comp) {
+  if (c.comp) {
     h += '<div class="cvsec"><h2>' + T.cvComp + '</h2><div class="chips">' +
-      S.comp.split(',').map(function (c) { return c.trim(); }).filter(Boolean).map(function (c) { return '<span>' + esc(c) + '</span>'; }).join('') + '</div></div>';
+      c.comp.split(',').map(function (x) { return x.trim(); }).filter(Boolean).map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('') + '</div></div>';
   }
-  if (S.langues) h += '<div class="cvsec"><h2>' + T.cvLang + '</h2><p>' + esc(S.langues) + '</p></div>';
-  if (S.interets) h += '<div class="cvsec"><h2>' + T.cvInt + '</h2><p>' + esc(S.interets) + '</p></div>';
-  h += '</div>';
-  if (!premium) h += '<div class="wm">' + T.wm + '</div>';
-  h += '</div>';
+  if (c.langues) h += '<div class="cvsec"><h2>' + T.cvLang + '</h2><p>' + esc(c.langues) + '</p></div>';
+  if (c.interets) h += '<div class="cvsec"><h2>' + T.cvInt + '</h2><p>' + esc(c.interets) + '</p></div>';
+  h += '</div></div>';
   return h;
 }
 
 function renderPrev() {
-  var T = t();
+  var T = t(); var c = CV();
   var h = '<div class="noprint">';
   h += '<div class="card"><h3>' + T.tplT + '</h3><div class="tplpick">' +
-    '<div class="' + (S.tpl === 'bleu' ? 'on' : '') + '" style="color:#1b4e89" onclick="setTpl(\'bleu\', false)">🔵 ' + (S.lang === 'fr' ? 'BLEU' : 'BLUE') + '<br>' + T.free + '</div>' +
-    '<div class="' + (S.tpl === 'vert' ? 'on' : '') + '" style="color:#0b5e55" onclick="setTpl(\'vert\', true)">🟢 ' + (S.lang === 'fr' ? 'VERT' : 'GREEN') + '<br>' + (isPremium() ? T.premOk : T.premLock) + '</div>' +
-    '<div class="' + (S.tpl === 'bordeaux' ? 'on' : '') + '" style="color:#7a1f3d" onclick="setTpl(\'bordeaux\', true)">🔴 ' + (S.lang === 'fr' ? 'BORDEAUX' : 'BURGUNDY') + '<br>' + (isPremium() ? T.premOk : T.premLock) + '</div>' +
-    '<div class="' + (S.tpl === 'noir' ? 'on' : '') + '" style="color:#222" onclick="setTpl(\'noir\', true)">⚫ ' + (S.lang === 'fr' ? 'NOIR' : 'BLACK') + '<br>' + (isPremium() ? T.premOk : T.premLock) + '</div>' +
-    '</div>' +
-    (!isPremium() ? '<p class="hint" style="margin-top:8px">' + T.tplHint + '</p>' : '') + '</div>';
+    '<div class="' + (c.tpl === 'bleu' ? 'on' : '') + '" style="color:#1b4e89" onclick="setTpl(\'bleu\')">🔵 ' + (S.lang === 'fr' ? 'BLEU' : 'BLUE') + '</div>' +
+    '<div class="' + (c.tpl === 'vert' ? 'on' : '') + '" style="color:#0b5e55" onclick="setTpl(\'vert\')">🟢 ' + (S.lang === 'fr' ? 'VERT' : 'GREEN') + '</div>' +
+    '<div class="' + (c.tpl === 'bordeaux' ? 'on' : '') + '" style="color:#7a1f3d" onclick="setTpl(\'bordeaux\')">🔴 ' + (S.lang === 'fr' ? 'BORDEAUX' : 'BURGUNDY') + '</div>' +
+    '<div class="' + (c.tpl === 'noir' ? 'on' : '') + '" style="color:#222" onclick="setTpl(\'noir\')">⚫ ' + (S.lang === 'fr' ? 'NOIR' : 'BLACK') + '</div>' +
+    '</div></div>';
   h += '</div>';
   h += cvHTML();
   h += '<div class="noprint">' +
-    '<button class="big green" onclick="window.print()">' + T.dlBtn + '</button>' +
-    '<p class="hint" style="text-align:center;margin-top:6px">' + T.dlHint + '</p>' +
+    '<button class="big green" onclick="wantPdf()">' + T.dlBtn + '</button>' +
+    '<p class="hint" style="text-align:center;margin-top:6px">' + (isPaid() ? T.dlHint : T.dlPay) + '</p>' +
     '<button class="big ghost" onclick="go(\'form\')">' + T.editBtn + '</button>' +
-    (!isPremium() ? '<div class="badge" style="margin-top:12px" onclick="go(\'premium\')">' + T.badge + '</div>' : '') +
     '</div>';
   return h;
 }
 
-function renderPremium() {
+function renderPay() {
   var T = t();
-  var y = new Date().getFullYear();
-  var h = '';
-  if (isPremium()) {
-    h += '<div class="card"><h3>' + T.premActiveT + '</h3><p class="hint">' + T.premActiveP(y) + '</p>' +
-      '<button class="big" onclick="go(\'prev\')">' + T.seeMyCv + '</button></div>';
-    return h;
+  var h = '<div class="card"><h3>' + T.payT + '</h3>' +
+    '<p class="hint" style="margin-bottom:10px">' + T.payList + '</p>' +
+    '<div class="step"><div class="n">1</div><p>' + (FAPSHI_LINK ? T.payOnlineHint : T.step1) + '</p></div>';
+  if (FAPSHI_LINK) {
+    h += '<a href="' + FAPSHI_LINK + '" target="_blank" rel="noreferrer"><button class="big green" style="margin-top:0">' + T.payOnline + '</button></a>' +
+      '<p class="hint" style="margin:8px 0">' + T.step1b + '</p>';
   }
-  h += '<div class="card"><h3>' + T.premT + '</h3>' +
-    '<p class="hint" style="margin-bottom:10px">' + T.premList + '</p>' +
-    '<div class="step"><div class="n">1</div><p>' + T.step1 + '</p></div>' +
-    '<div class="rowbtn"><a href="tel:%23150%23"><button class="big gold">' + T.dial1 + '</button></a><a href="tel:*126%23"><button class="big gold">' + T.dial2 + '</button></a></div>' +
+  h += '<div class="rowbtn"><a href="tel:%23150%23"><button class="big gold">' + T.dial1 + '</button></a><a href="tel:*126%23"><button class="big gold">' + T.dial2 + '</button></a></div>' +
     '<div class="step" style="margin-top:14px"><div class="n">2</div><p>' + T.step2 + '</p></div>' +
     '<div class="step" style="margin-top:14px"><div class="n">3</div><p>' + T.step3 + '</p></div>' +
     '<input id="pPhone" inputmode="tel" placeholder="' + T.phPhone + '" value="' + esc(S.phone) + '">' +
@@ -410,25 +449,26 @@ function activate() {
   if (ph.length < 9) { errEl.textContent = T.errPhone; return; }
   if (txn.replace(/[^A-Za-z0-9]/g, '').length < 8) { errEl.textContent = T.errTxn; return; }
   var y = new Date().getFullYear();
-  S.phone = ph; S.premiumYear = y; save();
-  regSend('📄 CV PREMIUM 1000F | tel: ' + ph + ' | ID transaction: ' + txn);
+  S.phone = ph; S.paidYear = y; save();
+  regSend('📄 CV PDF 1000F/an | tel: ' + ph + ' | ID transaction: ' + txn);
   toast(T.actToast);
-  go('prev');
+  view = 'prev'; window.scrollTo(0, 0); render();
+  setTimeout(function () { window.print(); }, 900);
 }
 
 function render() {
   var T = t();
   document.getElementById('lngBtn').textContent = T.lngBtn;
-  document.getElementById('topBtn').textContent = isPremium() ? T.premOn : T.premBtn;
+  document.getElementById('tabListL').textContent = T.tabList;
   document.getElementById('tabFormL').textContent = T.tabForm;
   document.getElementById('tabPrevL').textContent = T.tabPrev;
-  document.getElementById('tabPremL').textContent = T.tabPrem;
-  if (view === 'form') app.innerHTML = renderForm();
+  if (view === 'list') app.innerHTML = renderList();
+  else if (view === 'form') app.innerHTML = renderForm();
   else if (view === 'prev') app.innerHTML = renderPrev();
-  else app.innerHTML = renderPremium();
+  else app.innerHTML = renderPay();
+  document.getElementById('tabList').className = view === 'list' ? 'on' : '';
   document.getElementById('tabForm').className = view === 'form' ? 'on' : '';
-  document.getElementById('tabPrev').className = view === 'prev' ? 'on' : '';
-  document.getElementById('tabPrem').className = view === 'premium' ? 'on' : '';
+  document.getElementById('tabPrev').className = (view === 'prev' || view === 'pay') ? 'on' : '';
 }
 render();
 if ('serviceWorker' in navigator) {
