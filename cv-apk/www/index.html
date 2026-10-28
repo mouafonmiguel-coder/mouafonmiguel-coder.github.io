@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📄 CV RAPIDE</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon-192.png">
+<meta name="theme-color" content="#0b5e55">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { font-family: Arial, sans-serif; background: #eef6f4; color: #15302b; }
+  .top { position: sticky; top: 0; z-index: 50; background: #0b5e55; color: #fff; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .brand { font-weight: 900; } .brand span { color: #ffd54f; }
+  .top button { background: rgba(255,255,255,.14); color: #fff; border: 0; border-radius: 10px; padding: 7px 11px; font-weight: 700; font-size: .8rem; cursor: pointer; }
+  .top .lng { background: #ffd54f; color: #4a3500; font-weight: 900; }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 14px 14px 90px; }
+  .hero { background: linear-gradient(135deg,#0b5e55,#128a7d); color: #fff; border-radius: 18px; padding: 22px 18px; text-align: center; margin-bottom: 14px; }
+  .hero h1 { font-size: 1.3rem; margin-bottom: 8px; } .hero h1 b { color: #ffd54f; }
+  .hero p { font-size: .88rem; opacity: .94; line-height: 1.5; }
+  .card { background: #fff; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 10px rgba(11,94,85,.08); }
+  .card h3 { color: #0b5e55; margin-bottom: 10px; font-size: 1rem; }
+  label { font-size: .8rem; font-weight: 800; color: #0b5e55; display: block; margin-top: 8px; }
+  input, textarea, select { width: 100%; border: 2px solid #cfe5e0; border-radius: 10px; padding: 11px; font-size: .95rem; margin-top: 4px; font-family: inherit; }
+  textarea { min-height: 70px; resize: vertical; }
+  button.big { display: block; width: 100%; background: #0b5e55; color: #fff; border: 0; border-radius: 14px; padding: 14px; font-size: 1rem; font-weight: 900; margin-top: 12px; cursor: pointer; }
+  button.gold { background: #d99a06; } button.ghost { background: #fff; color: #0b5e55; border: 2px solid #0b5e55; } button.green { background: #1a7f37; }
+  .mini { background: #fdecea; color: #b42318; border: 0; border-radius: 8px; padding: 6px 10px; font-weight: 800; font-size: .78rem; cursor: pointer; }
+  .expbox { border: 2px dashed #cfe5e0; border-radius: 12px; padding: 10px; margin-top: 10px; }
+  .tabs { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #cfe5e0; display: flex; z-index: 60; }
+  .tabs button { flex: 1; background: none; border: 0; padding: 9px 4px 11px; font-size: .72rem; font-weight: 800; color: #7aa39b; cursor: pointer; }
+  .tabs button .tic { display: block; font-size: 1.35rem; margin-bottom: 2px; }
+  .tabs button.on { color: #0b5e55; }
+  .hint { font-size: .82rem; color: #5a7a72; line-height: 1.5; }
+  .err { color: #b42318; font-weight: 800; font-size: .9rem; min-height: 1.1em; }
+  .step { display: flex; gap: 10px; margin-bottom: 12px; }
+  .step .n { background: #0b5e55; color: #fff; min-width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; }
+  .step p { font-size: .9rem; line-height: 1.5; }
+  .rowbtn { display: flex; gap: 8px; } .rowbtn button, .rowbtn a { flex: 1; } a { text-decoration: none; }
+  .updbar { background: #1a7f37; color: #fff; padding: 10px 14px; text-align: center; font-weight: 800; font-size: .85rem; line-height: 1.5; }
+  .updbar a, .updbar button { background: #fff; color: #1a7f37; border: 0; border-radius: 8px; padding: 6px 14px; font-weight: 900; font-size: .85rem; margin-left: 8px; cursor: pointer; text-decoration: none; display: inline-block; }
+  .toast { position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%); background: #15302b; color: #fff; padding: 11px 18px; border-radius: 999px; font-size: .88rem; font-weight: 700; z-index: 99; }
+  .tplpick { display: flex; gap: 8px; margin-top: 8px; }
+  .tplpick div { flex: 1; border: 3px solid #cfe5e0; border-radius: 10px; padding: 10px 4px; text-align: center; font-size: .75rem; font-weight: 800; cursor: pointer; }
+  .tplpick div.on { border-color: #0b5e55; background: #e7f3f1; }
+  .cvrow { display: flex; align-items: center; gap: 10px; border: 2px solid #cfe5e0; border-radius: 12px; padding: 12px; margin-top: 10px; }
+  .cvrow .inf { flex: 1; cursor: pointer; }
+  .cvrow .nm { font-weight: 900; color: #0b5e55; }
+  .cvrow .jb { font-size: .8rem; color: #5a7a72; margin-top: 2px; }
+  .cvrow .del { background: #fdecea; border: 0; border-radius: 10px; font-size: 1.15rem; padding: 9px 11px; cursor: pointer; }
+
+  /* ---------- LE CV ---------- */
+  .cvpage { background: #fff; width: 100%; max-width: 760px; margin: 0 auto; box-shadow: 0 4px 18px rgba(0,0,0,.14); position: relative; overflow: hidden; }
+  .cvin { padding: 34px 38px; }
+  .cvhead { display: flex; gap: 18px; align-items: center; border-bottom: 4px solid var(--ac); padding-bottom: 16px; margin-bottom: 16px; }
+  .cvhead .ph { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 4px solid var(--ac); flex-shrink: 0; }
+  .cvhead h1 { font-size: 1.6rem; color: var(--ac); line-height: 1.15; }
+  .cvhead .job { font-size: 1rem; font-weight: 700; color: #333; margin-top: 3px; }
+  .cvhead .cont { font-size: .8rem; color: #444; margin-top: 7px; line-height: 1.5; }
+  .cvsec { margin-bottom: 14px; }
+  .cvsec h2 { font-size: .95rem; color: #fff; background: var(--ac); display: inline-block; padding: 4px 14px; border-radius: 4px; margin-bottom: 8px; letter-spacing: .5px; }
+  .cvsec p, .cvsec li { font-size: .86rem; line-height: 1.55; color: #222; }
+  .cvitem { margin-bottom: 9px; }
+  .cvitem .t1 { font-weight: 800; font-size: .9rem; color: #111; }
+  .cvitem .t2 { font-size: .8rem; color: var(--ac); font-weight: 700; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips span { background: #f0f0f0; border-left: 4px solid var(--ac); padding: 4px 10px; border-radius: 4px; font-size: .8rem; font-weight: 700; }
+  .dots { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+  .dots span { width: 34px; height: 34px; border-radius: 50%; cursor: pointer; border: 3px solid #fff; box-shadow: 0 0 0 2px #cfe5e0; }
+  .dots span.on { box-shadow: 0 0 0 3px #0b5e55; }
+  .pickrow { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+  .pickrow input[type=color] { width: 54px; height: 44px; padding: 2px; border: 2px solid #cfe5e0; border-radius: 10px; margin-top: 0; cursor: pointer; }
+  .cv-bleu { --ac: #1b4e89; } .cv-vert { --ac: #0b5e55; } .cv-bordeaux { --ac: #7a1f3d; } .cv-noir { --ac: #222222; }
+
+  @media print {
+    body { background: #fff; }
+    .top, .tabs, .noprint, .toast { display: none !important; }
+    .wrap { padding: 0; max-width: none; }
+    .cvpage { box-shadow: none; max-width: none; }
+    @page { size: A4; margin: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="top noprint">
+  <div class="brand" onclick="go('home')" style="cursor:pointer">📄 CV <span>RAPIDE</span></div>
+  <button class="lng" id="lngBtn" onclick="toggleLang()">🌐 EN</button>
+</div>
+<div class="wrap" id="app"></div>
+<div class="tabs noprint">
+  <button id="tabList" onclick="go('list')"><span class="tic">📂</span><span id="tabListL">Mes CV</span></button>
+  <button id="tabForm" onclick="go('form')"><span class="tic">✏️</span><span id="tabFormL">Remplir</span></button>
+  <button id="tabPrev" onclick="go('prev')"><span class="tic">👁️</span><span id="tabPrevL">Mon CV</span></button>
+</div>
+<script>
+// Lien de paiement Fapshi « CV RAPIDE — 1000 F » (colle le lien ici quand il est cree)
+var FAPSHI_LINK = 'https://buy.fapshi.com/xgm1f6';
+
+var TR = {
+  fr: {
+    tabList: 'Mes CV', tabForm: 'Remplir', tabPrev: 'Mon CV', lngBtn: '🌐 EN',
+    homeT: 'Ton CV professionnel<br><b>en 2 minutes, sur ton téléphone !</b>',
+    homeP: 'CV RAPIDE fabrique ton CV à ta place : toi tu remplis des petites cases, l\u2019application fait tout le reste.',
+    homeHow: '✅ Comment ça marche ?',
+    homeS1: '<b>Tu remplis des cases simples</b> : ton nom, ton métier, ta photo, tes anciens postes (ex. : Caissière, Chauffeur...).',
+    homeS2: '<b>L\u2019application écrit pour toi</b> : les tâches de chaque poste s\u2019écrivent automatiquement — tu n\u2019écris presque rien !',
+    homeS3: '<b>Tu télécharges ton CV en PDF</b> : un beau CV professionnel, prêt à envoyer sur WhatsApp ou par email.',
+    homeFeatT: '🎁 Ce que tu as dans l\u2019application',
+    homeF1: '⚡ <b>Écriture automatique</b> — les tâches de chaque poste s\u2019écrivent toutes seules',
+    homeF2: '🎨 <b>4 modèles de couleurs</b> — bleu, vert, bordeaux, noir',
+    homeF3: '🌐 <b>Français + Anglais</b> — ton CV dans les 2 langues si tu veux',
+    homeF4: '📂 <b>Plusieurs CV</b> — un par métier, modifiables à tout moment',
+    homeF5: '📸 <b>Ta photo</b> — mise en rond automatiquement, comme un pro',
+    homePriceT: '💰 C\u2019est combien ?',
+    homePrice: '<b>Créer et voir ton CV : GRATUIT.</b><br>Télécharger en PDF : <b>1 000 F seulement pour 1 AN (365 jours)</b> — tous tes CV, téléchargements illimités.',
+    homeCta: '🚀 CRÉER MON CV MAINTENANT',
+    homeFoot: 'Une question ? WhatsApp : <b>692 168 264</b>',
+    heroT: 'Ton CV professionnel,<br><b>prêt en 5 minutes !</b>',
+    heroP: 'Remplis les cases, choisis ton modèle, et télécharge ton CV en PDF — directement sur ton téléphone.',
+    infoT: '👤 Mes informations',
+    lNom: 'Nom complet', pNom: 'Ex. : NGONO Marie Claire',
+    lPoste: 'Poste recherché / métier', pPoste: 'Ex. : Comptable / Électricien / Secrétaire',
+    lTel: 'Téléphone', lEmail: 'Email (facultatif)',
+    lVille: 'Ville / Quartier', pVille: 'Ex. : Yaoundé, Awae',
+    lPhoto: 'Photo (facultatif mais conseillé)', photoOk: '✔ Photo enregistrée', photoToast: 'Photo ajoutée ✔',
+    profilT: '📝 Mon profil (2-3 phrases)',
+    pProfil: 'Ex. : Comptable rigoureuse avec 3 ans d\u2019expérience. Maîtrise de Excel et Sage. Disponible immédiatement.',
+    expT: '💼 Mes expériences',
+    lEposte: 'Nom du poste occupé', pEposte: 'Ex. : Caissière',
+    lElieu: 'Entreprise / Lieu', pElieu: 'Ex. : Boutique Chez Paul, Douala',
+    lEper: 'Période', pEper: 'Ex. : 2022 – 2024',
+    aiExpHint: 'Pas besoin d\u2019écrire les tâches : elles s\u2019écrivent automatiquement sur ton CV selon le nom du poste.',
+    rmExp: '🗑 Retirer cette expérience', addExp: '➕ Ajouter une expérience',
+    eduT: '🎓 Mes diplômes & formations',
+    lDip: 'Diplôme / Formation', pDip: 'Ex. : BAC D / CAP Couture / Licence',
+    lEco: 'École / Centre', pEco: 'Ex. : Lycée de Nkolbisson',
+    lAn: 'Année', rmEdu: '🗑 Retirer', addEdu: '➕ Ajouter un diplôme',
+    skillT: '⭐ Compétences, langues, centres d\u2019intérêt',
+    lComp: 'Compétences (sépare par des virgules)', pComp: 'Ex. : Excel, Caisse, Vente, Conduite',
+    lLang: 'Langues', pLang: 'Ex. : Français (courant), Anglais (moyen)',
+    lInt: 'Centres d\u2019intérêt (facultatif)', pInt: 'Ex. : Football, lecture, musique',
+    seeCv: '👁️ VOIR MON CV ➜',
+    cvName: 'TON NOM ICI', cvProfil: 'PROFIL', cvExp: 'EXPÉRIENCE PROFESSIONNELLE', cvEdu: 'FORMATION',
+    cvComp: 'COMPÉTENCES', cvLang: 'LANGUES', cvInt: 'CENTRES D\u2019INTÉRÊT',
+    tplT: '🎨 Choisis ton modèle',
+    customT: '🌈 Ou choisis N\u2019IMPORTE quelle couleur :', customPick: 'Toutes les couleurs →',
+    updMsg: '🔔 Nouvelle version de CV RAPIDE disponible !', updWeb: 'METTRE À JOUR', updApk: 'TÉLÉCHARGER',
+    expSoon: function (d) { return '⏳ Attention : ton accès téléchargement se termine dans <b>' + d + ' jour' + (d > 1 ? 's' : '') + '</b> ! Renouvelle (1 000 F = 1 an) pour continuer à télécharger tes CV.'; },
+    expEnd: '🔒 Ton accès téléchargement de 1 an est terminé. Renouvelle (1 000 F = 1 an) pour télécharger à nouveau tes CV.',
+    dlBtn: '📄 TÉLÉCHARGER EN PDF',
+    dlHint: 'Dans la fenêtre qui s\u2019ouvre, choisis <b>« Enregistrer au format PDF »</b> — puis envoie ton CV sur WhatsApp ou par email !',
+    editBtn: '✏️ Modifier mon CV',
+    listT: '📂 Mes CV',
+    listHint: 'Tu peux créer plusieurs CV (un par métier, un en français, un en anglais...). Appuie sur un CV pour l\u2019ouvrir, ou sur 🗑 pour le supprimer.',
+    noName: 'CV sans nom', newCv: '➕ Créer un nouveau CV',
+    delConfirm: 'Supprimer définitivement ce CV ?', delToast: '🗑 CV supprimé',
+    payT: '📄 Télécharger en PDF — 1 000 F pour 1 AN (365 jours)',
+    payList: '✔ Télécharge TOUS tes CV en PDF, autant de fois que tu veux<br>✔ Valable 1 AN (365 jours) à partir du paiement<br>✔ Toutes les couleurs incluses',
+    payOnline: '💳 PAYER',
+    payOnlineHint: 'Paiement sécurisé par Fapshi — tu reçois l\u2019ID de la transaction par SMS.',
+    step1b: 'Ou envoie directement <b>1 000 F</b> par Mobile Money à <b>MIGUEL MOUAFON</b> :<br>🟠 Orange Money : <b>692 168 264</b><br>🟡 MTN MoMo : <b>653 596 305</b>',
+    dial1: '🟠 Composer #150#', dial2: '🟡 Composer *126#',
+    step2: 'Après le paiement, tu reçois un <b>SMS de confirmation</b> avec l\u2019<b>ID de la transaction</b> (ex. : PP250118.1234.A12345).',
+    step3: 'Entre ton numéro et cet ID ici → le téléchargement se débloque <b>immédiatement</b> :',
+    phPhone: 'Ton numéro (ex. 6XXXXXXXX)', phTxn: 'ID de la transaction (dans le SMS reçu)',
+    actBtn: '🔓 Débloquer le téléchargement',
+    warn: '⚠️ L\u2019ID doit être exact : chaque déblocage est vérifié par MIGUEL avec les reçus. Une fausse déclaration = accès annulé.',
+    help: 'Un souci ? Écris sur WhatsApp : <b>692 168 264</b>',
+    errPhone: 'Entre ton numéro complet (9 chiffres).',
+    errTxn: 'Cet ID de transaction est trop court. Recopie exactement l\u2019ID du SMS de confirmation.',
+    actToast: '✅ Téléchargement débloqué pour 1 AN !',
+    dlPay: 'Le téléchargement PDF coûte <b>1 000 F pour 1 AN</b> (CV illimités). Appuie sur le bouton vert pour payer et télécharger.',
+    step1: 'Envoie <b>1 000 F</b> par Mobile Money à <b>MIGUEL MOUAFON</b> :<br>🟠 Orange Money : <b>692 168 264</b><br>🟡 MTN MoMo : <b>653 596 305</b>'
+  },
+  en: {
+    tabList: 'My CVs', tabForm: 'Fill in', tabPrev: 'My CV', lngBtn: '🌐 FR',
+    homeT: 'Your professional CV<br><b>in 2 minutes, on your phone!</b>',
+    homeP: 'CV RAPIDE builds your CV for you: you fill in small boxes, the app does all the rest.',
+    homeHow: '✅ How does it work?',
+    homeS1: '<b>You fill in simple boxes</b>: your name, your job, your photo, your past positions (e.g.: Cashier, Driver...).',
+    homeS2: '<b>The app writes for you</b>: the tasks of each job are written automatically — you barely write anything!',
+    homeS3: '<b>You download your CV as a PDF</b>: a beautiful professional CV, ready to send on WhatsApp or by email.',
+    homeFeatT: '🎁 What you get in the app',
+    homeF1: '⚡ <b>Automatic writing</b> — the tasks of each job are written by themselves',
+    homeF2: '🎨 <b>4 colour templates</b> — blue, green, burgundy, black',
+    homeF3: '🌐 <b>French + English</b> — your CV in both languages if you want',
+    homeF4: '📂 <b>Several CVs</b> — one per job, editable any time',
+    homeF5: '📸 <b>Your photo</b> — automatically framed in a circle, like a pro',
+    homePriceT: '💰 How much is it?',
+    homePrice: '<b>Creating and viewing your CV: FREE.</b><br>Downloading as PDF: <b>only 1,000 F for 1 YEAR (365 days)</b> — all your CVs, unlimited downloads.',
+    homeCta: '🚀 CREATE MY CV NOW',
+    homeFoot: 'Any question? WhatsApp: <b>692 168 264</b>',
+    heroT: 'Your professional CV,<br><b>ready in 5 minutes!</b>',
+    heroP: 'Fill in the boxes, pick your template, and download your CV as a PDF — right on your phone.',
+    infoT: '👤 My information',
+    lNom: 'Full name', pNom: 'E.g.: NGONO Marie Claire',
+    lPoste: 'Job you are looking for', pPoste: 'E.g.: Accountant / Electrician / Secretary',
+    lTel: 'Phone number', lEmail: 'Email (optional)',
+    lVille: 'City / Neighbourhood', pVille: 'E.g.: Bamenda, Nkwen',
+    lPhoto: 'Photo (optional but recommended)', photoOk: '✔ Photo saved', photoToast: 'Photo added ✔',
+    profilT: '📝 My profile (2-3 sentences)',
+    pProfil: 'E.g.: Hardworking accountant with 3 years of experience. Good knowledge of Excel and Sage. Available immediately.',
+    expT: '💼 My work experience',
+    lEposte: 'Job title you held', pEposte: 'E.g.: Cashier',
+    lElieu: 'Company / Place', pElieu: 'E.g.: Chez Paul Shop, Douala',
+    lEper: 'Period', pEper: 'E.g.: 2022 – 2024',
+    aiExpHint: 'No need to write the tasks: they are written automatically on your CV from the job title.',
+    rmExp: '🗑 Remove this experience', addExp: '➕ Add an experience',
+    eduT: '🎓 My diplomas & training',
+    lDip: 'Diploma / Training', pDip: 'E.g.: GCE A Level / Advanced Level / Degree',
+    lEco: 'School / Centre', pEco: 'E.g.: Government High School Bamenda',
+    lAn: 'Year', rmEdu: '🗑 Remove', addEdu: '➕ Add a diploma',
+    skillT: '⭐ Skills, languages, interests',
+    lComp: 'Skills (separate with commas)', pComp: 'E.g.: Excel, Cash register, Sales, Driving',
+    lLang: 'Languages', pLang: 'E.g.: English (fluent), French (average)',
+    lInt: 'Interests (optional)', pInt: 'E.g.: Football, reading, music',
+    seeCv: '👁️ SEE MY CV ➜',
+    cvName: 'YOUR NAME HERE', cvProfil: 'PROFILE', cvExp: 'WORK EXPERIENCE', cvEdu: 'EDUCATION',
+    cvComp: 'SKILLS', cvLang: 'LANGUAGES', cvInt: 'INTERESTS',
+    tplT: '🎨 Pick your template',
+    customT: '🌈 Or pick ANY colour you like:', customPick: 'All colours →',
+    updMsg: '🔔 New version of CV RAPIDE available!', updWeb: 'UPDATE NOW', updApk: 'DOWNLOAD',
+    expSoon: function (d) { return '⏳ Warning: your download access ends in <b>' + d + ' day' + (d > 1 ? 's' : '') + '</b>! Renew (1,000 F = 1 year) to keep downloading your CVs.'; },
+    expEnd: '🔒 Your 1-year download access has ended. Renew (1,000 F = 1 year) to download your CVs again.',
+    dlBtn: '📄 DOWNLOAD AS PDF',
+    dlHint: 'In the window that opens, choose <b>“Save as PDF”</b> — then send your CV on WhatsApp or by email!',
+    editBtn: '✏️ Edit my CV',
+    listT: '📂 My CVs',
+    listHint: 'You can create several CVs (one per job, one in English, one in French...). Tap a CV to open it, or 🗑 to delete it.',
+    noName: 'Untitled CV', newCv: '➕ Create a new CV',
+    delConfirm: 'Delete this CV permanently?', delToast: '🗑 CV deleted',
+    payT: '📄 Download as PDF — 1,000 F for 1 YEAR (365 days)',
+    payList: '✔ Download ALL your CVs as PDF, as many times as you want<br>✔ Valid for 1 YEAR (365 days) from payment<br>✔ All colours included',
+    payOnline: '💳 PAY',
+    payOnlineHint: 'Secure payment by Fapshi — you receive the transaction ID by SMS.',
+    step1b: 'Or send <b>1,000 F</b> directly by Mobile Money to <b>MIGUEL MOUAFON</b>:<br>🟠 Orange Money: <b>692 168 264</b><br>🟡 MTN MoMo: <b>653 596 305</b>',
+    dial1: '🟠 Dial #150#', dial2: '🟡 Dial *126#',
+    step2: 'After payment, you receive a <b>confirmation SMS</b> with the <b>transaction ID</b> (e.g.: PP250118.1234.A12345).',
+    step3: 'Enter your number and that ID here → downloading unlocks <b>immediately</b>:',
+    phPhone: 'Your number (e.g. 6XXXXXXXX)', phTxn: 'Transaction ID (from the SMS you received)',
+    actBtn: '🔓 Unlock downloading',
+    warn: '⚠️ The ID must be exact: every unlock is checked by MIGUEL against the receipts. A false declaration = access cancelled.',
+    help: 'Any problem? Write on WhatsApp: <b>692 168 264</b>',
+    errPhone: 'Enter your full number (9 digits).',
+    errTxn: 'This transaction ID is too short. Copy the exact ID from the confirmation SMS.',
+    actToast: '✅ Downloading unlocked for 1 YEAR!',
+    dlPay: 'PDF download costs <b>1,000 F for 1 YEAR</b> (unlimited CVs). Press the green button to pay and download.',
+    step1: 'Send <b>1,000 F</b> by Mobile Money to <b>MIGUEL MOUAFON</b>:<br>🟠 Orange Money: <b>692 168 264</b><br>🟡 MTN MoMo: <b>653 596 305</b>'
+  }
+};
+
+function blankCv() {
+  return { nom: '', poste: '', tel: '', email: '', ville: '', photo: '', profil: '', comp: '', langues: '', interets: '', color: '',
+    exp: [{ poste: '', lieu: '', periode: '', desc: '' }], edu: [{ dip: '', ecole: '', annee: '' }], tpl: 'bleu' };
+}
+var S = { lang: 'fr', phone: '', paidYear: 0, paidUntil: 0, wasPaid: false, cur: 0, cvs: [blankCv()] };
+try {
+  var sv = localStorage.getItem('cv_state_v1');
+  if (sv) {
+    var o = JSON.parse(sv);
+    if (o && o.cvs && o.cvs.length) { S = Object.assign(S, o); }
+    else if (o) {
+      // migration ancien format (1 seul CV + premium)
+      var c = blankCv();
+      ['nom','poste','tel','email','ville','photo','profil','comp','langues','interets','exp','edu','tpl'].forEach(function (k) { if (o[k] !== undefined) c[k] = o[k]; });
+      S.cvs = [c]; S.cur = 0;
+      if (o.lang) S.lang = o.lang;
+      if (o.phone) S.phone = o.phone;
+      if (o.premiumYear) S.paidYear = o.premiumYear;
+    }
+  }
+} catch (e) {}
+if (S.lang !== 'fr' && S.lang !== 'en') S.lang = 'fr';
+// migration : ancien systeme "annee calendrier" -> 365 jours a partir de maintenant
+if (!S.paidUntil && S.paidYear === new Date().getFullYear()) { S.paidUntil = Date.now() + 365 * 86400000; S.wasPaid = true; save(); }
+if (S.paidUntil) S.wasPaid = true;
+if (!S.cvs || !S.cvs.length) { S.cvs = [blankCv()]; S.cur = 0; }
+if (S.cur >= S.cvs.length) S.cur = 0;
+function CV() { return S.cvs[S.cur]; }
+function t() { return TR[S.lang]; }
+function save() { try { localStorage.setItem('cv_state_v1', JSON.stringify(S)); } catch (e) {} }
+function isPaid() { return !!S.paidUntil && Date.now() < S.paidUntil; }
+function daysLeft() { return Math.ceil((S.paidUntil - Date.now()) / 86400000); }
+function toggleLang() { grabSafe(); S.lang = (S.lang === 'fr' ? 'en' : 'fr'); save(); render(); }
+
+// Registre central de MIGUEL : chaque deblocage y est note automatiquement
+var CC_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSc8B9D32bIRco4H2AXkrnemNy_55aw8OoYg04ZVDsos1_u_Og/formResponse';
+var CC_ENTRY = 'entry.1876005044';
+function regSend(info) {
+  try {
+    var fd = new FormData();
+    fd.append(CC_ENTRY, info + ' | ' + new Date().toLocaleString('fr-FR'));
+    fetch(CC_FORM, { method: 'POST', mode: 'no-cors', body: fd }).catch(function () {});
+  } catch (e) {}
+}
+
+var app = document.getElementById('app');
+function toast(m) {
+  var el = document.createElement('div'); el.className = 'toast'; el.textContent = m;
+  document.body.appendChild(el); setTimeout(function () { el.remove(); }, 3200);
+}
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
+function nl(s) { return esc(s).replace(/\n/g, '<br>'); }
+
+var view = 'home';
+function go(v) { grabSafe(); view = v; window.scrollTo(0, 0); render(); }
+
+function F(id) { var el = document.getElementById(id); return el ? el.value : ''; }
+function grab() {
+  var c = CV();
+  c.nom = F('f_nom'); c.poste = F('f_poste'); c.tel = F('f_tel'); c.email = F('f_email');
+  c.ville = F('f_ville'); c.profil = F('f_profil'); c.comp = F('f_comp');
+  c.langues = F('f_lang'); c.interets = F('f_int');
+  c.exp = c.exp.map(function (x, i) {
+    return { poste: F('e_poste' + i), lieu: F('e_lieu' + i), periode: F('e_per' + i), desc: x.desc || '' };
+  });
+  c.edu = c.edu.map(function (x, i) {
+    return { dip: F('d_dip' + i), ecole: F('d_eco' + i), annee: F('d_an' + i) };
+  });
+  save();
+}
+function grabSafe() { if (view === 'form' && document.getElementById('f_nom')) grab(); }
+function addExp() { grab(); CV().exp.push({ poste: '', lieu: '', periode: '', desc: '' }); save(); render(); }
+function rmExp(i) { grab(); var c = CV(); c.exp.splice(i, 1); if (!c.exp.length) c.exp.push({ poste: '', lieu: '', periode: '', desc: '' }); save(); render(); }
+function addEdu() { grab(); CV().edu.push({ dip: '', ecole: '', annee: '' }); save(); render(); }
+function rmEdu(i) { grab(); var c = CV(); c.edu.splice(i, 1); if (!c.edu.length) c.edu.push({ dip: '', ecole: '', annee: '' }); save(); render(); }
+
+// ---------- MES CV (liste + corbeille) ----------
+function newCv() { grabSafe(); S.cvs.push(blankCv()); S.cur = S.cvs.length - 1; save(); view = 'form'; window.scrollTo(0, 0); render(); }
+function openCv(i) { S.cur = i; save(); view = 'form'; window.scrollTo(0, 0); render(); }
+function delCv(i) {
+  if (!confirm(t().delConfirm)) return;
+  S.cvs.splice(i, 1);
+  if (!S.cvs.length) S.cvs.push(blankCv());
+  if (S.cur >= S.cvs.length) S.cur = S.cvs.length - 1;
+  save(); toast(t().delToast); render();
+}
+
+function photoPick(ev) {
+  var f = ev.target.files[0]; if (!f) return;
+  var r = new FileReader();
+  r.onload = function () {
+    var img = new Image();
+    img.onload = function () {
+      var c = document.createElement('canvas');
+      var s2 = Math.min(img.width, img.height);
+      c.width = 300; c.height = 300;
+      c.getContext('2d').drawImage(img, (img.width - s2) / 2, (img.height - s2) / 2, s2, s2, 0, 0, 300, 300);
+      CV().photo = c.toDataURL('image/jpeg', 0.82);
+      save(); toast(t().photoToast); render();
+    };
+    img.src = r.result;
+  };
+  r.readAsDataURL(f);
+}
+
+function setTpl(tp) { grabSafe(); CV().tpl = tp; save(); render(); }
+var TPL_COLORS = { bleu: '#1b4e89', vert: '#0b5e55', bordeaux: '#7a1f3d', noir: '#222222' };
+var PALETTE = ['#e11d48', '#ea580c', '#d99a06', '#65a30d', '#0d9488', '#0284c7', '#4f46e5', '#9333ea', '#db2777', '#795548', '#607d8b', '#111111'];
+function cvColor(c) { return c.tpl === 'custom' ? (c.color || '#1b4e89') : (TPL_COLORS[c.tpl] || '#1b4e89'); }
+function setCustom(v) { grabSafe(); var c = CV(); c.tpl = 'custom'; c.color = v; save(); render(); }
+
+// ---------- IA INTEGREE (hors-ligne) ----------
+var AI_JOBS = [
+  { k: ['caissi', 'cashier', 'caisse'], fr: 'Encaissement des clients, gestion de la caisse et des recettes journalières, accueil et service de la clientèle.', en: 'Serving customers at the till, handling cash and daily takings, welcoming and assisting clients.' },
+  { k: ['vendeu', 'vente', 'seller', 'sales', 'commercial'], fr: 'Vente et conseil aux clients, présentation des produits, gestion du stock et des commandes, atteinte des objectifs de vente.', en: 'Selling and advising customers, presenting products, managing stock and orders, meeting sales targets.' },
+  { k: ['chauffeur', 'driver', 'taxi', 'conducteur'], fr: 'Conduite prudente et ponctuelle, transport des personnes ou des marchandises, entretien courant du véhicule, respect du code de la route.', en: 'Safe and punctual driving, transporting people or goods, basic vehicle maintenance, respecting traffic rules.' },
+  { k: ['secretai', 'secretar', 'assistant'], fr: 'Accueil des visiteurs, gestion des appels et du courrier, saisie et classement des documents, organisation des rendez-vous.', en: 'Welcoming visitors, handling calls and mail, typing and filing documents, organising appointments.' },
+  { k: ['comptab', 'accountant', 'finance', 'caissier comptable'], fr: 'Tenue de la comptabilité, enregistrement des factures, suivi des paiements, préparation des états financiers.', en: 'Bookkeeping, recording invoices, following up payments, preparing financial statements.' },
+  { k: ['electric', 'electrici'], fr: 'Installation et réparation des circuits électriques, câblage, diagnostic des pannes, respect des normes de sécurité.', en: 'Installing and repairing electrical circuits, wiring, fault diagnosis, following safety standards.' },
+  { k: ['plombier', 'plumber', 'plomberie'], fr: 'Installation et réparation de la tuyauterie, détection des fuites, pose des équipements sanitaires.', en: 'Installing and repairing pipes, detecting leaks, fitting sanitary equipment.' },
+  { k: ['couturi', 'tailor', 'seamstress', 'couture'], fr: 'Prise des mesures, coupe et couture des vêtements, retouches, conseil des clients sur les modèles et tissus.', en: 'Taking measurements, cutting and sewing clothes, alterations, advising clients on styles and fabrics.' },
+  { k: ['serveu', 'waiter', 'waitress', 'barman', 'barmaid'], fr: 'Accueil et service des clients, prise des commandes, encaissement, entretien de la salle.', en: 'Welcoming and serving customers, taking orders, handling payments, keeping the room clean.' },
+  { k: ['securit', 'vigile', 'gardien', 'security', 'guard'], fr: 'Surveillance des lieux, contrôle des entrées et sorties, rondes régulières, rédaction des rapports d\u2019incident.', en: 'Guarding the premises, controlling entries and exits, regular patrols, writing incident reports.' },
+  { k: ['enseignant', 'professeur', 'teacher', 'maitre', 'repetiteur', 'instituteur'], fr: 'Préparation et animation des cours, suivi et évaluation des élèves, encadrement et discipline de la classe.', en: 'Preparing and delivering lessons, monitoring and assessing students, classroom management.' },
+  { k: ['menag', 'housekeep', 'nounou', 'nanny', 'domestique'], fr: 'Entretien de la maison, lessive et repassage, préparation des repas, garde et soin des enfants.', en: 'Housekeeping, laundry and ironing, preparing meals, looking after children.' },
+  { k: ['coiffeu', 'coiffure', 'hairdress', 'barber'], fr: 'Coupe, coiffure et soins capillaires, tressage, accueil et fidélisation de la clientèle, hygiène du matériel.', en: 'Cutting and styling hair, braiding, hair care, welcoming and retaining clients, keeping tools clean.' },
+  { k: ['macon', 'mason', 'bricklayer', 'maconnerie'], fr: 'Construction des murs et fondations, préparation du béton, lecture des plans, finitions.', en: 'Building walls and foundations, preparing concrete, reading plans, finishing works.' },
+  { k: ['mecanic', 'mechanic', 'garagiste'], fr: 'Diagnostic et réparation des pannes, entretien des moteurs, remplacement des pièces, essais des véhicules.', en: 'Diagnosing and repairing faults, engine maintenance, replacing parts, testing vehicles.' },
+  { k: ['livreur', 'delivery', 'coursier', 'livraison'], fr: 'Livraison rapide et soignée des commandes, encaissement, bon contact avec les clients, respect des délais.', en: 'Fast and careful delivery of orders, collecting payments, good customer contact, meeting deadlines.' },
+  { k: ['gerant', 'manager', 'gestionnaire', 'directeur'], fr: 'Gestion quotidienne de l\u2019activité, encadrement du personnel, suivi du stock et de la caisse, relation avec les fournisseurs.', en: 'Day-to-day management of the business, supervising staff, monitoring stock and cash, dealing with suppliers.' },
+  { k: ['reception', 'hotesse', 'hôtesse'], fr: 'Accueil physique et téléphonique, information et orientation des clients, gestion des réservations.', en: 'Welcoming visitors and answering calls, informing and directing clients, managing bookings.' },
+  { k: ['informatic', 'developpeur', 'developer', 'programmeur', ' it ', 'web'], fr: 'Installation et maintenance du matériel et des logiciels, assistance aux utilisateurs, développement et mise à jour des applications.', en: 'Installing and maintaining hardware and software, user support, developing and updating applications.' },
+  { k: ['infirmi', 'nurse', 'aide-soignant', 'sante'], fr: 'Soins et suivi des patients, prise des paramètres, administration des traitements, hygiène et stérilisation.', en: 'Caring for and monitoring patients, taking vital signs, administering treatments, hygiene and sterilisation.' },
+  { k: ['cuisini', 'cook', 'chef', 'restaurat'], fr: 'Préparation des repas, gestion des provisions, respect de l\u2019hygiène alimentaire, création des menus.', en: 'Preparing meals, managing food supplies, respecting food hygiene, creating menus.' },
+  { k: ['agricult', 'farmer', 'planteur', 'eleveur'], fr: 'Préparation des champs, semis et récoltes, entretien des cultures ou du bétail, vente des produits.', en: 'Preparing fields, planting and harvesting, caring for crops or livestock, selling produce.' },
+  { k: ['photograph', 'camera', 'video'], fr: 'Prises de vue photo et vidéo, retouche et montage, couverture des événements, livraison des fichiers aux clients.', en: 'Photo and video shooting, editing and retouching, covering events, delivering files to clients.' },
+  { k: ['soudeur', 'welder', 'soudure'], fr: 'Soudure et assemblage des pièces métalliques, lecture des plans, finition et contrôle de la qualité.', en: 'Welding and assembling metal parts, reading plans, finishing and quality control.' },
+  { k: ['menuisier', 'carpenter', 'menuiserie', 'ebeniste'], fr: 'Fabrication et pose des meubles et ouvrages en bois, prise des mesures, finitions et vernissage.', en: 'Making and fitting furniture and woodwork, taking measurements, finishing and varnishing.' },
+  { k: ['boutiqu', 'shopkeep', 'call-box', 'callbox', 'commercant'], fr: 'Tenue de la boutique, vente et encaissement, gestion du stock et des crédits clients, ouverture et fermeture.', en: 'Running the shop, selling and collecting payments, managing stock and customer credits, opening and closing.' }
+];
+function aiNorm(x) { return (' ' + String(x || '').toLowerCase() + ' ').normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+function aiTasks(poste) {
+  var n = aiNorm(poste);
+  if (!n.trim()) return '';
+  for (var i = 0; i < AI_JOBS.length; i++) {
+    for (var j = 0; j < AI_JOBS[i].k.length; j++) {
+      if (n.indexOf(AI_JOBS[i].k[j]) >= 0) return AI_JOBS[i][S.lang];
+    }
+  }
+  return S.lang === 'fr'
+    ? 'Exécution sérieuse des tâches du poste, respect des horaires et des consignes, bon contact avec les clients et l\u2019équipe.'
+    : 'Carrying out the duties of the position seriously, respecting schedules and instructions, good contact with customers and the team.';
+}
+function wantPdf() {
+  if (isPaid()) { window.print(); return; }
+  go('pay');
+}
+
+function renderHome() {
+  var T = t();
+  var h = '<div class="hero"><h1>' + T.homeT + '</h1><p>' + T.homeP + '</p>' +
+    '<button class="big gold" style="margin-top:14px" onclick="go(\'form\')">' + T.homeCta + '</button></div>';
+  h += '<div class="card"><h3>' + T.homeHow + '</h3>' +
+    '<div class="step"><div class="n">1</div><p>' + T.homeS1 + '</p></div>' +
+    '<div class="step"><div class="n">2</div><p>' + T.homeS2 + '</p></div>' +
+    '<div class="step"><div class="n">3</div><p>' + T.homeS3 + '</p></div></div>';
+  h += '<div class="card"><h3>' + T.homeFeatT + '</h3>' +
+    '<p class="hint" style="font-size:.9rem;line-height:2">' + [T.homeF1, T.homeF2, T.homeF3, T.homeF4, T.homeF5].join('<br>') + '</p></div>';
+  h += '<div class="card"><h3>' + T.homePriceT + '</h3><p class="hint" style="font-size:.9rem">' + T.homePrice + '</p></div>';
+  h += '<button class="big" onclick="go(\'form\')">' + T.homeCta + '</button>' +
+    '<p class="hint" style="text-align:center;margin-top:10px">' + T.homeFoot + '</p>';
+  return h;
+}
+
+function renderList() {
+  var T = t();
+  var h = '<div class="card"><h3>' + T.listT + '</h3><p class="hint">' + T.listHint + '</p>';
+  S.cvs.forEach(function (c, i) {
+    var name = c.nom || c.poste || T.noName;
+    h += '<div class="cvrow' + '">' +
+      '<div class="inf" onclick="openCv(' + i + ')"><div class="nm">' + (i === S.cur ? '👉 ' : '') + esc(name) + '</div>' +
+      (c.poste ? '<div class="jb">' + esc(c.poste) + '</div>' : '') + '</div>' +
+      '<button class="del" onclick="delCv(' + i + ')">🗑</button></div>';
+  });
+  h += '<button class="big ghost" onclick="newCv()">' + T.newCv + '</button></div>';
+  return h;
+}
+
+function renderForm() {
+  var T = t(); var c = CV();
+  var h = '<div class="hero"><h1>' + T.heroT + '</h1><p>' + T.heroP + '</p></div>';
+  h += '<div class="card"><h3>' + T.infoT + '</h3>' +
+    '<label>' + T.lNom + '</label><input id="f_nom" value="' + esc(c.nom) + '" placeholder="' + T.pNom + '">' +
+    '<label>' + T.lPoste + '</label><input id="f_poste" value="' + esc(c.poste) + '" placeholder="' + T.pPoste + '">' +
+    '<label>' + T.lTel + '</label><input id="f_tel" inputmode="tel" value="' + esc(c.tel) + '" placeholder="6XX XXX XXX">' +
+    '<label>' + T.lEmail + '</label><input id="f_email" value="' + esc(c.email) + '" placeholder="exemple@gmail.com">' +
+    '<label>' + T.lVille + '</label><input id="f_ville" value="' + esc(c.ville) + '" placeholder="' + T.pVille + '">' +
+    '<label>' + T.lPhoto + '</label><input type="file" accept="image/*" onchange="photoPick(event)">' +
+    (c.photo ? '<p class="hint">' + T.photoOk + '</p>' : '') + '</div>';
+  h += '<div class="card"><h3>' + T.profilT + '</h3>' +
+    '<textarea id="f_profil" placeholder="' + T.pProfil + '">' + esc(c.profil) + '</textarea></div>';
+  h += '<div class="card"><h3>' + T.expT + '</h3><p class="hint">' + T.aiExpHint + '</p>';
+  c.exp.forEach(function (x, i) {
+    h += '<div class="expbox">' +
+      '<label>' + T.lEposte + '</label><input id="e_poste' + i + '" value="' + esc(x.poste) + '" placeholder="' + T.pEposte + '">' +
+      '<label>' + T.lElieu + '</label><input id="e_lieu' + i + '" value="' + esc(x.lieu) + '" placeholder="' + T.pElieu + '">' +
+      '<label>' + T.lEper + '</label><input id="e_per' + i + '" value="' + esc(x.periode) + '" placeholder="' + T.pEper + '">' +
+      (c.exp.length > 1 ? '<button class="mini" style="margin-top:8px" onclick="rmExp(' + i + ')">' + T.rmExp + '</button>' : '') +
+      '</div>';
+  });
+  h += '<button class="big ghost" onclick="addExp()">' + T.addExp + '</button></div>';
+  h += '<div class="card"><h3>' + T.eduT + '</h3>';
+  c.edu.forEach(function (x, i) {
+    h += '<div class="expbox">' +
+      '<label>' + T.lDip + '</label><input id="d_dip' + i + '" value="' + esc(x.dip) + '" placeholder="' + T.pDip + '">' +
+      '<label>' + T.lEco + '</label><input id="d_eco' + i + '" value="' + esc(x.ecole) + '" placeholder="' + T.pEco + '">' +
+      '<label>' + T.lAn + '</label><input id="d_an' + i + '" value="' + esc(x.annee) + '" placeholder="Ex. : 2021">' +
+      (c.edu.length > 1 ? '<button class="mini" style="margin-top:8px" onclick="rmEdu(' + i + ')">' + T.rmEdu + '</button>' : '') +
+      '</div>';
+  });
+  h += '<button class="big ghost" onclick="addEdu()">' + T.addEdu + '</button></div>';
+  h += '<div class="card"><h3>' + T.skillT + '</h3>' +
+    '<label>' + T.lComp + '</label><input id="f_comp" value="' + esc(c.comp) + '" placeholder="' + T.pComp + '">' +
+    '<label>' + T.lLang + '</label><input id="f_lang" value="' + esc(c.langues) + '" placeholder="' + T.pLang + '">' +
+    '<label>' + T.lInt + '</label><input id="f_int" value="' + esc(c.interets) + '" placeholder="' + T.pInt + '"></div>';
+  h += '<button class="big" onclick="grab(); go(\'prev\')">' + T.seeCv + '</button>';
+  return h;
+}
+
+function cvHTML() {
+  var T = t(); var c = CV();
+  var h = '<div class="cvpage" style="--ac:' + cvColor(c) + '"><div class="cvin">';
+  h += '<div class="cvhead">';
+  if (c.photo) h += '<img class="ph" src="' + c.photo + '">';
+  h += '<div><h1>' + (esc(c.nom) || T.cvName) + '</h1>' +
+    '<div class="job">' + esc(c.poste) + '</div>' +
+    '<div class="cont">' + [c.tel ? '📞 ' + esc(c.tel) : '', c.email ? '✉️ ' + esc(c.email) : '', c.ville ? '📍 ' + esc(c.ville) : ''].filter(Boolean).join(' &nbsp; ') + '</div>' +
+    '</div></div>';
+  if (c.profil) h += '<div class="cvsec"><h2>' + T.cvProfil + '</h2><p>' + nl(c.profil) + '</p></div>';
+  var exps = c.exp.filter(function (x) { return x.poste || x.lieu; });
+  if (exps.length) {
+    h += '<div class="cvsec"><h2>' + T.cvExp + '</h2>';
+    exps.forEach(function (x) {
+      var d = (x.desc && String(x.desc).trim()) ? x.desc : aiTasks(x.poste);
+      h += '<div class="cvitem"><div class="t1">' + esc(x.poste) + '</div><div class="t2">' + esc(x.lieu) + (x.periode ? ' · ' + esc(x.periode) : '') + '</div>' + (d ? '<p>' + nl(d) + '</p>' : '') + '</div>';
+    });
+    h += '</div>';
+  }
+  var edus = c.edu.filter(function (x) { return x.dip || x.ecole; });
+  if (edus.length) {
+    h += '<div class="cvsec"><h2>' + T.cvEdu + '</h2>';
+    edus.forEach(function (x) {
+      h += '<div class="cvitem"><div class="t1">' + esc(x.dip) + '</div><div class="t2">' + esc(x.ecole) + (x.annee ? ' · ' + esc(x.annee) : '') + '</div></div>';
+    });
+    h += '</div>';
+  }
+  if (c.comp) {
+    h += '<div class="cvsec"><h2>' + T.cvComp + '</h2><div class="chips">' +
+      c.comp.split(',').map(function (x) { return x.trim(); }).filter(Boolean).map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('') + '</div></div>';
+  }
+  if (c.langues) h += '<div class="cvsec"><h2>' + T.cvLang + '</h2><p>' + esc(c.langues) + '</p></div>';
+  if (c.interets) h += '<div class="cvsec"><h2>' + T.cvInt + '</h2><p>' + esc(c.interets) + '</p></div>';
+  h += '</div></div>';
+  return h;
+}
+
+function renderPrev() {
+  var T = t(); var c = CV();
+  var h = '<div class="noprint">';
+  h += '<div class="card"><h3>' + T.tplT + '</h3><div class="tplpick">' +
+    '<div class="' + (c.tpl === 'bleu' ? 'on' : '') + '" style="color:#1b4e89" onclick="setTpl(\'bleu\')">🔵 ' + (S.lang === 'fr' ? 'BLEU' : 'BLUE') + '</div>' +
+    '<div class="' + (c.tpl === 'vert' ? 'on' : '') + '" style="color:#0b5e55" onclick="setTpl(\'vert\')">🟢 ' + (S.lang === 'fr' ? 'VERT' : 'GREEN') + '</div>' +
+    '<div class="' + (c.tpl === 'bordeaux' ? 'on' : '') + '" style="color:#7a1f3d" onclick="setTpl(\'bordeaux\')">🔴 ' + (S.lang === 'fr' ? 'BORDEAUX' : 'BURGUNDY') + '</div>' +
+    '<div class="' + (c.tpl === 'noir' ? 'on' : '') + '" style="color:#222" onclick="setTpl(\'noir\')">⚫ ' + (S.lang === 'fr' ? 'NOIR' : 'BLACK') + '</div>' +
+    '</div>' +
+    '<p style="font-size:.85rem;font-weight:800;color:#0b5e55;margin-top:14px">' + T.customT + '</p>' +
+    '<div class="dots">' + PALETTE.map(function (col) {
+      return '<span class="' + (c.tpl === 'custom' && c.color === col ? 'on' : '') + '" style="background:' + col + '" onclick="setCustom(\'' + col + '\')"></span>';
+    }).join('') + '</div>' +
+    '<div class="pickrow"><input type="color" value="' + (c.tpl === 'custom' && c.color ? c.color : '#1b4e89') + '" onchange="setCustom(this.value)"><span class="hint">' + T.customPick + '</span></div>' +
+    '</div>';
+  h += '</div>';
+  h += cvHTML();
+  h += '<div class="noprint">' +
+    '<button class="big green" onclick="wantPdf()">' + T.dlBtn + '</button>' +
+    '<p class="hint" style="text-align:center;margin-top:6px">' + (isPaid() ? T.dlHint : T.dlPay) + '</p>' +
+    '<button class="big ghost" onclick="go(\'form\')">' + T.editBtn + '</button>' +
+    '</div>';
+  return h;
+}
+
+function renderPay() {
+  var T = t();
+  var h = '<div class="card"><h3>' + T.payT + '</h3>' +
+    '<p class="hint" style="margin-bottom:10px">' + T.payList + '</p>' +
+    '<div class="step"><div class="n">1</div><p>' + (FAPSHI_LINK ? T.payOnlineHint : T.step1) + '</p></div>';
+  if (FAPSHI_LINK) {
+    h += '<a href="' + FAPSHI_LINK + '" target="_blank" rel="noreferrer"><button class="big green" style="margin-top:0">' + T.payOnline + '</button></a>' +
+      '<p class="hint" style="margin:8px 0">' + T.step1b + '</p>';
+  }
+  h += '<div class="rowbtn"><a href="tel:%23150%23"><button class="big gold">' + T.dial1 + '</button></a><a href="tel:*126%23"><button class="big gold">' + T.dial2 + '</button></a></div>' +
+    '<div class="step" style="margin-top:14px"><div class="n">2</div><p>' + T.step2 + '</p></div>' +
+    '<div class="step" style="margin-top:14px"><div class="n">3</div><p>' + T.step3 + '</p></div>' +
+    '<input id="pPhone" inputmode="tel" placeholder="' + T.phPhone + '" value="' + esc(S.phone) + '">' +
+    '<input id="pTxn" placeholder="' + T.phTxn + '" style="margin-top:8px">' +
+    '<div class="err" id="pErr"></div>' +
+    '<button class="big" onclick="activate()">' + T.actBtn + '</button>' +
+    '<p class="hint" style="margin-top:8px">' + T.warn + '</p>' +
+    '<p class="hint" style="margin-top:6px">' + T.help + '</p></div>';
+  return h;
+}
+function activate() {
+  var T = t();
+  var ph = document.getElementById('pPhone').value.replace(/\D/g, '');
+  var txn = document.getElementById('pTxn').value.trim();
+  var errEl = document.getElementById('pErr'); errEl.textContent = '';
+  if (ph.length < 9) { errEl.textContent = T.errPhone; return; }
+  if (txn.replace(/[^A-Za-z0-9]/g, '').length < 8) { errEl.textContent = T.errTxn; return; }
+  S.phone = ph; S.paidUntil = Date.now() + 365 * 86400000; S.wasPaid = true; save();
+  regSend('📄 CV PDF 1000F/an | tel: ' + ph + ' | ID transaction: ' + txn);
+  toast(T.actToast);
+  view = 'prev'; window.scrollTo(0, 0); render();
+  setTimeout(function () { window.print(); }, 900);
+}
+
+function render() {
+  var T = t();
+  document.getElementById('lngBtn').textContent = T.lngBtn;
+  document.getElementById('tabListL').textContent = T.tabList;
+  document.getElementById('tabFormL').textContent = T.tabForm;
+  document.getElementById('tabPrevL').textContent = T.tabPrev;
+  var warn = '';
+  if (isPaid() && daysLeft() <= 3) warn = '<div class="card noprint" style="background:#fff7e6;border:2px solid #d99a06"><p style="font-weight:800;color:#8a5a00;font-size:.9rem;line-height:1.5">' + T.expSoon(daysLeft()) + '</p></div>';
+  else if (!isPaid() && S.wasPaid) warn = '<div class="card noprint" style="background:#fdecea;border:2px solid #b42318"><p style="font-weight:800;color:#b42318;font-size:.9rem;line-height:1.5">' + T.expEnd + '</p></div>';
+  if (view === 'home') app.innerHTML = warn + renderHome();
+  else if (view === 'list') app.innerHTML = warn + renderList();
+  else if (view === 'form') app.innerHTML = warn + renderForm();
+  else if (view === 'prev') app.innerHTML = warn + renderPrev();
+  else app.innerHTML = warn + renderPay();
+  document.getElementById('tabList').className = view === 'list' ? 'on' : '';
+  document.getElementById('tabForm').className = view === 'form' ? 'on' : '';
+  document.getElementById('tabPrev').className = (view === 'prev' || view === 'pay') ? 'on' : '';
+}
+// ---------- VERIFICATEUR DE MISE A JOUR (LIEN + APK) ----------
+var APP_VERSION = 16;
+var VERSION_URL = 'https://mouafonmiguel-coder.github.io/cv/version.json';
+var APK_URL = 'https://mouafonmiguel-coder.github.io/cv-apk/CVRapide.apk';
+var IS_APK = !!window.Capacitor;
+function showUpdate() {
+  if (document.getElementById('updBar')) return;
+  var T = t();
+  var d = document.createElement('div');
+  d.id = 'updBar'; d.className = 'updbar noprint';
+  d.innerHTML = T.updMsg + (IS_APK
+    ? ' <a href="' + APK_URL + '">📲 ' + T.updApk + '</a>'
+    : ' <button onclick="location.reload()">🔄 ' + T.updWeb + '</button>');
+  document.body.insertBefore(d, document.body.firstChild);
+}
+function checkUpdate() {
+  try {
+    fetch(VERSION_URL + '?v=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { if (j && j.version > APP_VERSION) showUpdate(); })
+      .catch(function () {});
+  } catch (e) {}
+}
+checkUpdate();
+setInterval(checkUpdate, 3600000);
+
+render();
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () { navigator.serviceWorker.register('./sw.js').catch(function () {}); });
+}
+</script>
+</body>
+</html>
