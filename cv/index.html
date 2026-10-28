@@ -3,16 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📄 CV RAPIDE — ton CV professionnel en 5 minutes</title>
+<title>📄 CV RAPIDE</title>
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon-192.png">
 <meta name="theme-color" content="#0b5e55">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   body { font-family: Arial, sans-serif; background: #eef6f4; color: #15302b; }
-  .top { position: sticky; top: 0; z-index: 50; background: #0b5e55; color: #fff; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
+  .top { position: sticky; top: 0; z-index: 50; background: #0b5e55; color: #fff; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
   .brand { font-weight: 900; } .brand span { color: #ffd54f; }
-  .top button { background: rgba(255,255,255,.14); color: #fff; border: 0; border-radius: 10px; padding: 7px 11px; font-weight: 700; font-size: .8rem; }
+  .top button { background: rgba(255,255,255,.14); color: #fff; border: 0; border-radius: 10px; padding: 7px 11px; font-weight: 700; font-size: .8rem; cursor: pointer; }
+  .top .lng { background: #ffd54f; color: #4a3500; font-weight: 900; }
   .wrap { max-width: 640px; margin: 0 auto; padding: 14px 14px 90px; }
   .hero { background: linear-gradient(135deg,#0b5e55,#128a7d); color: #fff; border-radius: 18px; padding: 22px 18px; text-align: center; margin-bottom: 14px; }
   .hero h1 { font-size: 1.3rem; margin-bottom: 8px; } .hero h1 b { color: #ffd54f; }
@@ -73,25 +74,144 @@
 <body>
 <div class="top noprint">
   <div class="brand">📄 CV <span>RAPIDE</span></div>
-  <button onclick="go('premium')" id="topBtn">⭐ Premium</button>
+  <div style="display:flex;gap:8px">
+    <button class="lng" id="lngBtn" onclick="toggleLang()">🌐 EN</button>
+    <button onclick="go('premium')" id="topBtn">⭐ Premium</button>
+  </div>
 </div>
 <div class="wrap" id="app"></div>
 <div class="tabs noprint">
-  <button id="tabForm" onclick="go('form')"><span class="tic">✏️</span>Remplir</button>
-  <button id="tabPrev" onclick="go('prev')"><span class="tic">👁️</span>Mon CV</button>
-  <button id="tabPrem" onclick="go('premium')"><span class="tic">⭐</span>Premium</button>
+  <button id="tabForm" onclick="go('form')"><span class="tic">✏️</span><span id="tabFormL">Remplir</span></button>
+  <button id="tabPrev" onclick="go('prev')"><span class="tic">👁️</span><span id="tabPrevL">Mon CV</span></button>
+  <button id="tabPrem" onclick="go('premium')"><span class="tic">⭐</span><span id="tabPremL">Premium</span></button>
 </div>
 <script>
+var TR = {
+  fr: {
+    tabForm: 'Remplir', tabPrev: 'Mon CV', tabPrem: 'Premium',
+    premBtn: '⭐ Premium', premOn: '⭐ Actif', lngBtn: '🌐 EN',
+    heroT: 'Ton CV professionnel,<br><b>prêt en 5 minutes !</b>',
+    heroP: 'Remplis les cases, choisis ton modèle, et télécharge ton CV en PDF — directement sur ton téléphone.',
+    infoT: '👤 Mes informations',
+    lNom: 'Nom complet', pNom: 'Ex. : NGONO Marie Claire',
+    lPoste: 'Poste recherché / métier', pPoste: 'Ex. : Comptable / Électricien / Secrétaire',
+    lTel: 'Téléphone', lEmail: 'Email (facultatif)',
+    lVille: 'Ville / Quartier', pVille: 'Ex. : Yaoundé, Awae',
+    lPhoto: 'Photo (facultatif mais conseillé)', photoOk: '✔ Photo enregistrée', photoToast: 'Photo ajoutée ✔',
+    profilT: '📝 Mon profil (2-3 phrases)',
+    pProfil: 'Ex. : Comptable rigoureuse avec 3 ans d\u2019expérience. Maîtrise de Excel et Sage. Disponible immédiatement.',
+    expT: '💼 Mes expériences',
+    lEposte: 'Poste occupé', pEposte: 'Ex. : Caissière',
+    lElieu: 'Entreprise / Lieu', pElieu: 'Ex. : Boutique Chez Paul, Douala',
+    lEper: 'Période', pEper: 'Ex. : 2022 – 2024',
+    lEdesc: 'Ce que tu faisais (facultatif)', pEdesc: 'Ex. : Encaissement, gestion du stock, service client.',
+    rmExp: '🗑 Retirer cette expérience', addExp: '➕ Ajouter une expérience',
+    eduT: '🎓 Mes diplômes & formations',
+    lDip: 'Diplôme / Formation', pDip: 'Ex. : BAC D / CAP Couture / Licence',
+    lEco: 'École / Centre', pEco: 'Ex. : Lycée de Nkolbisson',
+    lAn: 'Année', rmEdu: '🗑 Retirer', addEdu: '➕ Ajouter un diplôme',
+    skillT: '⭐ Compétences, langues, centres d\u2019intérêt',
+    lComp: 'Compétences (sépare par des virgules)', pComp: 'Ex. : Excel, Caisse, Vente, Conduite',
+    lLang: 'Langues', pLang: 'Ex. : Français (courant), Anglais (moyen)',
+    lInt: 'Centres d\u2019intérêt (facultatif)', pInt: 'Ex. : Football, lecture, musique',
+    seeCv: '👁️ VOIR MON CV ➜',
+    cvName: 'TON NOM ICI', cvProfil: 'PROFIL', cvExp: 'EXPÉRIENCE PROFESSIONNELLE', cvEdu: 'FORMATION',
+    cvComp: 'COMPÉTENCES', cvLang: 'LANGUES', cvInt: 'CENTRES D\u2019INTÉRÊT',
+    wm: 'CV créé gratuitement avec CV RAPIDE — WhatsApp 692 168 264',
+    tplT: '🎨 Choisis ton modèle', free: 'Gratuit', premOk: 'Premium ✓', premLock: '🔒 Premium',
+    tplHint: '⭐ Premium : modèles VERT, BORDEAUX et NOIR + <b>suppression du filigrane</b> en bas du CV.',
+    dlBtn: '📄 TÉLÉCHARGER EN PDF',
+    dlHint: 'Dans la fenêtre qui s\u2019ouvre, choisis <b>« Enregistrer au format PDF »</b> — puis envoie ton CV sur WhatsApp ou par email !',
+    editBtn: '✏️ Modifier mon CV',
+    badge: '⭐ Enlever le filigrane + modèles PRO — appuie ici',
+    lockToast: '🔒 Ce modèle est réservé au Premium',
+    premActiveT: '⭐ Premium actif',
+    premActiveP: function (y) { return 'Ton Premium est actif pour toute l\u2019année ' + y + ' : filigrane supprimé + tous les modèles débloqués. Bon courage pour tes candidatures ! 💼'; },
+    seeMyCv: '👁️ Voir mon CV',
+    premT: '⭐ Premium — 1 000 F pour TOUTE l\u2019année',
+    premList: '✔ Filigrane supprimé (CV 100 % propre)<br>✔ Modèles VERT, BORDEAUX et NOIR débloqués<br>✔ Modifie et retélécharge ton CV autant de fois que tu veux, toute l\u2019année.',
+    step1: 'Envoie <b>1 000 F</b> par Mobile Money à <b>MIGUEL MOUAFON</b> :<br>🟠 Orange Money : <b>692 168 264</b><br>🟡 MTN MoMo : <b>653 596 305</b>',
+    dial1: '🟠 Composer #150#', dial2: '🟡 Composer *126#',
+    step2: 'Après le paiement, tu reçois un <b>SMS de confirmation</b> avec l\u2019<b>ID de la transaction</b> (ex. : PP250118.1234.A12345 ou MP240118...).',
+    step3: 'Entre ton numéro et cet ID ici → le Premium s\u2019active <b>immédiatement</b> :',
+    phPhone: 'Ton numéro (ex. 6XXXXXXXX)', phTxn: 'ID de la transaction (dans le SMS reçu)',
+    actBtn: '🔓 Activer mon Premium maintenant',
+    warn: '⚠️ L\u2019ID doit être exact : chaque activation est vérifiée par MIGUEL avec les reçus Orange/MTN. Une fausse déclaration = Premium annulé.',
+    help: 'Un souci ? Écris sur WhatsApp : <b>692 168 264</b>',
+    errPhone: 'Entre ton numéro complet (9 chiffres).',
+    errTxn: 'Cet ID de transaction est trop court. Recopie exactement l\u2019ID du SMS de confirmation.',
+    actToast: '⭐ Premium activé ! Ton CV est maintenant 100 % propre.'
+  },
+  en: {
+    tabForm: 'Fill in', tabPrev: 'My CV', tabPrem: 'Premium',
+    premBtn: '⭐ Premium', premOn: '⭐ Active', lngBtn: '🌐 FR',
+    heroT: 'Your professional CV,<br><b>ready in 5 minutes!</b>',
+    heroP: 'Fill in the boxes, pick your template, and download your CV as a PDF — right on your phone.',
+    infoT: '👤 My information',
+    lNom: 'Full name', pNom: 'E.g.: NGONO Marie Claire',
+    lPoste: 'Job you are looking for', pPoste: 'E.g.: Accountant / Electrician / Secretary',
+    lTel: 'Phone number', lEmail: 'Email (optional)',
+    lVille: 'City / Neighbourhood', pVille: 'E.g.: Bamenda, Nkwen',
+    lPhoto: 'Photo (optional but recommended)', photoOk: '✔ Photo saved', photoToast: 'Photo added ✔',
+    profilT: '📝 My profile (2-3 sentences)',
+    pProfil: 'E.g.: Hardworking accountant with 3 years of experience. Good knowledge of Excel and Sage. Available immediately.',
+    expT: '💼 My work experience',
+    lEposte: 'Position held', pEposte: 'E.g.: Cashier',
+    lElieu: 'Company / Place', pElieu: 'E.g.: Chez Paul Shop, Douala',
+    lEper: 'Period', pEper: 'E.g.: 2022 – 2024',
+    lEdesc: 'What you did (optional)', pEdesc: 'E.g.: Cash handling, stock management, customer service.',
+    rmExp: '🗑 Remove this experience', addExp: '➕ Add an experience',
+    eduT: '🎓 My diplomas & training',
+    lDip: 'Diploma / Training', pDip: 'E.g.: GCE A Level / Advanced Level / Degree',
+    lEco: 'School / Centre', pEco: 'E.g.: Government High School Bamenda',
+    lAn: 'Year', rmEdu: '🗑 Remove', addEdu: '➕ Add a diploma',
+    skillT: '⭐ Skills, languages, interests',
+    lComp: 'Skills (separate with commas)', pComp: 'E.g.: Excel, Cash register, Sales, Driving',
+    lLang: 'Languages', pLang: 'E.g.: English (fluent), French (average)',
+    lInt: 'Interests (optional)', pInt: 'E.g.: Football, reading, music',
+    seeCv: '👁️ SEE MY CV ➜',
+    cvName: 'YOUR NAME HERE', cvProfil: 'PROFILE', cvExp: 'WORK EXPERIENCE', cvEdu: 'EDUCATION',
+    cvComp: 'SKILLS', cvLang: 'LANGUAGES', cvInt: 'INTERESTS',
+    wm: 'CV created for free with CV RAPIDE — WhatsApp 692 168 264',
+    tplT: '🎨 Pick your template', free: 'Free', premOk: 'Premium ✓', premLock: '🔒 Premium',
+    tplHint: '⭐ Premium: GREEN, BURGUNDY and BLACK templates + <b>watermark removed</b> at the bottom of the CV.',
+    dlBtn: '📄 DOWNLOAD AS PDF',
+    dlHint: 'In the window that opens, choose <b>“Save as PDF”</b> — then send your CV on WhatsApp or by email!',
+    editBtn: '✏️ Edit my CV',
+    badge: '⭐ Remove the watermark + PRO templates — tap here',
+    lockToast: '🔒 This template is for Premium only',
+    premActiveT: '⭐ Premium active',
+    premActiveP: function (y) { return 'Your Premium is active for the whole year ' + y + ': watermark removed + all templates unlocked. Good luck with your applications! 💼'; },
+    seeMyCv: '👁️ See my CV',
+    premT: '⭐ Premium — 1,000 F for the WHOLE year',
+    premList: '✔ Watermark removed (100% clean CV)<br>✔ GREEN, BURGUNDY and BLACK templates unlocked<br>✔ Edit and re-download your CV as many times as you want, all year long.',
+    step1: 'Send <b>1,000 F</b> by Mobile Money to <b>MIGUEL MOUAFON</b>:<br>🟠 Orange Money: <b>692 168 264</b><br>🟡 MTN MoMo: <b>653 596 305</b>',
+    dial1: '🟠 Dial #150#', dial2: '🟡 Dial *126#',
+    step2: 'After payment, you receive a <b>confirmation SMS</b> with the <b>transaction ID</b> (e.g.: PP250118.1234.A12345 or MP240118...).',
+    step3: 'Enter your number and that ID here → Premium activates <b>immediately</b>:',
+    phPhone: 'Your number (e.g. 6XXXXXXXX)', phTxn: 'Transaction ID (from the SMS you received)',
+    actBtn: '🔓 Activate my Premium now',
+    warn: '⚠️ The ID must be exact: every activation is checked by MIGUEL against the Orange/MTN receipts. A false declaration = Premium cancelled.',
+    help: 'Any problem? Write on WhatsApp: <b>692 168 264</b>',
+    errPhone: 'Enter your full number (9 digits).',
+    errTxn: 'This transaction ID is too short. Copy the exact ID from the confirmation SMS.',
+    actToast: '⭐ Premium activated! Your CV is now 100% clean.'
+  }
+};
+
 var S = {
   nom: '', poste: '', tel: '', email: '', ville: '', photo: '',
   profil: '', comp: '', langues: '', interets: '',
   exp: [{ poste: '', lieu: '', periode: '', desc: '' }],
   edu: [{ dip: '', ecole: '', annee: '' }],
-  tpl: 'bleu', phone: '', premiumYear: 0
+  tpl: 'bleu', phone: '', premiumYear: 0, lang: 'fr'
 };
 try { var sv = localStorage.getItem('cv_state_v1'); if (sv) S = Object.assign(S, JSON.parse(sv)); } catch (e) {}
+if (S.lang !== 'fr' && S.lang !== 'en') S.lang = 'fr';
+function t() { return TR[S.lang]; }
 function save() { try { localStorage.setItem('cv_state_v1', JSON.stringify(S)); } catch (e) {} }
 function isPremium() { return S.premiumYear === new Date().getFullYear(); }
+function toggleLang() { grabSafe(); S.lang = (S.lang === 'fr' ? 'en' : 'fr'); save(); render(); }
 
 // Registre central de MIGUEL : chaque activation y est notee automatiquement
 var CC_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSc8B9D32bIRco4H2AXkrnemNy_55aw8OoYg04ZVDsos1_u_Og/formResponse';
@@ -106,14 +226,14 @@ function regSend(info) {
 
 var app = document.getElementById('app');
 function toast(m) {
-  var t = document.createElement('div'); t.className = 'toast'; t.textContent = m;
-  document.body.appendChild(t); setTimeout(function () { t.remove(); }, 3200);
+  var el = document.createElement('div'); el.className = 'toast'; el.textContent = m;
+  document.body.appendChild(el); setTimeout(function () { el.remove(); }, 3200);
 }
 function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
 function nl(s) { return esc(s).replace(/\n/g, '<br>'); }
 
 var view = 'form';
-function go(v) { view = v; window.scrollTo(0, 0); render(); }
+function go(v) { grabSafe(); view = v; window.scrollTo(0, 0); render(); }
 
 function F(id) { var el = document.getElementById(id); return el ? el.value : ''; }
 function grab() {
@@ -128,6 +248,7 @@ function grab() {
   });
   save();
 }
+function grabSafe() { if (view === 'form' && document.getElementById('f_nom')) grab(); }
 function addExp() { grab(); S.exp.push({ poste: '', lieu: '', periode: '', desc: '' }); save(); render(); }
 function rmExp(i) { grab(); S.exp.splice(i, 1); if (!S.exp.length) S.exp.push({ poste: '', lieu: '', periode: '', desc: '' }); save(); render(); }
 function addEdu() { grab(); S.edu.push({ dip: '', ecole: '', annee: '' }); save(); render(); }
@@ -144,72 +265,74 @@ function photoPick(ev) {
       c.width = 300; c.height = 300;
       c.getContext('2d').drawImage(img, (img.width - s2) / 2, (img.height - s2) / 2, s2, s2, 0, 0, 300, 300);
       S.photo = c.toDataURL('image/jpeg', 0.82);
-      save(); toast('Photo ajoutée ✔'); render();
+      save(); toast(t().photoToast); render();
     };
     img.src = r.result;
   };
   r.readAsDataURL(f);
 }
 
-function setTpl(t, locked) {
-  if (locked && !isPremium()) { go('premium'); toast('🔒 Ce modèle est réservé au Premium'); return; }
-  grab(); S.tpl = t; save(); render();
+function setTpl(tp, locked) {
+  if (locked && !isPremium()) { go('premium'); toast(t().lockToast); return; }
+  grabSafe(); S.tpl = tp; save(); render();
 }
 
 function renderForm() {
-  var h = '<div class="hero"><h1>Ton CV professionnel,<br><b>prêt en 5 minutes !</b></h1><p>Remplis les cases, choisis ton modèle, et télécharge ton CV en PDF — directement sur ton téléphone.</p></div>';
-  h += '<div class="card"><h3>👤 Mes informations</h3>' +
-    '<label>Nom complet</label><input id="f_nom" value="' + esc(S.nom) + '" placeholder="Ex. : NGONO Marie Claire">' +
-    '<label>Poste recherché / métier</label><input id="f_poste" value="' + esc(S.poste) + '" placeholder="Ex. : Comptable / Électricien / Secrétaire">' +
-    '<label>Téléphone</label><input id="f_tel" inputmode="tel" value="' + esc(S.tel) + '" placeholder="6XX XXX XXX">' +
-    '<label>Email (facultatif)</label><input id="f_email" value="' + esc(S.email) + '" placeholder="exemple@gmail.com">' +
-    '<label>Ville / Quartier</label><input id="f_ville" value="' + esc(S.ville) + '" placeholder="Ex. : Yaoundé, Awae">' +
-    '<label>Photo (facultatif mais conseillé)</label><input type="file" accept="image/*" onchange="photoPick(event)">' +
-    (S.photo ? '<p class="hint">✔ Photo enregistrée</p>' : '') + '</div>';
-  h += '<div class="card"><h3>📝 Mon profil (2-3 phrases)</h3>' +
-    '<textarea id="f_profil" placeholder="Ex. : Comptable rigoureuse avec 3 ans d\u2019expérience. Maîtrise de Excel et Sage. Disponible immédiatement.">' + esc(S.profil) + '</textarea></div>';
-  h += '<div class="card"><h3>💼 Mes expériences</h3>';
+  var T = t();
+  var h = '<div class="hero"><h1>' + T.heroT + '</h1><p>' + T.heroP + '</p></div>';
+  h += '<div class="card"><h3>' + T.infoT + '</h3>' +
+    '<label>' + T.lNom + '</label><input id="f_nom" value="' + esc(S.nom) + '" placeholder="' + T.pNom + '">' +
+    '<label>' + T.lPoste + '</label><input id="f_poste" value="' + esc(S.poste) + '" placeholder="' + T.pPoste + '">' +
+    '<label>' + T.lTel + '</label><input id="f_tel" inputmode="tel" value="' + esc(S.tel) + '" placeholder="6XX XXX XXX">' +
+    '<label>' + T.lEmail + '</label><input id="f_email" value="' + esc(S.email) + '" placeholder="exemple@gmail.com">' +
+    '<label>' + T.lVille + '</label><input id="f_ville" value="' + esc(S.ville) + '" placeholder="' + T.pVille + '">' +
+    '<label>' + T.lPhoto + '</label><input type="file" accept="image/*" onchange="photoPick(event)">' +
+    (S.photo ? '<p class="hint">' + T.photoOk + '</p>' : '') + '</div>';
+  h += '<div class="card"><h3>' + T.profilT + '</h3>' +
+    '<textarea id="f_profil" placeholder="' + T.pProfil + '">' + esc(S.profil) + '</textarea></div>';
+  h += '<div class="card"><h3>' + T.expT + '</h3>';
   S.exp.forEach(function (x, i) {
     h += '<div class="expbox">' +
-      '<label>Poste occupé</label><input id="e_poste' + i + '" value="' + esc(x.poste) + '" placeholder="Ex. : Caissière">' +
-      '<label>Entreprise / Lieu</label><input id="e_lieu' + i + '" value="' + esc(x.lieu) + '" placeholder="Ex. : Boutique Chez Paul, Douala">' +
-      '<label>Période</label><input id="e_per' + i + '" value="' + esc(x.periode) + '" placeholder="Ex. : 2022 – 2024">' +
-      '<label>Ce que tu faisais (facultatif)</label><textarea id="e_desc' + i + '" placeholder="Ex. : Encaissement, gestion du stock, service client.">' + esc(x.desc) + '</textarea>' +
-      (S.exp.length > 1 ? '<button class="mini" style="margin-top:8px" onclick="rmExp(' + i + ')">🗑 Retirer cette expérience</button>' : '') +
+      '<label>' + T.lEposte + '</label><input id="e_poste' + i + '" value="' + esc(x.poste) + '" placeholder="' + T.pEposte + '">' +
+      '<label>' + T.lElieu + '</label><input id="e_lieu' + i + '" value="' + esc(x.lieu) + '" placeholder="' + T.pElieu + '">' +
+      '<label>' + T.lEper + '</label><input id="e_per' + i + '" value="' + esc(x.periode) + '" placeholder="' + T.pEper + '">' +
+      '<label>' + T.lEdesc + '</label><textarea id="e_desc' + i + '" placeholder="' + T.pEdesc + '">' + esc(x.desc) + '</textarea>' +
+      (S.exp.length > 1 ? '<button class="mini" style="margin-top:8px" onclick="rmExp(' + i + ')">' + T.rmExp + '</button>' : '') +
       '</div>';
   });
-  h += '<button class="big ghost" onclick="addExp()">➕ Ajouter une expérience</button></div>';
-  h += '<div class="card"><h3>🎓 Mes diplômes & formations</h3>';
+  h += '<button class="big ghost" onclick="addExp()">' + T.addExp + '</button></div>';
+  h += '<div class="card"><h3>' + T.eduT + '</h3>';
   S.edu.forEach(function (x, i) {
     h += '<div class="expbox">' +
-      '<label>Diplôme / Formation</label><input id="d_dip' + i + '" value="' + esc(x.dip) + '" placeholder="Ex. : BAC D / CAP Couture / Licence">' +
-      '<label>École / Centre</label><input id="d_eco' + i + '" value="' + esc(x.ecole) + '" placeholder="Ex. : Lycée de Nkolbisson">' +
-      '<label>Année</label><input id="d_an' + i + '" value="' + esc(x.annee) + '" placeholder="Ex. : 2021">' +
-      (S.edu.length > 1 ? '<button class="mini" style="margin-top:8px" onclick="rmEdu(' + i + ')">🗑 Retirer</button>' : '') +
+      '<label>' + T.lDip + '</label><input id="d_dip' + i + '" value="' + esc(x.dip) + '" placeholder="' + T.pDip + '">' +
+      '<label>' + T.lEco + '</label><input id="d_eco' + i + '" value="' + esc(x.ecole) + '" placeholder="' + T.pEco + '">' +
+      '<label>' + T.lAn + '</label><input id="d_an' + i + '" value="' + esc(x.annee) + '" placeholder="Ex. : 2021">' +
+      (S.edu.length > 1 ? '<button class="mini" style="margin-top:8px" onclick="rmEdu(' + i + ')">' + T.rmEdu + '</button>' : '') +
       '</div>';
   });
-  h += '<button class="big ghost" onclick="addEdu()">➕ Ajouter un diplôme</button></div>';
-  h += '<div class="card"><h3>⭐ Compétences, langues, centres d\u2019intérêt</h3>' +
-    '<label>Compétences (sépare par des virgules)</label><input id="f_comp" value="' + esc(S.comp) + '" placeholder="Ex. : Excel, Caisse, Vente, Conduite">' +
-    '<label>Langues</label><input id="f_lang" value="' + esc(S.langues) + '" placeholder="Ex. : Français (courant), Anglais (moyen)">' +
-    '<label>Centres d\u2019intérêt (facultatif)</label><input id="f_int" value="' + esc(S.interets) + '" placeholder="Ex. : Football, lecture, musique"></div>';
-  h += '<button class="big" onclick="grab(); go(\'prev\')">👁️ VOIR MON CV ➜</button>';
+  h += '<button class="big ghost" onclick="addEdu()">' + T.addEdu + '</button></div>';
+  h += '<div class="card"><h3>' + T.skillT + '</h3>' +
+    '<label>' + T.lComp + '</label><input id="f_comp" value="' + esc(S.comp) + '" placeholder="' + T.pComp + '">' +
+    '<label>' + T.lLang + '</label><input id="f_lang" value="' + esc(S.langues) + '" placeholder="' + T.pLang + '">' +
+    '<label>' + T.lInt + '</label><input id="f_int" value="' + esc(S.interets) + '" placeholder="' + T.pInt + '"></div>';
+  h += '<button class="big" onclick="grab(); go(\'prev\')">' + T.seeCv + '</button>';
   return h;
 }
 
 function cvHTML() {
+  var T = t();
   var premium = isPremium();
   var h = '<div class="cvpage cv-' + S.tpl + '"><div class="cvin">';
   h += '<div class="cvhead">';
   if (S.photo) h += '<img class="ph" src="' + S.photo + '">';
-  h += '<div><h1>' + (esc(S.nom) || 'TON NOM ICI') + '</h1>' +
+  h += '<div><h1>' + (esc(S.nom) || T.cvName) + '</h1>' +
     '<div class="job">' + esc(S.poste) + '</div>' +
     '<div class="cont">' + [S.tel ? '📞 ' + esc(S.tel) : '', S.email ? '✉️ ' + esc(S.email) : '', S.ville ? '📍 ' + esc(S.ville) : ''].filter(Boolean).join(' &nbsp; ') + '</div>' +
     '</div></div>';
-  if (S.profil) h += '<div class="cvsec"><h2>PROFIL</h2><p>' + nl(S.profil) + '</p></div>';
+  if (S.profil) h += '<div class="cvsec"><h2>' + T.cvProfil + '</h2><p>' + nl(S.profil) + '</p></div>';
   var exps = S.exp.filter(function (x) { return x.poste || x.lieu; });
   if (exps.length) {
-    h += '<div class="cvsec"><h2>EXPÉRIENCE PROFESSIONNELLE</h2>';
+    h += '<div class="cvsec"><h2>' + T.cvExp + '</h2>';
     exps.forEach(function (x) {
       h += '<div class="cvitem"><div class="t1">' + esc(x.poste) + '</div><div class="t2">' + esc(x.lieu) + (x.periode ? ' · ' + esc(x.periode) : '') + '</div>' + (x.desc ? '<p>' + nl(x.desc) + '</p>' : '') + '</div>';
     });
@@ -217,81 +340,89 @@ function cvHTML() {
   }
   var edus = S.edu.filter(function (x) { return x.dip || x.ecole; });
   if (edus.length) {
-    h += '<div class="cvsec"><h2>FORMATION</h2>';
+    h += '<div class="cvsec"><h2>' + T.cvEdu + '</h2>';
     edus.forEach(function (x) {
       h += '<div class="cvitem"><div class="t1">' + esc(x.dip) + '</div><div class="t2">' + esc(x.ecole) + (x.annee ? ' · ' + esc(x.annee) : '') + '</div></div>';
     });
     h += '</div>';
   }
   if (S.comp) {
-    h += '<div class="cvsec"><h2>COMPÉTENCES</h2><div class="chips">' +
+    h += '<div class="cvsec"><h2>' + T.cvComp + '</h2><div class="chips">' +
       S.comp.split(',').map(function (c) { return c.trim(); }).filter(Boolean).map(function (c) { return '<span>' + esc(c) + '</span>'; }).join('') + '</div></div>';
   }
-  if (S.langues) h += '<div class="cvsec"><h2>LANGUES</h2><p>' + esc(S.langues) + '</p></div>';
-  if (S.interets) h += '<div class="cvsec"><h2>CENTRES D\u2019INTÉRÊT</h2><p>' + esc(S.interets) + '</p></div>';
+  if (S.langues) h += '<div class="cvsec"><h2>' + T.cvLang + '</h2><p>' + esc(S.langues) + '</p></div>';
+  if (S.interets) h += '<div class="cvsec"><h2>' + T.cvInt + '</h2><p>' + esc(S.interets) + '</p></div>';
   h += '</div>';
-  if (!premium) h += '<div class="wm">CV créé gratuitement avec CV RAPIDE — WhatsApp 692 168 264</div>';
+  if (!premium) h += '<div class="wm">' + T.wm + '</div>';
   h += '</div>';
   return h;
 }
 
 function renderPrev() {
+  var T = t();
   var h = '<div class="noprint">';
-  h += '<div class="card"><h3>🎨 Choisis ton modèle</h3><div class="tplpick">' +
-    '<div class="' + (S.tpl === 'bleu' ? 'on' : '') + '" style="color:#1b4e89" onclick="setTpl(\'bleu\', false)">🔵 BLEU<br>Gratuit</div>' +
-    '<div class="' + (S.tpl === 'vert' ? 'on' : '') + '" style="color:#0b5e55" onclick="setTpl(\'vert\', true)">🟢 VERT<br>' + (isPremium() ? 'Premium ✓' : '🔒 Premium') + '</div>' +
-    '<div class="' + (S.tpl === 'bordeaux' ? 'on' : '') + '" style="color:#7a1f3d" onclick="setTpl(\'bordeaux\', true)">🔴 BORDEAUX<br>' + (isPremium() ? 'Premium ✓' : '🔒 Premium') + '</div>' +
-    '<div class="' + (S.tpl === 'noir' ? 'on' : '') + '" style="color:#222" onclick="setTpl(\'noir\', true)">⚫ NOIR<br>' + (isPremium() ? 'Premium ✓' : '🔒 Premium') + '</div>' +
+  h += '<div class="card"><h3>' + T.tplT + '</h3><div class="tplpick">' +
+    '<div class="' + (S.tpl === 'bleu' ? 'on' : '') + '" style="color:#1b4e89" onclick="setTpl(\'bleu\', false)">🔵 ' + (S.lang === 'fr' ? 'BLEU' : 'BLUE') + '<br>' + T.free + '</div>' +
+    '<div class="' + (S.tpl === 'vert' ? 'on' : '') + '" style="color:#0b5e55" onclick="setTpl(\'vert\', true)">🟢 ' + (S.lang === 'fr' ? 'VERT' : 'GREEN') + '<br>' + (isPremium() ? T.premOk : T.premLock) + '</div>' +
+    '<div class="' + (S.tpl === 'bordeaux' ? 'on' : '') + '" style="color:#7a1f3d" onclick="setTpl(\'bordeaux\', true)">🔴 ' + (S.lang === 'fr' ? 'BORDEAUX' : 'BURGUNDY') + '<br>' + (isPremium() ? T.premOk : T.premLock) + '</div>' +
+    '<div class="' + (S.tpl === 'noir' ? 'on' : '') + '" style="color:#222" onclick="setTpl(\'noir\', true)">⚫ ' + (S.lang === 'fr' ? 'NOIR' : 'BLACK') + '<br>' + (isPremium() ? T.premOk : T.premLock) + '</div>' +
     '</div>' +
-    (!isPremium() ? '<p class="hint" style="margin-top:8px">⭐ Premium : modèles VERT, BORDEAUX et NOIR + <b>suppression du filigrane</b> en bas du CV.</p>' : '') + '</div>';
+    (!isPremium() ? '<p class="hint" style="margin-top:8px">' + T.tplHint + '</p>' : '') + '</div>';
   h += '</div>';
   h += cvHTML();
   h += '<div class="noprint">' +
-    '<button class="big green" onclick="window.print()">📄 TÉLÉCHARGER EN PDF</button>' +
-    '<p class="hint" style="text-align:center;margin-top:6px">Dans la fenêtre qui s\u2019ouvre, choisis <b>« Enregistrer au format PDF »</b> — puis envoie ton CV sur WhatsApp ou par email !</p>' +
-    '<button class="big ghost" onclick="go(\'form\')">✏️ Modifier mon CV</button>' +
-    (!isPremium() ? '<div class="badge" style="margin-top:12px" onclick="go(\'premium\')">⭐ Enlever le filigrane + modèles PRO — appuie ici</div>' : '') +
+    '<button class="big green" onclick="window.print()">' + T.dlBtn + '</button>' +
+    '<p class="hint" style="text-align:center;margin-top:6px">' + T.dlHint + '</p>' +
+    '<button class="big ghost" onclick="go(\'form\')">' + T.editBtn + '</button>' +
+    (!isPremium() ? '<div class="badge" style="margin-top:12px" onclick="go(\'premium\')">' + T.badge + '</div>' : '') +
     '</div>';
   return h;
 }
 
 function renderPremium() {
+  var T = t();
   var y = new Date().getFullYear();
   var h = '';
   if (isPremium()) {
-    h += '<div class="card"><h3>⭐ Premium actif</h3><p class="hint">Ton Premium est actif pour toute l\u2019année ' + y + ' : filigrane supprimé + tous les modèles débloqués. Bon courage pour tes candidatures ! 💼</p>' +
-      '<button class="big" onclick="go(\'prev\')">👁️ Voir mon CV</button></div>';
+    h += '<div class="card"><h3>' + T.premActiveT + '</h3><p class="hint">' + T.premActiveP(y) + '</p>' +
+      '<button class="big" onclick="go(\'prev\')">' + T.seeMyCv + '</button></div>';
     return h;
   }
-  h += '<div class="card"><h3>⭐ Premium — 1 000 F pour TOUTE l\u2019année</h3>' +
-    '<p class="hint" style="margin-bottom:10px">✔ Filigrane supprimé (CV 100 % propre)<br>✔ Modèles VERT, BORDEAUX et NOIR débloqués<br>✔ Modifie et retélécharge ton CV autant de fois que tu veux, toute l\u2019année.</p>' +
-    '<div class="step"><div class="n">1</div><p>Envoie <b>1 000 F</b> par Mobile Money à <b>MIGUEL MOUAFON</b> :<br>🟠 Orange Money : <b>692 168 264</b><br>🟡 MTN MoMo : <b>653 596 305</b></p></div>' +
-    '<div class="rowbtn"><a href="tel:%23150%23"><button class="big gold">🟠 Composer #150#</button></a><a href="tel:*126%23"><button class="big gold">🟡 Composer *126#</button></a></div>' +
-    '<div class="step" style="margin-top:14px"><div class="n">2</div><p>Après le paiement, tu reçois un <b>SMS de confirmation</b> avec l\u2019<b>ID de la transaction</b> (ex. : PP250118.1234.A12345 ou MP240118...).</p></div>' +
-    '<div class="step" style="margin-top:14px"><div class="n">3</div><p>Entre ton numéro et cet ID ici → le Premium s\u2019active <b>immédiatement</b> :</p></div>' +
-    '<input id="pPhone" inputmode="tel" placeholder="Ton numéro (ex. 6XXXXXXXX)" value="' + esc(S.phone) + '">' +
-    '<input id="pTxn" placeholder="ID de la transaction (dans le SMS reçu)" style="margin-top:8px">' +
+  h += '<div class="card"><h3>' + T.premT + '</h3>' +
+    '<p class="hint" style="margin-bottom:10px">' + T.premList + '</p>' +
+    '<div class="step"><div class="n">1</div><p>' + T.step1 + '</p></div>' +
+    '<div class="rowbtn"><a href="tel:%23150%23"><button class="big gold">' + T.dial1 + '</button></a><a href="tel:*126%23"><button class="big gold">' + T.dial2 + '</button></a></div>' +
+    '<div class="step" style="margin-top:14px"><div class="n">2</div><p>' + T.step2 + '</p></div>' +
+    '<div class="step" style="margin-top:14px"><div class="n">3</div><p>' + T.step3 + '</p></div>' +
+    '<input id="pPhone" inputmode="tel" placeholder="' + T.phPhone + '" value="' + esc(S.phone) + '">' +
+    '<input id="pTxn" placeholder="' + T.phTxn + '" style="margin-top:8px">' +
     '<div class="err" id="pErr"></div>' +
-    '<button class="big" onclick="activate()">🔓 Activer mon Premium maintenant</button>' +
-    '<p class="hint" style="margin-top:8px">⚠️ L\u2019ID doit être exact : chaque activation est vérifiée par MIGUEL avec les reçus Orange/MTN. Une fausse déclaration = Premium annulé.</p>' +
-    '<p class="hint" style="margin-top:6px">Un souci ? Écris sur WhatsApp : <b>692 168 264</b></p></div>';
+    '<button class="big" onclick="activate()">' + T.actBtn + '</button>' +
+    '<p class="hint" style="margin-top:8px">' + T.warn + '</p>' +
+    '<p class="hint" style="margin-top:6px">' + T.help + '</p></div>';
   return h;
 }
 function activate() {
+  var T = t();
   var ph = document.getElementById('pPhone').value.replace(/\D/g, '');
   var txn = document.getElementById('pTxn').value.trim();
   var errEl = document.getElementById('pErr'); errEl.textContent = '';
-  if (ph.length < 9) { errEl.textContent = 'Entre ton numéro complet (9 chiffres).'; return; }
-  if (txn.replace(/[^A-Za-z0-9]/g, '').length < 8) { errEl.textContent = 'Cet ID de transaction est trop court. Recopie exactement l\u2019ID du SMS de confirmation.'; return; }
+  if (ph.length < 9) { errEl.textContent = T.errPhone; return; }
+  if (txn.replace(/[^A-Za-z0-9]/g, '').length < 8) { errEl.textContent = T.errTxn; return; }
   var y = new Date().getFullYear();
   S.phone = ph; S.premiumYear = y; save();
   regSend('📄 CV PREMIUM 1000F | tel: ' + ph + ' | ID transaction: ' + txn);
-  toast('⭐ Premium activé ! Ton CV est maintenant 100 % propre.');
+  toast(T.actToast);
   go('prev');
 }
 
 function render() {
-  document.getElementById('topBtn').textContent = isPremium() ? '⭐ Actif' : '⭐ Premium';
+  var T = t();
+  document.getElementById('lngBtn').textContent = T.lngBtn;
+  document.getElementById('topBtn').textContent = isPremium() ? T.premOn : T.premBtn;
+  document.getElementById('tabFormL').textContent = T.tabForm;
+  document.getElementById('tabPrevL').textContent = T.tabPrev;
+  document.getElementById('tabPremL').textContent = T.tabPrem;
   if (view === 'form') app.innerHTML = renderForm();
   else if (view === 'prev') app.innerHTML = renderPrev();
   else app.innerHTML = renderPremium();
