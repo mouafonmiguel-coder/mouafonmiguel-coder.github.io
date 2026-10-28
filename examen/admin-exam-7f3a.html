@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Codes Examen</title>
+<style>body{font-family:Arial;background:#0d2b66;color:#fff;max-width:420px;margin:0 auto;padding:20px}
+input,button{width:100%;padding:13px;border-radius:10px;border:0;font-size:1rem;margin:6px 0}
+button{background:#d99a06;font-weight:900;cursor:pointer}
+.code{font-size:2.6rem;font-weight:900;text-align:center;color:#ffd54f;letter-spacing:6px;margin:14px 0}</style></head>
+<body>
+<h2>🎓 Générateur de codes — RÉUSSIR SON EXAMEN</h2>
+<div id="gate"><input id="pw" type="password" placeholder="Mot de passe"><button onclick="if(document.getElementById('pw').value==='admin123'){document.getElementById('gate').style.display='none';document.getElementById('tool').style.display='block'}else alert('Non')">Entrer</button></div>
+<div id="tool" style="display:none">
+<p>Numéro du client (9 chiffres) :</p>
+<input id="ph" inputmode="tel" placeholder="6XXXXXXXX">
+<p>Année :</p>
+<input id="yr" inputmode="numeric">
+<button onclick="gen()">🔑 Générer le code</button>
+<div class="code" id="out">——————</div>
+<p style="font-size:.85rem;opacity:.8">Le code marche pour CE numéro et CETTE année seulement.</p>
+</div>
+<script>
+document.getElementById('yr').value=new Date().getFullYear();
+var SECRET='EXAM-MIGUEL-2026-9c4b7e1a5d3f8b26';
+async function gen(){
+  var ph=document.getElementById('ph').value.replace(/\D/g,'');
+  var yr=document.getElementById('yr').value.trim();
+  if(ph.length<9){alert('Numéro incomplet');return}
+  var enc=new TextEncoder();
+  var key=await crypto.subtle.importKey('raw',enc.encode(SECRET),{name:'HMAC',hash:'SHA-256'},false,['sign']);
+  var sig=await crypto.subtle.sign('HMAC',key,enc.encode(ph+':'+yr));
+  var hex=Array.from(new Uint8Array(sig)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
+  document.getElementById('out').textContent=String(parseInt(hex.slice(0,12),16)%1000000).padStart(6,'0');
+}
+</script></body></html>
