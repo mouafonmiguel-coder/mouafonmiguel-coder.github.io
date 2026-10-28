@@ -37,6 +37,8 @@
   .step .n { background: #0b5e55; color: #fff; min-width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; }
   .step p { font-size: .9rem; line-height: 1.5; }
   .rowbtn { display: flex; gap: 8px; } .rowbtn button, .rowbtn a { flex: 1; } a { text-decoration: none; }
+  .updbar { background: #1a7f37; color: #fff; padding: 10px 14px; text-align: center; font-weight: 800; font-size: .85rem; line-height: 1.5; }
+  .updbar a, .updbar button { background: #fff; color: #1a7f37; border: 0; border-radius: 8px; padding: 6px 14px; font-weight: 900; font-size: .85rem; margin-left: 8px; cursor: pointer; text-decoration: none; display: inline-block; }
   .toast { position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%); background: #15302b; color: #fff; padding: 11px 18px; border-radius: 999px; font-size: .88rem; font-weight: 700; z-index: 99; }
   .tplpick { display: flex; gap: 8px; margin-top: 8px; }
   .tplpick div { flex: 1; border: 3px solid #cfe5e0; border-radius: 10px; padding: 10px 4px; text-align: center; font-size: .75rem; font-weight: 800; cursor: pointer; }
@@ -142,6 +144,7 @@ var TR = {
     cvComp: 'COMPÉTENCES', cvLang: 'LANGUES', cvInt: 'CENTRES D\u2019INTÉRÊT',
     tplT: '🎨 Choisis ton modèle',
     customT: '🌈 Ou choisis N\u2019IMPORTE quelle couleur :', customPick: 'Toutes les couleurs →',
+    updMsg: '🔔 Nouvelle version de CV RAPIDE disponible !', updWeb: 'METTRE À JOUR', updApk: 'TÉLÉCHARGER',
     dlBtn: '📄 TÉLÉCHARGER EN PDF',
     dlHint: 'Dans la fenêtre qui s\u2019ouvre, choisis <b>« Enregistrer au format PDF »</b> — puis envoie ton CV sur WhatsApp ou par email !',
     editBtn: '✏️ Modifier mon CV',
@@ -214,6 +217,7 @@ var TR = {
     cvComp: 'SKILLS', cvLang: 'LANGUAGES', cvInt: 'INTERESTS',
     tplT: '🎨 Pick your template',
     customT: '🌈 Or pick ANY colour you like:', customPick: 'All colours →',
+    updMsg: '🔔 New version of CV RAPIDE available!', updWeb: 'UPDATE NOW', updApk: 'DOWNLOAD',
     dlBtn: '📄 DOWNLOAD AS PDF',
     dlHint: 'In the window that opens, choose <b>“Save as PDF”</b> — then send your CV on WhatsApp or by email!',
     editBtn: '✏️ Edit my CV',
@@ -578,6 +582,32 @@ function render() {
   document.getElementById('tabForm').className = view === 'form' ? 'on' : '';
   document.getElementById('tabPrev').className = (view === 'prev' || view === 'pay') ? 'on' : '';
 }
+// ---------- VERIFICATEUR DE MISE A JOUR (LIEN + APK) ----------
+var APP_VERSION = 13;
+var VERSION_URL = 'https://mouafonmiguel-coder.github.io/cv/version.json';
+var APK_URL = 'https://mouafonmiguel-coder.github.io/cv-apk/CVRapide.apk';
+var IS_APK = !!window.Capacitor;
+function showUpdate() {
+  if (document.getElementById('updBar')) return;
+  var T = t();
+  var d = document.createElement('div');
+  d.id = 'updBar'; d.className = 'updbar noprint';
+  d.innerHTML = T.updMsg + (IS_APK
+    ? ' <a href="' + APK_URL + '">📲 ' + T.updApk + '</a>'
+    : ' <button onclick="location.reload()">🔄 ' + T.updWeb + '</button>');
+  document.body.insertBefore(d, document.body.firstChild);
+}
+function checkUpdate() {
+  try {
+    fetch(VERSION_URL + '?v=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { if (j && j.version > APP_VERSION) showUpdate(); })
+      .catch(function () {});
+  } catch (e) {}
+}
+checkUpdate();
+setInterval(checkUpdate, 3600000);
+
 render();
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () { navigator.serviceWorker.register('./sw.js').catch(function () {}); });
