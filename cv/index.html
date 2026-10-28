@@ -154,7 +154,7 @@ var TR = {
     delConfirm: 'Supprimer définitivement ce CV ?', delToast: '🗑 CV supprimé',
     payT: '📄 Télécharger en PDF — 1 000 F pour TOUTE l\u2019année',
     payList: '✔ Télécharge TOUS tes CV en PDF, autant de fois que tu veux<br>✔ Valable toute l\u2019année, sur tous tes CV<br>✔ Les 4 modèles de couleurs inclus',
-    payOnline: '💳 PAYER EN LIGNE (MTN MoMo / Orange Money)',
+    payOnline: '💳 PAYER',
     payOnlineHint: 'Paiement sécurisé par Fapshi — tu reçois l\u2019ID de la transaction par SMS.',
     step1b: 'Ou envoie directement <b>1 000 F</b> par Mobile Money à <b>MIGUEL MOUAFON</b> :<br>🟠 Orange Money : <b>692 168 264</b><br>🟡 MTN MoMo : <b>653 596 305</b>',
     dial1: '🟠 Composer #150#', dial2: '🟡 Composer *126#',
@@ -227,7 +227,7 @@ var TR = {
     delConfirm: 'Delete this CV permanently?', delToast: '🗑 CV deleted',
     payT: '📄 Download as PDF — 1,000 F for the WHOLE year',
     payList: '✔ Download ALL your CVs as PDF, as many times as you want<br>✔ Valid all year, on all your CVs<br>✔ All 4 colour templates included',
-    payOnline: '💳 PAY ONLINE (MTN MoMo / Orange Money)',
+    payOnline: '💳 PAY',
     payOnlineHint: 'Secure payment by Fapshi — you receive the transaction ID by SMS.',
     step1b: 'Or send <b>1,000 F</b> directly by Mobile Money to <b>MIGUEL MOUAFON</b>:<br>🟠 Orange Money: <b>692 168 264</b><br>🟡 MTN MoMo: <b>653 596 305</b>',
     dial1: '🟠 Dial #150#', dial2: '🟡 Dial *126#',
@@ -583,7 +583,7 @@ function render() {
   document.getElementById('tabPrev').className = (view === 'prev' || view === 'pay') ? 'on' : '';
 }
 // ---------- VERIFICATEUR DE MISE A JOUR (LIEN + APK) ----------
-var APP_VERSION = 14;
+var APP_VERSION = 15;
 var VERSION_URL = 'https://mouafonmiguel-coder.github.io/cv/version.json';
 var APK_URL = 'https://mouafonmiguel-coder.github.io/cv-apk/CVRapide.apk';
 var IS_APK = !!window.Capacitor;
