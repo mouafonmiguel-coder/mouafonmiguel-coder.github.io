@@ -41,6 +41,12 @@
   .tplpick { display: flex; gap: 8px; margin-top: 8px; }
   .tplpick div { flex: 1; border: 3px solid #cfe5e0; border-radius: 10px; padding: 10px 4px; text-align: center; font-size: .75rem; font-weight: 800; cursor: pointer; }
   .tplpick div.on { border-color: #0b5e55; background: #e7f3f1; }
+  .bub { max-width: 85%; padding: 10px 13px; border-radius: 14px; margin-top: 8px; font-size: .92rem; line-height: 1.45; word-wrap: break-word; }
+  .bub.me { background: #0b5e55; color: #fff; margin-left: auto; border-bottom-right-radius: 4px; }
+  .bub.ai { background: #fff; color: #15302b; margin-right: auto; border: 2px solid #cfe5e0; border-bottom-left-radius: 4px; }
+  .chatin { display: flex; gap: 8px; position: sticky; bottom: 62px; }
+  .chatin input { background: #fff; margin-top: 0; }
+  .chatin button { background: #0b5e55; color: #fff; border: 0; border-radius: 12px; padding: 0 20px; font-size: 1.2rem; font-weight: 900; cursor: pointer; }
   .cvrow { display: flex; align-items: center; gap: 10px; border: 2px solid #cfe5e0; border-radius: 12px; padding: 12px; margin-top: 10px; }
   .cvrow .inf { flex: 1; cursor: pointer; }
   .cvrow .nm { font-weight: 900; color: #0b5e55; }
@@ -84,6 +90,7 @@
   <button id="tabList" onclick="go('list')"><span class="tic">📂</span><span id="tabListL">Mes CV</span></button>
   <button id="tabForm" onclick="go('form')"><span class="tic">✏️</span><span id="tabFormL">Remplir</span></button>
   <button id="tabPrev" onclick="go('prev')"><span class="tic">👁️</span><span id="tabPrevL">Mon CV</span></button>
+  <button id="tabChat" onclick="go('chat')"><span class="tic">🤖</span><span id="tabChatL">IA</span></button>
 </div>
 <script>
 // Lien de paiement Fapshi « CV RAPIDE — 1000 F » (colle le lien ici quand il est cree)
@@ -108,6 +115,8 @@ var TR = {
     homePrice: '<b>Créer et voir ton CV : GRATUIT.</b><br>Télécharger en PDF : <b>1 000 F seulement pour TOUTE l\u2019année</b> — tous tes CV, téléchargements illimités. Moins cher qu\u2019un seul CV au cyber-café !',
     homeCta: '🚀 CRÉER MON CV MAINTENANT',
     homeFoot: 'Une question ? WhatsApp : <b>692 168 264</b>',
+    tabChat: 'IA', chatT: '🤖 Cause avec l\u2019IA', chatPh: 'Écris ton message ici...',
+    chatHello: '👋 Bonjour ! Je suis l\u2019IA de CV RAPIDE. Dis-moi par exemple :<br>• « change la couleur en rouge »<br>• « écris mon profil »<br>• « je m\u2019appelle Marie NGONO »<br>• « c\u2019est combien ? »',
     heroT: 'Ton CV professionnel,<br><b>prêt en 5 minutes !</b>',
     heroP: 'Remplis les cases, choisis ton modèle, et télécharge ton CV en PDF — directement sur ton téléphone.',
     infoT: '👤 Mes informations',
@@ -180,6 +189,8 @@ var TR = {
     homePrice: '<b>Creating and viewing your CV: FREE.</b><br>Downloading as PDF: <b>only 1,000 F for the WHOLE year</b> — all your CVs, unlimited downloads. Cheaper than a single CV at the cyber café!',
     homeCta: '🚀 CREATE MY CV NOW',
     homeFoot: 'Any question? WhatsApp: <b>692 168 264</b>',
+    tabChat: 'AI', chatT: '🤖 Chat with the AI', chatPh: 'Type your message here...',
+    chatHello: '👋 Hello! I am the CV RAPIDE AI. Tell me for example:<br>• “change the colour to red”<br>• “write my profile”<br>• “my name is Marie NGONO”<br>• “how much is it?”',
     heroT: 'Your professional CV,<br><b>ready in 5 minutes!</b>',
     heroP: 'Fill in the boxes, pick your template, and download your CV as a PDF — right on your phone.',
     infoT: '👤 My information',
@@ -382,7 +393,7 @@ function aiTasks(poste) {
     : 'Carrying out the duties of the position seriously, respecting schedules and instructions, good contact with customers and the team.';
 }
 function aiProfil() {
-  grab();
+  grabSafe();
   var c = CV();
   var p = (c.poste || '').trim();
   var exps = c.exp.filter(function (x) { return x.poste; });
@@ -402,6 +413,95 @@ function aiProfil() {
 function wantPdf() {
   if (isPaid()) { window.print(); return; }
   go('pay');
+}
+
+// ---------- CHAT AVEC L'IA ----------
+var CHAT = [];
+function botReply(q) {
+  var fr = S.lang === 'fr';
+  var n = aiNorm(q);
+  var m;
+  // nom
+  m = q.match(/m[' \u2019]appelle\s+(.{2,40})/i) || q.match(/my name is\s+(.{2,40})/i);
+  if (m) { CV().nom = m[1].trim(); save();
+    return fr ? '✅ Enchanté <b>' + esc(CV().nom) + '</b> ! J\u2019ai mis ton nom sur le CV. Tu veux autre chose ? (couleur, profil...)' 
+              : '✅ Nice to meet you <b>' + esc(CV().nom) + '</b>! I put your name on the CV. Anything else? (colour, profile...)'; }
+  // telephone
+  var digits = q.replace(/\D/g, '');
+  if (/(numero|tél|tel |telephone|phone|number|whatsapp)/.test(n) && digits.length >= 9) {
+    CV().tel = digits; save();
+    return fr ? '✅ Numéro <b>' + digits + '</b> ajouté sur ton CV !' : '✅ Number <b>' + digits + '</b> added to your CV!'; }
+  // ville
+  m = q.match(/j[' \u2019]habite (?:a |à )?(.{2,40})/i) || q.match(/i live in\s+(.{2,40})/i);
+  if (m) { CV().ville = m[1].trim(); save();
+    return fr ? '✅ Ville <b>' + esc(CV().ville) + '</b> ajoutée sur ton CV !' : '✅ City <b>' + esc(CV().ville) + '</b> added to your CV!'; }
+  // poste recherche
+  m = q.match(/poste de\s+(.{2,40})/i) || q.match(/travail de\s+(.{2,40})/i) || q.match(/job as an?\s+(.{2,40})/i);
+  if (m) { CV().poste = m[1].trim(); save();
+    return fr ? '✅ Poste recherché : <b>' + esc(CV().poste) + '</b> — c\u2019est noté sur ton CV !' : '✅ Job wanted: <b>' + esc(CV().poste) + '</b> — added to your CV!'; }
+  // profil
+  if (/(profil|profile)/.test(n)) {
+    aiProfil();
+    return fr ? '✍️ Voilà, j\u2019ai écrit ton profil :<br><i>« ' + esc(CV().profil) + ' »</i><br>Tu peux le modifier dans ✏️ Remplir.' 
+              : '✍️ Done, I wrote your profile:<br><i>“' + esc(CV().profil) + '”</i><br>You can edit it in ✏️ Fill in.'; }
+  // couleurs
+  var col = null, colName = '';
+  if (/(rouge|bordeau|red|burgundy)/.test(n)) { col = 'bordeaux'; colName = fr ? '🔴 ROUGE (bordeaux)' : '🔴 RED (burgundy)'; }
+  else if (/(bleu|blue)/.test(n)) { col = 'bleu'; colName = fr ? '🔵 BLEU' : '🔵 BLUE'; }
+  else if (/(vert|green)/.test(n)) { col = 'vert'; colName = fr ? '🟢 VERT' : '🟢 GREEN'; }
+  else if (/(noir|black)/.test(n)) { col = 'noir'; colName = fr ? '⚫ NOIR' : '⚫ BLACK'; }
+  if (col) { CV().tpl = col; save();
+    return fr ? '🎨 C\u2019est fait ! Ton CV est maintenant en <b>' + colName + '</b>. Va voir dans 👁️ Mon CV !' 
+              : '🎨 Done! Your CV is now <b>' + colName + '</b>. Check it in 👁️ My CV!'; }
+  if (/(couleur|colour|color)/.test(n)) {
+    return fr ? '🎨 Quelle couleur veux-tu ? Dis-moi : <b>bleu</b>, <b>vert</b>, <b>rouge</b> ou <b>noir</b>.' 
+              : '🎨 Which colour do you want? Tell me: <b>blue</b>, <b>green</b>, <b>red</b> or <b>black</b>.'; }
+  // pdf / telechargement
+  if (/(pdf|telecharg|download|imprim|print)/.test(n)) {
+    return fr ? '📄 Pour télécharger : va dans 👁️ <b>Mon CV</b> et appuie sur le bouton vert « TÉLÉCHARGER EN PDF ». (1 000 F pour toute l\u2019année, CV illimités.)' 
+              : '📄 To download: go to 👁️ <b>My CV</b> and press the green “DOWNLOAD AS PDF” button. (1,000 F for the whole year, unlimited CVs.)'; }
+  // prix
+  if (/(combien|prix|cout|coute|cher|price|how much|pay)/.test(n)) {
+    return fr ? '💰 Créer et voir ton CV : <b>GRATUIT</b>. Télécharger en PDF : <b>1 000 F pour TOUTE l\u2019année</b> (tous tes CV, illimité). Paiement : Orange 692 168 264 · MTN 653 596 305.' 
+              : '💰 Creating and viewing your CV: <b>FREE</b>. Downloading as PDF: <b>1,000 F for the WHOLE year</b> (all your CVs, unlimited). Payment: Orange 692 168 264 · MTN 653 596 305.'; }
+  // langue
+  if (/(anglais|english)/.test(n) && S.lang === 'fr') { S.lang = 'en'; save(); return '🌐 Done! The app is now in English. Tell me what you need!'; }
+  if (/(francais|french|français)/.test(n) && S.lang === 'en') { S.lang = 'fr'; save(); return '🌐 Voilà ! L\u2019application est en français. Dis-moi ce qu\u2019il te faut !'; }
+  // salutations
+  if (/(bonjour|bonsoir|salut|hello|hi |good morning|good evening|good day)/.test(n) || n.trim() === 'hi') {
+    return fr ? 'Bonjour ! 😊 Je suis là pour t\u2019aider à faire ton CV. Tu peux me dire : « change la couleur en vert », « écris mon profil », « je m\u2019appelle ... » ou « c\u2019est combien ? »' 
+              : 'Hello! 😊 I\u2019m here to help you build your CV. You can tell me: “change the colour to green”, “write my profile”, “my name is ...” or “how much is it?”'; }
+  if (/(ca va|cava|comment vas|how are you)/.test(n)) {
+    return fr ? 'Je vais très bien, merci ! 😄 Et toi ? Dis-moi comment je peux t\u2019aider pour ton CV.' : 'I\u2019m doing great, thanks! 😄 And you? Tell me how I can help with your CV.'; }
+  if (/(merci|thank)/.test(n)) {
+    return fr ? 'Avec plaisir ! 🙏 Bonne chance pour tes candidatures ! 💼' : 'You\u2019re welcome! 🙏 Good luck with your applications! 💼'; }
+  if (/(au revoir|bye|a plus|a bientot)/.test(n)) {
+    return fr ? 'À bientôt ! 👋 Reviens quand tu veux modifier ton CV.' : 'See you soon! 👋 Come back any time to update your CV.'; }
+  // par defaut
+  return fr ? 'Hmm, je n\u2019ai pas bien compris 🙈 Essaie :<br>• « change la couleur en bleu / vert / rouge / noir »<br>• « écris mon profil »<br>• « je m\u2019appelle ... »<br>• « je cherche un poste de ... »<br>• « c\u2019est combien ? »' 
+            : 'Hmm, I didn\u2019t quite get that 🙈 Try:<br>• “change the colour to blue / green / red / black”<br>• “write my profile”<br>• “my name is ...”<br>• “I\u2019m looking for a job as a ...”<br>• “how much is it?”';
+}
+function chatSend() {
+  var el = document.getElementById('chatIn');
+  var q = (el ? el.value : '').trim();
+  if (!q) return;
+  CHAT.push({ me: true, txt: esc(q) });
+  CHAT.push({ me: false, txt: botReply(q) });
+  render();
+  var el2 = document.getElementById('chatIn');
+  if (el2) el2.focus();
+  window.scrollTo(0, 999999);
+}
+function renderChat() {
+  var T = t();
+  if (!CHAT.length) CHAT.push({ me: false, txt: T.chatHello });
+  var h = '<div class="card"><h3>' + T.chatT + '</h3><div style="display:flex;flex-direction:column">';
+  CHAT.forEach(function (msg) {
+    h += '<div class="bub ' + (msg.me ? 'me' : 'ai') + '">' + msg.txt + '</div>';
+  });
+  h += '</div></div>';
+  h += '<div class="chatin"><input id="chatIn" placeholder="' + T.chatPh + '" onkeydown="if(event.key===\'Enter\')chatSend()"><button onclick="chatSend()">➤</button></div>';
+  return h;
 }
 
 function renderHome() {
@@ -573,14 +673,17 @@ function render() {
   document.getElementById('tabListL').textContent = T.tabList;
   document.getElementById('tabFormL').textContent = T.tabForm;
   document.getElementById('tabPrevL').textContent = T.tabPrev;
+  document.getElementById('tabChatL').textContent = T.tabChat;
   if (view === 'home') app.innerHTML = renderHome();
   else if (view === 'list') app.innerHTML = renderList();
   else if (view === 'form') app.innerHTML = renderForm();
   else if (view === 'prev') app.innerHTML = renderPrev();
+  else if (view === 'chat') app.innerHTML = renderChat();
   else app.innerHTML = renderPay();
   document.getElementById('tabList').className = view === 'list' ? 'on' : '';
   document.getElementById('tabForm').className = view === 'form' ? 'on' : '';
   document.getElementById('tabPrev').className = (view === 'prev' || view === 'pay') ? 'on' : '';
+  document.getElementById('tabChat').className = view === 'chat' ? 'on' : '';
 }
 render();
 if ('serviceWorker' in navigator) {
