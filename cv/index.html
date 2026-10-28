@@ -112,7 +112,7 @@ var TR = {
     homeF4: '📂 <b>Plusieurs CV</b> — un par métier, modifiables à tout moment',
     homeF5: '📸 <b>Ta photo</b> — mise en rond automatiquement, comme un pro',
     homePriceT: '💰 C\u2019est combien ?',
-    homePrice: '<b>Créer et voir ton CV : GRATUIT.</b><br>Télécharger en PDF : <b>1 000 F seulement pour TOUTE l\u2019année</b> — tous tes CV, téléchargements illimités.',
+    homePrice: '<b>Créer et voir ton CV : GRATUIT.</b><br>Télécharger en PDF : <b>1 000 F seulement pour 1 AN (365 jours)</b> — tous tes CV, téléchargements illimités.',
     homeCta: '🚀 CRÉER MON CV MAINTENANT',
     homeFoot: 'Une question ? WhatsApp : <b>692 168 264</b>',
     heroT: 'Ton CV professionnel,<br><b>prêt en 5 minutes !</b>',
@@ -145,6 +145,8 @@ var TR = {
     tplT: '🎨 Choisis ton modèle',
     customT: '🌈 Ou choisis N\u2019IMPORTE quelle couleur :', customPick: 'Toutes les couleurs →',
     updMsg: '🔔 Nouvelle version de CV RAPIDE disponible !', updWeb: 'METTRE À JOUR', updApk: 'TÉLÉCHARGER',
+    expSoon: function (d) { return '⏳ Attention : ton accès téléchargement se termine dans <b>' + d + ' jour' + (d > 1 ? 's' : '') + '</b> ! Renouvelle (1 000 F = 1 an) pour continuer à télécharger tes CV.'; },
+    expEnd: '🔒 Ton accès téléchargement de 1 an est terminé. Renouvelle (1 000 F = 1 an) pour télécharger à nouveau tes CV.',
     dlBtn: '📄 TÉLÉCHARGER EN PDF',
     dlHint: 'Dans la fenêtre qui s\u2019ouvre, choisis <b>« Enregistrer au format PDF »</b> — puis envoie ton CV sur WhatsApp ou par email !',
     editBtn: '✏️ Modifier mon CV',
@@ -152,8 +154,8 @@ var TR = {
     listHint: 'Tu peux créer plusieurs CV (un par métier, un en français, un en anglais...). Appuie sur un CV pour l\u2019ouvrir, ou sur 🗑 pour le supprimer.',
     noName: 'CV sans nom', newCv: '➕ Créer un nouveau CV',
     delConfirm: 'Supprimer définitivement ce CV ?', delToast: '🗑 CV supprimé',
-    payT: '📄 Télécharger en PDF — 1 000 F pour TOUTE l\u2019année',
-    payList: '✔ Télécharge TOUS tes CV en PDF, autant de fois que tu veux<br>✔ Valable toute l\u2019année, sur tous tes CV<br>✔ Les 4 modèles de couleurs inclus',
+    payT: '📄 Télécharger en PDF — 1 000 F pour 1 AN (365 jours)',
+    payList: '✔ Télécharge TOUS tes CV en PDF, autant de fois que tu veux<br>✔ Valable 1 AN (365 jours) à partir du paiement<br>✔ Toutes les couleurs incluses',
     payOnline: '💳 PAYER',
     payOnlineHint: 'Paiement sécurisé par Fapshi — tu reçois l\u2019ID de la transaction par SMS.',
     step1b: 'Ou envoie directement <b>1 000 F</b> par Mobile Money à <b>MIGUEL MOUAFON</b> :<br>🟠 Orange Money : <b>692 168 264</b><br>🟡 MTN MoMo : <b>653 596 305</b>',
@@ -166,8 +168,8 @@ var TR = {
     help: 'Un souci ? Écris sur WhatsApp : <b>692 168 264</b>',
     errPhone: 'Entre ton numéro complet (9 chiffres).',
     errTxn: 'Cet ID de transaction est trop court. Recopie exactement l\u2019ID du SMS de confirmation.',
-    actToast: '✅ Téléchargement débloqué pour toute l\u2019année !',
-    dlPay: 'Le téléchargement PDF coûte <b>1 000 F pour toute l\u2019année</b> (CV illimités). Appuie sur le bouton vert pour payer et télécharger.',
+    actToast: '✅ Téléchargement débloqué pour 1 AN !',
+    dlPay: 'Le téléchargement PDF coûte <b>1 000 F pour 1 AN</b> (CV illimités). Appuie sur le bouton vert pour payer et télécharger.',
     step1: 'Envoie <b>1 000 F</b> par Mobile Money à <b>MIGUEL MOUAFON</b> :<br>🟠 Orange Money : <b>692 168 264</b><br>🟡 MTN MoMo : <b>653 596 305</b>'
   },
   en: {
@@ -185,7 +187,7 @@ var TR = {
     homeF4: '📂 <b>Several CVs</b> — one per job, editable any time',
     homeF5: '📸 <b>Your photo</b> — automatically framed in a circle, like a pro',
     homePriceT: '💰 How much is it?',
-    homePrice: '<b>Creating and viewing your CV: FREE.</b><br>Downloading as PDF: <b>only 1,000 F for the WHOLE year</b> — all your CVs, unlimited downloads.',
+    homePrice: '<b>Creating and viewing your CV: FREE.</b><br>Downloading as PDF: <b>only 1,000 F for 1 YEAR (365 days)</b> — all your CVs, unlimited downloads.',
     homeCta: '🚀 CREATE MY CV NOW',
     homeFoot: 'Any question? WhatsApp: <b>692 168 264</b>',
     heroT: 'Your professional CV,<br><b>ready in 5 minutes!</b>',
@@ -218,6 +220,8 @@ var TR = {
     tplT: '🎨 Pick your template',
     customT: '🌈 Or pick ANY colour you like:', customPick: 'All colours →',
     updMsg: '🔔 New version of CV RAPIDE available!', updWeb: 'UPDATE NOW', updApk: 'DOWNLOAD',
+    expSoon: function (d) { return '⏳ Warning: your download access ends in <b>' + d + ' day' + (d > 1 ? 's' : '') + '</b>! Renew (1,000 F = 1 year) to keep downloading your CVs.'; },
+    expEnd: '🔒 Your 1-year download access has ended. Renew (1,000 F = 1 year) to download your CVs again.',
     dlBtn: '📄 DOWNLOAD AS PDF',
     dlHint: 'In the window that opens, choose <b>“Save as PDF”</b> — then send your CV on WhatsApp or by email!',
     editBtn: '✏️ Edit my CV',
@@ -225,8 +229,8 @@ var TR = {
     listHint: 'You can create several CVs (one per job, one in English, one in French...). Tap a CV to open it, or 🗑 to delete it.',
     noName: 'Untitled CV', newCv: '➕ Create a new CV',
     delConfirm: 'Delete this CV permanently?', delToast: '🗑 CV deleted',
-    payT: '📄 Download as PDF — 1,000 F for the WHOLE year',
-    payList: '✔ Download ALL your CVs as PDF, as many times as you want<br>✔ Valid all year, on all your CVs<br>✔ All 4 colour templates included',
+    payT: '📄 Download as PDF — 1,000 F for 1 YEAR (365 days)',
+    payList: '✔ Download ALL your CVs as PDF, as many times as you want<br>✔ Valid for 1 YEAR (365 days) from payment<br>✔ All colours included',
     payOnline: '💳 PAY',
     payOnlineHint: 'Secure payment by Fapshi — you receive the transaction ID by SMS.',
     step1b: 'Or send <b>1,000 F</b> directly by Mobile Money to <b>MIGUEL MOUAFON</b>:<br>🟠 Orange Money: <b>692 168 264</b><br>🟡 MTN MoMo: <b>653 596 305</b>',
@@ -239,8 +243,8 @@ var TR = {
     help: 'Any problem? Write on WhatsApp: <b>692 168 264</b>',
     errPhone: 'Enter your full number (9 digits).',
     errTxn: 'This transaction ID is too short. Copy the exact ID from the confirmation SMS.',
-    actToast: '✅ Downloading unlocked for the whole year!',
-    dlPay: 'PDF download costs <b>1,000 F for the whole year</b> (unlimited CVs). Press the green button to pay and download.',
+    actToast: '✅ Downloading unlocked for 1 YEAR!',
+    dlPay: 'PDF download costs <b>1,000 F for 1 YEAR</b> (unlimited CVs). Press the green button to pay and download.',
     step1: 'Send <b>1,000 F</b> by Mobile Money to <b>MIGUEL MOUAFON</b>:<br>🟠 Orange Money: <b>692 168 264</b><br>🟡 MTN MoMo: <b>653 596 305</b>'
   }
 };
@@ -249,7 +253,7 @@ function blankCv() {
   return { nom: '', poste: '', tel: '', email: '', ville: '', photo: '', profil: '', comp: '', langues: '', interets: '', color: '',
     exp: [{ poste: '', lieu: '', periode: '', desc: '' }], edu: [{ dip: '', ecole: '', annee: '' }], tpl: 'bleu' };
 }
-var S = { lang: 'fr', phone: '', paidYear: 0, cur: 0, cvs: [blankCv()] };
+var S = { lang: 'fr', phone: '', paidYear: 0, paidUntil: 0, wasPaid: false, cur: 0, cvs: [blankCv()] };
 try {
   var sv = localStorage.getItem('cv_state_v1');
   if (sv) {
@@ -267,12 +271,16 @@ try {
   }
 } catch (e) {}
 if (S.lang !== 'fr' && S.lang !== 'en') S.lang = 'fr';
+// migration : ancien systeme "annee calendrier" -> 365 jours a partir de maintenant
+if (!S.paidUntil && S.paidYear === new Date().getFullYear()) { S.paidUntil = Date.now() + 365 * 86400000; S.wasPaid = true; save(); }
+if (S.paidUntil) S.wasPaid = true;
 if (!S.cvs || !S.cvs.length) { S.cvs = [blankCv()]; S.cur = 0; }
 if (S.cur >= S.cvs.length) S.cur = 0;
 function CV() { return S.cvs[S.cur]; }
 function t() { return TR[S.lang]; }
 function save() { try { localStorage.setItem('cv_state_v1', JSON.stringify(S)); } catch (e) {} }
-function isPaid() { return S.paidYear === new Date().getFullYear(); }
+function isPaid() { return !!S.paidUntil && Date.now() < S.paidUntil; }
+function daysLeft() { return Math.ceil((S.paidUntil - Date.now()) / 86400000); }
 function toggleLang() { grabSafe(); S.lang = (S.lang === 'fr' ? 'en' : 'fr'); save(); render(); }
 
 // Registre central de MIGUEL : chaque deblocage y est note automatiquement
@@ -559,8 +567,7 @@ function activate() {
   var errEl = document.getElementById('pErr'); errEl.textContent = '';
   if (ph.length < 9) { errEl.textContent = T.errPhone; return; }
   if (txn.replace(/[^A-Za-z0-9]/g, '').length < 8) { errEl.textContent = T.errTxn; return; }
-  var y = new Date().getFullYear();
-  S.phone = ph; S.paidYear = y; save();
+  S.phone = ph; S.paidUntil = Date.now() + 365 * 86400000; S.wasPaid = true; save();
   regSend('📄 CV PDF 1000F/an | tel: ' + ph + ' | ID transaction: ' + txn);
   toast(T.actToast);
   view = 'prev'; window.scrollTo(0, 0); render();
@@ -573,17 +580,20 @@ function render() {
   document.getElementById('tabListL').textContent = T.tabList;
   document.getElementById('tabFormL').textContent = T.tabForm;
   document.getElementById('tabPrevL').textContent = T.tabPrev;
-  if (view === 'home') app.innerHTML = renderHome();
-  else if (view === 'list') app.innerHTML = renderList();
-  else if (view === 'form') app.innerHTML = renderForm();
-  else if (view === 'prev') app.innerHTML = renderPrev();
-  else app.innerHTML = renderPay();
+  var warn = '';
+  if (isPaid() && daysLeft() <= 3) warn = '<div class="card noprint" style="background:#fff7e6;border:2px solid #d99a06"><p style="font-weight:800;color:#8a5a00;font-size:.9rem;line-height:1.5">' + T.expSoon(daysLeft()) + '</p></div>';
+  else if (!isPaid() && S.wasPaid) warn = '<div class="card noprint" style="background:#fdecea;border:2px solid #b42318"><p style="font-weight:800;color:#b42318;font-size:.9rem;line-height:1.5">' + T.expEnd + '</p></div>';
+  if (view === 'home') app.innerHTML = warn + renderHome();
+  else if (view === 'list') app.innerHTML = warn + renderList();
+  else if (view === 'form') app.innerHTML = warn + renderForm();
+  else if (view === 'prev') app.innerHTML = warn + renderPrev();
+  else app.innerHTML = warn + renderPay();
   document.getElementById('tabList').className = view === 'list' ? 'on' : '';
   document.getElementById('tabForm').className = view === 'form' ? 'on' : '';
   document.getElementById('tabPrev').className = (view === 'prev' || view === 'pay') ? 'on' : '';
 }
 // ---------- VERIFICATEUR DE MISE A JOUR (LIEN + APK) ----------
-var APP_VERSION = 15;
+var APP_VERSION = 16;
 var VERSION_URL = 'https://mouafonmiguel-coder.github.io/cv/version.json';
 var APK_URL = 'https://mouafonmiguel-coder.github.io/cv-apk/CVRapide.apk';
 var IS_APK = !!window.Capacitor;
