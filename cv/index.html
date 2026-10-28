@@ -263,9 +263,9 @@ function renderPremium() {
       '<button class="big" onclick="go(\'prev\')">👁️ Voir mon CV</button></div>';
     return h;
   }
-  h += '<div class="card"><h3>⭐ Premium — 500 F pour TOUTE l\u2019année</h3>' +
+  h += '<div class="card"><h3>⭐ Premium — 1 000 F pour TOUTE l\u2019année</h3>' +
     '<p class="hint" style="margin-bottom:10px">✔ Filigrane supprimé (CV 100 % propre)<br>✔ Modèles VERT, BORDEAUX et NOIR débloqués<br>✔ Modifie et retélécharge ton CV autant de fois que tu veux, toute l\u2019année.</p>' +
-    '<div class="step"><div class="n">1</div><p>Envoie <b>500 F</b> par Mobile Money à <b>MIGUEL MOUAFON</b> :<br>🟠 Orange Money : <b>692 168 264</b><br>🟡 MTN MoMo : <b>653 596 305</b></p></div>' +
+    '<div class="step"><div class="n">1</div><p>Envoie <b>1 000 F</b> par Mobile Money à <b>MIGUEL MOUAFON</b> :<br>🟠 Orange Money : <b>692 168 264</b><br>🟡 MTN MoMo : <b>653 596 305</b></p></div>' +
     '<div class="rowbtn"><a href="tel:%23150%23"><button class="big gold">🟠 Composer #150#</button></a><a href="tel:*126%23"><button class="big gold">🟡 Composer *126#</button></a></div>' +
     '<div class="step" style="margin-top:14px"><div class="n">2</div><p>Après le paiement, tu reçois un <b>SMS de confirmation</b> avec l\u2019<b>ID de la transaction</b> (ex. : PP250118.1234.A12345 ou MP240118...).</p></div>' +
     '<div class="step" style="margin-top:14px"><div class="n">3</div><p>Entre ton numéro et cet ID ici → le Premium s\u2019active <b>immédiatement</b> :</p></div>' +
@@ -285,7 +285,7 @@ function activate() {
   if (txn.replace(/[^A-Za-z0-9]/g, '').length < 8) { errEl.textContent = 'Cet ID de transaction est trop court. Recopie exactement l\u2019ID du SMS de confirmation.'; return; }
   var y = new Date().getFullYear();
   S.phone = ph; S.premiumYear = y; save();
-  regSend('📄 CV PREMIUM 500F | tel: ' + ph + ' | ID transaction: ' + txn);
+  regSend('📄 CV PREMIUM 1000F | tel: ' + ph + ' | ID transaction: ' + txn);
   toast('⭐ Premium activé ! Ton CV est maintenant 100 % propre.');
   go('prev');
 }
