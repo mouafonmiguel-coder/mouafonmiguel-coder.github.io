@@ -76,7 +76,7 @@
 </head>
 <body>
 <div class="top noprint">
-  <div class="brand">📄 CV <span>RAPIDE</span></div>
+  <div class="brand" onclick="go('home')" style="cursor:pointer">📄 CV <span>RAPIDE</span></div>
   <button class="lng" id="lngBtn" onclick="toggleLang()">🌐 EN</button>
 </div>
 <div class="wrap" id="app"></div>
@@ -92,6 +92,22 @@ var FAPSHI_LINK = '';
 var TR = {
   fr: {
     tabList: 'Mes CV', tabForm: 'Remplir', tabPrev: 'Mon CV', lngBtn: '🌐 EN',
+    homeT: 'Ton CV professionnel<br><b>en 2 minutes, sur ton téléphone !</b>',
+    homeP: 'CV RAPIDE fabrique ton CV à ta place : toi tu remplis des petites cases, l\u2019application fait tout le reste.',
+    homeHow: '✅ Comment ça marche ?',
+    homeS1: '<b>Tu remplis des cases simples</b> : ton nom, ton métier, ta photo, tes anciens postes (ex. : Caissière, Chauffeur...).',
+    homeS2: '<b>L\u2019IA écrit pour toi</b> : elle rédige ton profil et les tâches de chaque poste — tu n\u2019écris presque rien !',
+    homeS3: '<b>Tu télécharges ton CV en PDF</b> : un beau CV professionnel, prêt à envoyer sur WhatsApp ou par email.',
+    homeFeatT: '🎁 Ce que tu as dans l\u2019application',
+    homeF1: '🤖 <b>IA intégrée</b> — elle écrit ton profil et tes tâches automatiquement',
+    homeF2: '🎨 <b>4 modèles de couleurs</b> — bleu, vert, bordeaux, noir',
+    homeF3: '🌐 <b>Français + Anglais</b> — ton CV dans les 2 langues si tu veux',
+    homeF4: '📂 <b>Plusieurs CV</b> — un par métier, modifiables à tout moment',
+    homeF5: '📸 <b>Ta photo</b> — mise en rond automatiquement, comme un pro',
+    homePriceT: '💰 C\u2019est combien ?',
+    homePrice: '<b>Créer et voir ton CV : GRATUIT.</b><br>Télécharger en PDF : <b>1 000 F seulement pour TOUTE l\u2019année</b> — tous tes CV, téléchargements illimités. Moins cher qu\u2019un seul CV au cyber-café !',
+    homeCta: '🚀 CRÉER MON CV MAINTENANT',
+    homeFoot: 'Une question ? WhatsApp : <b>692 168 264</b>',
     heroT: 'Ton CV professionnel,<br><b>prêt en 5 minutes !</b>',
     heroP: 'Remplis les cases, choisis ton modèle, et télécharge ton CV en PDF — directement sur ton téléphone.',
     infoT: '👤 Mes informations',
@@ -148,6 +164,22 @@ var TR = {
   },
   en: {
     tabList: 'My CVs', tabForm: 'Fill in', tabPrev: 'My CV', lngBtn: '🌐 FR',
+    homeT: 'Your professional CV<br><b>in 2 minutes, on your phone!</b>',
+    homeP: 'CV RAPIDE builds your CV for you: you fill in small boxes, the app does all the rest.',
+    homeHow: '✅ How does it work?',
+    homeS1: '<b>You fill in simple boxes</b>: your name, your job, your photo, your past positions (e.g.: Cashier, Driver...).',
+    homeS2: '<b>The AI writes for you</b>: it writes your profile and the tasks of each job — you barely write anything!',
+    homeS3: '<b>You download your CV as a PDF</b>: a beautiful professional CV, ready to send on WhatsApp or by email.',
+    homeFeatT: '🎁 What you get in the app',
+    homeF1: '🤖 <b>Built-in AI</b> — it writes your profile and tasks automatically',
+    homeF2: '🎨 <b>4 colour templates</b> — blue, green, burgundy, black',
+    homeF3: '🌐 <b>French + English</b> — your CV in both languages if you want',
+    homeF4: '📂 <b>Several CVs</b> — one per job, editable any time',
+    homeF5: '📸 <b>Your photo</b> — automatically framed in a circle, like a pro',
+    homePriceT: '💰 How much is it?',
+    homePrice: '<b>Creating and viewing your CV: FREE.</b><br>Downloading as PDF: <b>only 1,000 F for the WHOLE year</b> — all your CVs, unlimited downloads. Cheaper than a single CV at the cyber café!',
+    homeCta: '🚀 CREATE MY CV NOW',
+    homeFoot: 'Any question? WhatsApp: <b>692 168 264</b>',
     heroT: 'Your professional CV,<br><b>ready in 5 minutes!</b>',
     heroP: 'Fill in the boxes, pick your template, and download your CV as a PDF — right on your phone.',
     infoT: '👤 My information',
@@ -253,7 +285,7 @@ function toast(m) {
 function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
 function nl(s) { return esc(s).replace(/\n/g, '<br>'); }
 
-var view = 'form';
+var view = 'home';
 function go(v) { grabSafe(); view = v; window.scrollTo(0, 0); render(); }
 
 function F(id) { var el = document.getElementById(id); return el ? el.value : ''; }
@@ -370,6 +402,22 @@ function aiProfil() {
 function wantPdf() {
   if (isPaid()) { window.print(); return; }
   go('pay');
+}
+
+function renderHome() {
+  var T = t();
+  var h = '<div class="hero"><h1>' + T.homeT + '</h1><p>' + T.homeP + '</p>' +
+    '<button class="big gold" style="margin-top:14px" onclick="go(\'form\')">' + T.homeCta + '</button></div>';
+  h += '<div class="card"><h3>' + T.homeHow + '</h3>' +
+    '<div class="step"><div class="n">1</div><p>' + T.homeS1 + '</p></div>' +
+    '<div class="step"><div class="n">2</div><p>' + T.homeS2 + '</p></div>' +
+    '<div class="step"><div class="n">3</div><p>' + T.homeS3 + '</p></div></div>';
+  h += '<div class="card"><h3>' + T.homeFeatT + '</h3>' +
+    '<p class="hint" style="font-size:.9rem;line-height:2">' + [T.homeF1, T.homeF2, T.homeF3, T.homeF4, T.homeF5].join('<br>') + '</p></div>';
+  h += '<div class="card"><h3>' + T.homePriceT + '</h3><p class="hint" style="font-size:.9rem">' + T.homePrice + '</p></div>';
+  h += '<button class="big" onclick="go(\'form\')">' + T.homeCta + '</button>' +
+    '<p class="hint" style="text-align:center;margin-top:10px">' + T.homeFoot + '</p>';
+  return h;
 }
 
 function renderList() {
@@ -525,7 +573,8 @@ function render() {
   document.getElementById('tabListL').textContent = T.tabList;
   document.getElementById('tabFormL').textContent = T.tabForm;
   document.getElementById('tabPrevL').textContent = T.tabPrev;
-  if (view === 'list') app.innerHTML = renderList();
+  if (view === 'home') app.innerHTML = renderHome();
+  else if (view === 'list') app.innerHTML = renderList();
   else if (view === 'form') app.innerHTML = renderForm();
   else if (view === 'prev') app.innerHTML = renderPrev();
   else app.innerHTML = renderPay();
