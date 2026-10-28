@@ -63,6 +63,11 @@
   .cvitem .t2 { font-size: .8rem; color: var(--ac); font-weight: 700; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .chips span { background: #f0f0f0; border-left: 4px solid var(--ac); padding: 4px 10px; border-radius: 4px; font-size: .8rem; font-weight: 700; }
+  .dots { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+  .dots span { width: 34px; height: 34px; border-radius: 50%; cursor: pointer; border: 3px solid #fff; box-shadow: 0 0 0 2px #cfe5e0; }
+  .dots span.on { box-shadow: 0 0 0 3px #0b5e55; }
+  .pickrow { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+  .pickrow input[type=color] { width: 54px; height: 44px; padding: 2px; border: 2px solid #cfe5e0; border-radius: 10px; margin-top: 0; cursor: pointer; }
   .cv-bleu { --ac: #1b4e89; } .cv-vert { --ac: #0b5e55; } .cv-bordeaux { --ac: #7a1f3d; } .cv-noir { --ac: #222222; }
 
   @media print {
@@ -136,6 +141,7 @@ var TR = {
     cvName: 'TON NOM ICI', cvProfil: 'PROFIL', cvExp: 'EXPÉRIENCE PROFESSIONNELLE', cvEdu: 'FORMATION',
     cvComp: 'COMPÉTENCES', cvLang: 'LANGUES', cvInt: 'CENTRES D\u2019INTÉRÊT',
     tplT: '🎨 Choisis ton modèle',
+    customT: '🌈 Ou choisis N\u2019IMPORTE quelle couleur :', customPick: 'Toutes les couleurs →',
     dlBtn: '📄 TÉLÉCHARGER EN PDF',
     dlHint: 'Dans la fenêtre qui s\u2019ouvre, choisis <b>« Enregistrer au format PDF »</b> — puis envoie ton CV sur WhatsApp ou par email !',
     editBtn: '✏️ Modifier mon CV',
@@ -207,6 +213,7 @@ var TR = {
     cvName: 'YOUR NAME HERE', cvProfil: 'PROFILE', cvExp: 'WORK EXPERIENCE', cvEdu: 'EDUCATION',
     cvComp: 'SKILLS', cvLang: 'LANGUAGES', cvInt: 'INTERESTS',
     tplT: '🎨 Pick your template',
+    customT: '🌈 Or pick ANY colour you like:', customPick: 'All colours →',
     dlBtn: '📄 DOWNLOAD AS PDF',
     dlHint: 'In the window that opens, choose <b>“Save as PDF”</b> — then send your CV on WhatsApp or by email!',
     editBtn: '✏️ Edit my CV',
@@ -235,7 +242,7 @@ var TR = {
 };
 
 function blankCv() {
-  return { nom: '', poste: '', tel: '', email: '', ville: '', photo: '', profil: '', comp: '', langues: '', interets: '',
+  return { nom: '', poste: '', tel: '', email: '', ville: '', photo: '', profil: '', comp: '', langues: '', interets: '', color: '',
     exp: [{ poste: '', lieu: '', periode: '', desc: '' }], edu: [{ dip: '', ecole: '', annee: '' }], tpl: 'bleu' };
 }
 var S = { lang: 'fr', phone: '', paidYear: 0, cur: 0, cvs: [blankCv()] };
@@ -336,6 +343,10 @@ function photoPick(ev) {
 }
 
 function setTpl(tp) { grabSafe(); CV().tpl = tp; save(); render(); }
+var TPL_COLORS = { bleu: '#1b4e89', vert: '#0b5e55', bordeaux: '#7a1f3d', noir: '#222222' };
+var PALETTE = ['#e11d48', '#ea580c', '#d99a06', '#65a30d', '#0d9488', '#0284c7', '#4f46e5', '#9333ea', '#db2777', '#795548', '#607d8b', '#111111'];
+function cvColor(c) { return c.tpl === 'custom' ? (c.color || '#1b4e89') : (TPL_COLORS[c.tpl] || '#1b4e89'); }
+function setCustom(v) { grabSafe(); var c = CV(); c.tpl = 'custom'; c.color = v; save(); render(); }
 
 // ---------- IA INTEGREE (hors-ligne) ----------
 var AI_JOBS = [
@@ -457,7 +468,7 @@ function renderForm() {
 
 function cvHTML() {
   var T = t(); var c = CV();
-  var h = '<div class="cvpage cv-' + c.tpl + '"><div class="cvin">';
+  var h = '<div class="cvpage" style="--ac:' + cvColor(c) + '"><div class="cvin">';
   h += '<div class="cvhead">';
   if (c.photo) h += '<img class="ph" src="' + c.photo + '">';
   h += '<div><h1>' + (esc(c.nom) || T.cvName) + '</h1>' +
@@ -500,7 +511,13 @@ function renderPrev() {
     '<div class="' + (c.tpl === 'vert' ? 'on' : '') + '" style="color:#0b5e55" onclick="setTpl(\'vert\')">🟢 ' + (S.lang === 'fr' ? 'VERT' : 'GREEN') + '</div>' +
     '<div class="' + (c.tpl === 'bordeaux' ? 'on' : '') + '" style="color:#7a1f3d" onclick="setTpl(\'bordeaux\')">🔴 ' + (S.lang === 'fr' ? 'BORDEAUX' : 'BURGUNDY') + '</div>' +
     '<div class="' + (c.tpl === 'noir' ? 'on' : '') + '" style="color:#222" onclick="setTpl(\'noir\')">⚫ ' + (S.lang === 'fr' ? 'NOIR' : 'BLACK') + '</div>' +
-    '</div></div>';
+    '</div>' +
+    '<p style="font-size:.85rem;font-weight:800;color:#0b5e55;margin-top:14px">' + T.customT + '</p>' +
+    '<div class="dots">' + PALETTE.map(function (col) {
+      return '<span class="' + (c.tpl === 'custom' && c.color === col ? 'on' : '') + '" style="background:' + col + '" onclick="setCustom(\'' + col + '\')"></span>';
+    }).join('') + '</div>' +
+    '<div class="pickrow"><input type="color" value="' + (c.tpl === 'custom' && c.color ? c.color : '#1b4e89') + '" onchange="setCustom(this.value)"><span class="hint">' + T.customPick + '</span></div>' +
+    '</div>';
   h += '</div>';
   h += cvHTML();
   h += '<div class="noprint">' +
