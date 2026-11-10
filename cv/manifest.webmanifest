@@ -1,6 +1,6 @@
 {
-  "name": "CV RAPIDE",
-  "short_name": "CV RAPIDE",
+  "name": "SmartCV",
+  "short_name": "SmartCV",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#0b5e55",
