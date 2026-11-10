@@ -112,7 +112,7 @@ var TR = {
     homeF4: '📂 <b>Plusieurs CV</b> — un par métier, modifiables à tout moment',
     homeF5: '📸 <b>Ta photo</b> — mise en rond automatiquement, comme un pro',
     homePriceT: '💰 C\u2019est combien ?',
-    homePrice: '<b>Créer et voir ton CV : GRATUIT.</b><br>Télécharger en PDF : <b>1 000 F seulement pour 1 AN (365 jours)</b> — tous tes CV, téléchargements illimités.',
+    homePrice: '<b>Créer et voir ton CV : GRATUIT.</b><br>Télécharger en PDF : <b>GRATUIT pendant 30 jours</b>, ensuite <b>1 000 F seulement pour 1 AN (365 jours)</b> — tous tes CV, téléchargements illimités.',
     homeCta: '🚀 CRÉER MON CV MAINTENANT',
     homeFoot: 'Une question ? WhatsApp : <b>692 168 264</b>',
     heroT: 'Ton CV professionnel,<br><b>prêt en 5 minutes !</b>',
@@ -170,6 +170,7 @@ var TR = {
     errTxn: 'Cet ID de transaction est trop court. Recopie exactement l\u2019ID du SMS de confirmation.',
     actToast: '✅ Téléchargement débloqué pour 1 AN !',
     dlPay: 'Le téléchargement PDF coûte <b>1 000 F pour 1 AN</b> (CV illimités). Appuie sur le bouton vert pour payer et télécharger.',
+    dlTrial: function (n) { return '🎁 <b>GRATUIT pendant ton essai : encore ' + n + ' jour(s).</b> Ensuite : 1 000 F pour 1 AN.'; },
     step1: 'Envoie <b>1 000 F</b> par Mobile Money à <b>MIGUEL MOUAFON</b> :<br>🟠 Orange Money : <b>692 168 264</b><br>🟡 MTN MoMo : <b>653 596 305</b>'
   },
   en: {
@@ -187,7 +188,7 @@ var TR = {
     homeF4: '📂 <b>Several CVs</b> — one per job, editable any time',
     homeF5: '📸 <b>Your photo</b> — automatically framed in a circle, like a pro',
     homePriceT: '💰 How much is it?',
-    homePrice: '<b>Creating and viewing your CV: FREE.</b><br>Downloading as PDF: <b>only 1,000 F for 1 YEAR (365 days)</b> — all your CVs, unlimited downloads.',
+    homePrice: '<b>Creating and viewing your CV: FREE.</b><br>Downloading as PDF: <b>FREE for 30 days</b>, then <b>only 1,000 F for 1 YEAR (365 days)</b> — all your CVs, unlimited downloads.',
     homeCta: '🚀 CREATE MY CV NOW',
     homeFoot: 'Any question? WhatsApp: <b>692 168 264</b>',
     heroT: 'Your professional CV,<br><b>ready in 5 minutes!</b>',
@@ -245,6 +246,7 @@ var TR = {
     errTxn: 'This transaction ID is too short. Copy the exact ID from the confirmation SMS.',
     actToast: '✅ Downloading unlocked for 1 YEAR!',
     dlPay: 'PDF download costs <b>1,000 F for 1 YEAR</b> (unlimited CVs). Press the green button to pay and download.',
+    dlTrial: function (n) { return '🎁 <b>FREE during your trial: ' + n + ' day(s) left.</b> Then: 1,000 F for 1 YEAR.'; },
     step1: 'Send <b>1,000 F</b> by Mobile Money to <b>MIGUEL MOUAFON</b>:<br>🟠 Orange Money: <b>692 168 264</b><br>🟡 MTN MoMo: <b>653 596 305</b>'
   }
 };
@@ -253,7 +255,7 @@ function blankCv() {
   return { nom: '', poste: '', tel: '', email: '', ville: '', photo: '', profil: '', comp: '', langues: '', interets: '', color: '',
     exp: [{ poste: '', lieu: '', periode: '', desc: '' }], edu: [{ dip: '', ecole: '', annee: '' }], tpl: 'bleu' };
 }
-var S = { lang: 'fr', phone: '', paidYear: 0, paidUntil: 0, wasPaid: false, cur: 0, cvs: [blankCv()] };
+var S = { lang: 'fr', phone: '', paidYear: 0, paidUntil: 0, wasPaid: false, trialStart: 0, cur: 0, cvs: [blankCv()] };
 try {
   var sv = localStorage.getItem('cv_state_v1');
   if (sv) {
@@ -276,11 +278,14 @@ if (!S.paidUntil && S.paidYear === new Date().getFullYear()) { S.paidUntil = Dat
 if (S.paidUntil) S.wasPaid = true;
 if (!S.cvs || !S.cvs.length) { S.cvs = [blankCv()]; S.cur = 0; }
 if (S.cur >= S.cvs.length) S.cur = 0;
+if (!S.trialStart) { S.trialStart = Date.now(); save(); }
 function CV() { return S.cvs[S.cur]; }
 function t() { return TR[S.lang]; }
 function save() { try { localStorage.setItem('cv_state_v1', JSON.stringify(S)); } catch (e) {} }
 function isPaid() { return !!S.paidUntil && Date.now() < S.paidUntil; }
 function daysLeft() { return Math.ceil((S.paidUntil - Date.now()) / 86400000); }
+function inTrial() { return !isPaid() && !!S.trialStart && Date.now() < S.trialStart + 30 * 86400000; }
+function trialDays() { return Math.ceil((S.trialStart + 30 * 86400000 - Date.now()) / 86400000); }
 function toggleLang() { grabSafe(); S.lang = (S.lang === 'fr' ? 'en' : 'fr'); save(); render(); }
 
 // Registre central de MIGUEL : chaque deblocage y est note automatiquement
@@ -403,7 +408,7 @@ function aiTasks(poste) {
     : 'Carrying out the duties of the position seriously, respecting schedules and instructions, good contact with customers and the team.';
 }
 function wantPdf() {
-  if (isPaid()) { window.print(); return; }
+  if (isPaid() || inTrial()) { window.print(); return; }
   go('pay');
 }
 
@@ -534,7 +539,7 @@ function renderPrev() {
   h += cvHTML();
   h += '<div class="noprint">' +
     '<button class="big green" onclick="wantPdf()">' + T.dlBtn + '</button>' +
-    '<p class="hint" style="text-align:center;margin-top:6px">' + (isPaid() ? T.dlHint : T.dlPay) + '</p>' +
+    '<p class="hint" style="text-align:center;margin-top:6px">' + (isPaid() ? T.dlHint : (inTrial() ? T.dlTrial(trialDays()) : T.dlPay)) + '</p>' +
     '<button class="big ghost" onclick="go(\'form\')">' + T.editBtn + '</button>' +
     '</div>';
   return h;
@@ -593,7 +598,7 @@ function render() {
   document.getElementById('tabPrev').className = (view === 'prev' || view === 'pay') ? 'on' : '';
 }
 // ---------- VERIFICATEUR DE MISE A JOUR (LIEN + APK) ----------
-var APP_VERSION = 17;
+var APP_VERSION = 18;
 var VERSION_URL = 'https://mouafonmiguel-coder.github.io/cv/version.json';
 var APK_URL = 'https://mouafonmiguel-coder.github.io/cv-apk/CVRapide.apk';
 var IS_APK = !!window.Capacitor;
