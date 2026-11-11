@@ -207,7 +207,7 @@ var TR = {
     dial1: 'Composer #150#', dial2: 'Composer *126#',
     step2: 'Après le paiement, tu reçois un <b>SMS de confirmation</b> avec l\u2019<b>ID de la transaction</b> (ex. : PP250118.1234.A12345).',
     step3: 'Entre ton numéro et cet ID ici → le téléchargement se débloque <b>immédiatement</b> :',
-    phPhone: 'Ton numéro (ex. 6XXXXXXXX)', phTxn: 'ID de la transaction (dans le SMS reçu)',
+    phPhone: 'Numéro Orange Money ou MTN MoMo qui a payé (ex. 6XXXXXXXX)', phTxn: 'ID de la transaction (dans le SMS de confirmation)',
     actBtn: 'Débloquer le téléchargement',
     warn: 'L\u2019ID doit être exact : chaque déblocage est vérifié par MIGUEL avec les reçus. Une fausse déclaration = accès annulé.',
     help: 'Un souci ? Écris sur WhatsApp : <b>692 168 264</b>',
@@ -294,7 +294,7 @@ var TR = {
     dial1: 'Dial #150#', dial2: 'Dial *126#',
     step2: 'After payment, you receive a <b>confirmation SMS</b> with the <b>transaction ID</b> (e.g.: PP250118.1234.A12345).',
     step3: 'Enter your number and that ID here → downloading unlocks <b>immediately</b>:',
-    phPhone: 'Your number (e.g. 6XXXXXXXX)', phTxn: 'Transaction ID (from the SMS you received)',
+    phPhone: 'Orange Money or MTN MoMo number that paid (e.g. 6XXXXXXXX)', phTxn: 'Transaction ID (from the confirmation SMS)',
     actBtn: 'Unlock downloading',
     warn: 'The ID must be exact: every unlock is checked by MIGUEL against the receipts. A false declaration = access cancelled.',
     help: 'Any problem? Write on WhatsApp: <b>692 168 264</b>',
@@ -702,7 +702,7 @@ function render() {
   document.getElementById('tabPrev').className = (view === 'prev' || view === 'pay') ? 'on' : '';
 }
 // ---------- VERIFICATEUR DE MISE A JOUR (LIEN + APK) ----------
-var APP_VERSION = 25;
+var APP_VERSION = 26;
 var VERSION_URL = 'https://mouafonmiguel-coder.github.io/cv/version.json';
 var APK_URL = 'https://mouafonmiguel-coder.github.io/cv-apk/CVRapide.apk';
 var IS_APK = !!window.Capacitor;
