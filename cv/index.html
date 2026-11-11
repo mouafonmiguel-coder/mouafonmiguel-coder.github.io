@@ -543,7 +543,7 @@ function renderPrev() {
   h += cvHTML();
   h += '<div class="noprint">' +
     '<button class="big green" onclick="wantPdf()">' + T.dlBtn + '</button>' +
-    '<p class="hint" style="text-align:center;margin-top:6px">' + (isPaid() ? T.dlHint : (inTrial() ? T.dlTrial(trialDays()) : T.dlPay)) + '</p>' +
+    '<p class="hint" style="text-align:center;margin-top:6px">' + (isPaid() || inTrial() ? T.dlHint : T.dlPay) + '</p>' +
     '<button class="big ghost" onclick="go(\'form\')">' + T.editBtn + '</button>' +
     '</div>';
   return h;
@@ -604,7 +604,7 @@ function render() {
   document.getElementById('tabPrev').className = (view === 'prev' || view === 'pay') ? 'on' : '';
 }
 // ---------- VERIFICATEUR DE MISE A JOUR (LIEN + APK) ----------
-var APP_VERSION = 21;
+var APP_VERSION = 22;
 var VERSION_URL = 'https://mouafonmiguel-coder.github.io/cv/version.json';
 var APK_URL = 'https://mouafonmiguel-coder.github.io/cv-apk/CVRapide.apk';
 var IS_APK = !!window.Capacitor;
