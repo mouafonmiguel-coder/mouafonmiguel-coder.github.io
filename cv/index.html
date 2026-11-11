@@ -79,6 +79,17 @@
     .cvpage { box-shadow: none; max-width: none; }
     @page { size: A4; margin: 0; }
   }
+
+  /* ---------- MODALS (remplace confirm / alert natifs) ---------- */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; }
+  .modal-box { background: #fff; border-radius: 18px; max-width: 360px; width: 100%; padding: 22px 20px; box-shadow: 0 10px 30px rgba(0,0,0,.35); text-align: center; animation: popIn .15s ease-out; }
+  .modal-box h4 { font-size: 1.15rem; color: #0b5e55; margin-bottom: 6px; }
+  .modal-box .btns { display: flex; gap: 10px; margin-top: 6px; }
+  .modal-box .btns button { flex: 1; border: 0; border-radius: 12px; padding: 12px; font-weight: 800; font-size: .92rem; cursor: pointer; }
+  .modal-box .btn-cancel { background: #eef2f1; color: #444; }
+  .modal-box .btn-danger { background: #b42318; color: #fff; }
+  .modal-box .btn-confirm { background: #0b5e55; color: #fff; }
+  @keyframes popIn { from { transform: scale(.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 </style>
 </head>
 <body>
@@ -92,6 +103,28 @@
   <button id="tabList" onclick="go('list')"><span id="tabListL">Mes CV</span></button>
   <button id="tabForm" onclick="go('form')"><span id="tabFormL">Remplir</span></button>
   <button id="tabPrev" onclick="go('prev')"><span id="tabPrevL">Mon CV</span></button>
+</div>
+<div id="delModal" class="modal-overlay noprint" onclick="if(event.target===this)cancelDel()">
+  <div class="modal-box">
+    <div style="font-size:2.2rem;margin-bottom:8px">🗑️</div>
+    <h4 id="delModalTitle">Supprimer ce CV ?</h4>
+    <p id="delModalText" style="text-align:center;font-size:.9rem;color:#555;margin:10px 0 18px">Cette action est définitive et supprimera ce CV de ta liste.</p>
+    <div class="btns">
+      <button class="btn-cancel" onclick="cancelDel()" id="delModalCancel">Annuler</button>
+      <button class="btn-danger" onclick="confirmDel()" id="delModalConfirm">Supprimer</button>
+    </div>
+  </div>
+</div>
+<div id="pdfModal" class="modal-overlay noprint" onclick="if(event.target===this)cancelPdf()">
+  <div class="modal-box">
+    <div style="font-size:2.2rem;margin-bottom:8px">📄</div>
+    <h4 id="pdfModalTitle">Téléchargement en PDF</h4>
+    <div id="pdfModalText" style="text-align:left;font-size:.88rem;color:#333;line-height:1.55;background:#f3faf8;border:1px solid #cfe5e0;border-radius:12px;padding:12px;margin:10px 0 16px"></div>
+    <div class="btns">
+      <button class="btn-cancel" onclick="cancelPdf()" id="pdfModalCancel">Annuler</button>
+      <button class="btn-confirm" onclick="confirmPdf()" id="pdfModalConfirm">TÉLÉCHARGER</button>
+    </div>
+  </div>
 </div>
 <script>
 // Lien de paiement Fapshi « SmartCV — 1000 F » (colle le lien ici quand il est cree)
@@ -158,6 +191,14 @@ var TR = {
     listHint: 'Tu peux créer plusieurs CV (un par métier, un en français, un en anglais...). Appuie sur un CV pour l\u2019ouvrir, ou sur × pour le supprimer.',
     noName: 'CV sans nom', newCv: '+ Créer un nouveau CV',
     delConfirm: 'Supprimer définitivement ce CV ?', delToast: '× CV supprimé',
+    delModalTitle: 'Supprimer ce CV ?',
+    delModalText: 'Cette action est définitive et supprimera ce CV de ta liste.',
+    delModalCancel: 'Annuler',
+    delModalConfirm: 'Supprimer',
+    pdfModalTitle: 'Télécharger mon CV en PDF',
+    pdfModalText: 'Dans la fenêtre qui va s\u2019ouvrir :<br><br><b>1.</b> En haut, choisis <b>« Enregistrer au format PDF »</b><br><b>2.</b> Format de papier : <b>A4</b><br><b>3.</b> Valide : ton CV ira dans tes <b>Téléchargements</b>.',
+    pdfModalCancel: 'Annuler',
+    pdfModalConfirm: 'TÉLÉCHARGER',
     payT: 'Télécharger en PDF — 1 000 F pour 1 AN (365 jours)',
     payList: '• Télécharge TOUS tes CV en PDF, autant de fois que tu veux<br>• Valable 1 AN (365 jours) à partir du paiement<br>• Toutes les couleurs incluses',
     payOnline: 'PAYER',
@@ -237,6 +278,14 @@ var TR = {
     listHint: 'You can create several CVs (one per job, one in English, one in French...). Tap a CV to open it, or × to delete it.',
     noName: 'Untitled CV', newCv: '+ Create a new CV',
     delConfirm: 'Delete this CV permanently?', delToast: '× CV deleted',
+    delModalTitle: 'Delete this CV?',
+    delModalText: 'This action is permanent and will remove this CV from your list.',
+    delModalCancel: 'Cancel',
+    delModalConfirm: 'Delete',
+    pdfModalTitle: 'Download my CV as PDF',
+    pdfModalText: 'In the window that opens:<br><br><b>1.</b> At the top, choose <b>“Save as PDF”</b><br><b>2.</b> Paper size: <b>A4</b><br><b>3.</b> Confirm: your CV will go to your <b>Downloads</b>.',
+    pdfModalCancel: 'Cancel',
+    pdfModalConfirm: 'DOWNLOAD',
     payT: 'Download as PDF — 1,000 F for 1 YEAR (365 days)',
     payList: '• Download ALL your CVs as PDF, as many times as you want<br>• Valid for 1 YEAR (365 days) from payment<br>• All colours included',
     payOnline: 'PAY',
@@ -340,13 +389,38 @@ function rmEdu(i) { grab(); var c = CV(); c.edu.splice(i, 1); if (!c.edu.length)
 // ---------- MES CV (liste + corbeille) ----------
 function newCv() { grabSafe(); S.cvs.push(blankCv()); S.cur = S.cvs.length - 1; save(); view = 'form'; window.scrollTo(0, 0); render(); }
 function openCv(i) { S.cur = i; save(); view = 'form'; window.scrollTo(0, 0); render(); }
-function delCv(i) {
-  if (!confirm(t().delConfirm)) return;
+var pendingDelIdx = null;
+function askDelCv(i) {
+  pendingDelIdx = i;
+  var T = t();
+  var tEl = document.getElementById('delModalTitle');
+  var mEl = document.getElementById('delModalText');
+  var cEl = document.getElementById('delModalCancel');
+  var kEl = document.getElementById('delModalConfirm');
+  if (tEl) tEl.textContent = T.delModalTitle;
+  if (mEl) mEl.textContent = T.delModalText;
+  if (cEl) cEl.textContent = T.delModalCancel;
+  if (kEl) kEl.textContent = T.delModalConfirm;
+  var modal = document.getElementById('delModal');
+  if (modal) modal.style.display = 'flex';
+}
+function cancelDel() {
+  pendingDelIdx = null;
+  var modal = document.getElementById('delModal');
+  if (modal) modal.style.display = 'none';
+}
+function confirmDel() {
+  if (pendingDelIdx === null) return;
+  var i = pendingDelIdx;
+  pendingDelIdx = null;
+  var modal = document.getElementById('delModal');
+  if (modal) modal.style.display = 'none';
   S.cvs.splice(i, 1);
   if (!S.cvs.length) S.cvs.push(blankCv());
   if (S.cur >= S.cvs.length) S.cur = S.cvs.length - 1;
   save(); toast(t().delToast); render();
 }
+function delCv(i) { askDelCv(i); }
 
 function photoPick(ev) {
   var f = ev.target.files[0]; if (!f) return;
@@ -415,8 +489,30 @@ function aiTasks(poste) {
     : 'Carrying out the duties of the position seriously, respecting schedules and instructions, good contact with customers and the team.';
 }
 function wantPdf() {
-  if (isPaid() || inTrial()) { alert(t().pdfTip); setTimeout(function () { window.print(); }, 150); return; }
+  if (isPaid() || inTrial()) {
+    var T = t();
+    var tEl = document.getElementById('pdfModalTitle');
+    var mEl = document.getElementById('pdfModalText');
+    var cEl = document.getElementById('pdfModalCancel');
+    var kEl = document.getElementById('pdfModalConfirm');
+    if (tEl) tEl.textContent = T.pdfModalTitle;
+    if (mEl) mEl.innerHTML = T.pdfModalText;
+    if (cEl) cEl.textContent = T.pdfModalCancel;
+    if (kEl) kEl.textContent = T.pdfModalConfirm;
+    var modal = document.getElementById('pdfModal');
+    if (modal) modal.style.display = 'flex';
+    return;
+  }
   go('pay');
+}
+function cancelPdf() {
+  var modal = document.getElementById('pdfModal');
+  if (modal) modal.style.display = 'none';
+}
+function confirmPdf() {
+  var modal = document.getElementById('pdfModal');
+  if (modal) modal.style.display = 'none';
+  setTimeout(function () { window.print(); }, 200);
 }
 
 function renderHome() {
@@ -442,7 +538,7 @@ function renderList() {
     h += '<div class="cvrow' + '">' +
       '<div class="inf" onclick="openCv(' + i + ')"><div class="nm">' + (i === S.cur ? '→ ' : '') + esc(name) + '</div>' +
       (c.poste ? '<div class="jb">' + esc(c.poste) + '</div>' : '') + '</div>' +
-      '<button class="del" onclick="delCv(' + i + ')">×</button></div>';
+      '<button class="del" onclick="askDelCv(' + i + ')">×</button></div>';
   });
   h += '<button class="big ghost" onclick="newCv()">' + T.newCv + '</button></div>';
   return h;
@@ -606,7 +702,7 @@ function render() {
   document.getElementById('tabPrev').className = (view === 'prev' || view === 'pay') ? 'on' : '';
 }
 // ---------- VERIFICATEUR DE MISE A JOUR (LIEN + APK) ----------
-var APP_VERSION = 23;
+var APP_VERSION = 24;
 var VERSION_URL = 'https://mouafonmiguel-coder.github.io/cv/version.json';
 var APK_URL = 'https://mouafonmiguel-coder.github.io/cv-apk/CVRapide.apk';
 var IS_APK = !!window.Capacitor;
