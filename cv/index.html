@@ -152,6 +152,7 @@ var TR = {
     expEnd: 'Ton accès téléchargement de 1 an est terminé. Renouvelle (1 000 F = 1 an) pour télécharger à nouveau tes CV.',
     dlBtn: 'TÉLÉCHARGER EN PDF',
     dlHint: 'Dans la fenêtre qui s\u2019ouvre, choisis <b>« Enregistrer au format PDF »</b> — puis envoie ton CV sur WhatsApp ou par email !',
+    pdfTip: 'Dans la fenêtre qui va s\u2019ouvrir :\n\n1. En haut, choisis « Enregistrer au format PDF »\n2. Valide\n\nTon CV ira dans Téléchargements.',
     editBtn: 'Modifier mon CV',
     listT: 'Mes CV',
     listHint: 'Tu peux créer plusieurs CV (un par métier, un en français, un en anglais...). Appuie sur un CV pour l\u2019ouvrir, ou sur × pour le supprimer.',
@@ -230,6 +231,7 @@ var TR = {
     expEnd: 'Your 1-year download access has ended. Renew (1,000 F = 1 year) to download your CVs again.',
     dlBtn: 'DOWNLOAD AS PDF',
     dlHint: 'In the window that opens, choose <b>“Save as PDF”</b> — then send your CV on WhatsApp or by email!',
+    pdfTip: 'In the window that opens:\n\n1. At the top, choose "Save as PDF"\n2. Confirm\n\nYour CV will go to Downloads.',
     editBtn: 'Edit my CV',
     listT: 'My CVs',
     listHint: 'You can create several CVs (one per job, one in English, one in French...). Tap a CV to open it, or × to delete it.',
@@ -413,7 +415,7 @@ function aiTasks(poste) {
     : 'Carrying out the duties of the position seriously, respecting schedules and instructions, good contact with customers and the team.';
 }
 function wantPdf() {
-  if (isPaid() || inTrial()) { window.print(); return; }
+  if (isPaid() || inTrial()) { alert(t().pdfTip); setTimeout(function () { window.print(); }, 150); return; }
   go('pay');
 }
 
@@ -543,7 +545,7 @@ function renderPrev() {
   h += cvHTML();
   h += '<div class="noprint">' +
     '<button class="big green" onclick="wantPdf()">' + T.dlBtn + '</button>' +
-    '<p class="hint" style="text-align:center;margin-top:6px">' + (isPaid() || inTrial() ? T.dlHint : T.dlPay) + '</p>' +
+    (isPaid() || inTrial() ? '' : '<p class="hint" style="text-align:center;margin-top:6px">' + T.dlPay + '</p>') +
     '<button class="big ghost" onclick="go(\'form\')">' + T.editBtn + '</button>' +
     '</div>';
   return h;
@@ -604,7 +606,7 @@ function render() {
   document.getElementById('tabPrev').className = (view === 'prev' || view === 'pay') ? 'on' : '';
 }
 // ---------- VERIFICATEUR DE MISE A JOUR (LIEN + APK) ----------
-var APP_VERSION = 22;
+var APP_VERSION = 23;
 var VERSION_URL = 'https://mouafonmiguel-coder.github.io/cv/version.json';
 var APK_URL = 'https://mouafonmiguel-coder.github.io/cv-apk/CVRapide.apk';
 var IS_APK = !!window.Capacitor;
