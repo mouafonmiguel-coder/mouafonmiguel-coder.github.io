@@ -133,7 +133,7 @@ var FAPSHI_LINK = 'https://buy.fapshi.com/xgm1f6';
 var TR = {
   fr: {
     tabHome: 'Guide', tabList: 'Mes CV', tabForm: 'Remplir', tabPrev: 'Mon CV', lngBtn: 'EN',
-    homeT: 'Ton CV professionnel<br><b>en 2 minutes, sur ton téléphone !</b>',
+    homeT: 'Ton CV professionnel<br><b>sur ton téléphone !</b>',
     homeP: 'SmartCV fabrique ton CV à ta place : toi tu remplis des petites cases, l\u2019application fait tout le reste.',
     homeHow: 'Comment ça marche ?',
     homeS1: '<b>Tu remplis des cases simples</b> : ton nom, ton métier, ta photo, tes anciens postes (ex. : Caissière, Chauffeur...).',
@@ -151,7 +151,7 @@ var TR = {
     homePrice: '<b>Créer et voir ton CV : GRATUIT.</b><br>Télécharger en PDF : <b>GRATUIT pendant 30 jours</b>, ensuite <b>1 000 F seulement pour 1 AN (365 jours)</b> — tous tes CV, téléchargements illimités.',
     homeCta: 'CRÉER MON CV MAINTENANT',
     homeFoot: 'Une question ? WhatsApp : <b>692 168 264</b>',
-    heroT: 'Ton CV professionnel,<br><b>prêt en 5 minutes !</b>',
+    heroT: 'Ton CV professionnel,<br><b>facile et rapide !</b>',
     heroP: 'Remplis les cases, choisis ton modèle, et télécharge ton CV en PDF — directement sur ton téléphone.',
     infoT: 'Mes informations',
     lNom: 'Nom complet', pNom: 'Ex. : NGONO Marie Claire',
@@ -220,7 +220,7 @@ var TR = {
   },
   en: {
     tabHome: 'Guide', tabList: 'My CVs', tabForm: 'Fill in', tabPrev: 'My CV', lngBtn: 'FR',
-    homeT: 'Your professional CV<br><b>in 2 minutes, on your phone!</b>',
+    homeT: 'Your professional CV<br><b>on your phone!</b>',
     homeP: 'SmartCV builds your CV for you: you fill in small boxes, the app does all the rest.',
     homeHow: 'How does it work?',
     homeS1: '<b>You fill in simple boxes</b>: your name, your job, your photo, your past positions (e.g.: Cashier, Driver...).',
@@ -238,7 +238,7 @@ var TR = {
     homePrice: '<b>Creating and viewing your CV: FREE.</b><br>Downloading as PDF: <b>FREE for 30 days</b>, then <b>only 1,000 F for 1 YEAR (365 days)</b> — all your CVs, unlimited downloads.',
     homeCta: 'CREATE MY CV NOW',
     homeFoot: 'Any question? WhatsApp: <b>692 168 264</b>',
-    heroT: 'Your professional CV,<br><b>ready in 5 minutes!</b>',
+    heroT: 'Your professional CV,<br><b>quick and easy!</b>',
     heroP: 'Fill in the boxes, pick your template, and download your CV as a PDF — right on your phone.',
     infoT: 'My information',
     lNom: 'Full name', pNom: 'E.g.: NGONO Marie Claire',
@@ -702,7 +702,7 @@ function render() {
   document.getElementById('tabPrev').className = (view === 'prev' || view === 'pay') ? 'on' : '';
 }
 // ---------- VERIFICATEUR DE MISE A JOUR (LIEN + APK) ----------
-var APP_VERSION = 24;
+var APP_VERSION = 25;
 var VERSION_URL = 'https://mouafonmiguel-coder.github.io/cv/version.json';
 var APK_URL = 'https://mouafonmiguel-coder.github.io/cv-apk/CVRapide.apk';
 var IS_APK = !!window.Capacitor;
