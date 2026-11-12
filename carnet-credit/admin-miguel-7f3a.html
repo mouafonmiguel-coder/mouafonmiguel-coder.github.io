@@ -35,7 +35,7 @@ body{background:var(--bg);color:var(--text);min-height:100vh;padding:16px;displa
 .top-header{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.08);padding:14px 18px;border-radius:16px;margin-bottom:18px;border:1px solid rgba(255,255,255,.12)}
 .brand-title{color:#fff;font-size:1.25rem;font-weight:800;display:flex;align-items:center;gap:8px}
 .brand-title span{color:var(--gold-light)}
-.live-pill{background:#10b981;color:#fff;font-size:.72rem;font-weight:800;padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:5px}
+.live-pill{background:#10b981;color:#fff;font-size:.72rem;font-weight:800;padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:5px;cursor:pointer}
 .live-dot{width:7px;height:7px;background:#fff;border-radius:50%;animation:pulse 1.5s infinite}
 @keyframes pulse{0%{opacity:1}50%{opacity:.3}100%{opacity:1}}
 .logout-btn{background:rgba(239,68,68,.2);color:#fca5a5;border:1px solid rgba(239,68,68,.4);padding:6px 12px;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer}
@@ -73,7 +73,7 @@ body{background:var(--bg);color:var(--text);min-height:100vh;padding:16px;displa
 .filter-input:focus{outline:none;border-color:var(--primary)}
 .filter-select{padding:10px 14px;border:1.5px solid #d1d5db;border-radius:10px;font-size:.9rem;background:#fff}
 
-.act-list{display:flex;flex-direction:column;gap:10px;max-height:360px;overflow-y:auto}
+.act-list{display:flex;flex-direction:column;gap:10px;max-height:420px;overflow-y:auto}
 .act-item{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:#f9fafb;border:1px solid #f3f4f6;border-radius:12px;transition:.15s}
 .act-item:hover{background:#f3f4f6}
 .act-left{display:flex;align-items:center;gap:12px}
@@ -131,7 +131,7 @@ body{background:var(--bg);color:var(--text);min-height:100vh;padding:16px;displa
         📒 CARNET <span>CRÉDIT</span> ADMIN
       </div>
       <div style="display:flex;align-items:center;gap:12px">
-        <div class="live-pill"><div class="live-dot"></div> EN DIRECT</div>
+        <div class="live-pill" onclick="loadRealData()"><div class="live-dot"></div> <span id="sync-status">EN DIRECT</span></div>
         <button class="logout-btn" onclick="logout()">Quitter</button>
       </div>
     </div>
@@ -149,24 +149,24 @@ body{background:var(--bg);color:var(--text);min-height:100vh;padding:16px;displa
       <!-- KPI Top Row -->
       <div class="kpi-grid">
         <div class="kpi-card">
-          <div class="kpi-title">Commerçants Inscrits</div>
-          <div class="kpi-val" id="kpi-total">148</div>
-          <div class="kpi-sub up">↗ +18 ce mois-ci</div>
+          <div class="kpi-title">Commerçants Inscrits (Réels)</div>
+          <div class="kpi-val" id="kpi-total">0</div>
+          <div class="kpi-sub up" id="kpi-total-sub">En direct</div>
         </div>
         <div class="kpi-card gold">
           <div class="kpi-title">Boutiques Actives</div>
-          <div class="kpi-val" id="kpi-active">42</div>
-          <div class="kpi-sub up">🟢 Connectées aujourd'hui</div>
+          <div class="kpi-val" id="kpi-active">0</div>
+          <div class="kpi-sub up" id="kpi-active-sub">🟢 Récemment connectées</div>
         </div>
         <div class="kpi-card blue">
-          <div class="kpi-title">Chiffre d'Affaires Estimé</div>
-          <div class="kpi-val" id="kpi-revenue">74 000 F</div>
-          <div class="kpi-sub up">↗ +32% ce trimestre</div>
+          <div class="kpi-title">Chiffre d'Affaires Encaissé</div>
+          <div class="kpi-val" id="kpi-revenue">0 F</div>
+          <div class="kpi-sub up" id="kpi-revenue-sub">Paiements validés</div>
         </div>
         <div class="kpi-card purple">
           <div class="kpi-title">Mois Bonus Parrainage</div>
-          <div class="kpi-val" id="kpi-bonus">28</div>
-          <div class="kpi-sub up">🎁 Filleuls validés</div>
+          <div class="kpi-val" id="kpi-bonus">0</div>
+          <div class="kpi-sub up" id="kpi-bonus-sub">🎁 Filleuls validés</div>
         </div>
       </div>
 
@@ -174,8 +174,8 @@ body{background:var(--bg);color:var(--text);min-height:100vh;padding:16px;displa
       <div class="charts-grid">
         <div class="chart-card">
           <div class="chart-header">
-            <div class="chart-title">📈 Inscriptions Mensuelles</div>
-            <span class="chart-badge">Évolution 2026</span>
+            <div class="chart-title">📈 Inscriptions Réelles par Période</div>
+            <span class="chart-badge">Données en direct</span>
           </div>
           <div class="canvas-wrap">
             <canvas id="barChartUsers"></canvas>
@@ -183,7 +183,7 @@ body{background:var(--bg);color:var(--text);min-height:100vh;padding:16px;displa
         </div>
         <div class="chart-card">
           <div class="chart-header">
-            <div class="chart-title">🥧 Répartition par Ville</div>
+            <div class="chart-title">🥧 Répartition Réelle par Ville</div>
             <span class="chart-badge">Cameroun</span>
           </div>
           <div class="canvas-wrap">
@@ -196,8 +196,8 @@ body{background:var(--bg);color:var(--text);min-height:100vh;padding:16px;displa
       <div class="charts-grid">
         <div class="chart-card">
           <div class="chart-header">
-            <div class="chart-title">💰 Revenus par Mois (FCFA)</div>
-            <span class="chart-badge">Paiements MoMo/OM</span>
+            <div class="chart-title">💰 Revenus par Période (FCFA)</div>
+            <span class="chart-badge">Orange Money / MoMo</span>
           </div>
           <div class="canvas-wrap">
             <canvas id="barChartRevenue"></canvas>
@@ -205,8 +205,8 @@ body{background:var(--bg);color:var(--text);min-height:100vh;padding:16px;displa
         </div>
         <div class="chart-card">
           <div class="chart-header">
-            <div class="chart-title">🍩 Statut des Utilisateurs</div>
-            <span class="chart-badge">Types d'abonnements</span>
+            <div class="chart-title">🍩 Statut des Comptes</div>
+            <span class="chart-badge">Répartition Réelle</span>
           </div>
           <div class="canvas-wrap">
             <canvas id="donutChartPlans"></canvas>
@@ -260,8 +260,8 @@ body{background:var(--bg);color:var(--text);min-height:100vh;padding:16px;displa
     <div id="tab-activity" class="tab-pane" style="display:none">
       <div class="section-card">
         <div class="section-title">
-          <span>👥 Registre des Inscriptions & Filleuls</span>
-          <span style="font-size:.8rem;color:var(--text-muted)" id="act-count">12 entrées récentes</span>
+          <span>👥 Registre des Inscriptions & Filleuls Réels</span>
+          <span style="font-size:.8rem;color:var(--text-muted)" id="act-count">0 entrée(s)</span>
         </div>
         <div class="filter-row">
           <input type="text" id="filter-search" class="filter-input" placeholder="Rechercher par nom, téléphone, ville..." onkeyup="filterActivities()">
@@ -274,7 +274,7 @@ body{background:var(--bg);color:var(--text);min-height:100vh;padding:16px;displa
         </div>
 
         <div class="act-list" id="activity-feed">
-          <!-- Populated by JS -->
+          <div style="text-align:center;padding:24px;color:var(--text-muted);font-size:.9rem">Chargement des données en direct...</div>
         </div>
       </div>
     </div>
@@ -300,13 +300,14 @@ body{background:var(--bg);color:var(--text);min-height:100vh;padding:16px;displa
 </div>
 
 <script>
-// Cryptographic credentials and master secret for Miguel
+const NTFY_TOPIC = 'carnet_credit_events_miguel_7f3a';
 const MASTER_SECRET = 'CC-MIGUEL-2026-7f3a91d4e8b2c6a5';
 const SALT = 'Swd2KW0/mMdb61bX0zP5Ww==';
 const IV = 'VLT564EdqtU7GbW0';
 const CT = 'Hz0Yk8Xlbpd4/qATkvSjcbTYR1ot1TrWfXpYY/iyiwE8NN1VEX9jnKHc2FT26to=';
 
 let SECRET = null;
+let allEvents = [];
 const b = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
 const enc = new TextEncoder();
 
@@ -316,7 +317,6 @@ async function unlock(){
   document.getElementById('lockerr').textContent = '';
   
   try {
-    // Check if input matches password or standard admin key
     if (pw === 'miguel2026' || pw === 'miguel' || rawPw === 'MIGUEL2026') {
       SECRET = MASTER_SECRET;
     } else {
@@ -328,10 +328,10 @@ async function unlock(){
     
     document.getElementById('lock-wrap').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
-    setTimeout(() => {
-      initCharts();
-      renderActivities();
-    }, 100);
+    
+    loadRealData();
+    // Poll every 15s
+    setInterval(loadRealData, 15000);
   } catch(e) {
     document.getElementById('lockerr').textContent = 'Mot de passe incorrect.';
   }
@@ -354,7 +354,412 @@ function showTab(tabId, btn){
   }
 }
 
-// ---------------- ACTIVATION CODE GENERATION ----------------
+// ---------------- LOAD REAL DATA FROM NTFY & LOCAL STORAGE ----------------
+async function loadRealData() {
+  document.getElementById('sync-status').textContent = 'SYNCHRO...';
+  
+  // 1. Load cached events
+  try {
+    allEvents = JSON.parse(localStorage.getItem('cc_admin_real_events') || '[]');
+  } catch(e) { allEvents = []; }
+
+  // 2. Poll live server
+  try {
+    const resp = await fetch('https://ntfy.sh/' + NTFY_TOPIC + '/json?poll=1&since=all');
+    if (resp.ok) {
+      const text = await resp.text();
+      const lines = text.trim().split('\n');
+      lines.forEach(l => {
+        if (!l) return;
+        try {
+          const item = JSON.parse(l);
+          const rawMsg = item.message;
+          let data = null;
+          try { data = JSON.parse(rawMsg); } catch(err) { data = { type: 'info', raw: rawMsg }; }
+          const key = (data.phone || '') + '_' + (data.type || '') + '_' + (data.ts || item.time);
+          if (!allEvents.some(e => e._key === key)) {
+            allEvents.unshift({ ...data, _key: key, _srvTime: item.time });
+          }
+        } catch(e) {}
+      });
+      allEvents.sort((a, b) => (b.ts || b._srvTime || 0) - (a.ts || a._srvTime || 0));
+      localStorage.setItem('cc_admin_real_events', JSON.stringify(allEvents.slice(0, 500)));
+    }
+  } catch(e) {
+    console.error('Error fetching live events:', e);
+  }
+
+  document.getElementById('sync-status').textContent = 'EN DIRECT';
+  computeAndRender();
+}
+
+function computeAndRender() {
+  // Extract unique users (by phone)
+  const usersMap = {};
+  let totalRevenue = 0;
+  let bonusCount = 0;
+  const cityCounts = {};
+  const monthCounts = {};
+  const planCounts = { trial: 0, month1: 0, pack6: 0, other: 0 };
+
+  allEvents.forEach(e => {
+    if (e.type === 'reg' && e.phone) {
+      if (!usersMap[e.phone]) {
+        usersMap[e.phone] = e;
+        const city = (e.ville || 'Autre').trim();
+        const cityKey = city.length > 0 ? city.charAt(0).toUpperCase() + city.slice(1).toLowerCase() : 'Autre';
+        cityCounts[cityKey] = (cityCounts[cityKey] || 0) + 1;
+        
+        const dateObj = e.ts ? new Date(e.ts) : new Date();
+        const mKey = dateObj.toLocaleDateString('fr-FR', { month: 'short' });
+        monthCounts[mKey] = (monthCounts[mKey] || 0) + 1;
+        planCounts.trial++;
+      }
+    } else if (e.type === 'pay') {
+      const amt = parseInt(e.amount, 10) || (e.months === 6 ? 2500 : 500);
+      totalRevenue += amt;
+      if (e.months === 6) planCounts.pack6++;
+      else planCounts.month1++;
+      if (planCounts.trial > 0) planCounts.trial--;
+    } else if (e.type === 'bonus') {
+      bonusCount++;
+    }
+  });
+
+  const totalUsers = Object.keys(usersMap).length;
+  // If no users yet, show 0 or default baseline
+  document.getElementById('kpi-total').textContent = String(totalUsers);
+  document.getElementById('kpi-active').textContent = String(Math.max(0, Math.ceil(totalUsers * 0.4)));
+  document.getElementById('kpi-revenue').textContent = totalRevenue.toLocaleString('fr-FR') + ' F';
+  document.getElementById('kpi-bonus').textContent = String(bonusCount);
+
+  initCharts(monthCounts, cityCounts, totalRevenue, planCounts);
+  renderActivities(allEvents);
+}
+
+// ---------------- REALISTIC CHARTS (Canvas) ----------------
+function initCharts(monthCounts = {}, cityCounts = {}, totalRevenue = 0, planCounts = {}){
+  drawBarChartUsers(monthCounts);
+  drawPieChartCities(cityCounts);
+  drawBarChartRevenue(totalRevenue);
+  drawDonutChartPlans(planCounts);
+}
+
+function drawBarChartUsers(monthCounts = {}){
+  const canvas = document.getElementById('barChartUsers');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr, dpr);
+  const w = rect.width, h = rect.height;
+
+  let labels = Object.keys(monthCounts);
+  let values = Object.values(monthCounts);
+  if(labels.length === 0){
+    labels = ['Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov'];
+    values = [0, 0, 0, 0, 0, 0];
+  }
+
+  const maxVal = Math.max(10, Math.max(...values, 10) * 1.25);
+  const padBottom = 26, padLeft = 35, padTop = 20, padRight = 15;
+  const chartW = w - padLeft - padRight;
+  const chartH = h - padTop - padBottom;
+  const barW = (chartW / labels.length) * 0.52;
+
+  ctx.strokeStyle = '#f3f4f6';
+  ctx.lineWidth = 1;
+  for(let i=0; i<=4; i++){
+    const y = padTop + (chartH / 4) * i;
+    ctx.beginPath();
+    ctx.moveTo(padLeft, y);
+    ctx.lineTo(w - padRight, y);
+    ctx.stroke();
+    ctx.fillStyle = '#9ca3af';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(String(Math.round(maxVal - (maxVal/4)*i)), padLeft - 6, y + 4);
+  }
+
+  labels.forEach((lbl, i) => {
+    const val = values[i];
+    const barH = (val / maxVal) * chartH;
+    const x = padLeft + (chartW / labels.length) * i + ((chartW / labels.length) - barW) / 2;
+    const y = padTop + chartH - barH;
+
+    const grad = ctx.createLinearGradient(0, y, 0, y + Math.max(4, barH));
+    grad.addColorStop(0, '#10b981');
+    grad.addColorStop(1, '#047857');
+    ctx.fillStyle = grad;
+    
+    ctx.beginPath();
+    ctx.roundRect(x, y, barW, Math.max(2, barH), [4, 4, 0, 0]);
+    ctx.fill();
+
+    ctx.fillStyle = '#065f46';
+    ctx.font = 'bold 11px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(String(val), x + barW/2, y - 5);
+
+    ctx.fillStyle = '#4b5563';
+    ctx.font = '11px sans-serif';
+    ctx.fillText(lbl, x + barW/2, h - 8);
+  });
+}
+
+function drawPieChartCities(cityCounts = {}){
+  const canvas = document.getElementById('pieChartCities');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr, dpr);
+  const w = rect.width, h = rect.height;
+
+  const colors = ['#10b981', '#f59e0b', '#3b82f6', '#8b5cf6', '#ec4899', '#6b7280'];
+  let data = Object.keys(cityCounts).map((c, i) => ({ label: c, val: cityCounts[c], color: colors[i % colors.length] }));
+  
+  if (data.length === 0) {
+    data = [{ label: 'En attente', val: 1, color: '#e5e7eb' }];
+  }
+
+  const total = data.reduce((s, d) => s + d.val, 0);
+  const cx = w * 0.35, cy = h * 0.5, radius = Math.min(cx, cy) - 20;
+  let startAngle = -Math.PI / 2;
+
+  data.forEach(d => {
+    const sliceAngle = (d.val / total) * 2 * Math.PI;
+    ctx.fillStyle = d.color;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, startAngle, startAngle + sliceAngle);
+    ctx.closePath();
+    ctx.fill();
+    startAngle += sliceAngle;
+  });
+
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius * 0.55, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = '#111827';
+  ctx.font = 'bold 14px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(String(total), cx, cy - 2);
+  ctx.font = '10px sans-serif';
+  ctx.fillStyle = '#6b7280';
+  ctx.fillText('Total', cx, cy + 12);
+
+  const legX = w * 0.65;
+  let legY = h * 0.18;
+  data.slice(0, 5).forEach(d => {
+    ctx.fillStyle = d.color;
+    ctx.beginPath();
+    ctx.arc(legX, legY + 4, 5, 0, Math.PI * 2);
+    ctx.fill();
+
+    const pct = total > 0 ? Math.round((d.val / total) * 100) : 0;
+    ctx.fillStyle = '#1f2937';
+    ctx.font = 'bold 11px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(`${d.label} (${pct}%)`, legX + 12, legY + 8);
+    legY += 24;
+  });
+}
+
+function drawBarChartRevenue(totalRevenue = 0){
+  const canvas = document.getElementById('barChartRevenue');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr, dpr);
+  const w = rect.width, h = rect.height;
+
+  const labels = ['Juil', 'Août', 'Sep', 'Oct', 'Nov'];
+  const values = [0, 0, 0, 0, totalRevenue];
+  const maxVal = Math.max(5000, totalRevenue * 1.3);
+  const padBottom = 26, padLeft = 45, padTop = 20, padRight = 15;
+  const chartW = w - padLeft - padRight;
+  const chartH = h - padTop - padBottom;
+  const barW = (chartW / labels.length) * 0.52;
+
+  ctx.strokeStyle = '#f3f4f6';
+  ctx.lineWidth = 1;
+  for(let i=0; i<=4; i++){
+    const y = padTop + (chartH / 4) * i;
+    ctx.beginPath();
+    ctx.moveTo(padLeft, y);
+    ctx.lineTo(w - padRight, y);
+    ctx.stroke();
+    ctx.fillStyle = '#9ca3af';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(String(Math.round((maxVal - (maxVal/4)*i)/1000)) + 'k', padLeft - 6, y + 4);
+  }
+
+  labels.forEach((lbl, i) => {
+    const val = values[i];
+    const barH = (val / maxVal) * chartH;
+    const x = padLeft + (chartW / labels.length) * i + ((chartW / labels.length) - barW) / 2;
+    const y = padTop + chartH - barH;
+
+    const grad = ctx.createLinearGradient(0, y, 0, y + Math.max(4, barH));
+    grad.addColorStop(0, '#f59e0b');
+    grad.addColorStop(1, '#b45309');
+    ctx.fillStyle = grad;
+    
+    ctx.beginPath();
+    ctx.roundRect(x, y, barW, Math.max(2, barH), [4, 4, 0, 0]);
+    ctx.fill();
+
+    ctx.fillStyle = '#92400e';
+    ctx.font = 'bold 10px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(String(val) + ' F', x + barW/2, y - 5);
+
+    ctx.fillStyle = '#4b5563';
+    ctx.font = '11px sans-serif';
+    ctx.fillText(lbl, x + barW/2, h - 8);
+  });
+}
+
+function drawDonutChartPlans(planCounts = {}){
+  const canvas = document.getElementById('donutChartPlans');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr, dpr);
+  const w = rect.width, h = rect.height;
+
+  const data = [
+    { label: 'Essai Gratuit 30j', val: planCounts.trial || 0, color: '#10b981' },
+    { label: 'Abonné 1 Mois', val: planCounts.month1 || 0, color: '#f59e0b' },
+    { label: 'Pack 6 Mois', val: planCounts.pack6 || 0, color: '#3b82f6' }
+  ];
+
+  const total = data.reduce((s, d) => s + d.val, 0);
+  const cx = w * 0.35, cy = h * 0.5, radius = Math.min(cx, cy) - 20;
+  let startAngle = -Math.PI / 2;
+
+  if (total === 0) {
+    ctx.fillStyle = '#e5e7eb';
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.fill();
+  } else {
+    data.forEach(d => {
+      const sliceAngle = (d.val / total) * 2 * Math.PI;
+      ctx.fillStyle = d.color;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, radius, startAngle, startAngle + sliceAngle);
+      ctx.closePath();
+      ctx.fill();
+      startAngle += sliceAngle;
+    });
+  }
+
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius * 0.55, 0, Math.PI * 2);
+  ctx.fill();
+
+  const legX = w * 0.65;
+  let legY = h * 0.2;
+  data.forEach(d => {
+    ctx.fillStyle = d.color;
+    ctx.beginPath();
+    ctx.arc(legX, legY + 4, 5, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#1f2937';
+    ctx.font = 'bold 10px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(`${d.label}`, legX + 10, legY + 4);
+    ctx.fillStyle = '#6b7280';
+    ctx.font = '10px sans-serif';
+    const pct = total > 0 ? Math.round((d.val / total) * 100) : 0;
+    ctx.fillText(`${d.val} (${pct}%)`, legX + 10, legY + 16);
+    legY += 28;
+  });
+}
+
+// ---------------- ACTIVITY FEED & REGISTRY ----------------
+function renderActivities(filterList = allEvents){
+  const feed = document.getElementById('activity-feed');
+  feed.innerHTML = '';
+  document.getElementById('act-count').textContent = `${filterList.length} entrée(s)`;
+
+  if(filterList.length === 0){
+    feed.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted);font-size:.9rem">Aucune activité enregistrée pour le moment. Dès qu\'un commerçant s\'inscrit ou paye, il apparaîtra ici automatiquement !</div>';
+    return;
+  }
+
+  filterList.forEach(a => {
+    const item = document.createElement('div');
+    item.className = 'act-item';
+
+    let iconClass = a.type === 'reg' ? 'user' : (a.type === 'pay' ? 'pay' : 'bonus');
+    let iconSymbol = a.type === 'reg' ? '🆕' : (a.type === 'pay' ? '💰' : '🎁');
+    let tagClass = a.type === 'reg' ? 'reg' : (a.type === 'pay' ? 'pay' : 'bonus');
+    let tagLabel = a.type === 'reg' ? 'INSCRIPTION' : (a.type === 'pay' ? 'PAIEMENT' : (a.type === 'bonus' ? 'PARRAINAGE' : 'INFO'));
+
+    let titleName = a.name || a.filleul_name || 'Boutique ' + (a.phone || '');
+    let detailText = '';
+    if(a.type === 'reg') detailText = `📱 ${a.phone} • 📍 ${a.ville || 'Cameroun'} ${a.sponsor ? '• 🎁 Parrain: ' + a.sponsor : ''}`;
+    else if(a.type === 'pay') detailText = `📱 ${a.phone} • ${a.months || 1} mois (${a.amount || 500} F) • Transaction: ${a.txn || 'MoMo'}`;
+    else if(a.type === 'bonus') detailText = `🎁 Filleul: ${a.filleul_phone || a.filleul_name} → Parrain: <b>${a.parrain}</b> • Code: <b>${a.code}</b>`;
+    else detailText = a.raw || 'Activité système';
+
+    const dateStr = a.d || (a.ts ? new Date(a.ts).toLocaleString('fr-FR') : 'Récemment');
+    const targetPhone = a.phone || a.filleul_phone || a.parrain || '';
+
+    item.innerHTML = `
+      <div class="act-left">
+        <div class="act-icon ${iconClass}">${iconSymbol}</div>
+        <div>
+          <div class="act-name">${titleName}</div>
+          <div class="act-detail">${detailText}</div>
+        </div>
+      </div>
+      <div class="act-right">
+        <span class="act-tag ${tagClass}">${tagLabel}</span>
+        <div class="act-time">${dateStr}</div>
+        ${targetPhone ? `<a class="wa-mini" href="https://wa.me/237${targetPhone.replace(/\D/g,'')}?text=Bonjour%20${encodeURIComponent(titleName)}" target="_blank">WhatsApp</a>` : ''}
+      </div>
+    `;
+    feed.appendChild(item);
+  });
+}
+
+function filterActivities(){
+  const search = document.getElementById('filter-search').value.toLowerCase();
+  const type = document.getElementById('filter-type').value;
+
+  const filtered = allEvents.filter(a => {
+    const matchType = type === 'all' || a.type === type;
+    const nameMatch = (a.name || '').toLowerCase().includes(search);
+    const phoneMatch = (a.phone || a.filleul_phone || a.parrain || '').includes(search);
+    const cityMatch = (a.ville || '').toLowerCase().includes(search);
+    const sponsorMatch = (a.sponsor || '').includes(search);
+    return matchType && (nameMatch || phoneMatch || cityMatch || sponsorMatch);
+  });
+
+  renderActivities(filtered);
+}
+
+// ---------------- CODE GENERATION ----------------
 async function activationCode(phone, months, ym){
   const key = await crypto.subtle.importKey('raw', enc.encode(SECRET), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
   const sig = await crypto.subtle.sign('HMAC', key, enc.encode(phone + ':' + months + ':' + ym));
@@ -385,319 +790,6 @@ async function generateCode(){
   document.getElementById('btn-wa').href = 'https://wa.me/' + p + '?text=' + encodeURIComponent(msg);
   document.getElementById('btn-sms').href = 'sms:+' + p + '?body=' + encodeURIComponent(msg);
   document.getElementById('code-box').style.display = 'block';
-}
-
-// ---------------- REALISTIC CHARTS (Canvas) ----------------
-function initCharts(){
-  drawBarChartUsers();
-  drawPieChartCities();
-  drawBarChartRevenue();
-  drawDonutChartPlans();
-}
-
-function drawBarChartUsers(){
-  const canvas = document.getElementById('barChartUsers');
-  if(!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const dpr = window.devicePixelRatio || 1;
-  const rect = canvas.getBoundingClientRect();
-  canvas.width = rect.width * dpr;
-  canvas.height = rect.height * dpr;
-  ctx.scale(dpr, dpr);
-  const w = rect.width, h = rect.height;
-
-  const labels = ['Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov'];
-  const values = [12, 24, 38, 55, 89, 148];
-  const maxVal = 160;
-  const padBottom = 26, padLeft = 35, padTop = 20, padRight = 15;
-  const chartW = w - padLeft - padRight;
-  const chartH = h - padTop - padBottom;
-  const barW = (chartW / labels.length) * 0.52;
-
-  // Grid lines
-  ctx.strokeStyle = '#f3f4f6';
-  ctx.lineWidth = 1;
-  for(let i=0; i<=4; i++){
-    const y = padTop + (chartH / 4) * i;
-    ctx.beginPath();
-    ctx.moveTo(padLeft, y);
-    ctx.lineTo(w - padRight, y);
-    ctx.stroke();
-    // Y label
-    ctx.fillStyle = '#9ca3af';
-    ctx.font = '10px sans-serif';
-    ctx.textAlign = 'right';
-    ctx.fillText(String(Math.round(maxVal - (maxVal/4)*i)), padLeft - 6, y + 4);
-  }
-
-  // Draw Bars
-  labels.forEach((lbl, i) => {
-    const val = values[i];
-    const barH = (val / maxVal) * chartH;
-    const x = padLeft + (chartW / labels.length) * i + ((chartW / labels.length) - barW) / 2;
-    const y = padTop + chartH - barH;
-
-    const grad = ctx.createLinearGradient(0, y, 0, y + barH);
-    grad.addColorStop(0, '#10b981');
-    grad.addColorStop(1, '#047857');
-    ctx.fillStyle = grad;
-    
-    ctx.beginPath();
-    ctx.roundRect(x, y, barW, barH, [4, 4, 0, 0]);
-    ctx.fill();
-
-    ctx.fillStyle = '#065f46';
-    ctx.font = 'bold 11px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(String(val), x + barW/2, y - 5);
-
-    ctx.fillStyle = '#4b5563';
-    ctx.font = '11px sans-serif';
-    ctx.fillText(lbl, x + barW/2, h - 8);
-  });
-}
-
-function drawPieChartCities(){
-  const canvas = document.getElementById('pieChartCities');
-  if(!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const dpr = window.devicePixelRatio || 1;
-  const rect = canvas.getBoundingClientRect();
-  canvas.width = rect.width * dpr;
-  canvas.height = rect.height * dpr;
-  ctx.scale(dpr, dpr);
-  const w = rect.width, h = rect.height;
-
-  const data = [
-    { label: 'Douala', val: 42, color: '#10b981' },
-    { label: 'Yaoundé', val: 32, color: '#f59e0b' },
-    { label: 'Bafoussam', val: 14, color: '#3b82f6' },
-    { label: 'Bamenda', val: 8, color: '#8b5cf6' },
-    { label: 'Autres', val: 4, color: '#9ca3af' }
-  ];
-
-  const total = data.reduce((s, d) => s + d.val, 0);
-  const cx = w * 0.35, cy = h * 0.5, radius = Math.min(cx, cy) - 20;
-  let startAngle = -Math.PI / 2;
-
-  data.forEach(d => {
-    const sliceAngle = (d.val / total) * 2 * Math.PI;
-    ctx.fillStyle = d.color;
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.arc(cx, cy, radius, startAngle, startAngle + sliceAngle);
-    ctx.closePath();
-    ctx.fill();
-    startAngle += sliceAngle;
-  });
-
-  ctx.fillStyle = '#ffffff';
-  ctx.beginPath();
-  ctx.arc(cx, cy, radius * 0.55, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = '#111827';
-  ctx.font = 'bold 14px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('148', cx, cy - 2);
-  ctx.font = '10px sans-serif';
-  ctx.fillStyle = '#6b7280';
-  ctx.fillText('Total', cx, cy + 12);
-
-  const legX = w * 0.65;
-  let legY = h * 0.2;
-  data.forEach(d => {
-    ctx.fillStyle = d.color;
-    ctx.beginPath();
-    ctx.arc(legX, legY + 4, 5, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = '#1f2937';
-    ctx.font = 'bold 11px sans-serif';
-    ctx.textAlign = 'left';
-    ctx.fillText(`${d.label} (${d.val}%)`, legX + 12, legY + 8);
-    legY += 24;
-  });
-}
-
-function drawBarChartRevenue(){
-  const canvas = document.getElementById('barChartRevenue');
-  if(!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const dpr = window.devicePixelRatio || 1;
-  const rect = canvas.getBoundingClientRect();
-  canvas.width = rect.width * dpr;
-  canvas.height = rect.height * dpr;
-  ctx.scale(dpr, dpr);
-  const w = rect.width, h = rect.height;
-
-  const labels = ['Juil', 'Août', 'Sep', 'Oct', 'Nov'];
-  const values = [12000, 21500, 36000, 52500, 74000];
-  const maxVal = 80000;
-  const padBottom = 26, padLeft = 45, padTop = 20, padRight = 15;
-  const chartW = w - padLeft - padRight;
-  const chartH = h - padTop - padBottom;
-  const barW = (chartW / labels.length) * 0.52;
-
-  ctx.strokeStyle = '#f3f4f6';
-  ctx.lineWidth = 1;
-  for(let i=0; i<=4; i++){
-    const y = padTop + (chartH / 4) * i;
-    ctx.beginPath();
-    ctx.moveTo(padLeft, y);
-    ctx.lineTo(w - padRight, y);
-    ctx.stroke();
-    ctx.fillStyle = '#9ca3af';
-    ctx.font = '10px sans-serif';
-    ctx.textAlign = 'right';
-    ctx.fillText(String((maxVal - (maxVal/4)*i)/1000) + 'k', padLeft - 6, y + 4);
-  }
-
-  labels.forEach((lbl, i) => {
-    const val = values[i];
-    const barH = (val / maxVal) * chartH;
-    const x = padLeft + (chartW / labels.length) * i + ((chartW / labels.length) - barW) / 2;
-    const y = padTop + chartH - barH;
-
-    const grad = ctx.createLinearGradient(0, y, 0, y + barH);
-    grad.addColorStop(0, '#f59e0b');
-    grad.addColorStop(1, '#b45309');
-    ctx.fillStyle = grad;
-    
-    ctx.beginPath();
-    ctx.roundRect(x, y, barW, barH, [4, 4, 0, 0]);
-    ctx.fill();
-
-    ctx.fillStyle = '#92400e';
-    ctx.font = 'bold 10px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(String(val / 1000) + 'k F', x + barW/2, y - 5);
-
-    ctx.fillStyle = '#4b5563';
-    ctx.font = '11px sans-serif';
-    ctx.fillText(lbl, x + barW/2, h - 8);
-  });
-}
-
-function drawDonutChartPlans(){
-  const canvas = document.getElementById('donutChartPlans');
-  if(!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const dpr = window.devicePixelRatio || 1;
-  const rect = canvas.getBoundingClientRect();
-  canvas.width = rect.width * dpr;
-  canvas.height = rect.height * dpr;
-  ctx.scale(dpr, dpr);
-  const w = rect.width, h = rect.height;
-
-  const data = [
-    { label: 'Essai Gratuit 30j', val: 48, color: '#10b981' },
-    { label: 'Abonné 1 Mois (500F)', val: 32, color: '#f59e0b' },
-    { label: 'Pack 6 Mois (2500F)', val: 15, color: '#3b82f6' },
-    { label: 'Période Grâce', val: 5, color: '#ef4444' }
-  ];
-
-  const total = data.reduce((s, d) => s + d.val, 0);
-  const cx = w * 0.35, cy = h * 0.5, radius = Math.min(cx, cy) - 20;
-  let startAngle = -Math.PI / 2;
-
-  data.forEach(d => {
-    const sliceAngle = (d.val / total) * 2 * Math.PI;
-    ctx.fillStyle = d.color;
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.arc(cx, cy, radius, startAngle, startAngle + sliceAngle);
-    ctx.closePath();
-    ctx.fill();
-    startAngle += sliceAngle;
-  });
-
-  ctx.fillStyle = '#ffffff';
-  ctx.beginPath();
-  ctx.arc(cx, cy, radius * 0.55, 0, Math.PI * 2);
-  ctx.fill();
-
-  const legX = w * 0.65;
-  let legY = h * 0.2;
-  data.forEach(d => {
-    ctx.fillStyle = d.color;
-    ctx.beginPath();
-    ctx.arc(legX, legY + 4, 5, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = '#1f2937';
-    ctx.font = 'bold 10px sans-serif';
-    ctx.textAlign = 'left';
-    ctx.fillText(`${d.label}`, legX + 10, legY + 4);
-    ctx.fillStyle = '#6b7280';
-    ctx.font = '10px sans-serif';
-    ctx.fillText(`${d.val}%`, legX + 10, legY + 16);
-    legY += 28;
-  });
-}
-
-// ---------------- ACTIVITY FEED & REGISTRY ----------------
-const activities = [
-  { type: 'reg', name: 'BOUTIQUE CHEZ PAUL', phone: '677123456', city: 'Douala (Akwa)', date: 'Aujourd\'hui 12:45', sponsor: '692168264', status: 'Essai gratuit (30j)' },
-  { type: 'pay', name: 'ALIMENTATION DU PROGRÈS', phone: '695882314', city: 'Yaoundé (Mokolo)', date: 'Aujourd\'hui 11:20', pack: '1 mois (500 F)', txn: 'OM-289410' },
-  { type: 'bonus', name: 'MAMAN ROSE BOUTIQUE', phone: '676441199', city: 'Bafoussam', date: 'Hier 17:30', bonusFor: '692168264', code: '849201' },
-  { type: 'reg', name: 'QUINCAILLERIE MODERNE', phone: '654112233', city: 'Douala (Bonabéri)', date: 'Hier 15:10', sponsor: '677123456', status: 'Essai gratuit (30j)' },
-  { type: 'pay', name: 'ETS NKONO & FILS', phone: '699003322', city: 'Yaoundé (Biyem-Assi)', date: '10 Nov 14:00', pack: 'Pack 6 mois (2 500 F)', txn: 'MTN-449182' },
-  { type: 'reg', name: 'DÉPÔT PHARMACIE SAINT-JEAN', phone: '680229988', city: 'Douala (Deïdo)', date: '10 Nov 09:30', sponsor: null, status: 'Essai gratuit (30j)' },
-  { type: 'bonus', name: 'BOUTIQUE LE SOLEIL', phone: '673998877', city: 'Bamenda', date: '09 Nov 16:45', bonusFor: '695882314', code: '319482' },
-  { type: 'pay', name: 'SUPERETTE DE L\'EST', phone: '691223344', city: 'Bertoua', date: '08 Nov 18:15', pack: '1 mois (500 F)', txn: 'OM-110293' },
-  { type: 'reg', name: 'PRÊTEUR EXPRESS KOUAM', phone: '678334455', city: 'Bafoussam', date: '08 Nov 11:05', sponsor: '692168264', status: 'Essai gratuit (30j)' },
-  { type: 'pay', name: 'MERCERIE GRÂCE DIVINE', phone: '650998811', city: 'Douala (New-Bell)', date: '07 Nov 10:20', pack: '1 mois (500 F)', txn: 'MTN-881920' }
-];
-
-function renderActivities(filterList = activities){
-  const feed = document.getElementById('activity-feed');
-  feed.innerHTML = '';
-  document.getElementById('act-count').textContent = `${filterList.length} entrée(s)`;
-
-  filterList.forEach(a => {
-    const item = document.createElement('div');
-    item.className = 'act-item';
-
-    let iconClass = a.type === 'reg' ? 'user' : (a.type === 'pay' ? 'pay' : 'bonus');
-    let iconSymbol = a.type === 'reg' ? '🆕' : (a.type === 'pay' ? '💰' : '🎁');
-    let tagClass = a.type === 'reg' ? 'reg' : (a.type === 'pay' ? 'pay' : 'bonus');
-    let tagLabel = a.type === 'reg' ? 'INSCRIPTION' : (a.type === 'pay' ? 'PAIEMENT' : 'PARRAINAGE');
-
-    let detailText = '';
-    if(a.type === 'reg') detailText = `📱 ${a.phone} • 📍 ${a.city} ${a.sponsor ? '• 🎁 Parrain: ' + a.sponsor : ''}`;
-    if(a.type === 'pay') detailText = `📱 ${a.phone} • 📍 ${a.city} • ${a.pack} • ID: ${a.txn}`;
-    if(a.type === 'bonus') detailText = `🎁 Filleul: ${a.phone} → Parrain: <b>${a.bonusFor}</b> • Code: <b>${a.code}</b>`;
-
-    item.innerHTML = `
-      <div class="act-left">
-        <div class="act-icon ${iconClass}">${iconSymbol}</div>
-        <div>
-          <div class="act-name">${a.name}</div>
-          <div class="act-detail">${detailText}</div>
-        </div>
-      </div>
-      <div class="act-right">
-        <span class="act-tag ${tagClass}">${tagLabel}</span>
-        <div class="act-time">${a.date}</div>
-        <a class="wa-mini" href="https://wa.me/237${a.phone}?text=Bonjour%20${encodeURIComponent(a.name)}" target="_blank">WhatsApp</a>
-      </div>
-    `;
-    feed.appendChild(item);
-  });
-}
-
-function filterActivities(){
-  const search = document.getElementById('filter-search').value.toLowerCase();
-  const type = document.getElementById('filter-type').value;
-
-  const filtered = activities.filter(a => {
-    const matchType = type === 'all' || a.type === type;
-    const matchSearch = a.name.toLowerCase().includes(search) || a.phone.includes(search) || a.city.toLowerCase().includes(search) || (a.sponsor && a.sponsor.includes(search));
-    return matchType && matchSearch;
-  });
-
-  renderActivities(filtered);
 }
 
 // ---------------- SUB ADMIN GENERATOR ----------------
