@@ -1,12 +1,27 @@
-const CACHE="cc-v69";
-self.addEventListener("install",function(e){self.skipWaiting()});
-self.addEventListener("activate",function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==CACHE}).map(function(k){return caches.delete(k)}))}).then(function(){return self.clients.claim()}))});
-self.addEventListener("fetch",function(e){
-  var u=new URL(e.request.url);
-  if(u.origin!==location.origin||e.request.method!=="GET")return;
-  if(e.request.mode==="navigate"){
-    e.respondWith(fetch(e.request).then(function(r){var c=r.clone();caches.open(CACHE).then(function(x){x.put(e.request,c)});return r}).catch(function(){return caches.match(e.request)}));
-    return;
-  }
-  e.respondWith(caches.match(e.request).then(function(hit){return hit||fetch(e.request).then(function(r){if(r&&r.status===200){var c=r.clone();caches.open(CACHE).then(function(x){x.put(e.request,c)})}return r})}));
+const CACHE_NAME = 'cc-v72';
+const ASSETS = [
+  './',
+  './index.html',
+  './index-D2776oQp.js',
+  './index-BXUP-vdl.css',
+  './manifest.json',
+  './version.json'
+];
+
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
+});
+
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys().then(keys => Promise.all(
+      keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+    )).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(cached => cached || fetch(e.request).catch(() => cached))
+  );
 });
