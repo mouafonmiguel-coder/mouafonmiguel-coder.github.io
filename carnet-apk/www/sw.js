@@ -1,8 +1,8 @@
-const CACHE_NAME = 'cc-v72';
+const CACHE_NAME = 'cc-v73';
 const ASSETS = [
   './',
   './index.html',
-  './index-D2776oQp.js',
+  './index-DFLSNBEc.js',
   './index-BXUP-vdl.css',
   './manifest.json',
   './version.json'
