@@ -3,7 +3,7 @@ const CACHE_NAME = 'cc-v75';
 const ASSETS = [
   './',
   './index.html',
-  './index-eDiXXqYm.js',
+  './index-gdomFeXj.js',
   './index-BXUP-vdl.css',
   './manifest.webmanifest',
   './version.json'
