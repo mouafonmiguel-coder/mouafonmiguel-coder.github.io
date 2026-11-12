@@ -110,6 +110,14 @@ body{background:var(--bg);color:var(--text);min-height:100vh;padding:16px;displa
 </style>
 </head>
 <body>
+  <!-- AUTO-UPDATE DETECTOR BANNER -->
+  <div id="update-banner" style="display:none;position:fixed;top:0;left:0;right:0;background:linear-gradient(90deg,#16a34a,#059669);color:#fff;text-align:center;padding:12px;font-weight:bold;font-size:.95rem;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,.5)">
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap">
+      <span style="font-size:1.2rem">🔄</span>
+      <span id="update-banner-text">Mise à jour détectée ! Rafraîchissement automatique en cours...</span>
+      <button type="button" onclick="applyUpdateNow()" style="background:#fff;color:#166534;border:none;border-radius:6px;padding:4px 10px;font-weight:800;font-size:.8rem;cursor:pointer">Actualiser direct</button>
+    </div>
+  </div>
 
 <div class="container">
 
@@ -140,6 +148,32 @@ body{background:var(--bg);color:var(--text);min-height:100vh;padding:16px;displa
         <div class="live-pill" onclick="loadRealData()"><div class="live-dot"></div> <span id="sync-status">EN DIRECT</span></div>
         <button class="logout-btn" onclick="logout()">Quitter</button>
       </div>
+    </div>
+
+    <!-- RADAR DETECTOR BANNER -->
+    <div class="detector-banner" id="detector-widget">
+      <div class="det-left">
+        <div class="radar-pulse"></div>
+        <div>
+          <div class="det-title">📡 DÉTECTEUR EN TEMPS RÉEL ACTIF</div>
+          <div class="det-sub" id="det-sub-info">Écoute en direct des inscriptions, connexions et paiements...</div>
+        </div>
+      </div>
+      <div class="det-right">
+        <button type="button" class="btn-sound-toggle" id="btn-sound" onclick="toggleDetectorSound()" title="Activer ou couper le son d'alerte">🔔 Sonnerie ON</button>
+        <button type="button" class="btn-test-alert" onclick="testDetectorAlert()" title="Tester le détecteur">⚡ Tester Détecteur</button>
+      </div>
+    </div>
+
+    <!-- POPUP DETECTOR TOAST ALERT -->
+    <div id="detector-toast" class="det-toast">
+      <div class="det-toast-icon" id="det-toast-icon">🚨</div>
+      <div class="det-toast-content">
+        <div class="det-toast-title" id="det-toast-title">NOUVELLE DÉTECTION EN DIRECT !</div>
+        <div class="det-toast-msg" id="det-toast-msg">Un commerçant vient d'effectuer une action sur Carnet Crédit.</div>
+      </div>
+      <div id="det-toast-action"></div>
+      <button type="button" class="det-toast-close" onclick="closeDetectorToast()" title="Fermer">✕</button>
     </div>
 
     <!-- Navigation Tabs -->
@@ -306,6 +340,69 @@ body{background:var(--bg);color:var(--text);min-height:100vh;padding:16px;displa
 </div>
 
 <script>
+const ADMIN_VERSION = 74;
+const VERSION_URL = 'https://mouafonmiguel-coder.github.io/carnet-credit/version.json';
+let isUpdating = false;
+
+// ---------------- DÉTECTEUR DE MISES À JOUR AUTOMATIQUE ----------------
+async function checkVersionUpdate() {
+  if (isUpdating) return;
+  try {
+    const res = await fetch(VERSION_URL + '?t=' + Date.now(), { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      const remoteVer = parseInt(data.version, 10);
+      if (remoteVer > ADMIN_VERSION) {
+        isUpdating = true;
+        const banner = document.getElementById('update-banner');
+        const bannerText = document.getElementById('update-banner-text');
+        if (banner) {
+          banner.style.display = 'block';
+          if (bannerText) bannerText.textContent = `🚀 Nouvelle mise à jour v${remoteVer} détectée ! Rafraîchissement automatique...`;
+        }
+        
+        // Vider les caches service worker et recharger
+        if ('caches' in window) {
+          try {
+            const keys = await caches.keys();
+            await Promise.all(keys.map(k => caches.delete(k)));
+          } catch(e) {}
+        }
+        
+        setTimeout(() => {
+          window.location.reload(true);
+        }, 1200);
+      }
+    }
+  } catch(e) {}
+}
+
+function applyUpdateNow() {
+  if ('caches' in window) {
+    caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k)))).finally(() => {
+      window.location.reload(true);
+    });
+  } else {
+    window.location.reload(true);
+  }
+}
+
+// Vérification continue du détecteur de mise à jour
+checkVersionUpdate();
+setInterval(checkVersionUpdate, 15000);
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    checkVersionUpdate();
+    if (SECRET) loadRealData();
+  }
+});
+
+window.addEventListener('focus', () => {
+  checkVersionUpdate();
+  if (SECRET) loadRealData();
+});
+
 const NTFY_TOPIC = 'carnet_credit_live_miguel_prod_2026';
 const MASTER_SECRET = 'CC-MIGUEL-2026-7f3a91d4e8b2c6a5';
 const SALT = 'Swd2KW0/mMdb61bX0zP5Ww==';
@@ -313,6 +410,112 @@ const IV = 'VLT564EdqtU7GbW0';
 const CT = 'Hz0Yk8Xlbpd4/qATkvSjcbTYR1ot1TrWfXpYY/iyiwE8NN1VEX9jnKHc2FT26to=';
 
 let SECRET = null;
+let soundEnabled = true;
+let isInitialLoad = true;
+let knownKeys = new Set();
+let audioCtx = null;
+
+// Sound synthesizer using Web Audio API (crisp chime / bell)
+function playAlertSound(type = 'reg') {
+  if (!soundEnabled) return;
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    if (!audioCtx) audioCtx = new AudioContext();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+
+    const now = audioCtx.currentTime;
+    if (type === 'pay') {
+      // Cash chime (4 notes)
+      const notes = [523.25, 659.25, 783.99, 1046.50];
+      notes.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+        gain.gain.setValueAtTime(0.3, now + idx * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.35);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now + idx * 0.08);
+        osc.stop(now + idx * 0.08 + 0.35);
+      });
+    } else {
+      // Crisp 2-tone bell for new merchant registration (587Hz -> 880Hz)
+      [587.33, 880.00].forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+        gain.gain.setValueAtTime(0.35, now + idx * 0.12);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.12 + 0.45);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now + idx * 0.12);
+        osc.stop(now + idx * 0.12 + 0.45);
+      });
+    }
+  } catch(e) {}
+
+  // Mobile vibration
+  try {
+    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+  } catch(e) {}
+}
+
+function toggleDetectorSound() {
+  soundEnabled = !soundEnabled;
+  const btn = document.getElementById('btn-sound');
+  if (soundEnabled) {
+    btn.textContent = '🔔 Sonnerie ON';
+    btn.style.background = 'rgba(255, 255, 255, 0.18)';
+    playAlertSound('reg');
+  } else {
+    btn.textContent = '🔕 Sonnerie OFF';
+    btn.style.background = 'rgba(239, 68, 68, 0.4)';
+  }
+}
+
+let toastTimer = null;
+function showDetectorToast(title, msg, type = 'reg', phone = '', name = '') {
+  const toast = document.getElementById('detector-toast');
+  const icon = document.getElementById('det-toast-icon');
+  const tTitle = document.getElementById('det-toast-title');
+  const tMsg = document.getElementById('det-toast-msg');
+  const act = document.getElementById('det-toast-action');
+
+  icon.textContent = type === 'pay' ? '💰' : (type === 'bonus' ? '🎁' : '🆕');
+  tTitle.textContent = title;
+  tMsg.textContent = msg;
+
+  if (phone) {
+    const cleanP = phone.replace(/\D/g, '');
+    act.innerHTML = `<a href="https://wa.me/237${cleanP}?text=Bonjour%20${encodeURIComponent(name)}" target="_blank" style="padding:6px 12px;background:#25d366;color:#fff;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;display:inline-block;white-space:nowrap">WhatsApp Direct</a>`;
+  } else {
+    act.innerHTML = '';
+  }
+
+  toast.style.display = 'flex';
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.style.display = 'none';
+  }, 9000);
+}
+
+function closeDetectorToast() {
+  document.getElementById('detector-toast').style.display = 'none';
+  if (toastTimer) clearTimeout(toastTimer);
+}
+
+function testDetectorAlert() {
+  playAlertSound('reg');
+  showDetectorToast(
+    '⚡ TEST DÉTECTEUR RÉUSSI !',
+    'Le détecteur radar est opérationnel et prêt à capter les vraies inscriptions en direct.',
+    'reg'
+  );
+}
+
 let allEvents = [];
 const b = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
 const enc = new TextEncoder();
@@ -424,7 +627,22 @@ async function loadRealData() {
           const key = (data.phone || '') + '_' + (data.type || '') + '_' + (data.ts || item.time);
           if (!deletedKeys.includes(key) && !isBlacklisted(data) && !allEvents.some(e => e._key === key)) {
             allEvents.unshift({ ...data, _key: key, _srvTime: item.time });
+            
+            // DÉTECTION EN DIRECT
+            if (!isInitialLoad && !knownKeys.has(key)) {
+              if (data.type === 'pay') {
+                playAlertSound('pay');
+                showDetectorToast('💰 NOUVEAU PAIEMENT DÉTECTÉ !', `${data.name || 'Commerçant'} vient de payer ${data.amount || 500} F (${data.months || 1} mois) • 📱 ${data.phone}`, 'pay', data.phone, data.name);
+              } else if (data.type === 'bonus') {
+                playAlertSound('pay');
+                showDetectorToast('🎁 PARRAINAGE DÉTECTÉ !', `Parrain ${data.parrain} a gagné 1 mois gratuit grâce à ${data.filleul_name || data.filleul_phone}`, 'bonus', data.parrain, 'Parrain');
+              } else if (data.type === 'reg') {
+                playAlertSound('reg');
+                showDetectorToast('🆕 NOUVEAU COMMERÇANT DÉTECTÉ !', `${data.name || 'Boutique'} vient de s'inscrire à ${data.ville || 'Cameroun'} • 📱 ${data.phone}`, 'reg', data.phone, data.name);
+              }
+            }
           }
+          knownKeys.add(key);
         } catch(e) {}
       });
       allEvents.sort((a, b) => (b.ts || b._srvTime || 0) - (a.ts || a._srvTime || 0));
@@ -435,6 +653,12 @@ async function loadRealData() {
   }
 
   document.getElementById('sync-status').textContent = 'EN DIRECT';
+  if (isInitialLoad) {
+    allEvents.forEach(e => { if (e._key) knownKeys.add(e._key); });
+    isInitialLoad = false;
+  }
+  const detInfo = document.getElementById('det-sub-info');
+  if (detInfo) detInfo.textContent = `Écoute active • ${allEvents.length} commerçant(s) synchronisé(s) • Dernière synchro : ${new Date().toLocaleTimeString('fr-FR')}`;
   computeAndRender();
 }
 
