@@ -1,27 +1,30 @@
-const CACHE_NAME = 'cc-v73';
+// Service Worker Carnet Credit v74
+const CACHE_NAME = 'cc-v74';
 const ASSETS = [
   './',
   './index.html',
-  './index-DFLSNBEc.js',
-  './index-BXUP-vdl.css',
-  './manifest.json',
+  './index-CkrX3U2V.js',
+  './index-D6zToNmI.css',
+  './manifest.webmanifest',
   './version.json'
 ];
 
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
+self.addEventListener('install', (e) => {
+  e.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting())
+  );
 });
 
-self.addEventListener('activate', e => {
+self.addEventListener('activate', (e) => {
   e.waitUntil(
-    caches.keys().then(keys => Promise.all(
-      keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+    caches.keys().then((keys) => Promise.all(
+      keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))
     )).then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('fetch', e => {
+self.addEventListener('fetch', (e) => {
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request).catch(() => cached))
+    fetch(e.request).catch(() => caches.match(e.request))
   );
 });
