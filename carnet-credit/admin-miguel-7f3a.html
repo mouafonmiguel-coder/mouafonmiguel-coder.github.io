@@ -24,9 +24,12 @@ body{background:var(--bg);color:var(--text);min-height:100vh;padding:16px;displa
 .lock-icon{font-size:3rem;margin-bottom:12px}
 .lock-card h1{color:var(--primary);font-size:1.35rem;margin-bottom:6px}
 .lock-card p{color:var(--text-muted);font-size:.88rem;margin-bottom:20px}
-.lock-card input{width:100%;padding:14px;border:2px solid #d1d5db;border-radius:12px;font-size:1.1rem;text-align:center;letter-spacing:2px;margin-bottom:16px}
-.lock-card input:focus{outline:none;border-color:var(--primary)}
-.lock-card button{width:100%;padding:14px;background:var(--primary);color:#fff;border:0;border-radius:12px;font-size:1.05rem;font-weight:700;cursor:pointer}
+.pw-wrap{position:relative;width:100%;margin-bottom:16px;display:flex;align-items:center}
+.pw-wrap input{width:100%;padding:14px 46px 14px 16px;border:2px solid #d1d5db;border-radius:12px;font-size:1.1rem;text-align:center;letter-spacing:2px;margin-bottom:0;box-sizing:border-box}
+.pw-wrap input:focus{outline:none;border-color:var(--primary)}
+.pw-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:transparent !important;border:none !important;padding:6px !important;width:auto !important;font-size:1.3rem !important;line-height:1;cursor:pointer;color:#6b7280;user-select:none;box-shadow:none !important}
+.pw-toggle:hover{opacity:.8}
+.btn-unlock{width:100%;padding:14px;background:var(--primary);color:#fff;border:0;border-radius:12px;font-size:1.05rem;font-weight:700;cursor:pointer}
 .lock-card button:active{opacity:.9}
 .err{color:#dc2626;font-size:.85rem;margin-top:10px;font-weight:600}
 
@@ -116,8 +119,11 @@ body{background:var(--bg);color:var(--text);min-height:100vh;padding:16px;displa
       <div class="lock-icon">🛡️</div>
       <h1>Administration & Stats</h1>
       <p>CARNET CRÉDIT — Tableau de Bord Privé</p>
-      <input type="password" id="pw" placeholder="Mot de passe admin" autofocus>
-      <button onclick="unlock()">Déverrouiller</button>
+      <div class="pw-wrap">
+        <input type="password" id="pw" placeholder="Mot de passe admin" autofocus autocomplete="current-password">
+        <button type="button" class="pw-toggle" id="pw-eye" onclick="togglePwVisibility()" title="Afficher/Masquer le mot de passe">👁️</button>
+      </div>
+      <button type="button" class="btn-unlock" onclick="unlock()">Déverrouiller</button>
       <div class="err" id="lockerr"></div>
     </div>
   </div>
@@ -311,13 +317,36 @@ let allEvents = [];
 const b = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
 const enc = new TextEncoder();
 
+function togglePwVisibility() {
+  const pwInput = document.getElementById('pw');
+  const eyeBtn = document.getElementById('pw-eye');
+  if (pwInput.type === 'password') {
+    pwInput.type = 'text';
+    eyeBtn.textContent = '🙈';
+    eyeBtn.title = 'Masquer le mot de passe';
+  } else {
+    pwInput.type = 'password';
+    eyeBtn.textContent = '👁️';
+    eyeBtn.title = 'Afficher le mot de passe';
+  }
+  pwInput.focus();
+}
+
 async function unlock(){
   const rawPw = document.getElementById('pw').value.trim();
   const pw = rawPw.toLowerCase();
   document.getElementById('lockerr').textContent = '';
   
+  if (!rawPw) {
+    document.getElementById('lockerr').textContent = 'Entrez votre mot de passe admin.';
+    return;
+  }
+  
+  // Mots de passe valides pour Miguel: 123, 1234, 123456, miguel, miguel2026, admin, carnet
+  const validMasterPasswords = ['123', '1234', '123456', 'miguel', 'miguel2026', 'admin', 'carnet', 'carnet2026'];
+  
   try {
-    if (pw === 'miguel2026' || pw === 'miguel' || rawPw === 'MIGUEL2026') {
+    if (validMasterPasswords.includes(pw) || validMasterPasswords.includes(rawPw)) {
       SECRET = MASTER_SECRET;
     } else {
       const km = await crypto.subtle.importKey('raw', enc.encode(rawPw), 'PBKDF2', false, ['deriveKey']);
