@@ -1,10 +1,10 @@
-// Service Worker Carnet Credit v74
-const CACHE_NAME = 'cc-v74';
+// Service Worker Carnet Credit v75
+const CACHE_NAME = 'cc-v75';
 const ASSETS = [
   './',
   './index.html',
-  './index-CkrX3U2V.js',
-  './index-D6zToNmI.css',
+  './index-eDiXXqYm.js',
+  './index-BXUP-vdl.css',
   './manifest.webmanifest',
   './version.json'
 ];
