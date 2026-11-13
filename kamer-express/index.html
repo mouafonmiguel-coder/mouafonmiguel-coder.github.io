@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#0f2852">
-  <meta name="description" content="KAMER EXPRESS — Coursier 237 : La plateforme de services et coursiers professionnels à Yaoundé et Bertoua.">
+  <meta name="description" content="KAMER EXPRESS — Coursier 237 : La plateforme de services et coursiers professionnels dans tout le Cameroun.">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="manifest.webmanifest">
-  <title>KAMER EXPRESS — Coursier 237 | Yaoundé & Bertoua</title>
+  <title>KAMER EXPRESS — Coursier 237 | Tout le Cameroun</title>
 
   <style>
     /* ========================================================================
@@ -1007,7 +1007,7 @@
       <div class="brand-logo-icon">KE</div>
       <div class="brand-text-col">
         <div class="brand-title">KAMER EXPRESS</div>
-        <div class="brand-tagline">COURSIER 237 &bull; YAOUNDÉ & BERTOUA</div>
+        <div class="brand-tagline">COURSIER 237 &bull; TOUT LE CAMEROUN</div>
       </div>
     </div>
     <div class="header-actions">
@@ -1037,11 +1037,11 @@
           </div>
           <div class="hero-badge-city" style="margin-bottom:8px;">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-            Yaoundé & Bertoua
+            🇨🇲 Tout le Cameroun
           </div>
           <h1 class="hero-title">Bienvenue sur <span>Kamer Express</span> (Coursier 237) !</h1>
           <p class="hero-desc">
-            Simplifiez votre quotidien : courses express, certification de documents, expédition de colis et démarches administratives sous le contrôle direct de vos administrateurs référents.
+            Simplifiez votre quotidien : courses express, certification de documents, expédition de colis et démarches administratives dans tout le Cameroun sous le contrôle direct de vos administrateurs référents.
           </p>
 
           <!-- Statistiques de Confiance -->
@@ -1055,8 +1055,8 @@
               <div class="stat-label">CNI & Domicile</div>
             </div>
             <div class="stat-clean-item">
-              <div class="stat-number">2 Villes</div>
-              <div class="stat-label">Yaoundé & Bertoua</div>
+              <div class="stat-number">10 Régions</div>
+              <div class="stat-label">Tout le Cameroun</div>
             </div>
           </div>
         </div>
@@ -1088,7 +1088,7 @@
               <div class="step-num-badge">3</div>
               <div class="step-content">
                 <div class="step-title">Prise en charge par l'Administrateur</div>
-                <div class="step-desc">Miguel (Admin Yaoundé) ou Jamil (Admin Bertoua) prend directement en charge et sécurise votre mission.</div>
+                <div class="step-desc">Les administrateurs Miguel et Jamil prennent directement en charge et sécurisent votre mission.</div>
               </div>
             </div>
             <div class="step-item">
@@ -1183,7 +1183,7 @@
         </h2>
       </div>
       <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 14px;">
-        Nos tarifs sont fixés et ajustés selon la distance et la nature de la mission par nos administrateurs référents (Miguel à Yaoundé et Jamil à Bertoua).
+        Nos tarifs sont fixés et ajustés selon la distance et la nature de la mission par vos administrateurs référents (Miguel & Jamil) pour toutes les villes du Cameroun.
       </p>
 
       <div class="services-grid" id="detailed-services-container">
@@ -1204,18 +1204,26 @@
 
       <form id="orderForm" onsubmit="handleOrderSubmit(event)">
         
-        <!-- Ville -->
+        <!-- Ville (Tout le Cameroun) -->
         <div class="form-group">
-          <label class="form-label">Ville de la course :</label>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-            <div id="city-card-yde" onclick="selectOrderCity('Yaoundé')" style="padding: 10px; border: 2px solid var(--blue-royal); background: var(--blue-light); border-radius: var(--radius-md); text-align: center; cursor: pointer; font-weight: 800; font-size: 0.85rem; color: var(--blue-deep);">
-              Yaoundé (Admin Miguel)
-            </div>
-            <div id="city-card-bta" onclick="selectOrderCity('Bertoua')" style="padding: 10px; border: 1px solid var(--border-color); background: #ffffff; border-radius: var(--radius-md); text-align: center; cursor: pointer; font-weight: 800; font-size: 0.85rem; color: var(--text-muted);">
-              Bertoua (Admin Jamil)
-            </div>
-          </div>
-          <input type="hidden" id="orderCity" value="Yaoundé">
+          <label class="form-label" for="orderCity">Ville de la course / prestation (Tout le Cameroun) :</label>
+          <select id="orderCity" class="form-control" style="font-weight:700;">
+            <option value="Yaoundé">Yaoundé (Centre)</option>
+            <option value="Douala">Douala (Littoral)</option>
+            <option value="Bafoussam">Bafoussam (Ouest)</option>
+            <option value="Bertoua">Bertoua (Est)</option>
+            <option value="Garoua">Garoua (Nord)</option>
+            <option value="Maroua">Maroua (Extrême-Nord)</option>
+            <option value="Ngaoundéré">Ngaoundéré (Adamaoua)</option>
+            <option value="Bamenda">Bamenda (Nord-Ouest)</option>
+            <option value="Kribi">Kribi (Sud)</option>
+            <option value="Limbe">Limbe (Sud-Ouest)</option>
+            <option value="Buea">Buea (Sud-Ouest)</option>
+            <option value="Ebolowa">Ebolowa (Sud)</option>
+            <option value="Dschang">Dschang (Ouest)</option>
+            <option value="Kousséri">Kousséri (Extrême-Nord)</option>
+            <option value="Autre ville">Autre ville (Cameroun)</option>
+          </select>
         </div>
 
         <!-- Service -->
@@ -1291,7 +1299,7 @@
         </h2>
       </div>
       <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 14px;">
-        Devenez coursier partenaire sous la supervision des administrateurs Miguel (Yaoundé) et Jamil (Bertoua). Vos documents (CNI et justificatif de domicile) sont vérifiés avant validation.
+        Devenez coursier partenaire dans votre ville sous la supervision des administrateurs Miguel et Jamil. Vos documents (CNI et justificatif de domicile) sont vérifiés avant validation.
       </p>
 
       <form id="agentApplyForm" onsubmit="handleAgentApplication(event)">
@@ -1300,10 +1308,23 @@
           <input type="text" id="applyAgentName" class="form-control" placeholder="Ex: Samuel Eto'o" required>
         </div>
         <div class="form-group">
-          <label class="form-label" for="applyAgentCity">Ville de travail :</label>
+          <label class="form-label" for="applyAgentCity">Ville de travail (Cameroun) :</label>
           <select id="applyAgentCity" class="form-control" required>
-            <option value="Yaoundé">Yaoundé</option>
-            <option value="Bertoua">Bertoua</option>
+            <option value="Yaoundé">Yaoundé (Centre)</option>
+            <option value="Douala">Douala (Littoral)</option>
+            <option value="Bafoussam">Bafoussam (Ouest)</option>
+            <option value="Bertoua">Bertoua (Est)</option>
+            <option value="Garoua">Garoua (Nord)</option>
+            <option value="Maroua">Maroua (Extrême-Nord)</option>
+            <option value="Ngaoundéré">Ngaoundéré (Adamaoua)</option>
+            <option value="Bamenda">Bamenda (Nord-Ouest)</option>
+            <option value="Kribi">Kribi (Sud)</option>
+            <option value="Limbe">Limbe (Sud-Ouest)</option>
+            <option value="Buea">Buea (Sud-Ouest)</option>
+            <option value="Ebolowa">Ebolowa (Sud)</option>
+            <option value="Dschang">Dschang (Ouest)</option>
+            <option value="Kousséri">Kousséri (Extrême-Nord)</option>
+            <option value="Autre ville">Autre ville (Cameroun)</option>
           </select>
         </div>
         <div class="form-group">
@@ -1611,10 +1632,23 @@
           <input type="tel" id="regPhone" class="form-control" placeholder="Ex: 692168264" required>
         </div>
         <div class="form-group">
-          <label class="form-label" for="regCity">Votre Ville :</label>
+          <label class="form-label" for="regCity">Votre Ville (Cameroun) :</label>
           <select id="regCity" class="form-control">
-            <option value="Yaoundé">Yaoundé</option>
-            <option value="Bertoua">Bertoua</option>
+            <option value="Yaoundé">Yaoundé (Centre)</option>
+            <option value="Douala">Douala (Littoral)</option>
+            <option value="Bafoussam">Bafoussam (Ouest)</option>
+            <option value="Bertoua">Bertoua (Est)</option>
+            <option value="Garoua">Garoua (Nord)</option>
+            <option value="Maroua">Maroua (Extrême-Nord)</option>
+            <option value="Ngaoundéré">Ngaoundéré (Adamaoua)</option>
+            <option value="Bamenda">Bamenda (Nord-Ouest)</option>
+            <option value="Kribi">Kribi (Sud)</option>
+            <option value="Limbe">Limbe (Sud-Ouest)</option>
+            <option value="Buea">Buea (Sud-Ouest)</option>
+            <option value="Ebolowa">Ebolowa (Sud)</option>
+            <option value="Dschang">Dschang (Ouest)</option>
+            <option value="Kousséri">Kousséri (Extrême-Nord)</option>
+            <option value="Autre ville">Autre ville (Cameroun)</option>
           </select>
         </div>
         <div class="form-group">
@@ -1779,8 +1813,8 @@
        JAVASCRIPT LOGIC
        ======================================================================== -->
   <script>
-    const APP_VERSION = '2.5.2';
-    const APP_BUILD = 2026111308;
+    const APP_VERSION = '2.6.0';
+    const APP_BUILD = 2026111309;
 
     const DEFAULT_AVATAR_MIGUEL = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231e3a8a'/><circle cx='50' cy='38' r='20' fill='%23d97706'/><path d='M20,90 Q50,60 80,90' fill='%23f59e0b'/><text x='50' y='44' font-family='sans-serif' font-size='18' font-weight='bold' fill='%230a192f' text-anchor='middle'>M</text></svg>";
     const DEFAULT_AVATAR_JAMIL = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230f2341'/><circle cx='50' cy='38' r='20' fill='%23f59e0b'/><path d='M20,90 Q50,60 80,90' fill='%23d97706'/><text x='50' y='44' font-family='sans-serif' font-size='18' font-weight='bold' fill='%230a192f' text-anchor='middle'>J</text></svg>";
@@ -1794,7 +1828,7 @@
         phone: '692168264',
         city: 'Yaoundé',
         role: 'Administrateur Principal',
-        statusTitle: '👑 Admin — Yaoundé',
+        statusTitle: '👑 Administrateur Principal',
         isAdmin: true,
         photoUrl: DEFAULT_AVATAR_MIGUEL
       },
@@ -1804,7 +1838,7 @@
         phone: '656995369',
         city: 'Bertoua',
         role: 'Administrateur Référent',
-        statusTitle: '👑 Admin — Bertoua',
+        statusTitle: '👑 Administrateur Référent',
         isAdmin: true,
         photoUrl: DEFAULT_AVATAR_JAMIL
       }
