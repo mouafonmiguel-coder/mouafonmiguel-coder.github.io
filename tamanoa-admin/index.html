@@ -405,12 +405,8 @@
 
     function getClients() {
       let clients = JSON.parse(localStorage.getItem('ke_users_v5') || '[]');
-      clients = clients.filter(c => {
-        const n = (c.name||'').toLowerCase().trim();
-        if (['usr-1', 'usr-2', 'usr-3'].includes(c.id)) return false;
-        if (n.includes('jean') || n.includes('test') || n.includes('nathalie') || n.includes('alain')) return false;
-        return true;
-      });
+      const demoIds = ['usr-1', 'usr-2', 'usr-3', 'usr-demo'];
+      clients = clients.filter(c => !demoIds.includes(c.id));
       return clients;
     }
 
