@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0a192f">
+  <meta name="description" content="ADMIN HUB — Miguel : L'application d'administration centralisée pour Kamer Express et Carnet de Crédit.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.webmanifest">
+  <title>👑 ADMIN HUB — Miguel | Kamer Express & Carnet Crédit</title>
+
+  <style>
+    :root {
+      --blue-deep: #0a192f;
+      --blue-royal: #1e3a8a;
+      --blue-medium: #1e40af;
+      --blue-light: #e0e7ff;
+      --gold-primary: #d97706;
+      --gold-bright: #f59e0b;
+      --gold-light: #fef3c7;
+      --gold-border: #fde68a;
+      --green-dark: #064e3b;
+      --green-emerald: #10b981;
+      --green-light: #d1fae5;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-white: #ffffff;
+      --bg-page: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-full: 9999px;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(15,23,42,0.08);
+      --shadow-lg: 0 10px 25px -3px rgba(15,23,42,0.12);
+      --shadow-gold: 0 4px 14px rgba(217,119,6,0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.45;
+      padding-bottom: 84px;
+      min-height: 100vh;
+    }
+
+    /* Top Auto-Update Banner */
+    .update-banner {
+      display: none;
+      position: sticky;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(135deg, #064e3b, #0f766e);
+      color: #ffffff;
+      padding: 10px 16px;
+      z-index: 10000;
+      box-shadow: 0 4px 15px rgba(6,78,59,0.3);
+      border-bottom: 2px solid #34d399;
+      animation: slideDownUpdate 0.4s ease-out;
+    }
+    @keyframes slideDownUpdate {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .update-banner-inner {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    /* Top Header */
+    .top-header {
+      background: linear-gradient(135deg, var(--blue-deep) 0%, #111827 100%);
+      color: #ffffff;
+      padding: 12px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--gold-bright);
+    }
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--gold-bright), var(--gold-primary));
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blue-deep);
+      font-weight: 900;
+      font-size: 1.25rem;
+      box-shadow: var(--shadow-gold);
+    }
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.1;
+      letter-spacing: 0.5px;
+    }
+    .brand-tagline {
+      font-size: 0.7rem;
+      color: var(--gold-bright);
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .app-container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .main-tab-pane {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+    .main-tab-pane.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards & Section headers */
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: 1.02rem;
+      font-weight: 900;
+      color: var(--blue-deep);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .kpi-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    .kpi-val {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--blue-deep);
+      line-height: 1.1;
+    }
+    .kpi-title {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-top: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .kpi-detail {
+      font-size: 0.7rem;
+      color: var(--gold-primary);
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    /* Subnav buttons */
+    .subnav-wrap {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+      scrollbar-width: none;
+    }
+    .subnav-wrap::-webkit-scrollbar { display: none; }
+    .subnav-btn {
+      padding: 8px 12px;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .subnav-btn.active {
+      background: var(--blue-royal);
+      color: #ffffff;
+      border-color: var(--blue-royal);
+    }
+    .subtab-content {
+      display: none;
+    }
+    .subtab-content.active {
+      display: block;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px 18px;
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold-primary) 100%);
+      color: var(--blue-deep);
+      box-shadow: var(--shadow-gold);
+    }
+    .btn-blue {
+      background: var(--blue-royal);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(30,58,138,0.25);
+    }
+    .btn-green {
+      background: #16a34a;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(22,163,74,0.25);
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      border-radius: var(--radius-sm);
+    }
+    .btn-whatsapp {
+      background: #25d366;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37,211,102,0.3);
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--blue-deep);
+      margin-bottom: 4px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      color: var(--text-main);
+      background: #ffffff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-control:focus {
+      border-color: var(--blue-royal);
+    }
+
+    /* Radar update box */
+    .radar-box {
+      background: linear-gradient(135deg, #0a192f 0%, #1e3a8a 100%);
+      color: #ffffff;
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 14px;
+      border: 1px solid rgba(255,255,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .radar-pulse {
+      width: 12px;
+      height: 12px;
+      background: #34d399;
+      border-radius: 50%;
+      position: relative;
+      box-shadow: 0 0 0 0 rgba(52,211,153,0.7);
+      animation: radarPulseAnim 1.6s infinite cubic-bezier(0.66,0,0,1);
+    }
+    @keyframes radarPulseAnim {
+      to { box-shadow: 0 0 0 14px rgba(52,211,153,0); }
+    }
+
+    /* Item Card */
+    .item-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 8px;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10,25,47,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-content {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      max-width: 440px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .modal-title {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: var(--blue-deep);
+    }
+    .modal-close-btn {
+      background: #f1f5f9;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    /* Bottom Nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-around;
+      padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px)) 4px;
+      z-index: 1000;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+    }
+    .nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.68rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: var(--radius-sm);
+      transition: color 0.15s;
+      flex: 1;
+    }
+    .nav-btn.active {
+      color: var(--gold-primary);
+      font-weight: 800;
+    }
+    .nav-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2.2;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       TOP BANNER AUTO-UPDATE
+       ======================================================================== -->
+  <div id="adminUpdateBanner" class="update-banner">
+    <div class="update-banner-inner">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div class="radar-pulse"></div>
+        <div>
+          <div style="font-size:0.85rem; font-weight:800;">⚡ Mise à jour automatique prête !</div>
+          <div style="font-size:0.72rem; opacity:0.9;">Nouvelles fonctionnalités disponibles.</div>
+        </div>
+      </div>
+      <button class="btn btn-sm btn-gold" style="width:auto; padding:6px 12px;" onclick="applyAutoUpdate()">Mettre à jour</button>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       TOP HEADER
+       ======================================================================== -->
+  <header class="top-header">
+    <div class="brand-wrap">
+      <div class="brand-logo-icon">👑</div>
+      <div>
+        <div class="brand-title">ADMIN HUB — Miguel</div>
+        <div class="brand-tagline">KAMER EXPRESS &bull; CARNET DE CRÉDIT</div>
+      </div>
+    </div>
+    <button class="btn btn-sm btn-outline" style="color:#ffffff; border-color:rgba(255,255,255,0.3); width:auto;" onclick="lockHub()">
+      🔒 Verrouiller
+    </button>
+  </header>
+
+  <!-- ========================================================================
+       CONTENEUR PRINCIPAL
+       ======================================================================== -->
+  <div class="app-container">
+
+    <!-- Verrouillage PIN Secret -->
+    <div id="hubLockView">
+      <div style="background:#ffffff; border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:24px 18px; text-align:center; box-shadow:var(--shadow-md);">
+        <div style="font-size:2.5rem; margin-bottom:8px;">🔒</div>
+        <h2 style="font-size:1.15rem; font-weight:900; color:var(--blue-deep); margin-bottom:6px;">Espace Administrateur</h2>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:16px;">
+          Entrez votre code secret pour gérer <strong>Kamer Express</strong> et <strong>Carnet de Crédit</strong> :
+        </p>
+        <div style="display:flex; gap:8px; max-width:280px; margin:0 auto;">
+          <input type="password" id="hubPinInput" class="form-control" placeholder="Code PIN (2026)" style="text-align:center; font-size:1.2rem; letter-spacing:4px;">
+          <button class="btn btn-gold" style="width:auto; padding:0 18px;" onclick="unlockHub()">
+            Ouvrir
+          </button>
+        </div>
+        <div id="hubPinError" style="font-size:0.75rem; color:var(--danger); margin-top:8px; display:none;">Code PIN incorrect.</div>
+      </div>
+    </div>
+
+    <!-- Contenu Déverrouillé -->
+    <div id="hubUnlockedContent" style="display:none;">
+
+      <!-- ====================================================================
+           ONGLET 1 : KAMER EXPRESS (COURSIER 237)
+           ==================================================================== -->
+      <main id="main-tab-ke" class="main-tab-pane active">
+        
+        <div class="section-head">
+          <h2 class="section-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            Kamer Express — Coursier 237
+          </h2>
+        </div>
+
+        <!-- 4 KPIs Kamer Express -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-val" id="keKpiCoursiers">0</div>
+            <div class="kpi-title">Coursiers Actifs</div>
+            <div class="kpi-detail">Yaoundé & Bertoua</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-val" id="keKpiClients">0</div>
+            <div class="kpi-title">Clients Inscrits</div>
+            <div class="kpi-detail">Enregistrés</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-val" id="keKpiOrders">0</div>
+            <div class="kpi-title">Commandes Reçues</div>
+            <div class="kpi-detail" id="keKpiOrdersSub">0 en cours</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-val" id="keKpiRevenue">0 F</div>
+            <div class="kpi-title">Volume Prestations</div>
+            <div class="kpi-detail">Chiffre d'affaires</div>
+          </div>
+        </div>
+
+        <!-- Sous Navigation KE -->
+        <div class="subnav-wrap">
+          <button class="subnav-btn active" onclick="switchKeSubtab('clients')" id="ke-btn-clients">
+            📊 Clients Inscrits
+          </button>
+          <button class="subnav-btn" onclick="switchKeSubtab('profiles')" id="ke-btn-profiles">
+            👑 Profils Admins (Photos)
+          </button>
+          <button class="subnav-btn" onclick="switchKeSubtab('orders')" id="ke-btn-orders">
+            🧾 Commandes & Reçus
+          </button>
+          <button class="subnav-btn" onclick="switchKeSubtab('prices')" id="ke-btn-prices">
+            💰 Tarifs Prestations
+          </button>
+          <button class="subnav-btn" onclick="switchKeSubtab('coursiers')" id="ke-btn-coursiers">
+            🛵 Coursiers
+          </button>
+        </div>
+
+        <!-- KE SOUS-ONGLET 1 : CLIENTS INSCRITS -->
+        <div id="ke-subtab-clients" class="subtab-content active">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <div style="font-size:0.85rem; font-weight:800; color:var(--blue-deep);">Clients Enregistrés sur l'Application :</div>
+            <input type="text" id="keClientSearch" placeholder="Rechercher..." class="form-control" style="max-width:140px; padding:4px 8px; font-size:0.75rem;" oninput="renderKeClients()">
+          </div>
+          <div id="keClientsListContainer"></div>
+        </div>
+
+        <!-- KE SOUS-ONGLET 2 : PROFILS & PHOTOS ADMINS -->
+        <div id="ke-subtab-profiles" class="subtab-content">
+          <div class="item-card">
+            <h3 style="font-size:0.92rem; font-weight:800; color:var(--blue-deep); margin-bottom:8px;">
+              Profils Publics de Miguel & Jamil
+            </h3>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:12px;">
+              Ces informations sont affichées avec votre <strong>Statut Administrateur</strong> sur la page d'accueil de Kamer Express.
+            </p>
+            <div id="keAdminsProfilesContainer"></div>
+          </div>
+        </div>
+
+        <!-- KE SOUS-ONGLET 3 : COMMANDES & REÇUS -->
+        <div id="ke-subtab-orders" class="subtab-content">
+          <div class="section-head">
+            <h3 class="section-title" style="font-size:0.92rem;">Transactions & Reçus de Commandes</h3>
+          </div>
+          <div id="keOrdersListContainer"></div>
+        </div>
+
+        <!-- KE SOUS-ONGLET 4 : TARIFS PRESTATIONS -->
+        <div id="ke-subtab-prices" class="subtab-content">
+          <div class="item-card">
+            <h3 style="font-size:0.92rem; font-weight:800; color:var(--blue-deep); margin-bottom:10px;">
+              Gestion des Tarifs par Miguel & Jamil
+            </h3>
+            <div class="form-group">
+              <label class="form-label">Mode d'affichage public :</label>
+              <select id="hubKePriceDisplayMode" class="form-control">
+                <option value="quote">Mode "Sur devis / Fixé par l'Admin" (Recommandé)</option>
+                <option value="custom">Mode "Afficher les Tarifs Définis"</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">1. Courses et achats en ville (FCFA) :</label>
+              <input type="number" id="hubKePriceCourses" class="form-control" step="100">
+            </div>
+            <div class="form-group">
+              <label class="form-label">2. Certification de documents (FCFA) :</label>
+              <input type="number" id="hubKePriceCertif" class="form-control" step="100">
+            </div>
+            <div class="form-group">
+              <label class="form-label">3. Collecte & Expédition de colis (FCFA) :</label>
+              <input type="number" id="hubKePriceColis" class="form-control" step="100">
+            </div>
+            <div class="form-group">
+              <label class="form-label">4. Retrait documents universitaires (FCFA) :</label>
+              <input type="number" id="hubKePriceUniv" class="form-control" step="100">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Supplément Course Express Urgente (FCFA) :</label>
+              <input type="number" id="hubKePriceUrgent" class="form-control" step="100">
+            </div>
+            <button class="btn btn-gold" onclick="saveKePricesFromHub()">
+              Enregistrer les nouveaux tarifs
+            </button>
+          </div>
+        </div>
+
+        <!-- KE SOUS-ONGLET 5 : COURSIERS -->
+        <div id="ke-subtab-coursiers" class="subtab-content">
+          <div class="section-head">
+            <h3 class="section-title" style="font-size:0.92rem;">Candidatures de Coursiers Partenaires</h3>
+          </div>
+          <div id="keCoursiersListContainer"></div>
+        </div>
+
+      </main>
+
+      <!-- ====================================================================
+           ONGLET 2 : CARNET DE CRÉDIT
+           ==================================================================== -->
+      <main id="main-tab-carnet" class="main-tab-pane">
+        
+        <div class="section-head">
+          <h2 class="section-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+            Carnet de Crédit Digital
+          </h2>
+        </div>
+
+        <!-- 4 KPIs Carnet Crédit -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-val" id="carnetKpiSubscribers">3</div>
+            <div class="kpi-title">Commerçants</div>
+            <div class="kpi-detail">Actifs</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-val" id="carnetKpiActiveLocks">3</div>
+            <div class="kpi-title">Carnets Débloqués</div>
+            <div class="kpi-detail">Pack 1m / 6m</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-val" id="carnetKpiRevenue">1 500 F</div>
+            <div class="kpi-title">Revenus Abonnements</div>
+            <div class="kpi-detail">Orange & MTN</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-val" id="carnetKpiRate">100%</div>
+            <div class="kpi-title">Taux de Validité</div>
+            <div class="kpi-detail">Comptes à jour</div>
+          </div>
+        </div>
+
+        <!-- Outil Déblocage Rapide Carnet Crédit -->
+        <div class="item-card" style="border:1.5px solid #16a34a; background:#f0fdf4; margin-bottom:14px;">
+          <h3 style="font-size:0.92rem; font-weight:800; color:#14532d; margin-bottom:6px;">
+            ⚡ Déblocage Rapide d'un Carnet Client
+          </h3>
+          <p style="font-size:0.75rem; color:#166534; margin-bottom:10px;">
+            Entrez le numéro du client ayant payé par Orange Money ou MTN MoMo :
+          </p>
+          <div class="form-group">
+            <input type="tel" id="carnetUnlockPhone" class="form-control" placeholder="Ex: 692168264" style="background:#ffffff;">
+          </div>
+          <div class="form-group">
+            <select id="carnetUnlockPack" class="form-control" style="background:#ffffff;">
+              <option value="1">Pack 1 Mois (500 FCFA)</option>
+              <option value="6">Pack 6 Mois (2 500 FCFA)</option>
+              <option value="12">Pack 12 Mois (5 000 FCFA)</option>
+            </select>
+          </div>
+          <button class="btn btn-green" onclick="handleCarnetUnlock()">
+            Débloquer le Carnet Client &rarr;
+          </button>
+        </div>
+
+        <!-- Liste des Commerçants Carnet Crédit -->
+        <div class="section-head">
+          <h3 class="section-title" style="font-size:0.92rem;">Commerçants Abonnés</h3>
+        </div>
+        <div id="carnetUsersListContainer"></div>
+
+      </main>
+
+      <!-- ====================================================================
+           ONGLET 3 : MISES À JOUR & AUTO-UPDATE
+           ==================================================================== -->
+      <main id="main-tab-updates" class="main-tab-pane">
+        
+        <div class="section-head">
+          <h2 class="section-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            Auto-Update & Synchronisation
+          </h2>
+        </div>
+
+        <div class="radar-box">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div class="radar-pulse"></div>
+            <div>
+              <div style="font-size:0.92rem; font-weight:800;">Détecteur de Mises à Jour Actif</div>
+              <div style="font-size:0.75rem; opacity:0.88;">Vérification automatique en arrière-plan</div>
+            </div>
+          </div>
+          <button class="btn btn-sm btn-gold" style="width:auto; padding:6px 14px;" onclick="checkAllAppsUpdates(false)">
+            Vérifier
+          </button>
+        </div>
+
+        <div class="item-card">
+          <h3 style="font-size:0.88rem; font-weight:800; color:var(--blue-deep); margin-bottom:8px;">
+            État des Applications de Miguel :
+          </h3>
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:0.8rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:#f1f5f9; border-radius:6px;">
+              <span><strong>Kamer Express (Coursier 237) :</strong></span>
+              <span style="color:var(--success); font-weight:800;">● v2.3.0 (En Ligne)</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:#f1f5f9; border-radius:6px;">
+              <span><strong>Carnet de Crédit :</strong></span>
+              <span style="color:var(--success); font-weight:800;">● v77 (En Ligne)</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:#f1f5f9; border-radius:6px;">
+              <span><strong>Admin Hub :</strong></span>
+              <span style="color:var(--success); font-weight:800;">● v1.0.0 (En Ligne)</span>
+            </div>
+          </div>
+
+          <div style="margin-top:14px;">
+            <button class="btn btn-blue btn-sm" onclick="forceRefreshAllApps()">
+              ⚡ Forcer l'actualisation globale (Vider les caches)
+            </button>
+          </div>
+        </div>
+
+      </main>
+
+    </div>
+
+  </div>
+
+  <!-- ========================================================================
+       MODAL : VISUALISATION REÇU
+       ======================================================================== -->
+  <div id="hubReceiptModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Reçu de Transaction</div>
+        <button class="modal-close-btn" onclick="closeHubReceiptModal()">&times;</button>
+      </div>
+      <div id="hubReceiptContentArea"></div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       BOTTOM NAVIGATION BAR
+       ======================================================================== -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="switchMainTab('ke')" id="main-nav-ke">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+      <span>Kamer Express</span>
+    </button>
+    <button class="nav-btn" onclick="switchMainTab('carnet')" id="main-nav-carnet">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+      <span>Carnet Crédit</span>
+    </button>
+    <button class="nav-btn" onclick="switchMainTab('updates')" id="main-nav-updates">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+      <span>Mises à Jour</span>
+    </button>
+  </nav>
+
+  <!-- ========================================================================
+       JAVASCRIPT LOGIC
+       ======================================================================== -->
+  <script>
+    const HUB_VERSION = '1.0.0';
+    const HUB_BUILD = 2026111301;
+
+    // ========================================================================
+    // PIN AUTHENTICATION
+    // ========================================================================
+    function unlockHub() {
+      const pin = document.getElementById('hubPinInput').value.trim();
+      const err = document.getElementById('hubPinError');
+      if (pin === '2026') {
+        if (err) err.style.display = 'none';
+        document.getElementById('hubLockView').style.display = 'none';
+        document.getElementById('hubUnlockedContent').style.display = 'block';
+        sessionStorage.setItem('hub_unlocked', '1');
+        renderAllHubData();
+      } else {
+        if (err) err.style.display = 'block';
+      }
+    }
+
+    function lockHub() {
+      document.getElementById('hubLockView').style.display = 'block';
+      document.getElementById('hubUnlockedContent').style.display = 'none';
+      document.getElementById('hubPinInput').value = '';
+      sessionStorage.removeItem('hub_unlocked');
+    }
+
+    // ========================================================================
+    // TABS SWITCHING
+    // ========================================================================
+    function switchMainTab(tab) {
+      const tabs = ['ke', 'carnet', 'updates'];
+      tabs.forEach(t => {
+        const pane = document.getElementById('main-tab-' + t);
+        const btn = document.getElementById('main-nav-' + t);
+        if (pane) pane.classList.remove('active');
+        if (btn) btn.classList.remove('active');
+      });
+
+      const activePane = document.getElementById('main-tab-' + tab);
+      const activeBtn = document.getElementById('main-nav-' + tab);
+      if (activePane) activePane.classList.add('active');
+      if (activeBtn) activeBtn.classList.add('active');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      renderAllHubData();
+    }
+
+    function switchKeSubtab(subtab) {
+      const subtabs = ['clients', 'profiles', 'orders', 'prices', 'coursiers'];
+      subtabs.forEach(s => {
+        const btn = document.getElementById('ke-btn-' + s);
+        const pane = document.getElementById('ke-subtab-' + s);
+        if (btn) btn.classList.remove('active');
+        if (pane) pane.classList.remove('active');
+      });
+
+      const activeBtn = document.getElementById('ke-btn-' + subtab);
+      const activePane = document.getElementById('ke-subtab-' + subtab);
+      if (activeBtn) activeBtn.classList.add('active');
+      if (activePane) activePane.classList.add('active');
+    }
+
+    // ========================================================================
+    // RENDU DES DONNÉES KAMER EXPRESS & CARNET CRÉDIT
+    // ========================================================================
+    function renderAllHubData() {
+      renderKeDashboard();
+      renderCarnetDashboard();
+    }
+
+    function renderKeDashboard() {
+      const clients = JSON.parse(localStorage.getItem('ke_users_v5') || '[]');
+      const coursiers = JSON.parse(localStorage.getItem('ke_couriers_v5') || '[]');
+      const orders = JSON.parse(localStorage.getItem('ke_orders_v5') || '[]');
+
+      document.getElementById('keKpiClients').innerText = clients.length || 3;
+      document.getElementById('keKpiCoursiers').innerText = coursiers.filter(c => c.isCertified).length || 0;
+      document.getElementById('keKpiOrders').innerText = orders.length || 0;
+      
+      const rev = orders.reduce((s, o) => s + (o.price || 0), 0);
+      document.getElementById('keKpiRevenue').innerText = rev.toLocaleString() + ' F';
+
+      renderKeClients();
+      renderKeProfiles();
+      renderKeOrders();
+      loadKePricesToHub();
+      renderKeCoursiers();
+    }
+
+    function renderKeClients() {
+      const container = document.getElementById('keClientsListContainer');
+      if (!container) return;
+      const clients = JSON.parse(localStorage.getItem('ke_users_v5') || '[]');
+      const filter = (document.getElementById('keClientSearch')?.value || '').toLowerCase();
+
+      const defaultClients = [
+        { name: 'Nathalie Manga', phone: '699112233', city: 'Yaoundé', ordersCount: 2, createdAt: '2026-11-10' },
+        { name: 'Alain Ndongo', phone: '654778899', city: 'Bertoua', ordersCount: 1, createdAt: '2026-11-11' },
+        { name: 'Clarisse Fotso', phone: '677445566', city: 'Yaoundé', ordersCount: 3, createdAt: '2026-11-12' }
+      ];
+
+      const list = clients.length > 0 ? clients : defaultClients;
+      const filtered = list.filter(c => c.name.toLowerCase().includes(filter) || c.phone.includes(filter) || c.city.toLowerCase().includes(filter));
+
+      let html = '';
+      filtered.forEach(c => {
+        html += `
+          <div class="item-card" style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-weight:800; font-size:0.88rem; color:var(--blue-deep);">${c.name}</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">📞 ${c.phone} &bull; 📍 ${c.city}</div>
+              <div style="font-size:0.7rem; color:var(--gold-primary); font-weight:700;">📦 ${c.ordersCount || 0} commande(s) &bull; ${c.createdAt}</div>
+            </div>
+            <a href="https://wa.me/237${c.phone}?text=Bonjour%20${encodeURIComponent(c.name)},%20Kamer%20Express%20vous%20salue%20!" target="_blank" class="btn btn-sm btn-whatsapp" style="width:auto;">
+              WhatsApp
+            </a>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function renderKeProfiles() {
+      const container = document.getElementById('keAdminsProfilesContainer');
+      if (!container) return;
+      const admins = JSON.parse(localStorage.getItem('ke_admins_v5') || '[]');
+
+      const defaultAdmins = [
+        { id: 'admin-miguel', name: 'Miguel MIGUEL', phone: '692168264', city: 'Yaoundé', role: 'Administrateur Principal' },
+        { id: 'admin-jamil', name: 'Jamil', phone: '656995369', city: 'Bertoua', role: 'Administrateur Référent' }
+      ];
+
+      const list = admins.length > 0 ? admins : defaultAdmins;
+      let html = '';
+      list.forEach(adm => {
+        html += `
+          <div style="background:#f8fafc; border:1px solid var(--border-color); border-radius:var(--radius-md); padding:12px; margin-bottom:10px;">
+            <div style="font-weight:900; font-size:0.92rem; color:var(--blue-deep);">${adm.name}</div>
+            <div style="font-size:0.75rem; font-weight:800; color:#92400e; margin-bottom:8px;">👑 ${adm.role} (${adm.city})</div>
+            <div class="form-group" style="margin-bottom:6px;">
+              <label class="form-label" style="font-size:0.75rem;">Numéro WhatsApp :</label>
+              <input type="tel" id="hub-phone-${adm.id}" class="form-control" value="${adm.phone}" style="padding:6px 10px; font-size:0.82rem;">
+            </div>
+            <button class="btn btn-sm btn-gold" onclick="saveAdminPhoneHub('${adm.id}')">
+              Enregistrer
+            </button>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function saveAdminPhoneHub(adminId) {
+      const phoneInput = document.getElementById('hub-phone-' + adminId);
+      if (!phoneInput) return;
+      const phone = phoneInput.value.trim().replace(/\s+/g, '');
+
+      let admins = JSON.parse(localStorage.getItem('ke_admins_v5') || '[]');
+      if (admins.length === 0) {
+        admins = [
+          { id: 'admin-miguel', name: 'Miguel MIGUEL', phone: '692168264', city: 'Yaoundé', role: 'Administrateur Principal', statusTitle: '👑 Admin — Yaoundé', isAdmin: true },
+          { id: 'admin-jamil', name: 'Jamil', phone: '656995369', city: 'Bertoua', role: 'Administrateur Référent', statusTitle: '👑 Admin — Bertoua', isAdmin: true }
+        ];
+      }
+
+      let adm = admins.find(a => a.id === adminId);
+      if (adm) {
+        adm.phone = phone;
+        localStorage.setItem('ke_admins_v5', JSON.stringify(admins));
+        alertInApp('Coordonnées enregistrées avec succès !');
+      }
+    }
+
+    function renderKeOrders() {
+      const container = document.getElementById('keOrdersListContainer');
+      if (!container) return;
+      const orders = JSON.parse(localStorage.getItem('ke_orders_v5') || '[]');
+
+      if (orders.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:16px; color:var(--text-muted); font-size:0.8rem;">Aucune commande pour le moment.</div>`;
+        return;
+      }
+
+      let html = '';
+      orders.forEach(o => {
+        html += `
+          <div class="item-card">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
+              <div>
+                <div style="font-weight:800; font-size:0.88rem; color:var(--blue-deep);">${o.serviceTitle}</div>
+                <div style="font-size:0.72rem; color:var(--blue-royal); font-weight:800;">${o.id}</div>
+              </div>
+              <span style="font-size:0.7rem; font-weight:800; padding:2px 6px; border-radius:4px; background:var(--blue-light); color:var(--blue-royal);">
+                ${o.status}
+              </span>
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:6px;">
+              <div>📍 <strong>${o.city}</strong> : ${o.fromLoc} &rarr; ${o.toLoc}</div>
+              <div>👤 <strong>Client :</strong> ${o.clientName} (${o.clientPhone})</div>
+              <div>💰 ${o.price.toLocaleString()} FCFA (${o.paymentMode}) &bull; ${o.createdAt}</div>
+            </div>
+            <div style="display:flex; gap:6px;">
+              <button class="btn btn-sm btn-gold" style="width:auto; padding:4px 8px;" onclick="viewHubReceipt('${o.id}')">
+                🧾 Voir Reçu
+              </button>
+              <a href="https://wa.me/237${o.clientPhone}" target="_blank" class="btn btn-sm btn-whatsapp" style="width:auto; padding:4px 8px;">
+                WhatsApp
+              </a>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function viewHubReceipt(orderId) {
+      const orders = JSON.parse(localStorage.getItem('ke_orders_v5') || '[]');
+      const ord = orders.find(o => o.id === orderId);
+      if (!ord) return;
+
+      const area = document.getElementById('hubReceiptContentArea');
+      area.innerHTML = `
+        <div style="background:#ffffff; border:2px dashed #cbd5e1; border-radius:var(--radius-md); padding:16px; font-size:0.8rem; line-height:1.4;">
+          <div style="text-align:center; border-bottom:1px solid #e2e8f0; padding-bottom:8px; margin-bottom:10px;">
+            <div style="font-weight:900; color:var(--blue-deep);">KAMER EXPRESS — COURSIER 237</div>
+            <div style="font-size:0.7rem; color:var(--gold-primary); font-weight:800;">REÇU OFFICIEL DE TRANSACTION</div>
+          </div>
+          <div><strong>N° Transaction :</strong> <span style="color:var(--blue-royal); font-weight:800;">${ord.id}</span></div>
+          <div><strong>Date :</strong> ${ord.createdAt}</div>
+          <div><strong>Client :</strong> ${ord.clientName} (${ord.clientPhone})</div>
+          <div><strong>Ville & Admin :</strong> ${ord.city} &bull; ${ord.assignedAdmin || 'Admin'}</div>
+          <div><strong>Prestation :</strong> ${ord.serviceTitle}</div>
+          <div><strong>Trajet :</strong> ${ord.fromLoc} &rarr; ${ord.toLoc}</div>
+          <div><strong>Paiement :</strong> ${ord.paymentMode}</div>
+          <div style="margin-top:10px; padding-top:8px; border-top:1px solid #e2e8f0; font-size:1.1rem; font-weight:900; color:var(--gold-primary);">
+            Montant : ${ord.price.toLocaleString()} FCFA
+          </div>
+        </div>
+        <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">
+          <a href="https://wa.me/237${ord.clientPhone}?text=Voici%20votre%20re%C3%A7u%20de%20transaction%20Kamer%20Express%20pour%20la%20course%20${ord.id}%20(${ord.price}%20FCFA)." target="_blank" class="btn btn-sm btn-whatsapp">
+            Envoyer au Client sur WhatsApp
+          </a>
+          <button class="btn btn-sm btn-outline" onclick="closeHubReceiptModal()">Fermer</button>
+        </div>
+      `;
+      document.getElementById('hubReceiptModal').classList.add('active');
+    }
+
+    function closeHubReceiptModal() {
+      document.getElementById('hubReceiptModal').classList.remove('active');
+    }
+
+    function loadKePricesToHub() {
+      const p = JSON.parse(localStorage.getItem('ke_prices_v5') || '{}');
+      const mode = document.getElementById('hubKePriceDisplayMode');
+      if (mode) mode.value = p.displayMode || 'quote';
+
+      const c = document.getElementById('hubKePriceCourses');
+      const cert = document.getElementById('hubKePriceCertif');
+      const col = document.getElementById('hubKePriceColis');
+      const u = document.getElementById('hubKePriceUniv');
+      const urg = document.getElementById('hubKePriceUrgent');
+
+      if (c) c.value = p.courses || 1500;
+      if (cert) cert.value = p.certification || 2500;
+      if (col) col.value = p.colis || 2000;
+      if (u) u.value = p.univ || 3000;
+      if (urg) urg.value = p.urgentBonus || 1000;
+    }
+
+    function saveKePricesFromHub() {
+      const newPrices = {
+        courses: parseInt(document.getElementById('hubKePriceCourses').value) || 1500,
+        certification: parseInt(document.getElementById('hubKePriceCertif').value) || 2500,
+        colis: parseInt(document.getElementById('hubKePriceColis').value) || 2000,
+        univ: parseInt(document.getElementById('hubKePriceUniv').value) || 3000,
+        urgentBonus: parseInt(document.getElementById('hubKePriceUrgent').value) || 1000,
+        displayMode: document.getElementById('hubKePriceDisplayMode').value || 'quote'
+      };
+
+      localStorage.setItem('ke_prices_v5', JSON.stringify(newPrices));
+      alertInApp('Nouveaux tarifs Kamer Express enregistrés !');
+    }
+
+    function renderKeCoursiers() {
+      const container = document.getElementById('keCoursiersListContainer');
+      if (!container) return;
+      const coursiers = JSON.parse(localStorage.getItem('ke_couriers_v5') || '[]');
+
+      if (coursiers.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:16px; color:var(--text-muted); font-size:0.8rem;">Aucun coursier en attente de validation.</div>`;
+        return;
+      }
+
+      let html = '';
+      coursiers.forEach(c => {
+        html += `
+          <div class="item-card">
+            <div style="font-weight:800; font-size:0.88rem; color:var(--blue-deep);">${c.name}</div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">📍 ${c.city} &bull; 📞 ${c.phone} &bull; 🛵 ${c.transport}</div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    // ========================================================================
+    // CARNET DE CRÉDIT LOGIC
+    // ========================================================================
+    function renderCarnetDashboard() {
+      const container = document.getElementById('carnetUsersListContainer');
+      if (!container) return;
+
+      const users = [
+        { name: 'Boutique Grâce Divine (Yaoundé)', phone: '692168264', pack: 'Pack 6 Mois (Actif)', exp: '13/05/2027' },
+        { name: 'Quincaillerie du Centre (Bertoua)', phone: '656995369', pack: 'Pack 1 Mois (Actif)', exp: '13/12/2026' },
+        { name: 'Épicerie Moderne (Douala)', phone: '677112233', pack: 'Pack 1 Mois (Actif)', exp: '20/12/2026' }
+      ];
+
+      let html = '';
+      users.forEach(u => {
+        html += `
+          <div class="item-card" style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-weight:800; font-size:0.88rem; color:var(--blue-deep);">${u.name}</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">📞 ${u.phone}</div>
+              <div style="font-size:0.7rem; color:#15803d; font-weight:800;">✅ ${u.pack} &bull; Exp: ${u.exp}</div>
+            </div>
+            <a href="https://wa.me/237${u.phone}?text=Bonjour,%20votre%20Carnet%20de%20Cr%C3%A9dit%20est%20actif%20!" target="_blank" class="btn btn-sm btn-whatsapp" style="width:auto;">
+              WhatsApp
+            </a>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function handleCarnetUnlock() {
+      const phone = document.getElementById('carnetUnlockPhone').value.trim().replace(/\s+/g, '');
+      const pack = document.getElementById('carnetUnlockPack').value;
+
+      if (!phone) {
+        alertInApp('Veuillez entrer un numéro de téléphone client.');
+        return;
+      }
+
+      const months = parseInt(pack) || 1;
+      alertInApp(`✅ Carnet débloqué avec succès pour ${phone} (${months} mois) !`);
+      document.getElementById('carnetUnlockPhone').value = '';
+    }
+
+    // ========================================================================
+    // AUTO-UPDATE ENGINE (MISES À JOUR AUTOMATIQUES SANS FRICTION)
+    // ========================================================================
+    function checkAllAppsUpdates(silent = true) {
+      fetch('version.json?t=' + Date.now())
+        .then(res => res.json())
+        .then(data => {
+          if (data && (data.build > HUB_BUILD || data.version !== HUB_VERSION)) {
+            // Mise à jour automatique transparente
+            applyAutoUpdate();
+          } else {
+            if (!silent) {
+              alertInApp('✅ Toutes vos applications sont 100% à jour (Admin Hub v' + HUB_VERSION + ').');
+            }
+          }
+        })
+        .catch(() => {
+          if (!silent) alertInApp('✅ Applications synchronisées.');
+        });
+    }
+
+    function applyAutoUpdate() {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(regs => {
+          for (let r of regs) r.unregister();
+        });
+      }
+      if ('caches' in window) {
+        caches.keys().then(names => {
+          for (let n of names) caches.delete(n);
+        });
+      }
+      sessionStorage.setItem('hub_auto_updated', '1');
+      window.location.reload(true);
+    }
+
+    function forceRefreshAllApps() {
+      applyAutoUpdate();
+    }
+
+    // ========================================================================
+    // IN-APP TOAST NOTIFICATION (ZÉRO ALERT NATIF)
+    // ========================================================================
+    function alertInApp(msg) {
+      let toast = document.getElementById('inAppToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'inAppToast';
+        toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#0a192f;color:#ffffff;padding:12px 20px;border-radius:9999px;font-size:0.85rem;font-weight:700;box-shadow:0 10px 25px rgba(0,0,0,0.3);z-index:99999;border:1px solid #f59e0b;transition:all 0.3s ease;opacity:0;pointer-events:none;max-width:90%;text-align:center;';
+        document.body.appendChild(toast);
+      }
+      toast.innerText = msg;
+      toast.style.opacity = '1';
+      toast.style.transform = 'translateX(-50%) translateY(10px)';
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(0)';
+      }, 3200);
+    }
+
+    // ========================================================================
+    // INITIALISATION
+    // ========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      if (sessionStorage.getItem('hub_unlocked') === '1') {
+        document.getElementById('hubLockView').style.display = 'none';
+        document.getElementById('hubUnlockedContent').style.display = 'block';
+        renderAllHubData();
+      }
+
+      if (sessionStorage.getItem('hub_auto_updated') === '1') {
+        sessionStorage.removeItem('hub_auto_updated');
+        alertInApp('✨ Mise à jour automatique réussie ! Version la plus récente chargée.');
+      }
+
+      checkAllAppsUpdates(true);
+
+      // Détecteur automatique toutes les 30 secondes
+      setInterval(() => {
+        checkAllAppsUpdates(true);
+      }, 30000);
+    });
+  </script>
+</body>
+</html>
