@@ -1,14 +1,15 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.37.0",
-  "build": 2026111355,
-  "lastUpdated": "13 Novembre 2026 - Nettoyage Accueil (Suppression du footer termes)",
+  "version": "2.38.0",
+  "build": 2026111356,
+  "lastUpdated": "13 Novembre 2026 - Bouton Corbeille & Purge Coursiers dans l'Admin",
   "direction": {
     "miguel": "Charg\u00e9 de Communication (Yaound\u00e9)",
     "jamil": "Charg\u00e9 de Communication (Bertoua)"
   },
   "features": [
-    "Suppression du bloc de pied de page sur l'accueil",
-    "Maintien exclusif des Termes & Conditions dans le formulaire d'inscription"
+    "Bouton Corbeille (\ud83d\uddd1\ufe0f Supprimer) ajout\u00e9 sur chaque fiche de coursier",
+    "Bouton de purge globale '\ud83d\uddd1\ufe0f Tout purger' pour r\u00e9initialiser le compteur \u00e0 0",
+    "Filtrage automatique et purge d\u00e9finitive de tous les anciens coursiers d\u00e9mo"
   ]
 }
