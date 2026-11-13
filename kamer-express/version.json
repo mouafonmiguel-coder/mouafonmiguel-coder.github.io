@@ -1,10 +1,10 @@
 {
   "app": "KAMER_EXPRESS_COURSIER_237",
-  "version": "2.9.1",
-  "build": 2026111319,
+  "version": "2.9.2",
+  "build": 2026111320,
   "lastUpdated": "13 Novembre 2026",
   "features": [
-    "Texte de l'étape 3 du guide épuré : 'Les administrateurs prennent directement en charge et sécurisent votre mission.'",
+    "Icône œil interactif pour afficher/masquer le mot de passe (Inscription, Connexion, Code PIN Admin)",
     "Noms de Direction 'Miguel' et 'JAMIL' avec leurs photos officielles et contacts directs",
     "Couverture nationale : Déploiement officiel sur TOUT LE CAMEROUN (10 Régions)"
   ]
