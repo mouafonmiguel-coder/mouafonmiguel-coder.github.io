@@ -1,14 +1,12 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.18.0",
-  "build": 2026111330,
+  "version": "2.19.0",
+  "build": 2026111331,
   "lastUpdated": "13 Novembre 2026",
   "features": [
-    "Suppression du montant convenu fixe 2500 FCFA sur le reçu officiel",
-    "Intégration du bouton et lien de paiement sécurisé en ligne Fapshi (https://pay.fapshi.com/97799594)",
-    "Comptes de règlement officiels de Miguel : Orange Money (692 16 82 64) et MTN MoMo (653 59 63 05)",
-    "Instructions de règlement dynamiques et signature cryptographique sur les reçus et WhatsApp",
-    "Renommage officiel en TAMANOA EXPRESS (Coursier 237)",
-    "Accès secret Administrateurs (Miguel & JAMIL) via URL directe #admin ou triple-clic logo"
+    "Suppression de l'option espèces/cash pour sécuriser 100% des flux financiers vers la Direction",
+    "Modes de paiement numériques exclusifs : Passerelle Fapshi (OM / MoMo / Carte), Orange Money 692 16 82 64 et MTN MoMo 653 59 63 05",
+    "Suppression du montant fixe 2500 FCFA sur le reçu officiel",
+    "Renommage officiel en TAMANOA EXPRESS (Coursier 237)"
   ]
 }
