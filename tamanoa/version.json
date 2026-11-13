@@ -1,16 +1,16 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.22.0",
-  "build": 2026111339,
-  "lastUpdated": "13 Novembre 2026 - Miguel Charg\u00e9 de Communication (Yaound\u00e9) & JAMIL Charg\u00e9 de Communication (Bertoua)",
+  "version": "2.23.0",
+  "build": 2026111340,
+  "lastUpdated": "13 Novembre 2026 - Prestation : Retrait de casiers judiciaires",
   "direction": {
     "miguel": "Charg\u00e9 de Communication (Yaound\u00e9)",
     "jamil": "Charg\u00e9 de Communication (Bertoua)"
   },
   "features": [
+    "Nouvelle prestation : Retrait de casiers judiciaires (Bulletin N\u00b03) et certificats de nationalit\u00e9 aupr\u00e8s des tribunaux",
     "Suppression de l'option esp\u00e8ces/cash pour s\u00e9curiser 100% des flux financiers vers la Direction",
     "Modes de paiement num\u00e9riques exclusifs : Passerelle Fapshi (OM / MoMo / Carte), Orange Money 692 16 82 64 et MTN MoMo 653 59 63 05",
-    "Suppression du montant fixe 2500 FCFA sur le re\u00e7u officiel",
     "Renommage officiel en TAMANOA EXPRESS (Coursier 237)"
   ]
 }
