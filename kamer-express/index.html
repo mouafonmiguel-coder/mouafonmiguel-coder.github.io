@@ -434,61 +434,57 @@
     }
 
     /* ========================================================================
-       AGENTS LIST & CARDS (SANS MENTION DE QUARTIER)
+       ADMINS CARDS (MIGUEL & JAMIL - STATUT ADMIN)
        ======================================================================== */
-    .agents-grid {
+    .admins-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
       margin-bottom: 16px;
     }
-    .agent-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
+    .admin-profile-card {
+      background: #ffffff;
+      border: 1.5px solid var(--gold-border);
       border-radius: var(--radius-md);
-      padding: 12px;
+      padding: 14px 10px;
       text-align: center;
       box-shadow: var(--shadow-sm);
+      position: relative;
     }
-    .agent-avatar-wrap {
-      width: 60px;
-      height: 60px;
+    .admin-avatar-wrap {
+      width: 64px;
+      height: 64px;
       margin: 0 auto 8px auto;
       border-radius: 50%;
       overflow: hidden;
-      border: 2px solid var(--gold-bright);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border: 2.5px solid var(--gold-bright);
+      box-shadow: 0 4px 12px rgba(217,119,6,0.25);
       position: relative;
+      background: #ffffff;
     }
-    .agent-avatar-img {
+    .admin-avatar-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-    .agent-name {
-      font-size: 0.86rem;
-      font-weight: 800;
+    .admin-name-title {
+      font-size: 0.88rem;
+      font-weight: 900;
       color: var(--blue-deep);
+      line-height: 1.2;
     }
-    .agent-city-badge {
-      display: inline-block;
-      font-size: 0.7rem;
+    .admin-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.68rem;
       font-weight: 800;
-      color: var(--blue-royal);
-      background: var(--blue-light);
+      color: #92400e;
+      background: var(--gold-light);
+      border: 1px solid var(--gold-border);
       padding: 2px 8px;
       border-radius: var(--radius-full);
-      margin: 3px 0 6px 0;
-    }
-    .agent-certif-pill {
-      font-size: 0.65rem;
-      font-weight: 800;
-      color: #15803d;
-      background: var(--success-light);
-      padding: 2px 6px;
-      border-radius: 4px;
-      display: inline-block;
-      margin-bottom: 8px;
+      margin: 4px 0 8px 0;
     }
 
     /* ========================================================================
@@ -562,7 +558,75 @@
     }
 
     /* ========================================================================
-       ADMIN DASHBOARD CARDS & STATS (INSPIRED BY CARNET DE CRÉDIT)
+       REÇU OFFICIEL DE TRANSACTION STYLISÉ
+       ======================================================================== */
+    .receipt-ticket {
+      background: #ffffff;
+      border: 2px dashed #cbd5e1;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 14px;
+      position: relative;
+    }
+    .receipt-header {
+      text-align: center;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+    .receipt-brand {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: var(--blue-deep);
+      letter-spacing: 0.5px;
+    }
+    .receipt-sub {
+      font-size: 0.7rem;
+      color: var(--gold-primary);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+    .receipt-row-label {
+      color: var(--text-muted);
+      font-weight: 600;
+      min-width: 110px;
+    }
+    .receipt-row-val {
+      color: var(--blue-deep);
+      font-weight: 800;
+      text-align: right;
+      flex: 1;
+    }
+    .receipt-total-box {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .receipt-total-label {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--blue-deep);
+    }
+    .receipt-total-val {
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: var(--gold-primary);
+    }
+
+    /* ========================================================================
+       ADMIN DASHBOARD CARDS & STATS
        ======================================================================== */
     .admin-kpi-grid {
       display: grid;
@@ -633,7 +697,6 @@
       display: block;
     }
 
-    /* Radar update box in Admin */
     .admin-detector-box {
       background: linear-gradient(135deg, #0f2341 0%, #1e3a8a 100%);
       color: #ffffff;
@@ -647,7 +710,6 @@
       gap: 12px;
     }
 
-    /* Client table / cards */
     .user-item-card {
       background: #ffffff;
       border: 1px solid var(--border-color);
@@ -738,7 +800,6 @@
       color: var(--text-muted);
     }
 
-    /* Auth modal tabs */
     .auth-tabs {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -862,7 +923,7 @@
         </div>
         <h1 class="hero-title">Simplifiez votre vie, <span>confiez-nous</span> vos besoins !</h1>
         <p class="hero-desc">
-          Courses express, certification de documents, expédition de colis et démarches administratives assurées par vos référents certifiés.
+          Courses express, certification de documents, expédition de colis et démarches administratives sous la direction de vos administrateurs référents.
         </p>
 
         <!-- Statistiques SANS EMOJIS -->
@@ -908,15 +969,15 @@
           <div class="step-item">
             <div class="step-num-badge">3</div>
             <div class="step-content">
-              <div class="step-title">Prise en charge directe</div>
-              <div class="step-desc">Miguel (Yaoundé) ou Jamil (Bertoua) reçoit votre mission et lance la course.</div>
+              <div class="step-title">Prise en charge par l'Administrateur</div>
+              <div class="step-desc">Miguel (Admin Yaoundé) ou Jamil (Admin Bertoua) prend en charge votre mission.</div>
             </div>
           </div>
           <div class="step-item">
             <div class="step-num-badge">4</div>
             <div class="step-content">
-              <div class="step-title">Livraison & Règlement</div>
-              <div class="step-desc">Paiement sécurisé par Orange Money, MTN MoMo ou à la livraison.</div>
+              <div class="step-title">Livraison & Reçu de Transaction</div>
+              <div class="step-desc">Votre reçu officiel de transaction est généré avec toutes les clarifications.</div>
             </div>
           </div>
         </div>
@@ -935,21 +996,24 @@
         <!-- Rendu dynamique par updatePricesDisplay() -->
       </div>
 
-      <!-- Nos Fondateurs & Administrateurs Référents -->
+      <!-- Direction & Administrateurs (Miguel & Jamil) -->
       <div class="section-head" style="margin-top: 20px;">
         <h2 class="section-title">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-          Administrateurs Référents
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+          Direction & Administrateurs
         </h2>
       </div>
-      <div class="agents-grid" id="homeAgentsList">
-        <!-- Rendu dynamique -->
+      <div class="admins-grid" id="homeAdminsList">
+        <!-- Rendu dynamique des Administrateurs Miguel & Jamil -->
       </div>
 
-      <!-- Bouton d'action principal -->
-      <div style="margin-top: 14px;">
+      <!-- Boutons d'action rapides -->
+      <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;">
         <button class="btn btn-gold" onclick="switchTab('order')">
           Passer une commande maintenant &rarr;
+        </button>
+        <button class="btn btn-outline btn-sm" onclick="openClientReceiptsModal()">
+          🧾 Voir l'historique de mes reçus de transaction
         </button>
       </div>
 
@@ -992,10 +1056,10 @@
           <label class="form-label">Ville de la course :</label>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
             <div id="city-card-yde" onclick="selectOrderCity('Yaoundé')" style="padding: 10px; border: 2px solid var(--blue-royal); background: var(--blue-light); border-radius: var(--radius-md); text-align: center; cursor: pointer; font-weight: 800; font-size: 0.85rem; color: var(--blue-deep);">
-              Yaoundé (Miguel)
+              Yaoundé (Admin Miguel)
             </div>
             <div id="city-card-bta" onclick="selectOrderCity('Bertoua')" style="padding: 10px; border: 1px solid var(--border-color); background: #ffffff; border-radius: var(--radius-md); text-align: center; cursor: pointer; font-weight: 800; font-size: 0.85rem; color: var(--text-muted);">
-              Bertoua (Jamil)
+              Bertoua (Admin Jamil)
             </div>
           </div>
           <input type="hidden" id="orderCity" value="Yaoundé">
@@ -1062,12 +1126,12 @@
             Sur devis / Tarif Admin
           </div>
           <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">
-            Tarif ajusté par Miguel ou Jamil selon le trajet exact.
+            Un reçu officiel de transaction avec code de suivi vous est délivré à chaque commande.
           </div>
         </div>
 
         <button type="submit" class="btn btn-gold">
-          Envoyer ma commande à l'administrateur &rarr;
+          Valider ma commande & Générer le Reçu &rarr;
         </button>
       </form>
     </main>
@@ -1079,11 +1143,11 @@
       <div class="section-head">
         <h2 class="section-title">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
-          Rejoindre le Réseau d'Agents
+          Rejoindre le Réseau de Coursiers
         </h2>
       </div>
       <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 14px;">
-        Devenez coursier certifié à Yaoundé ou Bertoua. Vos documents (CNI et justificatif de domicile) sont vérifiés par Miguel et Jamil avant validation.
+        Devenez coursier partenaire sous la supervision des administrateurs Miguel (Yaoundé) et Jamil (Bertoua). Vos documents (CNI et justificatif de domicile) sont vérifiés avant validation.
       </p>
 
       <form id="agentApplyForm" onsubmit="handleAgentApplication(event)">
@@ -1152,7 +1216,7 @@
         <div style="background: var(--blue-light); border: 1px solid var(--blue-royal); border-radius: var(--radius-md); padding: 18px; text-align: center;">
           <div style="font-size: 1.8rem; margin-bottom: 6px;">🔒</div>
           <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--blue-deep); margin-bottom: 6px;">Espace Administrateurs</h3>
-          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 14px;">Entrez votre code secret pour certifier les agents, voir les statistiques, modifier les tarifs et suivre l'activité :</p>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 14px;">Entrez votre code secret pour certifier les coursiers, modifier vos photos de profil, ajuster les tarifs et suivre l'activité :</p>
           <div style="display: flex; gap: 8px; max-width: 280px; margin: 0 auto;">
             <input type="password" id="adminPinInput" class="form-control" placeholder="Code PIN (2026)" style="text-align: center; font-size: 1.1rem; letter-spacing: 4px;">
             <button class="btn btn-blue" style="width: auto; padding: 0 16px;" onclick="verifyAdminPin()">
@@ -1167,15 +1231,15 @@
       <div id="adminDashboardContent" style="display: none;">
         
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; background: #f1f5f9; padding: 10px 14px; border-radius: var(--radius-md);">
-          <span style="font-size: 0.85rem; font-weight: 800; color: var(--success);">Session Admin Active</span>
+          <span style="font-size: 0.85rem; font-weight: 800; color: var(--success);">Session Administrateur Active</span>
           <button class="btn btn-sm btn-outline" style="color: var(--danger); border-color: var(--danger); width: auto;" onclick="lockAdmin()">Verrouiller</button>
         </div>
 
-        <!-- 4 Cartes Statistiques KPI en haut (Inspiré de Carnet de Crédit) -->
+        <!-- 4 Cartes Statistiques KPI en haut -->
         <div class="admin-kpi-grid">
           <div class="admin-kpi-card">
             <div class="admin-kpi-val" id="kpiAgentsCount">0</div>
-            <div class="admin-kpi-title">Agents Inscrits</div>
+            <div class="admin-kpi-title">Coursiers Inscrits</div>
             <div class="admin-kpi-detail" id="kpiAgentsBreakdown">0 YDE &bull; 0 BTA</div>
           </div>
           <div class="admin-kpi-card">
@@ -1185,7 +1249,7 @@
           </div>
           <div class="admin-kpi-card">
             <div class="admin-kpi-val" id="kpiOrdersCount">0</div>
-            <div class="admin-kpi-title">Commandes Totales</div>
+            <div class="admin-kpi-title">Commandes & Reçus</div>
             <div class="admin-kpi-detail" id="kpiOrdersBreakdown">0 en cours &bull; 0 livrées</div>
           </div>
           <div class="admin-kpi-card">
@@ -1201,7 +1265,7 @@
             <div class="radar-pulse"></div>
             <div>
               <div style="font-size: 0.88rem; font-weight: 800;">Détecteur de Mises à Jour</div>
-              <div style="font-size: 0.72rem; opacity: 0.85;" id="adminAppVersionText">Version v2.2.0 &bull; Système actif</div>
+              <div style="font-size: 0.72rem; opacity: 0.85;" id="adminAppVersionText">Version v2.3.0 &bull; Système actif</div>
             </div>
           </div>
           <button class="btn btn-sm btn-gold" style="width: auto; padding: 6px 12px; font-size: 0.75rem;" onclick="checkAppUpdates(false)">
@@ -1214,14 +1278,14 @@
           <button class="admin-subnav-btn active" onclick="switchAdminSubtab('stats')" id="admin-subbtn-stats">
             📊 Activité & Clients
           </button>
-          <button class="admin-subnav-btn" onclick="switchAdminSubtab('certif')" id="admin-subbtn-certif">
-            Certification (<span id="adminPendingCountBadge">0</span>)
-          </button>
           <button class="admin-subnav-btn" onclick="switchAdminSubtab('profiles')" id="admin-subbtn-profiles">
-            Photos & Profils
+            👑 Profils Admins (Photos)
           </button>
           <button class="admin-subnav-btn" onclick="switchAdminSubtab('orders')" id="admin-subbtn-orders">
-            Commandes
+            🧾 Commandes & Reçus
+          </button>
+          <button class="admin-subnav-btn" onclick="switchAdminSubtab('certif')" id="admin-subbtn-certif">
+            Validation Coursiers (<span id="adminPendingCountBadge">0</span>)
           </button>
           <button class="admin-subnav-btn" onclick="switchAdminSubtab('prices')" id="admin-subbtn-prices">
             💰 Tarifs & Prestations
@@ -1231,51 +1295,52 @@
         <!-- SOUS-ONGLET 1 : STATISTIQUES & ACTIVITÉ UTILISATEURS -->
         <div id="admin-subtab-stats" class="admin-subtab-pane active">
           <div class="section-head">
-            <h3 class="section-title" style="font-size: 0.98rem;">Activité & Fonctionnement des Utilisateurs</h3>
+            <h3 class="section-title" style="font-size: 0.98rem;">Activité & Fonctionnement des Clients</h3>
           </div>
           <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">
-            Suivi en direct des clients inscrits, de leurs commandes et de leur utilisation de l'application.
+            Suivi en direct des clients inscrits, de leurs reçus de transaction et de leur activité.
           </p>
 
-          <!-- Liste des clients inscrits -->
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
             <div style="font-size: 0.85rem; font-weight: 800; color: var(--blue-deep);">Liste des Clients Inscrits :</div>
             <input type="text" id="adminUserSearchInput" placeholder="Rechercher..." class="form-control" style="max-width: 140px; padding: 4px 8px; font-size: 0.75rem;" oninput="renderAdminUsersList()">
           </div>
           <div id="adminUsersListContainer"></div>
 
-          <!-- Journal des Dernières Activités -->
           <div class="section-head" style="margin-top: 18px;">
-            <h3 class="section-title" style="font-size: 0.92rem;">Journal des Activités Récentes</h3>
+            <h3 class="section-title" style="font-size: 0.92rem;">Journal des Dernières Transactions</h3>
           </div>
           <div id="adminActivityLogList"></div>
         </div>
 
-        <!-- SOUS-ONGLET 2 : VALIDATION DES AGENTS -->
-        <div id="admin-subtab-certif" class="admin-subtab-pane">
-          <div class="section-head">
-            <h3 class="section-title" style="font-size: 0.98rem;">Dossiers d'Agents à Valider</h3>
-          </div>
-          <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">
-            Vérifiez les pièces justificatives (CNI, Domicile, Photo). Une fois validé, l'agent reçoit son badge <strong>« Certifié Conforme »</strong> et devient visible par les clients.
-          </p>
-          <div id="adminAgentsCertificationList"></div>
-        </div>
-
-        <!-- SOUS-ONGLET 3 : PROFILS & PHOTOS MIGUEL & JAMIL -->
+        <!-- SOUS-ONGLET 2 : PROFILS & PHOTOS DES ADMINS (MIGUEL & JAMIL) -->
         <div id="admin-subtab-profiles" class="admin-subtab-pane">
           <div class="section-head">
-            <h3 class="section-title" style="font-size: 0.98rem;">Gestion des Profils & Photos de Miguel & Jamil</h3>
+            <h3 class="section-title" style="font-size: 0.98rem;">Profils & Photos des Administrateurs</h3>
           </div>
+          <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">
+            Modifiez vos photos de profil et numéros de téléphone. Vos photos et votre <strong>Statut Administrateur</strong> s'affichent publiquement sur la page d'accueil de l'application.
+          </p>
           <div id="adminProfilesEditorArea"></div>
         </div>
 
-        <!-- SOUS-ONGLET 4 : COMMANDES -->
+        <!-- SOUS-ONGLET 3 : COMMANDES & REÇUS -->
         <div id="admin-subtab-orders" class="admin-subtab-pane">
           <div class="section-head">
-            <h3 class="section-title" style="font-size: 0.98rem;">Toutes les Commandes Clients</h3>
+            <h3 class="section-title" style="font-size: 0.98rem;">Toutes les Commandes & Reçus Clients</h3>
           </div>
           <div id="adminOrdersManagementList"></div>
+        </div>
+
+        <!-- SOUS-ONGLET 4 : VALIDATION DES COURSIERS -->
+        <div id="admin-subtab-certif" class="admin-subtab-pane">
+          <div class="section-head">
+            <h3 class="section-title" style="font-size: 0.98rem;">Candidatures de Coursiers Partenaires</h3>
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">
+            Vérifiez les pièces justificatives des coursiers partenaires (CNI, Domicile, Photo).
+          </p>
+          <div id="adminAgentsCertificationList"></div>
         </div>
 
         <!-- SOUS-ONGLET 5 : TARIFS & PRESTATIONS (GÉRÉ PAR MIGUEL & JAMIL) -->
@@ -1337,20 +1402,21 @@
         <button class="modal-close-btn" onclick="closeAuthModal()">&times;</button>
       </div>
 
-      <!-- Onglets Inscription / Connexion (Inscription en Premier) -->
       <div class="auth-tabs" id="authTabsContainer">
         <button class="auth-tab-btn active" id="auth-tab-register-btn" onclick="switchAuthTab('register')">1. S'inscrire</button>
         <button class="auth-tab-btn" id="auth-tab-login-btn" onclick="switchAuthTab('login')">2. Se connecter</button>
       </div>
 
-      <!-- Vue Déjà Connecté -->
       <div id="authLoggedInView" style="display:none; text-align:center; padding:10px 0;">
         <div style="font-size:2.2rem; margin-bottom:6px;">👤</div>
         <h3 id="authUserNameDisplay" style="font-size:1.1rem; font-weight:800; color:var(--blue-deep);"></h3>
         <p id="authUserPhoneDisplay" style="font-size:0.85rem; color:var(--text-muted); margin-bottom:14px;"></p>
         <div style="display:flex; flex-direction:column; gap:8px;">
           <button class="btn btn-gold btn-sm" onclick="closeAuthModal(); switchTab('order');">
-            Passer une commande
+            Passer une nouvelle commande
+          </button>
+          <button class="btn btn-blue btn-sm" onclick="closeAuthModal(); openClientReceiptsModal();">
+            🧾 Voir mes reçus de transaction
           </button>
           <button class="btn btn-outline btn-sm" style="color:var(--danger); border-color:var(--danger);" onclick="logoutUser()">
             Se déconnecter
@@ -1358,10 +1424,9 @@
         </div>
       </div>
 
-      <!-- Formulaire Inscription -->
       <form id="authRegisterForm" onsubmit="handleRegisterSubmit(event)">
         <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:12px;">
-          Inscrivez-vous d'abord pour commander vos courses et suivre vos livraisons.
+          Inscrivez-vous d'abord pour commander vos courses et obtenir votre reçu officiel de transaction.
         </p>
         <div class="form-group">
           <label class="form-label" for="regName">Nom Complet :</label>
@@ -1387,7 +1452,6 @@
         </button>
       </form>
 
-      <!-- Formulaire Connexion -->
       <form id="authLoginForm" style="display:none;" onsubmit="handleLoginSubmit(event)">
         <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:12px;">
           Connectez-vous avec votre numéro WhatsApp et mot de passe.
@@ -1408,34 +1472,97 @@
   </div>
 
   <!-- ========================================================================
-       MODAL : CONFIRMATION DE COMMANDE & REÇU
+       MODAL : REÇU OFFICIEL DE TRANSACTION DE COMMANDE
        ======================================================================== -->
   <div id="orderSuccessModal" class="modal-overlay">
     <div class="modal-content">
-      <div style="text-align: center; margin-bottom: 14px;">
-        <div style="font-size: 2.2rem; margin-bottom: 4px;">✅</div>
-        <div class="modal-title">Commande Transmise avec Succès !</div>
-        <p style="font-size: 0.8rem; color: var(--text-muted);">Voici le récapitulatif de votre course :</p>
+      <div class="modal-header">
+        <div class="modal-title">Reçu Officiel de Transaction</div>
+        <button class="modal-close-btn" onclick="closeOrderModal()">&times;</button>
       </div>
 
-      <div style="background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; margin-bottom: 14px; font-size: 0.82rem; line-height: 1.5;">
-        <div><strong>Code Suivi :</strong> <span id="modalTrackingId" style="color: var(--blue-royal); font-weight: 800;"></span></div>
-        <div><strong>Prestation :</strong> <span id="modalReceiptService"></span></div>
-        <div><strong>Ville & Contact :</strong> <span id="modalReceiptCityAgent"></span></div>
-        <div><strong>Client :</strong> <span id="modalReceiptClient"></span></div>
-        <div><strong>Itinéraire :</strong> <span id="modalReceiptRoute"></span></div>
-        <div><strong>Urgence :</strong> <span id="modalReceiptUrgency"></span></div>
-        <div><strong>Tarif Indicatif :</strong> <span id="modalReceiptPrice" style="color: var(--gold-primary); font-weight: 800;"></span></div>
+      <!-- Ticket Reçu Imprimable -->
+      <div class="receipt-ticket" id="receiptPrintArea">
+        <div class="receipt-header">
+          <div class="receipt-brand">KAMER EXPRESS — COURSIER 237</div>
+          <div class="receipt-sub">Reçu de Transaction & Prestation</div>
+        </div>
+
+        <div class="receipt-row">
+          <span class="receipt-row-label">N° Transaction :</span>
+          <span class="receipt-row-val" id="modalTrackingId" style="color:var(--blue-royal);"></span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-row-label">Date & Heure :</span>
+          <span class="receipt-row-val" id="modalReceiptDate"></span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-row-label">Client :</span>
+          <span class="receipt-row-val" id="modalReceiptClient"></span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-row-label">Prestation :</span>
+          <span class="receipt-row-val" id="modalReceiptService"></span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-row-label">Ville & Admin :</span>
+          <span class="receipt-row-val" id="modalReceiptCityAgent"></span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-row-label">Départ :</span>
+          <span class="receipt-row-val" id="modalReceiptFrom"></span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-row-label">Arrivée :</span>
+          <span class="receipt-row-val" id="modalReceiptTo"></span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-row-label">Urgence :</span>
+          <span class="receipt-row-val" id="modalReceiptUrgency"></span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-row-label">Paiement :</span>
+          <span class="receipt-row-val" id="modalReceiptPaymentMode"></span>
+        </div>
+
+        <div class="receipt-total-box">
+          <span class="receipt-total-label">Montant Convenu :</span>
+          <span class="receipt-total-val" id="modalReceiptPrice"></span>
+        </div>
+
+        <div style="font-size:0.68rem; color:var(--text-muted); text-align:center; margin-top:10px; font-style:italic;">
+          Conservez ce reçu de transaction pour toute clarification avec la direction.
+        </div>
       </div>
 
+      <!-- Boutons d'Action -->
       <div style="display: flex; flex-direction: column; gap: 8px;">
         <a id="modalWhatsAppBtn" href="#" target="_blank" class="btn btn-whatsapp">
-          Envoyer la commande sur WhatsApp &rarr;
+          Envoyer le Reçu sur WhatsApp &rarr;
         </a>
+        <button class="btn btn-outline btn-sm" onclick="printReceiptTicket()">
+          🖨️ Imprimer / Télécharger le Reçu
+        </button>
         <button class="btn btn-outline btn-sm" onclick="closeOrderModal()">
           Fermer
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL : HISTORIQUE DES REÇUS DU CLIENT
+       ======================================================================== -->
+  <div id="clientReceiptsModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Mes Reçus de Transaction</div>
+        <button class="modal-close-btn" onclick="closeClientReceiptsModal()">&times;</button>
+      </div>
+      <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:12px;">
+        Retrouvez ci-dessous tous vos reçus de transactions pour clarification ou vérification :
+      </p>
+      <div id="clientReceiptsListContainer"></div>
     </div>
   </div>
 
@@ -1469,42 +1596,34 @@
        JAVASCRIPT LOGIC
        ======================================================================== -->
   <script>
-    const APP_VERSION = '2.2.0';
-    const APP_BUILD = 2026111302;
+    const APP_VERSION = '2.3.0';
+    const APP_BUILD = 2026111303;
 
     const DEFAULT_AVATAR_MIGUEL = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231e3a8a'/><circle cx='50' cy='38' r='20' fill='%23d97706'/><path d='M20,90 Q50,60 80,90' fill='%23f59e0b'/><text x='50' y='44' font-family='sans-serif' font-size='18' font-weight='bold' fill='%230a192f' text-anchor='middle'>M</text></svg>";
     const DEFAULT_AVATAR_JAMIL = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230f2341'/><circle cx='50' cy='38' r='20' fill='%23f59e0b'/><path d='M20,90 Q50,60 80,90' fill='%23d97706'/><text x='50' y='44' font-family='sans-serif' font-size='18' font-weight='bold' fill='%230a192f' text-anchor='middle'>J</text></svg>";
     const DEFAULT_AVATAR_GENERIC = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23334155'/><circle cx='50' cy='38' r='20' fill='%23cbd5e1'/><path d='M20,90 Q50,60 80,90' fill='%2394a3b8'/></svg>";
 
-    // AGENTS RÉFÉRENTS (SANS MENTION DE QUARTIER)
-    const INITIAL_AGENTS = [
+    // ADMINISTRATEURS OFFICIELS (MIGUEL & JAMIL)
+    const INITIAL_ADMINS = [
       {
-        id: 'agent-miguel',
+        id: 'admin-miguel',
         name: 'Miguel MIGUEL',
         phone: '692168264',
         city: 'Yaoundé',
-        transport: 'Moto & Voiture',
-        role: 'Admin & Référent',
+        role: 'Administrateur Principal',
+        statusTitle: '👑 Admin — Yaoundé',
         isAdmin: true,
-        isCertified: true,
-        photoUrl: DEFAULT_AVATAR_MIGUEL,
-        cniDoc: 'CNI Validée (Admin)',
-        domicileDoc: 'Domicile Validé (Admin)',
-        createdAt: '2026-09-01'
+        photoUrl: DEFAULT_AVATAR_MIGUEL
       },
       {
-        id: 'agent-jamil',
+        id: 'admin-jamil',
         name: 'Jamil',
         phone: '656995369',
         city: 'Bertoua',
-        transport: 'Moto',
-        role: 'Admin & Référent',
+        role: 'Administrateur Référent',
+        statusTitle: '👑 Admin — Bertoua',
         isAdmin: true,
-        isCertified: true,
-        photoUrl: DEFAULT_AVATAR_JAMIL,
-        cniDoc: 'CNI Validée (Admin)',
-        domicileDoc: 'Domicile Validé (Admin)',
-        createdAt: '2026-09-01'
+        photoUrl: DEFAULT_AVATAR_JAMIL
       }
     ];
 
@@ -1552,47 +1671,55 @@
     // ========================================================================
     // STORAGE HELPERS
     // ========================================================================
+    function getStoredAdmins() {
+      const stored = localStorage.getItem('ke_admins_v5');
+      return stored ? JSON.parse(stored) : INITIAL_ADMINS;
+    }
+    function saveStoredAdmins(admins) {
+      localStorage.setItem('ke_admins_v5', JSON.stringify(admins));
+    }
+
     function getStoredAgents() {
-      const stored = localStorage.getItem('ke_agents_v4');
-      return stored ? JSON.parse(stored) : INITIAL_AGENTS;
+      const stored = localStorage.getItem('ke_couriers_v5');
+      return stored ? JSON.parse(stored) : [];
     }
     function saveStoredAgents(agents) {
-      localStorage.setItem('ke_agents_v4', JSON.stringify(agents));
+      localStorage.setItem('ke_couriers_v5', JSON.stringify(agents));
     }
 
     function getStoredPrices() {
-      const stored = localStorage.getItem('ke_prices_v4');
+      const stored = localStorage.getItem('ke_prices_v5');
       return stored ? JSON.parse(stored) : DEFAULT_PRICES;
     }
     function saveStoredPrices(prices) {
-      localStorage.setItem('ke_prices_v4', JSON.stringify(prices));
+      localStorage.setItem('ke_prices_v5', JSON.stringify(prices));
     }
 
     function getStoredOrders() {
-      const stored = localStorage.getItem('ke_orders_v4');
+      const stored = localStorage.getItem('ke_orders_v5');
       return stored ? JSON.parse(stored) : [];
     }
     function saveStoredOrders(orders) {
-      localStorage.setItem('ke_orders_v4', JSON.stringify(orders));
+      localStorage.setItem('ke_orders_v5', JSON.stringify(orders));
     }
 
     function getStoredUsers() {
-      const stored = localStorage.getItem('ke_users_v4');
+      const stored = localStorage.getItem('ke_users_v5');
       return stored ? JSON.parse(stored) : INITIAL_USERS;
     }
     function saveStoredUsers(users) {
-      localStorage.setItem('ke_users_v4', JSON.stringify(users));
+      localStorage.setItem('ke_users_v5', JSON.stringify(users));
     }
 
     function getCurrentUser() {
-      const stored = localStorage.getItem('ke_current_user_v4');
+      const stored = localStorage.getItem('ke_current_user_v5');
       return stored ? JSON.parse(stored) : null;
     }
     function setCurrentUser(user) {
       if (user) {
-        localStorage.setItem('ke_current_user_v4', JSON.stringify(user));
+        localStorage.setItem('ke_current_user_v5', JSON.stringify(user));
       } else {
-        localStorage.removeItem('ke_current_user_v4');
+        localStorage.removeItem('ke_current_user_v5');
       }
       updateAuthUI();
     }
@@ -1753,7 +1880,7 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
       if (tabId === 'home') {
-        renderHomeAgents();
+        renderHomeAdmins();
         updatePricesDisplay();
       } else if (tabId === 'services') {
         renderDetailedServices();
@@ -1763,7 +1890,7 @@
     }
 
     // ========================================================================
-    // RENDU DES PRESTATIONS & AGENTS (SANS PRIX EN DUR)
+    // RENDU DES PRESTATIONS & ADMINS (MIGUEL & JAMIL STATUT ADMIN)
     // ========================================================================
     function updatePricesDisplay() {
       const p = getStoredPrices();
@@ -1827,24 +1954,23 @@
       container.innerHTML = html;
     }
 
-    function renderHomeAgents() {
-      const list = document.getElementById('homeAgentsList');
+    function renderHomeAdmins() {
+      const list = document.getElementById('homeAdminsList');
       if (!list) return;
-      const agents = getStoredAgents().filter(a => a.isCertified);
+      const admins = getStoredAdmins();
 
       let html = '';
-      agents.forEach(a => {
+      admins.forEach(adm => {
         html += `
-          <div class="agent-card">
-            <div class="agent-avatar-wrap">
-              <img src="${a.photoUrl || DEFAULT_AVATAR_GENERIC}" class="agent-avatar-img" alt="${a.name}">
+          <div class="admin-profile-card">
+            <div class="admin-avatar-wrap">
+              <img src="${adm.photoUrl || (adm.city === 'Yaoundé' ? DEFAULT_AVATAR_MIGUEL : DEFAULT_AVATAR_JAMIL)}" class="admin-avatar-img" alt="${adm.name}">
             </div>
-            <div class="agent-name">${a.name}</div>
-            <div class="agent-city-badge">${a.city}</div>
+            <div class="admin-name-title">${adm.name}</div>
             <div>
-              <span class="agent-certif-pill">Certifié Conforme</span>
+              <span class="admin-status-badge">${adm.statusTitle || '👑 Administrateur'}</span>
             </div>
-            <a href="https://wa.me/237${a.phone}?text=Bonjour%20${encodeURIComponent(a.name)},%20j'aimerais%20solliciter%20un%20service%20coursier%20sur%20Kamer%20Express" target="_blank" class="btn btn-whatsapp btn-sm" style="margin-top:6px;">
+            <a href="https://wa.me/237${adm.phone}?text=Bonjour%20${encodeURIComponent(adm.name)},%20j'aimerais%20solliciter%20un%20service%20coursier%20sur%20Kamer%20Express" target="_blank" class="btn btn-whatsapp btn-sm" style="margin-top:2px;">
               WhatsApp
             </a>
           </div>
@@ -1901,7 +2027,7 @@
     }
 
     // ========================================================================
-    // GESTION DES COMMANDES CLIENTS
+    // GESTION DES COMMANDES & GÉNÉRATION DE REÇU OFFICIEL DE TRANSACTION
     // ========================================================================
     function handleOrderSubmit(e) {
       e.preventDefault();
@@ -1919,12 +2045,13 @@
       let price = p[serviceKey] || 1500;
       if (urgency === 'urgent') price += (p.urgentBonus || 1000);
 
-      const trackingId = 'KE-' + Math.floor(100000 + Math.random() * 900000);
+      const trackingId = 'KE-TRX-' + Math.floor(100000 + Math.random() * 900000);
       const serviceTitle = SERVICES_DATA[serviceKey] ? SERVICES_DATA[serviceKey].title : serviceKey;
 
-      // Déterminer l'administrateur de destination
+      // Déterminer l'administrateur responsable
       const adminPhone = (city === 'Bertoua') ? '656995369' : '692168264';
-      const adminName = (city === 'Bertoua') ? 'Jamil' : 'Miguel MIGUEL';
+      const adminName = (city === 'Bertoua') ? 'Jamil (Admin Bertoua)' : 'Miguel MIGUEL (Admin Yaoundé)';
+      const dateStr = new Date().toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' });
 
       const orderObj = {
         id: trackingId,
@@ -1939,9 +2066,10 @@
         urgency: urgency,
         paymentMode: paymentMode,
         price: price,
-        status: 'Reçue',
-        assignedTo: adminName,
-        createdAt: new Date().toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })
+        status: 'Validée & Enregistrée',
+        assignedAdmin: adminName,
+        adminPhone: adminPhone,
+        createdAt: dateStr
       };
 
       // Sauvegarde de la commande
@@ -1967,43 +2095,107 @@
         saveStoredUsers(users);
       }
 
-      // Préparation du message WhatsApp
-      const waMsg = `*NOUVELLE COMMANDE KAMER EXPRESS (COURSIER 237)*%0A%0A` +
-        `📦 *Prestation :* ${encodeURIComponent(serviceTitle)}%0A` +
-        `📍 *Ville :* ${encodeURIComponent(city)}%0A` +
-        `👤 *Client :* ${encodeURIComponent(clientName)} (${encodeURIComponent(clientPhone)})%0A` +
-        `🚀 *Départ :* ${encodeURIComponent(fromLoc)}%0A` +
-        `🎯 *Arrivée :* ${encodeURIComponent(toLoc)}%0A` +
-        `📝 *Détails :* ${encodeURIComponent(details)}%0A` +
-        `⚡ *Urgence :* ${encodeURIComponent(urgency === 'urgent' ? 'Express Urgent' : 'Standard')}%0A` +
-        `💳 *Paiement :* ${encodeURIComponent(paymentMode)}%0A` +
-        `💰 *Tarif Indicatif :* ${price.toLocaleString()} FCFA%0A` +
-        `🔑 *Code Suivi :* ${trackingId}%0A%0A` +
-        `Merci de confirmer la prise en charge !`;
+      // Afficher le Reçu Officiel
+      displayReceiptModal(orderObj);
 
-      const waUrl = `https://wa.me/237${adminPhone}?text=${waMsg}`;
-
-      // Affichage modal de confirmation
-      document.getElementById('modalTrackingId').innerText = trackingId;
-      document.getElementById('modalReceiptService').innerText = serviceTitle;
-      document.getElementById('modalReceiptCityAgent').innerText = city + ' (Admin : ' + adminName + ')';
-      document.getElementById('modalReceiptClient').innerText = clientName + ' (' + clientPhone + ')';
-      document.getElementById('modalReceiptRoute').innerText = fromLoc + ' -> ' + toLoc;
-      document.getElementById('modalReceiptUrgency').innerText = (urgency === 'urgent' ? 'Express Urgent' : 'Standard');
-      document.getElementById('modalReceiptPrice').innerText = price.toLocaleString() + ' FCFA (' + paymentMode + ')';
-      document.getElementById('modalWhatsAppBtn').href = waUrl;
-
-      document.getElementById('orderSuccessModal').classList.add('active');
       document.getElementById('orderForm').reset();
       renderAdminDashboard();
+    }
+
+    function displayReceiptModal(order) {
+      document.getElementById('modalTrackingId').innerText = order.id;
+      document.getElementById('modalReceiptDate').innerText = order.createdAt;
+      document.getElementById('modalReceiptClient').innerText = order.clientName + ' (' + order.clientPhone + ')';
+      document.getElementById('modalReceiptService').innerText = order.serviceTitle;
+      document.getElementById('modalReceiptCityAgent').innerText = order.city + ' \u2022 ' + order.assignedAdmin;
+      document.getElementById('modalReceiptFrom').innerText = order.fromLoc;
+      document.getElementById('modalReceiptTo').innerText = order.toLoc;
+      document.getElementById('modalReceiptUrgency').innerText = (order.urgency === 'urgent' ? 'Express Urgent' : 'Standard');
+      document.getElementById('modalReceiptPaymentMode').innerText = order.paymentMode;
+      document.getElementById('modalReceiptPrice').innerText = order.price.toLocaleString() + ' FCFA';
+
+      // WhatsApp URL
+      const waMsg = `*REÇU DE TRANSACTION KAMER EXPRESS (COURSIER 237)*%0A%0A` +
+        `🧾 *N° Transaction :* ${order.id}%0A` +
+        `📅 *Date :* ${order.createdAt}%0A` +
+        `👤 *Client :* ${encodeURIComponent(order.clientName)} (${encodeURIComponent(order.clientPhone)})%0A` +
+        `📍 *Ville :* ${encodeURIComponent(order.city)}%0A` +
+        `👑 *Admin Référent :* ${encodeURIComponent(order.assignedAdmin)}%0A` +
+        `📦 *Prestation :* ${encodeURIComponent(order.serviceTitle)}%0A` +
+        `🚀 *Départ :* ${encodeURIComponent(order.fromLoc)}%0A` +
+        `🎯 *Arrivée :* ${encodeURIComponent(order.toLoc)}%0A` +
+        `⚡ *Urgence :* ${encodeURIComponent(order.urgency === 'urgent' ? 'Express Urgent' : 'Standard')}%0A` +
+        `💳 *Paiement :* ${encodeURIComponent(order.paymentMode)}%0A` +
+        `💰 *Montant :* ${order.price.toLocaleString()} FCFA%0A%0A` +
+        `Merci pour votre confiance sur Kamer Express !`;
+
+      document.getElementById('modalWhatsAppBtn').href = `https://wa.me/237${order.adminPhone || '692168264'}?text=${waMsg}`;
+      document.getElementById('orderSuccessModal').classList.add('active');
     }
 
     function closeOrderModal() {
       document.getElementById('orderSuccessModal').classList.remove('active');
     }
 
+    function printReceiptTicket() {
+      window.print();
+    }
+
     // ========================================================================
-    // CANDIDATURE DEVENIR AGENT
+    // MODAL HISTORIQUE DES REÇUS DU CLIENT
+    // ========================================================================
+    function openClientReceiptsModal() {
+      const container = document.getElementById('clientReceiptsListContainer');
+      const orders = getStoredOrders();
+      const currentUser = getCurrentUser();
+
+      let clientOrders = orders;
+      if (currentUser) {
+        clientOrders = orders.filter(o => o.clientPhone === currentUser.phone);
+      }
+
+      if (clientOrders.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:0.82rem;">Aucun reçu de transaction enregistré pour le moment.</div>`;
+      } else {
+        let html = '';
+        clientOrders.forEach(o => {
+          html += `
+            <div style="background:#f8fafc; border:1px solid var(--border-color); border-radius:var(--radius-md); padding:12px; margin-bottom:10px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                <span style="font-weight:900; color:var(--blue-royal); font-size:0.82rem;">${o.id}</span>
+                <span style="font-size:0.7rem; color:var(--text-muted);">${o.createdAt}</span>
+              </div>
+              <div style="font-size:0.8rem; font-weight:800; color:var(--blue-deep); margin-bottom:2px;">${o.serviceTitle}</div>
+              <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">
+                📍 ${o.city} &bull; ${o.price.toLocaleString()} FCFA (${o.paymentMode})
+              </div>
+              <button class="btn btn-sm btn-gold" onclick="viewSpecificReceipt('${o.id}')">
+                🧾 Afficher le Reçu Officiel
+              </button>
+            </div>
+          `;
+        });
+        container.innerHTML = html;
+      }
+
+      document.getElementById('clientReceiptsModal').classList.add('active');
+    }
+
+    function closeClientReceiptsModal() {
+      document.getElementById('clientReceiptsModal').classList.remove('active');
+    }
+
+    function viewSpecificReceipt(orderId) {
+      const orders = getStoredOrders();
+      const ord = orders.find(o => o.id === orderId);
+      if (ord) {
+        closeClientReceiptsModal();
+        displayReceiptModal(ord);
+      }
+    }
+
+    // ========================================================================
+    // CANDIDATURE COURSIER
     // ========================================================================
     function previewUpload(input, targetImgId) {
       if (input.files && input.files[0]) {
@@ -2053,7 +2245,7 @@
       agents.push(newAgent);
       saveStoredAgents(agents);
 
-      alertInApp('Candidature soumise avec succès ! Miguel ou Jamil validera vos pièces justificatives.');
+      alertInApp('Candidature soumise avec succès ! Les administrateurs Miguel et Jamil examineront votre dossier.');
       document.getElementById('agentApplyForm').reset();
       if (avatarImg) avatarImg.style.display = 'none';
       if (cniImg) cniImg.style.display = 'none';
@@ -2086,7 +2278,7 @@
     }
 
     function switchAdminSubtab(subtab) {
-      const subtabs = ['stats', 'certif', 'profiles', 'orders', 'prices'];
+      const subtabs = ['stats', 'profiles', 'orders', 'certif', 'prices'];
       subtabs.forEach(s => {
         const btn = document.getElementById('admin-subbtn-' + s);
         const pane = document.getElementById('admin-subtab-' + s);
@@ -2101,12 +2293,12 @@
 
       if (subtab === 'stats') {
         renderAdminUsersList();
-      } else if (subtab === 'certif') {
-        renderAdminCertificationList();
       } else if (subtab === 'profiles') {
         renderAdminProfilesEditor();
       } else if (subtab === 'orders') {
         renderAdminOrdersList();
+      } else if (subtab === 'certif') {
+        renderAdminCertificationList();
       } else if (subtab === 'prices') {
         loadAdminPriceInputs();
       }
@@ -2117,7 +2309,6 @@
       const users = getStoredUsers();
       const orders = getStoredOrders();
 
-      // Top KPIs
       const certAgents = agents.filter(a => a.isCertified);
       const pendingAgents = agents.filter(a => !a.isCertified);
       const ydeAgents = certAgents.filter(a => a.city === 'Yaoundé').length;
@@ -2141,9 +2332,9 @@
       if (pendingBadge) pendingBadge.innerText = pendingAgents.length;
 
       renderAdminUsersList();
-      renderAdminCertificationList();
       renderAdminProfilesEditor();
       renderAdminOrdersList();
+      renderAdminCertificationList();
       loadAdminPriceInputs();
     }
 
@@ -2185,12 +2376,17 @@
         const orders = getStoredOrders();
         let logHtml = '';
         if (orders.length === 0) {
-          logHtml = `<div style="padding:10px; background:#f8fafc; border-radius:var(--radius-md); font-size:0.75rem; color:var(--text-muted); text-align:center;">Aucune commande récente enregistrée.</div>`;
+          logHtml = `<div style="padding:10px; background:#f8fafc; border-radius:var(--radius-md); font-size:0.75rem; color:var(--text-muted); text-align:center;">Aucune transaction enregistrée.</div>`;
         } else {
           orders.slice(0, 5).forEach(o => {
             logHtml += `
-              <div style="padding:8px 12px; background:#ffffff; border:1px solid var(--border-color); border-radius:var(--radius-sm); margin-bottom:6px; font-size:0.75rem;">
-                <span style="font-weight:800; color:var(--blue-deep);">${o.clientName}</span> a commandé <strong>${o.serviceTitle}</strong> à <strong>${o.city}</strong> (${o.price.toLocaleString()} FCFA) &bull; <span style="color:var(--gold-primary); font-weight:700;">${o.status}</span>
+              <div style="padding:8px 12px; background:#ffffff; border:1px solid var(--border-color); border-radius:var(--radius-sm); margin-bottom:6px; font-size:0.75rem; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <span style="font-weight:800; color:var(--blue-deep);">${o.clientName}</span> &bull; <strong>${o.serviceTitle}</strong> (${o.price.toLocaleString()} FCFA)
+                </div>
+                <button class="btn btn-sm btn-outline" style="width:auto; padding:2px 8px; font-size:0.7rem;" onclick="viewSpecificReceipt('${o.id}')">
+                  Reçu
+                </button>
               </div>
             `;
           });
@@ -2199,112 +2395,35 @@
       }
     }
 
-    function renderAdminCertificationList() {
-      const container = document.getElementById('adminAgentsCertificationList');
-      if (!container) return;
-      const agents = getStoredAgents();
-
-      if (agents.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:16px; color:var(--text-muted); font-size:0.8rem;">Aucun agent enregistré.</div>`;
-        return;
-      }
-
-      let html = '';
-      agents.forEach(a => {
-        const isPending = !a.isCertified;
-        html += `
-          <div style="background:#ffffff; border:1px solid var(--border-color); border-radius:var(--radius-md); padding:12px; margin-bottom:10px;">
-            <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
-              <img src="${a.photoUrl || DEFAULT_AVATAR_GENERIC}" style="width:44px; height:44px; border-radius:50%; object-fit:cover; border:2px solid var(--gold-bright);">
-              <div>
-                <div style="font-size:0.88rem; font-weight:800; color:var(--blue-deep);">${a.name} ${a.isAdmin ? '(Admin)' : ''}</div>
-                <div style="font-size:0.75rem; color:var(--text-muted);">📍 ${a.city} &bull; 📞 ${a.phone} &bull; 🛵 ${a.transport}</div>
-              </div>
-            </div>
-
-            <div style="display:flex; gap:8px; margin-bottom:10px;">
-              <span style="font-size:0.7rem; font-weight:800; padding:2px 8px; border-radius:4px; background:${a.isCertified ? 'var(--success-light)' : 'var(--danger-light)'}; color:${a.isCertified ? 'var(--success)' : 'var(--danger)'};">
-                ${a.isCertified ? 'Certifié Conforme' : 'En Attente de Validation'}
-              </span>
-            </div>
-
-            ${isPending ? `
-              <div style="display:flex; gap:8px;">
-                <button class="btn btn-sm btn-gold" onclick="setAgentCertification('${a.id}', true)">
-                  Valider & Certifier
-                </button>
-                <button class="btn btn-sm btn-outline" style="color:var(--danger); border-color:var(--danger);" onclick="deleteAgent('${a.id}')">
-                  Rejeter
-                </button>
-              </div>
-            ` : `
-              <div style="display:flex; gap:8px;">
-                <a href="https://wa.me/237${a.phone}" target="_blank" class="btn btn-sm btn-whatsapp" style="width:auto;">
-                  WhatsApp
-                </a>
-                ${!a.isAdmin ? `
-                  <button class="btn btn-sm btn-outline" style="color:var(--danger); border-color:var(--danger); width:auto;" onclick="deleteAgent('${a.id}')">
-                    Supprimer
-                  </button>
-                ` : ''}
-              </div>
-            `}
-          </div>
-        `;
-      });
-      container.innerHTML = html;
-    }
-
-    function setAgentCertification(agentId, status) {
-      let agents = getStoredAgents();
-      let a = agents.find(ag => ag.id === agentId);
-      if (a) {
-        a.isCertified = status;
-        saveStoredAgents(agents);
-        alertInApp('Statut de l\'agent mis à jour avec succès !');
-        renderAdminDashboard();
-        renderHomeAgents();
-      }
-    }
-
-    function deleteAgent(agentId) {
-      confirmInApp('Voulez-vous vraiment supprimer cet agent ?', () => {
-        let agents = getStoredAgents();
-        agents = agents.filter(a => a.id !== agentId);
-        saveStoredAgents(agents);
-        alertInApp('Agent supprimé.');
-        renderAdminDashboard();
-        renderHomeAgents();
-      });
-    }
-
     function renderAdminProfilesEditor() {
       const container = document.getElementById('adminProfilesEditorArea');
       if (!container) return;
-      const agents = getStoredAgents().filter(a => a.isAdmin);
+      const admins = getStoredAdmins();
 
       let html = '';
-      agents.forEach(adm => {
+      admins.forEach(adm => {
         html += `
-          <div style="background:#ffffff; border:1px solid var(--border-color); border-radius:var(--radius-md); padding:14px; margin-bottom:12px;">
+          <div style="background:#ffffff; border:1.5px solid var(--gold-border); border-radius:var(--radius-md); padding:14px; margin-bottom:12px;">
             <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
-              <img id="admin-photo-preview-${adm.id}" src="${adm.photoUrl || DEFAULT_AVATAR_GENERIC}" style="width:54px; height:54px; border-radius:50%; object-fit:cover; border:2px solid var(--gold-bright);">
+              <img id="admin-photo-preview-${adm.id}" src="${adm.photoUrl || (adm.city === 'Yaoundé' ? DEFAULT_AVATAR_MIGUEL : DEFAULT_AVATAR_JAMIL)}" style="width:58px; height:58px; border-radius:50%; object-fit:cover; border:2.5px solid var(--gold-bright);">
               <div>
-                <div style="font-size:0.92rem; font-weight:800; color:var(--blue-deep);">${adm.name}</div>
-                <div style="font-size:0.75rem; color:var(--gold-primary); font-weight:800;">Admin Référent (${adm.city})</div>
+                <div style="font-size:0.95rem; font-weight:900; color:var(--blue-deep);">${adm.name}</div>
+                <div style="font-size:0.75rem; color:#92400e; font-weight:800; background:var(--gold-light); display:inline-block; padding:2px 6px; border-radius:4px; margin-top:2px;">
+                  👑 ${adm.role} (${adm.city})
+                </div>
               </div>
             </div>
 
             <div class="form-group">
-              <label class="form-label">Changer la photo de profil :</label>
-              <input type="file" class="form-control" accept="image/*" onchange="updateAgentPhoto('${adm.id}', this)">
+              <label class="form-label">Changer votre photo de profil :</label>
+              <input type="file" class="form-control" accept="image/*" onchange="updateAdminPhoto('${adm.id}', this)">
             </div>
             <div class="form-group">
-              <label class="form-label">Numéro WhatsApp :</label>
+              <label class="form-label">Numéro WhatsApp de l'Administrateur :</label>
               <input type="tel" id="admin-phone-input-${adm.id}" class="form-control" value="${adm.phone}">
             </div>
-            <button class="btn btn-sm btn-blue" onclick="saveAgentProfileDetails('${adm.id}')">
-              Enregistrer les modifications
+            <button class="btn btn-sm btn-gold" onclick="saveAdminProfileDetails('${adm.id}')">
+              Enregistrer mon profil Admin
             </button>
           </div>
         `;
@@ -2312,38 +2431,38 @@
       container.innerHTML = html;
     }
 
-    function updateAgentPhoto(agentId, input) {
+    function updateAdminPhoto(adminId, input) {
       if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          const preview = document.getElementById('admin-photo-preview-' + agentId);
+          const preview = document.getElementById('admin-photo-preview-' + adminId);
           if (preview) preview.src = e.target.result;
 
-          let agents = getStoredAgents();
-          let ag = agents.find(a => a.id === agentId);
-          if (ag) {
-            ag.photoUrl = e.target.result;
-            saveStoredAgents(agents);
-            alertInApp('Photo de profil mise à jour !');
-            renderHomeAgents();
+          let admins = getStoredAdmins();
+          let adm = admins.find(a => a.id === adminId);
+          if (adm) {
+            adm.photoUrl = e.target.result;
+            saveStoredAdmins(admins);
+            alertInApp('Photo de profil mise à jour avec succès !');
+            renderHomeAdmins();
           }
         };
         reader.readAsDataURL(input.files[0]);
       }
     }
 
-    function saveAgentProfileDetails(agentId) {
-      const phoneInput = document.getElementById('admin-phone-input-' + agentId);
+    function saveAdminProfileDetails(adminId) {
+      const phoneInput = document.getElementById('admin-phone-input-' + adminId);
       if (!phoneInput) return;
       const phone = phoneInput.value.trim().replace(/\s+/g, '');
 
-      let agents = getStoredAgents();
-      let ag = agents.find(a => a.id === agentId);
-      if (ag) {
-        ag.phone = phone;
-        saveStoredAgents(agents);
-        alertInApp('Coordonnées enregistrées avec succès !');
-        renderHomeAgents();
+      let admins = getStoredAdmins();
+      let adm = admins.find(a => a.id === adminId);
+      if (adm) {
+        adm.phone = phone;
+        saveStoredAdmins(admins);
+        alertInApp('Profil Administrateur enregistré avec succès !');
+        renderHomeAdmins();
       }
     }
 
@@ -2362,7 +2481,10 @@
         html += `
           <div style="background:#ffffff; border:1px solid var(--border-color); border-radius:var(--radius-md); padding:12px; margin-bottom:10px;">
             <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
-              <div style="font-size:0.88rem; font-weight:800; color:var(--blue-deep);">${o.serviceTitle}</div>
+              <div>
+                <div style="font-size:0.88rem; font-weight:800; color:var(--blue-deep);">${o.serviceTitle}</div>
+                <div style="font-size:0.72rem; color:var(--blue-royal); font-weight:800;">${o.id}</div>
+              </div>
               <span style="font-size:0.7rem; font-weight:800; padding:2px 6px; border-radius:4px; background:var(--blue-light); color:var(--blue-royal);">
                 ${o.status}
               </span>
@@ -2372,13 +2494,16 @@
               <div>👤 <strong>Client :</strong> ${o.clientName} (${o.clientPhone})</div>
               <div>💰 ${o.price.toLocaleString()} FCFA (${o.paymentMode}) &bull; ${o.createdAt}</div>
             </div>
-            <div style="display:flex; gap:6px;">
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
               <select class="form-control" style="font-size:0.75rem; padding:4px 8px; width:auto;" onchange="updateOrderStatus('${o.id}', this.value)">
-                <option value="Reçue" ${o.status === 'Reçue' ? 'selected' : ''}>Reçue</option>
+                <option value="Validée & Enregistrée" ${o.status === 'Validée & Enregistrée' ? 'selected' : ''}>Validée</option>
                 <option value="En cours" ${o.status === 'En cours' ? 'selected' : ''}>En cours</option>
                 <option value="Livrée" ${o.status === 'Livrée' ? 'selected' : ''}>Livrée</option>
                 <option value="Annulée" ${o.status === 'Annulée' ? 'selected' : ''}>Annulée</option>
               </select>
+              <button class="btn btn-sm btn-gold" style="width:auto; padding:4px 8px;" onclick="viewSpecificReceipt('${o.id}')">
+                🧾 Voir Reçu
+              </button>
               <a href="https://wa.me/237${o.clientPhone}" target="_blank" class="btn btn-sm btn-whatsapp" style="width:auto; padding:4px 8px;">
                 WhatsApp Client
               </a>
@@ -2398,17 +2523,73 @@
       if (ord) {
         ord.status = newStatus;
         saveStoredOrders(orders);
-        alertInApp('Statut de la commande mis à jour : ' + newStatus);
+        alertInApp('Statut de la transaction mis à jour : ' + newStatus);
         renderAdminDashboard();
       }
     }
 
     function deleteOrder(orderId) {
-      confirmInApp('Voulez-vous supprimer cette commande ?', () => {
+      confirmInApp('Voulez-vous supprimer cette commande et son reçu ?', () => {
         let orders = getStoredOrders();
         orders = orders.filter(o => o.id !== orderId);
         saveStoredOrders(orders);
         alertInApp('Commande supprimée.');
+        renderAdminDashboard();
+      });
+    }
+
+    function renderAdminCertificationList() {
+      const container = document.getElementById('adminAgentsCertificationList');
+      if (!container) return;
+      const agents = getStoredAgents();
+
+      if (agents.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:16px; color:var(--text-muted); font-size:0.8rem;">Aucune candidature de coursier en attente.</div>`;
+        return;
+      }
+
+      let html = '';
+      agents.forEach(a => {
+        html += `
+          <div style="background:#ffffff; border:1px solid var(--border-color); border-radius:var(--radius-md); padding:12px; margin-bottom:10px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+              <img src="${a.photoUrl || DEFAULT_AVATAR_GENERIC}" style="width:44px; height:44px; border-radius:50%; object-fit:cover;">
+              <div>
+                <div style="font-size:0.88rem; font-weight:800; color:var(--blue-deep);">${a.name}</div>
+                <div style="font-size:0.75rem; color:var(--text-muted);">📍 ${a.city} &bull; 📞 ${a.phone} &bull; 🛵 ${a.transport}</div>
+              </div>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button class="btn btn-sm btn-gold" onclick="setAgentCertification('${a.id}', true)">
+                Valider Coursier
+              </button>
+              <button class="btn btn-sm btn-outline" style="color:var(--danger); border-color:var(--danger);" onclick="deleteAgent('${a.id}')">
+                Supprimer
+              </button>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function setAgentCertification(agentId, status) {
+      let agents = getStoredAgents();
+      let a = agents.find(ag => ag.id === agentId);
+      if (a) {
+        a.isCertified = status;
+        saveStoredAgents(agents);
+        alertInApp('Coursier validé avec succès !');
+        renderAdminDashboard();
+      }
+    }
+
+    function deleteAgent(agentId) {
+      confirmInApp('Voulez-vous supprimer ce coursier ?', () => {
+        let agents = getStoredAgents();
+        agents = agents.filter(a => a.id !== agentId);
+        saveStoredAgents(agents);
+        alertInApp('Coursier supprimé.');
         renderAdminDashboard();
       });
     }
@@ -2554,12 +2735,11 @@
     // INITIALISATION DE L'APPLICATION
     // ========================================================================
     window.addEventListener('DOMContentLoaded', () => {
-      renderHomeAgents();
+      renderHomeAdmins();
       updatePricesDisplay();
       updateAuthUI();
       checkAppUpdates(true);
 
-      // Vérification périodique des mises à jour toutes les 60 secondes
       setInterval(() => {
         checkAppUpdates(true);
       }, 60000);
