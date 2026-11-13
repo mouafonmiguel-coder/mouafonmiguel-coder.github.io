@@ -1,0 +1,2883 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0f2852">
+  <meta name="description" content="KAMER EXPRESS — Coursier 237 : La plateforme de services et coursiers professionnels à Yaoundé et Bertoua.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" href="./icon-192.png">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>KAMER EXPRESS — Coursier 237 | Yaoundé & Bertoua</title>
+  <style>
+    /* ==========================================================================
+       RESET & VARIABLES DE DESIGN (Bleu Royal, Or & Blanc)
+       ========================================================================== */
+    :root {
+      --blue-deep: #0a192f;
+      --blue-royal: #1e3a8a;
+      --blue-bright: #2563eb;
+      --blue-light: #eff6ff;
+      --blue-card: #142a4d;
+      --gold-primary: #d97706;
+      --gold-bright: #f59e0b;
+      --gold-light: #fef3c7;
+      --gold-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --blue-gradient: linear-gradient(135deg, #0a192f 0%, #1e3a8a 100%);
+      --bg-dark: #081220;
+      --bg-card-dark: #0f2341;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-white: #ffffff;
+      --white: #ffffff;
+      --border-color: #e2e8f0;
+      --border-dark: #1e3a8a33;
+      --success: #10b981;
+      --danger: #ef4444;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --shadow-gold: 0 8px 20px -4px rgba(245, 158, 11, 0.35);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: var(--text-main);
+      padding-bottom: 85px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: #ffffff;
+      min-height: 100vh;
+      position: relative;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.08);
+    }
+
+    /* HEADER */
+    .header-bar {
+      background: var(--blue-gradient);
+      color: var(--white);
+      padding: 14px 18px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid rgba(245, 158, 11, 0.4);
+      box-shadow: var(--shadow-md);
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .brand-logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--gold-gradient);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blue-deep);
+      box-shadow: var(--shadow-gold);
+    }
+
+    .brand-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      line-height: 1.1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title span:first-child {
+      color: var(--white);
+      font-weight: 900;
+    }
+
+    .brand-title span:last-child {
+      color: var(--gold-bright);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .city-badge {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.5);
+      border-radius: var(--radius-full);
+      padding: 4px 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--gold-bright);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .auth-btn-pill {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: var(--white);
+      padding: 5px 10px;
+      border-radius: var(--radius-full);
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .auth-btn-pill:hover {
+      background: var(--gold-gradient);
+      color: var(--blue-deep);
+      border-color: var(--gold-bright);
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 500px;
+      background: #ffffff;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 4px;
+      z-index: 100;
+      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 6px 4px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      transition: all 0.2s ease;
+      flex: 1;
+    }
+
+    .nav-item.active {
+      color: var(--blue-royal);
+    }
+
+    .nav-item.active .nav-icon {
+      background: var(--blue-light);
+      color: var(--blue-royal);
+      border-radius: var(--radius-md);
+      transform: scale(1.08);
+    }
+
+    .nav-icon {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    /* PAGES */
+    .tab-page {
+      display: none;
+      padding: 20px;
+      animation: fadeIn 0.25s ease forwards;
+    }
+
+    .tab-page.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* HERO BANNER */
+    .hero-banner {
+      background: var(--blue-gradient);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .hero-banner::after {
+      content: "";
+      position: absolute;
+      top: -30%;
+      right: -20%;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.25) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid var(--gold-bright);
+      color: var(--gold-bright);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .hero-title {
+      font-size: 1.55rem;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .hero-title span {
+      color: var(--gold-bright);
+    }
+
+    .hero-subtitle {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      line-height: 1.45;
+      margin-bottom: 20px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* BOUTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 20px;
+      border-radius: var(--radius-md);
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-gold {
+      background: var(--gold-gradient);
+      color: var(--blue-deep);
+      box-shadow: var(--shadow-gold);
+      font-weight: 800;
+    }
+
+    .btn-blue {
+      background: var(--blue-royal);
+      color: var(--white);
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: var(--white);
+    }
+
+    .btn-sm {
+      padding: 8px 14px;
+      font-size: 0.8rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .btn-whatsapp {
+      background: #25d366;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .btn-call {
+      background: var(--blue-royal);
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    /* STATS ROW SANS EMOJIS (ÉPURÉ) */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 6px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-number {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--blue-royal);
+      margin-bottom: 2px;
+    }
+
+    .stat-label {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* EXPLICATION CLAIRE DU FONCTIONNEMENT (USER INTERFACE) */
+    .how-it-works-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-lg);
+      padding: 18px 16px;
+      margin-bottom: 24px;
+    }
+
+    .how-step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .how-step-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .how-step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--blue-royal);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+
+    .how-step-content {
+      flex: 1;
+    }
+
+    .how-step-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--blue-deep);
+      margin-bottom: 2px;
+    }
+
+    .how-step-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* TITRES */
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--blue-deep);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-link {
+      font-size: 0.8rem;
+      color: var(--blue-bright);
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* SERVICES */
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .service-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      position: relative;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .service-card:hover {
+      border-color: var(--gold-bright);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .service-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      background: var(--blue-light);
+      color: var(--blue-royal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .service-content {
+      flex: 1;
+    }
+
+    .service-title {
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--blue-deep);
+      margin-bottom: 4px;
+    }
+
+    .service-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .service-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 6px;
+    }
+
+    .service-price {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--gold-primary);
+      background: var(--gold-light);
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+    }
+
+    .service-btn-arrow {
+      color: var(--blue-royal);
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    /* AGENTS */
+    .agents-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .agent-card {
+      background: var(--bg-card-dark);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      color: var(--white);
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .agent-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 100%;
+      background: var(--gold-gradient);
+    }
+
+    .agent-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .agent-avatar-img {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2.5px solid var(--gold-bright);
+      background: var(--blue-royal);
+      flex-shrink: 0;
+    }
+
+    .agent-meta {
+      flex: 1;
+    }
+
+    .agent-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .agent-badge-certified {
+      background: #10b981;
+      color: #ffffff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+    }
+
+    .agent-badge-admin {
+      background: var(--gold-gradient);
+      color: var(--blue-deep);
+      font-size: 0.65rem;
+      font-weight: 900;
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+    }
+
+    .agent-loc {
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 3px;
+      font-weight: 700;
+    }
+
+    .agent-transport {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    .agent-phone {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--gold-bright);
+      margin-top: 4px;
+    }
+
+    .agent-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    /* FORMULAIRES */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--blue-deep);
+      margin-bottom: 6px;
+    }
+
+    .form-control, .form-select, .form-textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-size: 0.92rem;
+      background: #ffffff;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--blue-royal);
+      box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.12);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .radio-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .radio-card {
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #ffffff;
+    }
+
+    .radio-card.selected {
+      border-color: var(--blue-royal);
+      background: var(--blue-light);
+      color: var(--blue-royal);
+      font-weight: 700;
+    }
+
+    /* SUIVI */
+    .tracking-box {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 28px;
+      margin-top: 16px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 6px;
+      left: 10px;
+      bottom: 6px;
+      width: 2px;
+      background: #e2e8f0;
+    }
+
+    .timeline-step {
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .timeline-step:last-child {
+      margin-bottom: 0;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -28px;
+      top: 2px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 800;
+    }
+
+    .timeline-step.completed .timeline-dot {
+      background: var(--success);
+    }
+
+    .timeline-step.active .timeline-dot {
+      background: var(--gold-bright);
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+    }
+
+    .timeline-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--blue-deep);
+    }
+
+    .timeline-time {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 25, 47, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: modalFadeIn 0.2s ease forwards;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 440px;
+      padding: 22px;
+      position: relative;
+      box-shadow: var(--shadow-lg);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--blue-deep);
+    }
+
+    .modal-close-btn {
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      line-height: 1;
+      padding: 4px;
+    }
+
+    /* REÇU */
+    .receipt-box {
+      background: #f8fafc;
+      border: 1px dashed var(--blue-royal);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin: 14px 0;
+      font-size: 0.82rem;
+    }
+
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      border-bottom: 1px dotted #e2e8f0;
+    }
+
+    .receipt-row:last-child {
+      border-bottom: none;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--blue-deep);
+      padding-top: 8px;
+    }
+
+    /* ADMIN */
+    .admin-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .admin-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .admin-badge-status {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+    }
+
+    .status-pending { background: #fef3c7; color: #b45309; }
+    .status-progress { background: #dbeafe; color: #1e40af; }
+    .status-completed { background: #d1fae5; color: #065f46; }
+
+    /* AUTH TABS */
+    .auth-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: var(--radius-md);
+    }
+
+    .auth-tab-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: transparent;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .auth-tab-btn.active {
+      background: #ffffff;
+      color: var(--blue-royal);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ADMIN SUBNAV */
+    .admin-subnav {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: var(--radius-md);
+    }
+
+    .admin-subnav-btn {
+      flex: 1;
+      padding: 8px 4px;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: transparent;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .admin-subnav-btn.active {
+      background: #ffffff;
+      color: var(--blue-royal);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .admin-subtab-pane {
+      display: none;
+    }
+
+    .admin-subtab-pane.active {
+      display: block;
+    }
+
+    .upload-dropzone {
+      border: 2px dashed #cbd5e1;
+      border-radius: var(--radius-md);
+      padding: 14px;
+      text-align: center;
+      background: #f8fafc;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-bottom: 10px;
+    }
+
+    .preview-thumb {
+      max-width: 100%;
+      height: 90px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+      margin-top: 8px;
+      border: 1px solid var(--border-color);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- ========================================================================
+         EN-TÊTE FIXE (HEADER)
+         ======================================================================== -->
+    <header class="header-bar">
+      <div class="brand-box" onclick="switchTab('home')">
+        <div class="brand-logo-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="8" cy="21" r="1"></circle>
+            <circle cx="19" cy="21" r="1"></circle>
+            <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+            <path d="M12 2l3 4h-3l1 3-4-4h3l-1-3z" fill="currentColor"></path>
+          </svg>
+        </div>
+        <div class="brand-title">
+          <span>KAMER EXPRESS</span>
+          <span>COURSIER 237</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="city-badge" onclick="openCityModal()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          <span id="headerCityLabel">Yaoundé / Bertoua</span>
+        </div>
+
+        <button class="auth-btn-pill" id="headerAuthBtn" onclick="openAuthModal('register')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <span id="headerAuthText">S'inscrire</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ========================================================================
+         PAGE 1 : ACCUEIL (HOME)
+         ======================================================================== -->
+    <main id="tab-home" class="tab-page active">
+      
+      <!-- Bannière Hero -->
+      <section class="hero-banner">
+        <div class="hero-tag">
+          Plateforme de Services & Coursiers
+        </div>
+        <h1 class="hero-title">Simplifiez votre vie, <span>confiez-nous</span> vos besoins !</h1>
+        <p class="hero-subtitle">Courses en ville, certifications de documents, expéditions de colis et démarches universitaires à Yaoundé et Bertoua.</p>
+        
+        <div class="hero-actions">
+          <button class="btn btn-gold" onclick="switchTab('order')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"></path></svg>
+            Commander une course en 1 clic
+          </button>
+          <button class="btn btn-outline" onclick="openAuthModal('register')">
+            S'inscrire d'abord (Créer mon compte)
+          </button>
+          <button class="btn btn-sm btn-outline" style="border:none; text-decoration:underline; font-size:0.78rem; padding:4px;" onclick="openAuthModal('login')">
+            J'ai déjà un compte — Se connecter &rarr;
+          </button>
+        </div>
+      </section>
+
+      <!-- Statistiques sobres (ZÉRO EMOJIS) -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Rapidité Express</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">Certifié</div>
+          <div class="stat-label">Sécurité & Fret</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">2 Villes</div>
+          <div class="stat-label">Yaoundé & Bertoua</div>
+        </div>
+      </div>
+
+      <!-- INTERFACE UTILISATEUR : COMMENT ÇA MARCHE ? -->
+      <section class="how-it-works-box">
+        <div class="section-head" style="margin-bottom: 12px;">
+          <h3 class="section-title" style="font-size: 0.98rem;">Comment ça marche ?</h3>
+        </div>
+        
+        <div class="how-step-item">
+          <div class="how-step-num">1</div>
+          <div class="how-step-content">
+            <div class="how-step-title">Choisissez votre prestation</div>
+            <div class="how-step-desc">Courses, certification de documents, expédition de colis ou retrait de diplômes universitaires.</div>
+          </div>
+        </div>
+
+        <div class="how-step-item">
+          <div class="how-step-num">2</div>
+          <div class="how-step-content">
+            <div class="how-step-title">Prise en charge par l'agent certifié</div>
+            <div class="how-step-desc">Miguel à Yaoundé ou Jamil à Bertoua reçoit votre demande et confirme l'itinéraire en direct sur WhatsApp.</div>
+          </div>
+        </div>
+
+        <div class="how-step-item">
+          <div class="how-step-num">3</div>
+          <div class="how-step-content">
+            <div class="how-step-title">Livraison rapide & Paiement sécurisé</div>
+            <div class="how-step-desc">Suivez votre mission en direct avec votre numéro de suivi. Règlement par Orange Money, MTN MoMo ou espèces.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section : Les 4 Prestations -->
+      <div class="section-head">
+        <h2 class="section-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+          Nos 4 Prestations
+        </h2>
+        <span class="section-link" onclick="switchTab('services')">Voir détails &rarr;</span>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card" onclick="startOrderForService('courses')">
+          <div class="service-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          </div>
+          <div class="service-content">
+            <div class="service-title">1. Courses et achats en ville</div>
+            <div class="service-desc">Achats aux marchés, supermarchés, quincailleries ou pharmacies à Yaoundé et Bertoua.</div>
+            <div class="service-footer">
+              <span class="service-price" id="price-tag-courses">Dès 1 500 F</span>
+              <span class="service-btn-arrow">Commander &rarr;</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-card" onclick="startOrderForService('certification')">
+          <div class="service-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          </div>
+          <div class="service-content">
+            <div class="service-title">2. Certification de documents</div>
+            <div class="service-desc">Accompagnement rapide et sécurisé pour légalisations en Mairies et Commissariats.</div>
+            <div class="service-footer">
+              <span class="service-price" id="price-tag-certification">Dès 2 500 F</span>
+              <span class="service-btn-arrow">Commander &rarr;</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-card" onclick="startOrderForService('colis')">
+          <div class="service-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>
+          </div>
+          <div class="service-content">
+            <div class="service-title">3. Collecte et expédition de colis</div>
+            <div class="service-desc">Récupération chez vous et dépôt en agences de voyage (Touristique, Buca, Finexs, etc.).</div>
+            <div class="service-footer">
+              <span class="service-price" id="price-tag-colis">Dès 2 000 F</span>
+              <span class="service-btn-arrow">Commander &rarr;</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-card" onclick="startOrderForService('univ')">
+          <div class="service-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+          </div>
+          <div class="service-content">
+            <div class="service-title">4. Retrait de documents universitaires</div>
+            <div class="service-desc">Retrait de diplômes, attestations et relevés (UY1 Ngoa-Ekélé, UY2 Soa, Univ Bertoua).</div>
+            <div class="service-footer">
+              <span class="service-price" id="price-tag-univ">Dès 3 000 F</span>
+              <span class="service-btn-arrow">Commander &rarr;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section : Nos Responsables & Agents (SANS NOMS DE QUARTIERS) -->
+      <div class="section-head">
+        <h2 class="section-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          Nos Agents Référents
+        </h2>
+        <span class="section-link" onclick="switchTab('join-agent')">+ Postuler</span>
+      </div>
+
+      <div class="agents-grid" id="homeAgentsList">
+        <!-- Rendu dynamique JS -->
+      </div>
+
+    </main>
+
+    <!-- ========================================================================
+         PAGE 2 : SERVICES & TARIFS
+         ======================================================================== -->
+    <main id="tab-services" class="tab-page">
+      <div class="section-head">
+        <h2 class="section-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          Services & Tarifs Indicatifs
+        </h2>
+      </div>
+
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+        Nos tarifs sont transparents, adaptés à la distance et au type de mission. Vous réglez directement par <strong>Orange Money</strong>, <strong>MTN MoMo</strong> ou en <strong>espèces</strong>.
+      </p>
+
+      <div class="services-grid" id="detailed-services-container"></div>
+
+      <!-- Simulateur interactif -->
+      <div class="hero-banner" style="background: var(--blue-card); border-color: var(--blue-royal);">
+        <h3 style="font-size: 1.15rem; color: var(--gold-bright); margin-bottom: 8px;">Simulateur de Devis Express</h3>
+        <p style="font-size: 0.8rem; color: #cbd5e1; margin-bottom: 14px;">Estimez le tarif de votre mission en quelques secondes :</p>
+
+        <div class="form-group">
+          <label class="form-label" style="color: #ffffff;">Ville de la mission :</label>
+          <select id="calcCity" class="form-select" onchange="calculatePrice()">
+            <option value="Yaoundé">Yaoundé (Miguel)</option>
+            <option value="Bertoua">Bertoua (Jamil)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" style="color: #ffffff;">Prestation demandée :</label>
+          <select id="calcService" class="form-select" onchange="calculatePrice()">
+            <option value="courses">1. Courses et achats en ville</option>
+            <option value="certification">2. Certification de documents</option>
+            <option value="colis">3. Collecte et expédition de colis</option>
+            <option value="univ">4. Retrait de documents universitaires</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" style="color: #ffffff;">Niveau d'urgence :</label>
+          <select id="calcUrgency" class="form-select" onchange="calculatePrice()">
+            <option value="normal">Standard (dans la journée)</option>
+            <option value="urgent">Express Urgent (Course prioritaire immédiate)</option>
+          </select>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.08); padding: 14px; border-radius: var(--radius-md); text-align: center; margin-top: 10px; border: 1px dashed var(--gold-bright);">
+          <div style="font-size: 0.75rem; color: #cbd5e1;">Estimation du tarif :</div>
+          <div id="calcResult" style="font-size: 1.45rem; font-weight: 900; color: var(--gold-bright); margin: 4px 0;">1 500 FCFA</div>
+          <button class="btn btn-gold btn-sm mt-2" onclick="applyCalcToOrder()">
+            Commander avec cette estimation
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- ========================================================================
+         PAGE 3 : PASSER UNE COMMANDE
+         ======================================================================== -->
+    <main id="tab-order" class="tab-page">
+      <div class="section-head">
+        <h2 class="section-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+          Commander une Prestation
+        </h2>
+      </div>
+
+      <div style="background: var(--blue-light); border-left: 4px solid var(--blue-royal); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 18px; font-size: 0.8rem; color: var(--blue-deep);">
+        Votre commande est transmise directement sur le <strong>WhatsApp officiel</strong> de l'agent référent (Miguel à Yaoundé ou Jamil à Bertoua) avec un identifiant de suivi.
+      </div>
+
+      <form id="orderForm" onsubmit="handleOrderSubmit(event)">
+        
+        <!-- Ville (SANS QUARTIER) -->
+        <div class="form-group">
+          <label class="form-label">1. Ville de la mission *</label>
+          <div class="radio-cards-grid">
+            <div id="city-card-yde" class="radio-card selected" onclick="selectCityOption('Yaoundé')">
+              <div style="font-size: 1.1rem; margin-bottom: 2px;">🏛️</div>
+              <div style="font-weight: 800;">Yaoundé</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted);">Référent : Miguel</div>
+            </div>
+            <div id="city-card-bta" class="radio-card" onclick="selectCityOption('Bertoua')">
+              <div style="font-size: 1.1rem; margin-bottom: 2px;">🌳</div>
+              <div style="font-weight: 800;">Bertoua</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted);">Référent : Jamil</div>
+            </div>
+          </div>
+          <input type="hidden" id="orderCity" value="Yaoundé">
+        </div>
+
+        <!-- Prestation -->
+        <div class="form-group">
+          <label class="form-label">2. Prestation souhaitée *</label>
+          <select id="orderService" class="form-select" required onchange="updateOrderPriceSummary()">
+            <option value="courses">1. Courses et achats en ville</option>
+            <option value="certification">2. Certification de documents</option>
+            <option value="colis">3. Collecte et expédition de colis</option>
+            <option value="univ">4. Retrait de documents universitaires</option>
+          </select>
+        </div>
+
+        <!-- Adresses -->
+        <div class="form-group">
+          <label class="form-label">3. Lieu de départ / Récupération *</label>
+          <input type="text" id="orderFrom" class="form-control" placeholder="Ex: Bastos, Marché Mokolo, Mairie..." required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">4. Lieu de livraison / Destination *</label>
+          <input type="text" id="orderTo" class="form-control" placeholder="Ex: Agence Buca Voyages, Domicile, Bureau..." required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">5. Description complète du besoin *</label>
+          <textarea id="orderDetails" class="form-textarea" placeholder="Précisez les détails : liste des achats, documents à certifier, nom du diplôme, colis à expédier..." required></textarea>
+        </div>
+
+        <!-- Client -->
+        <div class="form-group">
+          <label class="form-label">6. Votre Nom & Prénom *</label>
+          <input type="text" id="orderClientName" class="form-control" placeholder="Votre nom" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">7. Votre Numéro de Téléphone / WhatsApp *</label>
+          <input type="tel" id="orderClientPhone" class="form-control" placeholder="Ex: 692168264" required>
+        </div>
+
+        <!-- Urgence & Paiement -->
+        <div class="form-group">
+          <label class="form-label">8. Niveau d'urgence</label>
+          <select id="orderUrgency" class="form-select" onchange="updateOrderPriceSummary()">
+            <option value="Standard">Standard (dans la demi-journée)</option>
+            <option value="Express Urgent">Express Urgent (Course prioritaire immédiate)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">9. Mode de règlement préféré</label>
+          <select id="orderPaymentMode" class="form-select">
+            <option value="Orange Money">Orange Money</option>
+            <option value="MTN Mobile Money">MTN Mobile Money</option>
+            <option value="Espèces à l'Agent">Paiement en espèces à l'agent</option>
+          </select>
+        </div>
+
+        <!-- Récapitulatif -->
+        <div style="background: var(--gold-light); border: 1px solid var(--gold-bright); border-radius: var(--radius-md); padding: 14px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 0.75rem; color: var(--gold-primary); font-weight: 700;">TARIF ESTIMÉ :</div>
+            <div style="font-size: 0.72rem; color: #78350f;">Ajustable selon mission</div>
+          </div>
+          <div id="orderEstimatedPrice" style="font-size: 1.3rem; font-weight: 900; color: var(--gold-primary);">
+            1 500 FCFA
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-gold" style="font-size: 1.02rem; padding: 15px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          Transmettre la commande sur WhatsApp &rarr;
+        </button>
+
+      </form>
+    </main>
+
+    <!-- ========================================================================
+         PAGE 4 : DEVENIR AGENT CERTIFIÉ
+         ======================================================================== -->
+    <main id="tab-join-agent" class="tab-page">
+      <div class="section-head">
+        <h2 class="section-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          Devenir Agent Certifié
+        </h2>
+      </div>
+
+      <div style="background: #f0fdf4; border: 1px solid #86efac; padding: 14px; border-radius: var(--radius-md); margin-bottom: 18px; font-size: 0.82rem; color: #166534;">
+        <strong>Processus de Certification :</strong><br>
+        Pour garantir la sécurité des clients, chaque candidat agent fournit ses pièces officielles (CNI, Domicile, Photo). <strong>Les administrateurs Miguel et Jamil vérifient et valident manuellement chaque dossier</strong> avant toute activation.
+      </div>
+
+      <form id="agentApplyForm" onsubmit="handleAgentApplication(event)">
+        
+        <div class="form-group">
+          <label class="form-label">1. Nom complet du candidat *</label>
+          <input type="text" id="applyAgentName" class="form-control" placeholder="Votre nom et prénom" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">2. Ville de rattachement *</label>
+          <select id="applyAgentCity" class="form-select" required>
+            <option value="Yaoundé">Yaoundé</option>
+            <option value="Bertoua">Bertoua</option>
+            <option value="Douala">Douala</option>
+            <option value="Bafoussam">Bafoussam</option>
+            <option value="Autre">Autre ville</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">3. Numéro de Téléphone & WhatsApp officiel *</label>
+          <input type="tel" id="applyAgentPhone" class="form-control" placeholder="Ex: 692168264" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">4. Moyen de transport utilisé *</label>
+          <select id="applyAgentTransport" class="form-select" required>
+            <option value="Moto personnelle">Moto personnelle</option>
+            <option value="Voiture personnelle">Voiture personnelle</option>
+            <option value="Transport en commun / Taxi">Transport en commun / Taxi</option>
+            <option value="À pied / Proximité">À pied / Proximité</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">5. Photo de Profil (Portrait clair) *</label>
+          <div class="upload-dropzone" onclick="document.getElementById('fileAgentAvatar').click()">
+            <div>Cliquez pour importer votre Photo de Profil</div>
+            <input type="file" id="fileAgentAvatar" accept="image/*" style="display:none;" onchange="previewUpload(this, 'previewAgentAvatar')">
+            <img id="previewAgentAvatar" class="preview-thumb" style="display:none;">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">6. Pièce d'Identité CNI / Passeport (Document officiel) *</label>
+          <div class="upload-dropzone" onclick="document.getElementById('fileAgentCni').click()">
+            <div>Cliquez pour importer votre CNI (Recto ou complet)</div>
+            <input type="file" id="fileAgentCni" accept="image/*" style="display:none;" onchange="previewUpload(this, 'previewAgentCni')">
+            <img id="previewAgentCni" class="preview-thumb" style="display:none;">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">7. Justificatif de domicile / Plan de localisation *</label>
+          <div class="upload-dropzone" onclick="document.getElementById('fileAgentDomicile').click()">
+            <div>Cliquez pour importer votre Plan de localisation / Reçu</div>
+            <input type="file" id="fileAgentDomicile" accept="image/*" style="display:none;" onchange="previewUpload(this, 'previewAgentDomicile')">
+            <img id="previewAgentDomicile" class="preview-thumb" style="display:none;">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-blue" style="font-size: 1rem; padding: 14px;">
+          Soumettre mon dossier pour certification &rarr;
+        </button>
+
+      </form>
+    </main>
+
+    <!-- ========================================================================
+         PAGE 5 : SUIVI DE MISSION
+         ======================================================================== -->
+    <main id="tab-tracking" class="tab-page">
+      <div class="section-head">
+        <h2 class="section-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          Suivi de votre Mission
+        </h2>
+      </div>
+
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+        Entrez votre identifiant de commande (ex : <code>KE-YDE-1042</code>) pour vérifier l'état d'avancement de votre coursier.
+      </p>
+
+      <div style="display: flex; gap: 8px; margin-bottom: 18px;">
+        <input type="text" id="trackSearchInput" class="form-control" placeholder="N° de commande (ex: KE-YDE-1042)">
+        <button class="btn btn-blue" style="width: auto; padding: 0 18px;" onclick="searchTracking()">
+          Vérifier
+        </button>
+      </div>
+
+      <div id="trackingResultArea"></div>
+
+      <div class="section-head mt-4">
+        <h3 class="section-title" style="font-size: 0.98rem;">Vos commandes récentes</h3>
+      </div>
+      <div id="recentOrdersList"></div>
+    </main>
+
+    <!-- ========================================================================
+         PAGE 6 : ESPACE ADMINISTRATION (MIGUEL & JAMIL)
+         ======================================================================== -->
+    <main id="tab-admin" class="tab-page">
+      <div class="section-head">
+        <h2 class="section-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          Administration Miguel & Jamil
+        </h2>
+      </div>
+
+      <!-- Verrouillage PIN Admin -->
+      <div id="adminAuthLock">
+        <div style="background: var(--blue-light); border: 1px solid var(--blue-royal); border-radius: var(--radius-md); padding: 18px; text-align: center;">
+          <div style="font-size: 1.8rem; margin-bottom: 6px;">🔒</div>
+          <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--blue-deep); margin-bottom: 6px;">Espace Administrateurs</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 14px;">Entrez votre code secret pour certifier les agents, gérer les photos et modifier les tarifs :</p>
+          <div style="display: flex; gap: 8px; max-width: 280px; margin: 0 auto;">
+            <input type="password" id="adminPinInput" class="form-control" placeholder="Code PIN (2026)" style="text-align: center; font-size: 1.1rem; letter-spacing: 4px;">
+            <button class="btn btn-blue" style="width: auto; padding: 0 16px;" onclick="verifyAdminPin()">
+              Ouvrir
+            </button>
+          </div>
+          <div id="adminPinError" style="font-size: 0.75rem; color: var(--danger); margin-top: 6px; display: none;">Code PIN incorrect.</div>
+        </div>
+      </div>
+
+      <!-- Contenu Admin déverrouillé -->
+      <div id="adminDashboardContent" style="display: none;">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; background: #f1f5f9; padding: 10px 14px; border-radius: var(--radius-md);">
+          <span style="font-size: 0.85rem; font-weight: 800; color: var(--success);">Session Admin Active</span>
+          <button class="btn btn-sm btn-outline" style="color: var(--danger); border-color: var(--danger); width: auto;" onclick="lockAdmin()">Verrouiller</button>
+        </div>
+
+        <!-- Sous-navigation Admin -->
+        <div class="admin-subnav">
+          <button class="admin-subnav-btn active" onclick="switchAdminSubtab('certif')" id="admin-subbtn-certif">
+            Certification (<span id="adminPendingCountBadge">0</span>)
+          </button>
+          <button class="admin-subnav-btn" onclick="switchAdminSubtab('profiles')" id="admin-subbtn-profiles">
+            Photos & Profils
+          </button>
+          <button class="admin-subnav-btn" onclick="switchAdminSubtab('orders')" id="admin-subbtn-orders">
+            Commandes
+          </button>
+          <button class="admin-subnav-btn" onclick="switchAdminSubtab('prices')" id="admin-subbtn-prices">
+            Tarifs
+          </button>
+        </div>
+
+        <!-- SOUS-ONGLET 1 : VALIDATION DES AGENTS -->
+        <div id="admin-subtab-certif" class="admin-subtab-pane active">
+          <div class="section-head">
+            <h3 class="section-title" style="font-size: 0.98rem;">Dossiers d'Agents à Valider</h3>
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">
+            Vérifiez les pièces justificatives (CNI, Domicile, Photo). Une fois validé, l'agent reçoit son badge <strong>« Certifié Conforme »</strong> et devient visible par les clients.
+          </p>
+          <div id="adminAgentsCertificationList"></div>
+        </div>
+
+        <!-- SOUS-ONGLET 2 : PROFILS & PHOTOS MIGUEL & JAMIL -->
+        <div id="admin-subtab-profiles" class="admin-subtab-pane">
+          <div class="section-head">
+            <h3 class="section-title" style="font-size: 0.98rem;">Gestion des Profils & Photos de Miguel & Jamil</h3>
+          </div>
+          <div id="adminProfilesEditorArea"></div>
+        </div>
+
+        <!-- SOUS-ONGLET 3 : COMMANDES -->
+        <div id="admin-subtab-orders" class="admin-subtab-pane">
+          <div class="section-head">
+            <h3 class="section-title" style="font-size: 0.98rem;">Toutes les Commandes Clients</h3>
+          </div>
+          <div id="adminOrdersManagementList"></div>
+        </div>
+
+        <!-- SOUS-ONGLET 4 : TARIFS -->
+        <div id="admin-subtab-prices" class="admin-subtab-pane">
+          <div class="tracking-box">
+            <h3 style="font-size: 0.98rem; font-weight: 800; color: var(--blue-deep); margin-bottom: 12px;">
+              Prix de Base des 4 Prestations
+            </h3>
+            <div class="form-group">
+              <label class="form-label">1. Courses et achats en ville (FCFA) :</label>
+              <input type="number" id="adminPriceCourses" class="form-control" step="100">
+            </div>
+            <div class="form-group">
+              <label class="form-label">2. Certification de documents (FCFA) :</label>
+              <input type="number" id="adminPriceCertif" class="form-control" step="100">
+            </div>
+            <div class="form-group">
+              <label class="form-label">3. Collecte & Expédition de colis (FCFA) :</label>
+              <input type="number" id="adminPriceColis" class="form-control" step="100">
+            </div>
+            <div class="form-group">
+              <label class="form-label">4. Retrait documents universitaires (FCFA) :</label>
+              <input type="number" id="adminPriceUniv" class="form-control" step="100">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Supplément Course Express Urgente (FCFA) :</label>
+              <input type="number" id="adminPriceUrgent" class="form-control" step="100">
+            </div>
+            <button class="btn btn-gold btn-sm" onclick="saveAdminPrices()">
+              Enregistrer les nouveaux tarifs
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- ========================================================================
+         MODAL : AUTHENTIFICATION CLIENT (CONNEXION & INSCRIPTION)
+         ======================================================================== -->
+    <div id="authModal" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title" id="authModalTitle">Espace Client</div>
+          <button class="modal-close-btn" onclick="closeAuthModal()">&times;</button>
+        </div>
+
+        <!-- Onglets Inscription / Connexion (Inscription en Premier) -->
+        <div class="auth-tabs" id="authTabsContainer">
+          <button class="auth-tab-btn active" id="auth-tab-register-btn" onclick="switchAuthTab('register')">1. Créer un compte</button>
+          <button class="auth-tab-btn" id="auth-tab-login-btn" onclick="switchAuthTab('login')">2. Se connecter</button>
+        </div>
+
+        <!-- Vue Déjà Connecté -->
+        <div id="authLoggedInView" style="display:none; text-align:center; padding:10px 0;">
+          <div style="font-size:2.2rem; margin-bottom:6px;">👤</div>
+          <h3 id="authUserNameDisplay" style="font-size:1.1rem; font-weight:800; color:var(--blue-deep);"></h3>
+          <p id="authUserPhoneDisplay" style="font-size:0.85rem; color:var(--text-muted); margin-bottom:14px;"></p>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <button class="btn btn-gold btn-sm" onclick="closeAuthModal(); switchTab('order');">
+              Passer une commande
+            </button>
+            <button class="btn btn-outline btn-sm" style="color:var(--danger); border-color:var(--danger);" onclick="logoutUser()">
+              Se déconnecter
+            </button>
+          </div>
+        </div>
+
+        <!-- Formulaire Inscription (Par défaut) -->
+        <form id="registerForm" onsubmit="handleRegisterSubmit(event)">
+          <div class="form-group">
+            <label class="form-label">Nom complet *</label>
+            <input type="text" id="regName" class="form-control" placeholder="Votre nom et prénom" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Numéro de Téléphone / WhatsApp *</label>
+            <input type="tel" id="regPhone" class="form-control" placeholder="Ex: 692168264" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ville de résidence *</label>
+            <select id="regCity" class="form-select" required>
+              <option value="Yaoundé">Yaoundé</option>
+              <option value="Bertoua">Bertoua</option>
+              <option value="Douala">Douala</option>
+              <option value="Autre">Autre ville</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Créer un mot de passe *</label>
+            <input type="password" id="regPassword" class="form-control" placeholder="Minimum 4 caractères" required>
+          </div>
+          <button type="submit" class="btn btn-gold" style="margin-top:10px;">
+            Créer mon compte
+          </button>
+          <div style="text-align:center; margin-top:14px; font-size:0.8rem; color:var(--text-muted);">
+            Vous avez déjà un compte ? <a href="#" onclick="switchAuthTab('login'); return false;" style="color:var(--blue-royal); font-weight:800; text-decoration:none;">Se connecter &rarr;</a>
+          </div>
+        </form>
+
+        <!-- Formulaire Connexion -->
+        <form id="loginForm" onsubmit="handleLoginSubmit(event)" style="display:none;">
+          <div class="form-group">
+            <label class="form-label">Numéro de Téléphone *</label>
+            <input type="tel" id="loginPhone" class="form-control" placeholder="Ex: 692168264" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mot de passe *</label>
+            <input type="password" id="loginPassword" class="form-control" placeholder="Votre mot de passe" required>
+          </div>
+          <button type="submit" class="btn btn-blue" style="margin-top:10px;">
+            Se connecter
+          </button>
+          <div style="text-align:center; margin-top:14px; font-size:0.8rem; color:var(--text-muted);">
+            Pas encore de compte ? <a href="#" onclick="switchAuthTab('register'); return false;" style="color:var(--gold-primary); font-weight:800; text-decoration:none;">S'inscrire d'abord &rarr;</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ========================================================================
+         MODAL : CONFIRMATION DE COMMANDE & REÇU
+         ======================================================================== -->
+    <div id="orderSuccessModal" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">Commande Enregistrée !</div>
+          <button class="modal-close-btn" onclick="closeOrderModal()">&times;</button>
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 14px;">
+          <div style="font-size: 2.2rem; color: var(--success);">✓</div>
+          <p style="font-size: 0.88rem; color: var(--text-main); font-weight: 700; margin-top: 4px;">
+            Votre commande a été préparée avec succès !
+          </p>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">
+            Numéro de suivi attribué : <strong id="modalTrackingId" style="color: var(--blue-royal);"></strong>
+          </div>
+        </div>
+
+        <div class="receipt-box">
+          <div class="receipt-row">
+            <span>Prestation :</span>
+            <strong id="modalReceiptService"></strong>
+          </div>
+          <div class="receipt-row">
+            <span>Ville & Référent :</span>
+            <strong id="modalReceiptCityAgent"></strong>
+          </div>
+          <div class="receipt-row">
+            <span>Client :</span>
+            <span id="modalReceiptClient"></span>
+          </div>
+          <div class="receipt-row">
+            <span>Itinéraire :</span>
+            <span id="modalReceiptRoute"></span>
+          </div>
+          <div class="receipt-row">
+            <span>Urgence :</span>
+            <span id="modalReceiptUrgency"></span>
+          </div>
+          <div class="receipt-row">
+            <span>Tarif estimé :</span>
+            <span id="modalReceiptPrice"></span>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <a id="modalWhatsAppBtn" href="#" target="_blank" class="btn btn-whatsapp">
+            Ouvrir WhatsApp avec l'Agent
+          </a>
+          <button class="btn btn-outline" style="color: var(--blue-deep); border-color: #cbd5e1;" onclick="closeOrderModal()">
+            Terminer & Revenir à l'accueil
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================
+         MODAL : SÉLECTEUR DE VILLE
+         ======================================================================== -->
+    <div id="citySelectorModal" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">Choisissez votre Ville</div>
+          <button class="modal-close-btn" onclick="closeCityModal()">&times;</button>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">
+          Sélectionnez la ville où vous souhaitez effectuer votre mission :
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="service-card" onclick="setAppCity('Yaoundé')">
+            <div class="service-icon-box" style="background: #eff6ff; color: #1e3a8a;">🏛️</div>
+            <div class="service-content">
+              <div class="service-title">Yaoundé (Capitale)</div>
+              <div class="service-desc">Référent : Miguel MIGUEL (📞 692 16 82 64)</div>
+            </div>
+          </div>
+
+          <div class="service-card" onclick="setAppCity('Bertoua')">
+            <div class="service-icon-box" style="background: #fef3c7; color: #b45309;">🌳</div>
+            <div class="service-content">
+              <div class="service-title">Bertoua (Région de l'Est)</div>
+              <div class="service-desc">Référent : Jamil (📞 656 99 53 69)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================
+         BARRE DE NAVIGATION DU BAS (BOTTOM NAV)
+         ======================================================================== -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" onclick="switchTab('home')" id="nav-btn-home">
+        <div class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        </div>
+        <span>Accueil</span>
+      </button>
+
+      <button class="nav-item" onclick="switchTab('services')" id="nav-btn-services">
+        <div class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+        </div>
+        <span>Services</span>
+      </button>
+
+      <button class="nav-item" onclick="switchTab('order')" id="nav-btn-order">
+        <div class="nav-icon" style="background: var(--gold-gradient); color: var(--blue-deep); border-radius: 50%;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M12 5v14M5 12h14"></path></svg>
+        </div>
+        <span style="font-weight: 800; color: var(--gold-primary);">Commander</span>
+      </button>
+
+      <button class="nav-item" onclick="switchTab('join-agent')" id="nav-btn-join-agent">
+        <div class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>Postuler</span>
+      </button>
+
+      <button class="nav-item" onclick="switchTab('tracking')" id="nav-btn-tracking">
+        <div class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+        </div>
+        <span>Suivi</span>
+      </button>
+
+      <button class="nav-item" onclick="switchTab('admin')" id="nav-btn-admin">
+        <div class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </div>
+        <span>Admin</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- ========================================================================
+       JAVASCRIPT LOGIQUE & PERSISTANCE
+       ======================================================================== -->
+  <script>
+    const DEFAULT_AVATAR_MIGUEL = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231e3a8a'/><circle cx='50' cy='38' r='20' fill='%23d97706'/><path d='M20,90 Q50,60 80,90' fill='%23f59e0b'/><text x='50' y='44' font-family='sans-serif' font-size='18' font-weight='bold' fill='%230a192f' text-anchor='middle'>M</text></svg>";
+    const DEFAULT_AVATAR_JAMIL = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230f2341'/><circle cx='50' cy='38' r='20' fill='%23f59e0b'/><path d='M20,90 Q50,60 80,90' fill='%23d97706'/><text x='50' y='44' font-family='sans-serif' font-size='18' font-weight='bold' fill='%230a192f' text-anchor='middle'>J</text></svg>";
+    const DEFAULT_AVATAR_GENERIC = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23334155'/><circle cx='50' cy='38' r='20' fill='%23cbd5e1'/><path d='M20,90 Q50,60 80,90' fill='%2394a3b8'/></svg>";
+
+    // INITIAL AGENTS (SANS MENTION DE QUARTIER HAWAI OU TINBIBA)
+    const INITIAL_AGENTS = [
+      {
+        id: 'agent-miguel',
+        name: 'Miguel MIGUEL',
+        phone: '692168264',
+        city: 'Yaoundé',
+        transport: 'Moto & Voiture',
+        role: 'Admin & Référent',
+        isAdmin: true,
+        isCertified: true,
+        photoUrl: DEFAULT_AVATAR_MIGUEL,
+        cniDoc: 'CNI Validée (Admin)',
+        domicileDoc: 'Domicile Validé (Yaoundé)',
+        missionsCount: 148,
+        rating: '5.0 / 5'
+      },
+      {
+        id: 'agent-jamil',
+        name: 'Jamil',
+        phone: '656995369',
+        city: 'Bertoua',
+        transport: 'Moto Express',
+        role: 'Admin & Référent',
+        isAdmin: true,
+        isCertified: true,
+        photoUrl: DEFAULT_AVATAR_JAMIL,
+        cniDoc: 'CNI Validée (Admin)',
+        domicileDoc: 'Domicile Validé (Bertoua)',
+        missionsCount: 122,
+        rating: '4.9 / 5'
+      }
+    ];
+
+    const DEFAULT_PRICES = {
+      courses: 1500,
+      certification: 2500,
+      colis: 2000,
+      univ: 3000,
+      urgentBonus: 1000
+    };
+
+    const SERVICES_DATA = {
+      courses: {
+        title: 'Courses et achats en ville',
+        desc: 'Un agent effectue vos achats dans les marchés, supermarchés, quincailleries ou pharmacies.',
+        icon: '🛒'
+      },
+      certification: {
+        title: 'Certification de documents',
+        desc: 'Un agent vous assiste ou se déplace pour légaliser vos pièces officielles dans les Mairies, Commissariats et administrations.',
+        icon: '📜'
+      },
+      colis: {
+        title: 'Collecte et expédition de colis',
+        desc: 'Récupération sécurisée d\'un colis dans une ville et organisation immédiate de son expédition par agence de voyage.',
+        icon: '📦'
+      },
+      univ: {
+        title: 'Retrait de documents universitaires',
+        desc: 'Assistance dédiée pour récupérer diplômes, attestations de réussite et relevés de notes auprès des universités.',
+        icon: '🎓'
+      }
+    };
+
+    // LOCALSTORAGE
+    function getStoredAgents() {
+      const stored = localStorage.getItem('ke_agents_v3');
+      if (!stored) {
+        localStorage.setItem('ke_agents_v3', JSON.stringify(INITIAL_AGENTS));
+        return INITIAL_AGENTS;
+      }
+      return JSON.parse(stored);
+    }
+
+    function saveStoredAgents(agents) {
+      localStorage.setItem('ke_agents_v3', JSON.stringify(agents));
+    }
+
+    function getStoredPrices() {
+      const stored = localStorage.getItem('ke_prices_v3');
+      return stored ? JSON.parse(stored) : DEFAULT_PRICES;
+    }
+
+    function saveStoredPrices(prices) {
+      localStorage.setItem('ke_prices_v3', JSON.stringify(prices));
+    }
+
+    function getStoredOrders() {
+      const stored = localStorage.getItem('ke_orders_v3');
+      if (!stored) {
+        const samples = [
+          {
+            id: 'KE-YDE-1042',
+            clientName: 'Alain MBARGA',
+            clientPhone: '699451230',
+            city: 'Yaoundé',
+            agentName: 'Miguel MIGUEL',
+            agentPhone: '692168264',
+            serviceKey: 'univ',
+            serviceTitle: 'Retrait de documents universitaires',
+            from: 'Ngoa-Ekélé (UY1)',
+            to: 'Bastos, Ambassade',
+            details: 'Retrait de relevé de notes Master 2 Faculté des Sciences',
+            urgency: 'Standard',
+            paymentMode: 'Orange Money',
+            price: 3000,
+            status: 'completed',
+            createdAt: '12/11/2026 14:20'
+          },
+          {
+            id: 'KE-BTA-1043',
+            clientName: 'Marie Claire NGA',
+            clientPhone: '675892144',
+            city: 'Bertoua',
+            agentName: 'Jamil',
+            agentPhone: '656995369',
+            serviceKey: 'colis',
+            serviceTitle: 'Collecte et expédition de colis',
+            from: 'Centre-ville',
+            to: 'Agence Touristique Express Bertoua',
+            details: 'Envoi d\'un sac de vivres frais vers Yaoundé',
+            urgency: 'Express Urgent',
+            paymentMode: 'MTN Mobile Money',
+            price: 3000,
+            status: 'progress',
+            createdAt: '13/11/2026 09:15'
+          }
+        ];
+        localStorage.setItem('ke_orders_v3', JSON.stringify(samples));
+        return samples;
+      }
+      return JSON.parse(stored);
+    }
+
+    function saveStoredOrders(orders) {
+      localStorage.setItem('ke_orders_v3', JSON.stringify(orders));
+    }
+
+    // AUTHENTIFICATION CLIENT
+    function getStoredUsers() {
+      const stored = localStorage.getItem('ke_users_v3');
+      return stored ? JSON.parse(stored) : [
+        { name: 'Alain MBARGA', phone: '699451230', city: 'Yaoundé', password: '123' }
+      ];
+    }
+
+    function saveStoredUsers(users) {
+      localStorage.setItem('ke_users_v3', JSON.stringify(users));
+    }
+
+    function getCurrentUser() {
+      const stored = localStorage.getItem('ke_session_user_v3');
+      return stored ? JSON.parse(stored) : null;
+    }
+
+    function setCurrentUser(user) {
+      if (user) {
+        localStorage.setItem('ke_session_user_v3', JSON.stringify(user));
+      } else {
+        localStorage.removeItem('ke_session_user_v3');
+      }
+      updateAuthUI();
+    }
+
+    function updateAuthUI() {
+      const user = getCurrentUser();
+      const authBtnText = document.getElementById('headerAuthText');
+      if (user) {
+        authBtnText.innerText = user.name.split(' ')[0];
+        const nameInput = document.getElementById('orderClientName');
+        const phoneInput = document.getElementById('orderClientPhone');
+        if (nameInput && !nameInput.value) nameInput.value = user.name;
+        if (phoneInput && !phoneInput.value) phoneInput.value = user.phone;
+      } else {
+        authBtnText.innerText = "S'inscrire";
+      }
+    }
+
+    function openAuthModal(defaultTab = 'register') {
+      const user = getCurrentUser();
+      if (user) {
+        document.getElementById('authModalTitle').innerText = 'Mon Compte Client';
+        document.getElementById('authTabsContainer').style.display = 'none';
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('registerForm').style.display = 'none';
+        document.getElementById('authLoggedInView').style.display = 'block';
+        document.getElementById('authUserNameDisplay').innerText = user.name;
+        document.getElementById('authUserPhoneDisplay').innerText = `📞 ${user.phone} (${user.city})`;
+      } else {
+        document.getElementById('authModalTitle').innerText = 'Espace Client';
+        document.getElementById('authTabsContainer').style.display = 'flex';
+        document.getElementById('authLoggedInView').style.display = 'none';
+        switchAuthTab(defaultTab);
+      }
+      document.getElementById('authModal').classList.add('active');
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.remove('active');
+    }
+
+    function switchAuthTab(tab) {
+      document.getElementById('auth-tab-register-btn').classList.toggle('active', tab === 'register');
+      document.getElementById('auth-tab-login-btn').classList.toggle('active', tab === 'login');
+      document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
+      document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+    }
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const phone = document.getElementById('loginPhone').value.trim();
+      const pass = document.getElementById('loginPassword').value.trim();
+
+      const users = getStoredUsers();
+      const userExists = users.some(u => u.phone === phone);
+
+      if (!userExists) {
+        alertInApp('⚠️ Aucun compte trouvé avec ce numéro. Vous devez d\'abord vous inscrire !');
+        switchAuthTab('register');
+        document.getElementById('regPhone').value = phone;
+        return;
+      }
+
+      const found = users.find(u => u.phone === phone && u.password === pass);
+
+      if (found) {
+        setCurrentUser(found);
+        alertInApp('Bienvenue ' + found.name + ' !');
+        closeAuthModal();
+      } else {
+        alertInApp('Mot de passe incorrect pour ce numéro.');
+      }
+    }
+
+    function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const city = document.getElementById('regCity').value;
+      const pass = document.getElementById('regPassword').value.trim();
+
+      const users = getStoredUsers();
+      if (users.find(u => u.phone === phone)) {
+        alertInApp('Ce numéro possède déjà un compte. Veuillez vous connecter.');
+        switchAuthTab('login');
+        return;
+      }
+
+      const newUser = { name, phone, city, password: pass };
+      users.push(newUser);
+      saveStoredUsers(users);
+      setCurrentUser(newUser);
+
+      alertInApp('Compte créé avec succès ! Bienvenue ' + name);
+      closeAuthModal();
+    }
+
+    function logoutUser() {
+      setCurrentUser(null);
+      alertInApp('Vous êtes déconnecté.');
+      closeAuthModal();
+    }
+
+    // NAVIGATION
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+
+      const targetPage = document.getElementById('tab-' + tabId);
+      if (targetPage) targetPage.classList.add('active');
+
+      const navBtn = document.getElementById('nav-btn-' + tabId);
+      if (navBtn) navBtn.classList.add('active');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (tabId === 'home') renderHomeAgents();
+      if (tabId === 'services') renderDetailedServices();
+      if (tabId === 'tracking') renderRecentOrders();
+      if (tabId === 'admin') renderAdminDashboard();
+      if (tabId === 'order') updateOrderPriceSummary();
+    }
+
+    // RENDU DES AGENTS (SANS QUARTIER HAWAI/TINBIBA)
+    function renderHomeAgents() {
+      const container = document.getElementById('homeAgentsList');
+      if (!container) return;
+      const agents = getStoredAgents().filter(a => a.isCertified);
+
+      let html = '';
+      agents.forEach(a => {
+        const badge = a.isAdmin 
+          ? `<span class="agent-badge-admin">Admin Référent</span>`
+          : `<span class="agent-badge-certified">Certifié Conforme</span>`;
+
+        html += `
+          <div class="agent-card">
+            <div class="agent-top">
+              <img src="${a.photoUrl || DEFAULT_AVATAR_GENERIC}" class="agent-avatar-img" alt="${a.name}">
+              <div class="agent-meta">
+                <div class="agent-name">
+                  ${a.name}
+                  ${badge}
+                </div>
+                <div class="agent-loc">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path></svg>
+                  Ville : <strong>${a.city}</strong>
+                </div>
+                <div class="agent-transport">${a.transport || 'Moto Express'} &bull; Note : ${a.rating || '5.0/5'} (${a.missionsCount || 10}+ courses)</div>
+                <div class="agent-phone">📞 ${a.phone}</div>
+              </div>
+            </div>
+            <div class="agent-actions">
+              <a href="https://wa.me/237${a.phone}?text=Bonjour%20${encodeURIComponent(a.name)},%20j%27ai%20besoin%20d%27un%20coursier%20Kamer%20Express%20%C3%A0%20${encodeURIComponent(a.city)}." target="_blank" class="btn btn-whatsapp btn-sm">
+                WhatsApp
+              </a>
+              <a href="tel:${a.phone}" class="btn btn-call btn-sm">
+                Appeler
+              </a>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    // SERVICES & PRIX
+    function updatePricesDisplay() {
+      const p = getStoredPrices();
+      const elCourses = document.getElementById('price-tag-courses');
+      const elCertif = document.getElementById('price-tag-certification');
+      const elColis = document.getElementById('price-tag-colis');
+      const elUniv = document.getElementById('price-tag-univ');
+
+      if (elCourses) elCourses.innerText = 'Dès ' + p.courses.toLocaleString() + ' F';
+      if (elCertif) elCertif.innerText = 'Dès ' + p.certification.toLocaleString() + ' F';
+      if (elColis) elColis.innerText = 'Dès ' + p.colis.toLocaleString() + ' F';
+      if (elUniv) elUniv.innerText = 'Dès ' + p.univ.toLocaleString() + ' F';
+    }
+
+    function renderDetailedServices() {
+      const container = document.getElementById('detailed-services-container');
+      if (!container) return;
+      const p = getStoredPrices();
+
+      let html = '';
+      for (const [k, s] of Object.entries(SERVICES_DATA)) {
+        const price = p[k] || 1500;
+        html += `
+          <div class="service-card" onclick="startOrderForService('${k}')">
+            <div class="service-icon-box" style="font-size: 1.4rem;">${s.icon}</div>
+            <div class="service-content">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div class="service-title">${s.title}</div>
+                <span class="service-price">${price.toLocaleString()} FCFA</span>
+              </div>
+              <div class="service-desc">${s.desc}</div>
+              <div style="font-size: 0.72rem; color: var(--blue-royal); font-weight: 700;">
+                Villes : Yaoundé & Bertoua &bull; <span style="color: var(--gold-primary);">Commander &rarr;</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      container.innerHTML = html;
+    }
+
+    function calculatePrice() {
+      const service = document.getElementById('calcService').value;
+      const urgency = document.getElementById('calcUrgency').value;
+      const p = getStoredPrices();
+
+      let base = p[service] || 1500;
+      if (urgency === 'urgent') base += (p.urgentBonus || 1000);
+
+      document.getElementById('calcResult').innerText = base.toLocaleString() + ' FCFA';
+      return base;
+    }
+
+    function applyCalcToOrder() {
+      const city = document.getElementById('calcCity').value;
+      const service = document.getElementById('calcService').value;
+      const urgency = document.getElementById('calcUrgency').value;
+
+      selectCityOption(city);
+      document.getElementById('orderService').value = service;
+      document.getElementById('orderUrgency').value = urgency === 'urgent' ? 'Express Urgent' : 'Standard';
+
+      switchTab('order');
+    }
+
+    function selectCityOption(city) {
+      document.getElementById('orderCity').value = city;
+      document.getElementById('city-card-yde').classList.toggle('selected', city === 'Yaoundé');
+      document.getElementById('city-card-bta').classList.toggle('selected', city === 'Bertoua');
+      updateOrderPriceSummary();
+    }
+
+    function startOrderForService(serviceKey) {
+      document.getElementById('orderService').value = serviceKey;
+      switchTab('order');
+    }
+
+    function updateOrderPriceSummary() {
+      const service = document.getElementById('orderService').value;
+      const urgency = document.getElementById('orderUrgency').value;
+      const p = getStoredPrices();
+
+      let price = p[service] || 1500;
+      if (urgency.includes('Urgent')) price += (p.urgentBonus || 1000);
+
+      document.getElementById('orderEstimatedPrice').innerText = price.toLocaleString() + ' FCFA';
+      return price;
+    }
+
+    function handleOrderSubmit(e) {
+      e.preventDefault();
+
+      const city = document.getElementById('orderCity').value;
+      const serviceKey = document.getElementById('orderService').value;
+      const from = document.getElementById('orderFrom').value.trim();
+      const to = document.getElementById('orderTo').value.trim();
+      const details = document.getElementById('orderDetails').value.trim();
+      const clientName = document.getElementById('orderClientName').value.trim();
+      const clientPhone = document.getElementById('orderClientPhone').value.trim();
+      const urgency = document.getElementById('orderUrgency').value;
+      const paymentMode = document.getElementById('orderPaymentMode').value;
+
+      const agents = getStoredAgents().filter(a => a.isCertified && a.city.toLowerCase() === city.toLowerCase());
+      const agent = agents.length > 0 ? agents[0] : (getStoredAgents()[0]);
+
+      const serviceInfo = SERVICES_DATA[serviceKey];
+      const p = getStoredPrices();
+      let price = p[serviceKey] || 1500;
+      if (urgency.includes('Urgent')) price += (p.urgentBonus || 1000);
+
+      const prefix = city === 'Yaoundé' ? 'KE-YDE' : 'KE-BTA';
+      const randNum = Math.floor(1000 + Math.random() * 9000);
+      const trackingId = `${prefix}-${randNum}`;
+
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('fr-FR') + ' ' + now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+
+      const newOrder = {
+        id: trackingId,
+        clientName,
+        clientPhone,
+        city,
+        agentName: agent.name,
+        agentPhone: agent.phone,
+        serviceKey,
+        serviceTitle: serviceInfo.title,
+        from,
+        to,
+        details,
+        urgency,
+        paymentMode,
+        price,
+        status: 'pending',
+        createdAt: dateStr
+      };
+
+      const orders = getStoredOrders();
+      orders.unshift(newOrder);
+      saveStoredOrders(orders);
+
+      const waText = encodeURIComponent(
+`🚀 *NOUVELLE COMMANDE — KAMER EXPRESS*
+━━━━━━━━━━━━━━━━━━━━
+📦 *N° Suivi :* ${trackingId}
+📍 *Ville :* ${city} (Référent : ${agent.name})
+⚙️ *Prestation :* ${serviceInfo.title}
+👤 *Client :* ${clientName} (📞 ${clientPhone})
+
+🚩 *Lieu de Récupération :* ${from}
+🎯 *Lieu de Livraison :* ${to}
+📝 *Détails Mission :* ${details}
+⚡ *Urgence :* ${urgency}
+💰 *Tarif Estimé :* ${price.toLocaleString()} FCFA
+💳 *Paiement :* ${paymentMode}
+━━━━━━━━━━━━━━━━━━━━
+_Merci de confirmer la prise en charge de ma course._`
+      );
+
+      const waUrl = `https://wa.me/237${agent.phone}?text=${waText}`;
+
+      document.getElementById('modalTrackingId').innerText = trackingId;
+      document.getElementById('modalReceiptService').innerText = serviceInfo.title;
+      document.getElementById('modalReceiptCityAgent').innerText = `${city} (${agent.name})`;
+      document.getElementById('modalReceiptClient').innerText = `${clientName} - ${clientPhone}`;
+      document.getElementById('modalReceiptRoute').innerText = `${from} ➔ ${to}`;
+      document.getElementById('modalReceiptUrgency').innerText = urgency;
+      document.getElementById('modalReceiptPrice').innerText = price.toLocaleString() + ' FCFA';
+      document.getElementById('modalWhatsAppBtn').href = waUrl;
+
+      document.getElementById('orderSuccessModal').classList.add('active');
+
+      document.getElementById('orderDetails').value = '';
+      document.getElementById('orderFrom').value = '';
+      document.getElementById('orderTo').value = '';
+    }
+
+    function closeOrderModal() {
+      document.getElementById('orderSuccessModal').classList.remove('active');
+      switchTab('tracking');
+    }
+
+    // CANDIDATURE AGENT
+    let tempAvatarBase64 = '';
+    let tempCniBase64 = '';
+    let tempDomicileBase64 = '';
+
+    function previewUpload(input, previewId) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById(previewId);
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+
+          if (previewId === 'previewAgentAvatar') tempAvatarBase64 = e.target.result;
+          if (previewId === 'previewAgentCni') tempCniBase64 = e.target.result;
+          if (previewId === 'previewAgentDomicile') tempDomicileBase64 = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function handleAgentApplication(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('applyAgentName').value.trim();
+      const city = document.getElementById('applyAgentCity').value;
+      const phone = document.getElementById('applyAgentPhone').value.trim();
+      const transport = document.getElementById('applyAgentTransport').value;
+
+      const newCandidate = {
+        id: 'agent-' + Date.now(),
+        name,
+        phone,
+        city,
+        transport,
+        role: 'Agent Coursier',
+        isAdmin: false,
+        isCertified: false,
+        photoUrl: tempAvatarBase64 || DEFAULT_AVATAR_GENERIC,
+        cniDoc: tempCniBase64 ? 'Image CNI Déposée' : 'Non fournie',
+        cniImg: tempCniBase64,
+        domicileDoc: tempDomicileBase64 ? 'Plan Domicile Déposé' : 'Non fournie',
+        domicileImg: tempDomicileBase64,
+        missionsCount: 0,
+        rating: 'Nouveau',
+        appliedAt: new Date().toLocaleDateString('fr-FR')
+      };
+
+      const agents = getStoredAgents();
+      agents.push(newCandidate);
+      saveStoredAgents(agents);
+
+      alertInApp('Dossier soumis ! Les admins Miguel & Jamil vont vérifier vos documents.');
+      document.getElementById('agentApplyForm').reset();
+      document.getElementById('previewAgentAvatar').style.display = 'none';
+      document.getElementById('previewAgentCni').style.display = 'none';
+      document.getElementById('previewAgentDomicile').style.display = 'none';
+      tempAvatarBase64 = '';
+      tempCniBase64 = '';
+      tempDomicileBase64 = '';
+
+      switchTab('home');
+    }
+
+    // SUIVI
+    function searchTracking() {
+      const query = document.getElementById('trackSearchInput').value.trim().toUpperCase();
+      const container = document.getElementById('trackingResultArea');
+
+      if (!query) {
+        container.innerHTML = '<div style="color: var(--danger); font-size: 0.82rem; text-align: center;">Veuillez entrer un numéro de suivi.</div>';
+        return;
+      }
+
+      const orders = getStoredOrders();
+      const found = orders.find(o => o.id.toUpperCase() === query);
+
+      if (!found) {
+        container.innerHTML = `
+          <div class="tracking-box" style="text-align: center; border-color: #fca5a5; background: #fef2f2;">
+            <div style="font-size: 1.5rem; color: var(--danger);">✕</div>
+            <div style="font-weight: 800; color: #991b1b; margin: 4px 0;">Commande introuvable</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted);">Aucune mission enregistrée avec le code <strong>${query}</strong>.</div>
+          </div>
+        `;
+        return;
+      }
+
+      renderTrackingDetail(found, container);
+    }
+
+    function renderTrackingDetail(order, container) {
+      let statusLabel = 'En attente de confirmation';
+      let statusClass = 'status-pending';
+      let step1 = 'completed';
+      let step2 = order.status !== 'pending' ? 'completed' : 'active';
+      let step3 = order.status === 'progress' ? 'active' : (order.status === 'completed' ? 'completed' : '');
+      let step4 = order.status === 'completed' ? 'completed active' : '';
+
+      if (order.status === 'pending') {
+        statusLabel = 'Reçue & En cours d\'assignation';
+        statusClass = 'status-pending';
+      } else if (order.status === 'progress') {
+        statusLabel = 'Agent en Route / En cours';
+        statusClass = 'status-progress';
+      } else if (order.status === 'completed') {
+        statusLabel = 'Livrée & Clôturée avec Succès';
+        statusClass = 'status-completed';
+      }
+
+      container.innerHTML = `
+        <div class="tracking-box">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+            <div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">N° de Suivi :</div>
+              <div style="font-size: 1.15rem; font-weight: 900; color: var(--blue-royal);">${order.id}</div>
+            </div>
+            <span class="admin-badge-status ${statusClass}">${statusLabel}</span>
+          </div>
+
+          <div style="font-size: 0.82rem; line-height: 1.5; margin-bottom: 12px;">
+            <div><strong>Prestation :</strong> ${order.serviceTitle}</div>
+            <div><strong>Ville :</strong> ${order.city} (Référent : <strong>${order.agentName}</strong> - 📞 ${order.agentPhone})</div>
+            <div><strong>Itinéraire :</strong> ${order.from} ➔ ${order.to}</div>
+            <div><strong>Montant :</strong> ${order.price.toLocaleString()} FCFA (${order.paymentMode})</div>
+            <div><strong>Créée le :</strong> ${order.createdAt}</div>
+          </div>
+
+          <div class="timeline">
+            <div class="timeline-step ${step1}">
+              <div class="timeline-dot">1</div>
+              <div class="timeline-title">Commande enregistrée</div>
+              <div class="timeline-time">Reçue par le système Kamer Express</div>
+            </div>
+            <div class="timeline-step ${step2}">
+              <div class="timeline-dot">2</div>
+              <div class="timeline-title">Agent notifié (${order.agentName})</div>
+              <div class="timeline-time">Validation du trajet et contact client</div>
+            </div>
+            <div class="timeline-step ${step3}">
+              <div class="timeline-dot">3</div>
+              <div class="timeline-title">Mission en cours d'exécution</div>
+              <div class="timeline-time">Achats / Légalisation / Colis en déplacement</div>
+            </div>
+            <div class="timeline-step ${step4}">
+              <div class="timeline-dot">4</div>
+              <div class="timeline-title">Livraison effectuée & Terminée</div>
+              <div class="timeline-time">Remise des documents / achats au client</div>
+            </div>
+          </div>
+
+          <div style="margin-top: 16px; display: flex; gap: 8px;">
+            <a href="https://wa.me/237${order.agentPhone}?text=Bonjour%20${encodeURIComponent(order.agentName)},%20je%20suis%20le%20client%20pour%20la%20commande%20${order.id}." target="_blank" class="btn btn-whatsapp btn-sm">
+              WhatsApp
+            </a>
+            <a href="tel:${order.agentPhone}" class="btn btn-call btn-sm">
+              Appeler
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderRecentOrders() {
+      const container = document.getElementById('recentOrdersList');
+      if (!container) return;
+      const orders = getStoredOrders();
+
+      if (orders.length === 0) {
+        container.innerHTML = '<div style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">Aucune commande récente.</div>';
+        return;
+      }
+
+      let html = '';
+      orders.slice(0, 4).forEach(o => {
+        let badgeClass = o.status === 'completed' ? 'status-completed' : (o.status === 'progress' ? 'status-progress' : 'status-pending');
+        let statusText = o.status === 'completed' ? 'Terminée' : (o.status === 'progress' ? 'En cours' : 'En attente');
+
+        html += `
+          <div class="service-card" onclick="selectRecentOrder('${o.id}')" style="margin-bottom: 8px; padding: 12px;">
+            <div class="service-content">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <strong style="color: var(--blue-royal); font-size: 0.9rem;">${o.id}</strong>
+                <span class="admin-badge-status ${badgeClass}">${statusText}</span>
+              </div>
+              <div style="font-size: 0.8rem; font-weight: 700;">${o.serviceTitle}</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted);">${o.city} &bull; ${o.createdAt} &bull; ${o.price.toLocaleString()} F</div>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function selectRecentOrder(orderId) {
+      document.getElementById('trackSearchInput').value = orderId;
+      searchTracking();
+    }
+
+    // ADMIN (MIGUEL & JAMIL)
+    function verifyAdminPin() {
+      const pin = document.getElementById('adminPinInput').value.trim();
+      const err = document.getElementById('adminPinError');
+
+      if (pin === '2026' || pin === '237' || pin === '1234') {
+        err.style.display = 'none';
+        document.getElementById('adminAuthLock').style.display = 'none';
+        document.getElementById('adminDashboardContent').style.display = 'block';
+        loadAdminPriceInputs();
+        renderAdminDashboard();
+      } else {
+        err.style.display = 'block';
+      }
+    }
+
+    function lockAdmin() {
+      document.getElementById('adminPinInput').value = '';
+      document.getElementById('adminAuthLock').style.display = 'block';
+      document.getElementById('adminDashboardContent').style.display = 'none';
+    }
+
+    function switchAdminSubtab(subtabId) {
+      document.querySelectorAll('.admin-subtab-pane').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.admin-subnav-btn').forEach(b => b.classList.remove('active'));
+
+      const pane = document.getElementById('admin-subtab-' + subtabId);
+      if (pane) pane.classList.add('active');
+
+      const btn = document.getElementById('admin-subbtn-' + subtabId);
+      if (btn) btn.classList.add('active');
+
+      if (subtabId === 'certif') renderAdminCertificationList();
+      if (subtabId === 'profiles') renderAdminProfilesEditor();
+      if (subtabId === 'orders') renderAdminOrdersList();
+    }
+
+    function renderAdminDashboard() {
+      renderAdminCertificationList();
+      renderAdminProfilesEditor();
+      renderAdminOrdersList();
+    }
+
+    function renderAdminCertificationList() {
+      const container = document.getElementById('adminAgentsCertificationList');
+      if (!container) return;
+      const agents = getStoredAgents();
+      const pendingAgents = agents.filter(a => !a.isCertified);
+
+      document.getElementById('adminPendingCountBadge').innerText = pendingAgents.length;
+
+      if (agents.length === 0) {
+        container.innerHTML = '<div style="font-size: 0.8rem; color: var(--text-muted);">Aucun agent inscrit.</div>';
+        return;
+      }
+
+      let html = '';
+      agents.forEach(a => {
+        const isCert = a.isCertified;
+        const statusBadge = isCert 
+          ? `<span style="background: #d1fae5; color: #065f46; font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px;">Certifié Actif</span>`
+          : `<span style="background: #fef3c7; color: #b45309; font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px;">En attente de Validation</span>`;
+
+        html += `
+          <div class="admin-card">
+            <div class="admin-card-head">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <img src="${a.photoUrl || DEFAULT_AVATAR_GENERIC}" style="width:36px; height:36px; border-radius:50%; object-fit:cover;">
+                <div>
+                  <strong style="color: var(--blue-royal); font-size: 0.95rem;">${a.name}</strong>
+                  <div style="font-size: 0.72rem; color: var(--text-muted);">Ville : ${a.city}</div>
+                </div>
+              </div>
+              ${statusBadge}
+            </div>
+
+            <div style="font-size: 0.8rem; margin: 8px 0; background: #f8fafc; padding: 10px; border-radius: var(--radius-sm);">
+              <div><strong>Téléphone / WhatsApp :</strong> ${a.phone}</div>
+              <div><strong>Moyen de transport :</strong> ${a.transport}</div>
+              <div><strong>Pièce d'identité :</strong> ${a.cniDoc || 'Document non fourni'}</div>
+              ${a.cniImg ? `<img src="${a.cniImg}" style="max-height:80px; border-radius:4px; margin-top:4px; border:1px solid #cbd5e1;">` : ''}
+              <div><strong>Justificatif Domicile :</strong> ${a.domicileDoc || 'Document non fourni'}</div>
+              ${a.domicileImg ? `<img src="${a.domicileImg}" style="max-height:80px; border-radius:4px; margin-top:4px; border:1px solid #cbd5e1;">` : ''}
+            </div>
+
+            <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px;">
+              ${!isCert ? `
+                <button class="btn btn-sm btn-gold" style="width: auto;" onclick="setAgentCertification('${a.id}', true)">
+                  Valider & Certifier cet Agent
+                </button>
+              ` : `
+                <button class="btn btn-sm btn-outline" style="color: var(--danger); border-color: var(--danger); width: auto;" onclick="setAgentCertification('${a.id}', false)">
+                  Retirer la Certification
+                </button>
+              `}
+              ${!a.isAdmin ? `
+                <button class="btn btn-sm btn-outline" style="color: #64748b; border-color: #cbd5e1; width: auto;" onclick="deleteAgent('${a.id}')">
+                  Supprimer
+                </button>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function setAgentCertification(agentId, isCertified) {
+      const agents = getStoredAgents();
+      const agent = agents.find(a => a.id === agentId);
+      if (agent) {
+        agent.isCertified = isCertified;
+        saveStoredAgents(agents);
+        renderAdminCertificationList();
+        renderHomeAgents();
+        alertInApp(isCertified ? `Agent ${agent.name} certifié !` : `Certification retirée pour ${agent.name}.`);
+      }
+    }
+
+    function deleteAgent(agentId) {
+      confirmInApp('Voulez-vous supprimer ce profil d\'agent ?', () => {
+        let agents = getStoredAgents();
+        agents = agents.filter(a => a.id !== agentId);
+        saveStoredAgents(agents);
+        renderAdminCertificationList();
+        renderHomeAgents();
+        alertInApp('Agent supprimé.');
+      });
+    }
+
+    function renderAdminProfilesEditor() {
+      const container = document.getElementById('adminProfilesEditorArea');
+      if (!container) return;
+      const agents = getStoredAgents();
+
+      let html = '';
+      agents.forEach(a => {
+        html += `
+          <div class="admin-card">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+              <img src="${a.photoUrl || DEFAULT_AVATAR_GENERIC}" id="avatar-preview-${a.id}" style="width:60px; height:60px; border-radius:50%; object-fit:cover; border:2px solid var(--gold-bright);">
+              <div>
+                <strong style="font-size:1.05rem; color:var(--blue-deep);">${a.name}</strong>
+                <div style="font-size:0.75rem; color:var(--text-muted);">${a.role} &bull; Ville : ${a.city}</div>
+                <div style="margin-top:6px;">
+                  <button class="btn btn-sm btn-outline" style="color:var(--blue-royal); border-color:var(--blue-royal); width:auto; padding:4px 10px;" onclick="document.getElementById('input-file-${a.id}').click()">
+                    Changer la Photo
+                  </button>
+                  <input type="file" id="input-file-${a.id}" accept="image/*" style="display:none;" onchange="updateAgentPhoto('${a.id}', this)">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom:8px;">
+              <label class="form-label">Nom complet :</label>
+              <input type="text" id="edit-name-${a.id}" class="form-control" value="${a.name}">
+            </div>
+            <div class="form-group" style="margin-bottom:8px;">
+              <label class="form-label">Téléphone / WhatsApp :</label>
+              <input type="tel" id="edit-phone-${a.id}" class="form-control" value="${a.phone}">
+            </div>
+            <div class="form-group" style="margin-bottom:8px;">
+              <label class="form-label">Ville :</label>
+              <input type="text" id="edit-city-${a.id}" class="form-control" value="${a.city}">
+            </div>
+
+            <button class="btn btn-sm btn-gold mt-2" onclick="saveAgentProfileDetails('${a.id}')">
+              Mettre à jour ce profil
+            </button>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function updateAgentPhoto(agentId, input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const agents = getStoredAgents();
+          const agent = agents.find(a => a.id === agentId);
+          if (agent) {
+            agent.photoUrl = e.target.result;
+            saveStoredAgents(agents);
+            document.getElementById('avatar-preview-' + agentId).src = e.target.result;
+            renderHomeAgents();
+            alertInApp('Photo de profil mise à jour !');
+          }
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function saveAgentProfileDetails(agentId) {
+      const agents = getStoredAgents();
+      const agent = agents.find(a => a.id === agentId);
+      if (agent) {
+        agent.name = document.getElementById('edit-name-' + agentId).value.trim();
+        agent.phone = document.getElementById('edit-phone-' + agentId).value.trim();
+        agent.city = document.getElementById('edit-city-' + agentId).value.trim();
+        saveStoredAgents(agents);
+        renderHomeAgents();
+        alertInApp('Informations du profil enregistrées !');
+      }
+    }
+
+    function renderAdminOrdersList() {
+      const container = document.getElementById('adminOrdersManagementList');
+      if (!container) return;
+      const orders = getStoredOrders();
+
+      if (orders.length === 0) {
+        container.innerHTML = '<div style="font-size: 0.8rem; color: var(--text-muted);">Aucune commande enregistrée.</div>';
+        return;
+      }
+
+      let html = '';
+      orders.forEach(o => {
+        html += `
+          <div class="admin-card">
+            <div class="admin-card-head">
+              <strong style="color: var(--blue-royal); font-size: 0.95rem;">${o.id} (${o.city})</strong>
+              <select onchange="updateOrderStatus('${o.id}', this.value)" style="padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.78rem; font-weight: 700; border: 1px solid var(--border-color);">
+                <option value="pending" ${o.status === 'pending' ? 'selected' : ''}>En attente</option>
+                <option value="progress" ${o.status === 'progress' ? 'selected' : ''}>En cours</option>
+                <option value="completed" ${o.status === 'completed' ? 'selected' : ''}>Terminée</option>
+              </select>
+            </div>
+            <div style="font-size: 0.8rem; margin-bottom: 6px;">
+              <strong>${o.serviceTitle}</strong> &bull; Client : ${o.clientName} (📞 ${o.clientPhone})
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">
+              <div>📍 ${o.from} ➔ ${o.to}</div>
+              <div>📝 ${o.details}</div>
+              <div>💰 ${o.price.toLocaleString()} FCFA (${o.paymentMode}) &bull; ${o.createdAt}</div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px;">
+              <a href="https://wa.me/237${o.clientPhone}?text=Bonjour%20${encodeURIComponent(o.clientName)},%20ici%20votre%20coursier%20Kamer%20Express%20pour%20votre%20commande%20${o.id}." target="_blank" class="btn btn-whatsapp btn-sm" style="width: auto;">
+                WhatsApp Client
+              </a>
+              <button class="btn btn-sm btn-outline" style="color: var(--danger); border-color: var(--danger); width: auto;" onclick="deleteOrder('${o.id}')">
+                Supprimer
+              </button>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function updateOrderStatus(orderId, newStatus) {
+      const orders = getStoredOrders();
+      const order = orders.find(o => o.id === orderId);
+      if (order) {
+        order.status = newStatus;
+        saveStoredOrders(orders);
+        renderAdminOrdersList();
+      }
+    }
+
+    function deleteOrder(orderId) {
+      confirmInApp('Voulez-vous vraiment supprimer la commande ' + orderId + ' ?', () => {
+        let orders = getStoredOrders();
+        orders = orders.filter(o => o.id !== orderId);
+        saveStoredOrders(orders);
+        renderAdminOrdersList();
+        alertInApp('Commande ' + orderId + ' supprimée.');
+      });
+    }
+
+    function loadAdminPriceInputs() {
+      const p = getStoredPrices();
+      document.getElementById('adminPriceCourses').value = p.courses;
+      document.getElementById('adminPriceCertif').value = p.certification;
+      document.getElementById('adminPriceColis').value = p.colis;
+      document.getElementById('adminPriceUniv').value = p.univ;
+      document.getElementById('adminPriceUrgent').value = p.urgentBonus;
+    }
+
+    function saveAdminPrices() {
+      const updated = {
+        courses: parseInt(document.getElementById('adminPriceCourses').value) || 1500,
+        certification: parseInt(document.getElementById('adminPriceCertif').value) || 2500,
+        colis: parseInt(document.getElementById('adminPriceColis').value) || 2000,
+        univ: parseInt(document.getElementById('adminPriceUniv').value) || 3000,
+        urgentBonus: parseInt(document.getElementById('adminPriceUrgent').value) || 1000
+      };
+
+      saveStoredPrices(updated);
+      updatePricesDisplay();
+      calculatePrice();
+      updateOrderPriceSummary();
+      alertInApp('Nouveaux tarifs enregistrés avec succès !');
+    }
+
+    function openCityModal() {
+      document.getElementById('citySelectorModal').classList.add('active');
+    }
+
+    function closeCityModal() {
+      document.getElementById('citySelectorModal').classList.remove('active');
+    }
+
+    function setAppCity(city) {
+      document.getElementById('headerCityLabel').innerText = city;
+      selectCityOption(city);
+      closeCityModal();
+    }
+
+    function alertInApp(msg) {
+      let toast = document.getElementById('inAppToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'inAppToast';
+        toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#0f172a;color:#ffffff;padding:12px 20px;border-radius:9999px;font-size:0.85rem;font-weight:700;box-shadow:0 10px 25px rgba(0,0,0,0.25);z-index:99999;border:1px solid #f59e0b;transition:all 0.3s ease;opacity:0;pointer-events:none;';
+        document.body.appendChild(toast);
+      }
+      toast.innerText = msg;
+      toast.style.opacity = '1';
+      toast.style.transform = 'translateX(-50%) translateY(10px)';
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(0)';
+      }, 3000);
+    }
+
+    let confirmCallback = null;
+    function confirmInApp(msg, onConfirm) {
+      let modal = document.getElementById('inAppConfirmModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'inAppConfirmModal';
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+          <div class="modal-content" style="max-width:360px;text-align:center;">
+            <div style="font-size:1.8rem;margin-bottom:8px;">⚠️</div>
+            <div id="inAppConfirmText" style="font-size:0.92rem;font-weight:800;color:var(--blue-deep);margin-bottom:16px;"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <button class="btn btn-outline" style="color:var(--text-muted);border-color:#cbd5e1;" onclick="closeInAppConfirm(false)">Annuler</button>
+              <button class="btn btn-gold" onclick="closeInAppConfirm(true)">Confirmer</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+      }
+      document.getElementById('inAppConfirmText').innerText = msg;
+      confirmCallback = onConfirm;
+      modal.classList.add('active');
+    }
+
+    function closeInAppConfirm(result) {
+      const modal = document.getElementById('inAppConfirmModal');
+      if (modal) modal.classList.remove('active');
+      if (result && confirmCallback) confirmCallback();
+      confirmCallback = null;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderHomeAgents();
+      updatePricesDisplay();
+      calculatePrice();
+      renderRecentOrders();
+      updateAuthUI();
+    });
+  </script>
+</body>
+</html>
