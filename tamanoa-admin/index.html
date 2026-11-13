@@ -228,7 +228,7 @@
           <div class="kpi-sub">Base 100% propre</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-val" id="kpiCoursiers">9</div>
+          <div class="kpi-val" id="kpiCoursiers">0</div>
           <div class="kpi-title">Coursiers Actifs</div>
           <div class="kpi-sub">Yaoundé & Bertoua</div>
         </div>
@@ -609,15 +609,27 @@
       }
     }
 
+    function getCoursiers() {
+      let couriers = JSON.parse(localStorage.getItem('ke_couriers_v5') || '[]');
+      const demoIds = ['ag-yde-1', 'ag-yde-2', 'ag-yde-3', 'ag-dla-1', 'ag-dla-2', 'ag-bta-1', 'ag-bta-2', 'ag-bda-1', 'ag-baf-1'];
+      const demoNames = ['Marcel Mbengono', 'Christian Njoya', 'Fabrice Kamga', 'Emmanuel Epoh', 'Arsène Ndongo', 'Alain Ndongo', 'Clarisse Fotso'];
+      couriers = couriers.filter(c => !demoIds.includes(c.id) && !demoNames.includes(c.name));
+      localStorage.setItem('ke_couriers_v5', JSON.stringify(couriers));
+      return couriers;
+    }
+
     function renderCoursiers() {
       const container = document.getElementById('coursiersContainer');
-      const coursiers = [
-        { name: 'Marcel Mbengono', phone: '692168264', city: 'Yaoundé', district: 'Bastos - Dragages', cert: true },
-        { name: 'Christian Njoya', phone: '656995369', city: 'Bertoua', district: 'Centre Commercial', cert: true },
-        { name: 'Emmanuel Epoh', phone: '699112233', city: 'Douala', district: 'Akwa - Liberté', cert: true },
-        { name: 'Fabrice Kamga', phone: '677223344', city: 'Yaoundé', district: 'Omnisports', cert: true },
-        { name: 'Arsène Ndongo', phone: '654778899', city: 'Douala', district: 'Bonapriso', cert: true }
-      ];
+      const coursiers = getCoursiers();
+      document.getElementById('kpiCoursiers').innerText = coursiers.length;
+
+      if (coursiers.length === 0) {
+        container.innerHTML = `<div class="item-card" style="text-align:center; padding:30px; color:var(--text-muted); font-size:0.85rem; border:1px dashed #cbd5e1;">
+          🏍️ <strong>Aucun coursier inscrit pour le moment.</strong><br>
+          <span style="font-size:0.75rem;">Les candidatures de coursiers partenaires (CNI, plan de localisation) s'afficheront ici en direct pour validation.</span>
+        </div>`;
+        return;
+      }
 
       let html = '';
       coursiers.forEach(c => {
@@ -625,10 +637,12 @@
           <div class="item-card" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <div>
               <div style="font-weight:800; font-size:0.88rem; color:var(--blue-deep);">${c.name}</div>
-              <div style="font-size:0.75rem; color:var(--text-muted);">📞 ${c.phone} &bull; 📍 ${c.city} (${c.district})</div>
-              <div style="font-size:0.7rem; color:var(--success); font-weight:800;">🟢 Coursier Certifié &bull; Actif</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">📞 ${c.phone} &bull; 📍 ${c.city} (${c.district || ''})</div>
+              <div style="font-size:0.7rem; color:${c.isCertified ? 'var(--success)' : 'var(--gold-primary)'}; font-weight:800;">
+                ${c.isCertified ? '🟢 Coursier Certifié &bull; Actif' : '⏳ En attente de validation'}
+              </div>
             </div>
-            <a href="https://wa.me/237${c.phone.replace(/\D/g, '')}" target="_blank" class="btn btn-sm btn-whatsapp">
+            <a href="https://wa.me/237${(c.phone||'').replace(/\D/g, '')}" target="_blank" class="btn btn-sm btn-whatsapp">
               WhatsApp
             </a>
           </div>
