@@ -1,12 +1,12 @@
 {
   "app": "KAMER_EXPRESS_COURSIER_237",
-  "version": "2.8.3",
-  "build": 2026111315,
+  "version": "2.8.4",
+  "build": 2026111316,
   "lastUpdated": "13 Novembre 2026",
   "features": [
-    "Suppression de l'encadré téléphone en doublon sur les cartes d'administrateurs",
-    "Numéros de téléphone directement intégrés dans les boutons WhatsApp de Miguel (692 16 82 64) et Jamil (656 99 53 69)",
-    "Photos officielles de Miguel MIGUEL et Jamil intégrées en haute définition",
+    "Nom officiel de Miguel configuré sur 'Miguel'",
+    "Nom officiel de JAMIL configuré en majuscules 'JAMIL'",
+    "Photos officielles de Miguel et JAMIL intégrées en haute définition",
     "Couverture nationale : Déploiement officiel sur TOUT LE CAMEROUN (10 Régions)"
   ]
 }
