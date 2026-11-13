@@ -1145,14 +1145,30 @@
     // ========================================================================
     let carnetLiveMerchants = [];
 
+    function isCarnetBlacklisted(name, phone, ntfyId) {
+      const n = (name || '').toLowerCase();
+      const p = (phone || '').replace(/\D/g, '');
+      const deleted = JSON.parse(localStorage.getItem('cc_admin_deleted_keys') || '[]');
+
+      if (ntfyId && deleted.includes(ntfyId)) return true;
+      if (p && deleted.includes('phone_' + p)) return true;
+
+      // Suppression automatique des anciens comptes de test
+      if (n.includes('test') || n.includes('triomphe') || n.includes('alimentation centrale') || n.includes('alimentation du bonheur')) return true;
+      if (p === '699887766' || p === '699112233') return true;
+
+      return false;
+    }
+
     async function fetchCarnetLiveData() {
       const TOPIC = 'carnet_credit_live_miguel_prod_2026';
       const badge = document.getElementById('carnetSyncBadge');
       if (badge) badge.textContent = '🔄 SYNC...';
 
       try {
-        const local = JSON.parse(localStorage.getItem('cc_admin_hub_merchants') || '[]');
-        if (local && local.length > 0) carnetLiveMerchants = local;
+        let local = JSON.parse(localStorage.getItem('cc_admin_hub_merchants') || '[]');
+        local = local.filter(m => !isCarnetBlacklisted(m.name, m.phone, m.ntfyId));
+        carnetLiveMerchants = local;
       } catch (e) {}
 
       try {
@@ -1165,13 +1181,14 @@
           let activePaidCount = 0;
 
           carnetLiveMerchants.forEach(m => {
-            if (m.phone) merchantsMap[m.phone] = m;
+            if (m.phone && !isCarnetBlacklisted(m.name, m.phone, m.ntfyId)) merchantsMap[m.phone] = m;
           });
 
           lines.forEach(l => {
             if (!l) return;
             try {
               const item = JSON.parse(l);
+              const ntfyId = item.id;
               const rawMsg = item.message;
               let data = null;
               try { data = JSON.parse(rawMsg); } catch (err) { data = { type: 'info', raw: rawMsg }; }
@@ -1201,6 +1218,9 @@
               if (data.phone) data.phone = String(data.phone).replace(/\s+/g, '');
               data.ts = data.ts || (item.time ? item.time * 1000 : Date.now());
               data.d = data.d || new Date(data.ts).toLocaleString('fr-FR');
+              data.ntfyId = ntfyId;
+
+              if (isCarnetBlacklisted(data.name, data.phone, ntfyId)) return;
 
               if (data.type === 'reg' && data.phone) {
                 if (!merchantsMap[data.phone]) {
@@ -1211,7 +1231,8 @@
                     pack: '🆓 Essai Gratuit (Inscrit)',
                     isPaid: false,
                     date: data.d,
-                    ts: data.ts
+                    ts: data.ts,
+                    ntfyId: ntfyId
                   };
                 }
               } else if (data.type === 'pay' && data.phone) {
@@ -1229,7 +1250,8 @@
                     pack: `⭐ Pack ${data.months || 1} Mois (Actif)`,
                     isPaid: true,
                     date: data.d,
-                    ts: data.ts
+                    ts: data.ts,
+                    ntfyId: ntfyId
                   };
                 }
               }
@@ -1247,7 +1269,7 @@
 
           if (kpiSub) kpiSub.textContent = totalCount;
           if (kpiLocks) kpiLocks.textContent = activePaidCount > 0 ? activePaidCount : totalCount;
-          if (kpiRev) kpiRev.textContent = (totalPayRevenue > 0 ? totalPayRevenue.toLocaleString('fr-FR') : '500') + ' F';
+          if (kpiRev) kpiRev.textContent = (totalPayRevenue > 0 ? totalPayRevenue.toLocaleString('fr-FR') : '0') + ' F';
           if (kpiRate) kpiRate.textContent = totalCount > 0 ? Math.round(((activePaidCount || totalCount) / totalCount) * 100) + '%' : '100%';
         }
       } catch (err) {
@@ -1272,7 +1294,7 @@
       if (list.length === 0) {
         container.innerHTML = `
           <div class="item-card" style="text-align:center; padding:24px; color:var(--text-muted); font-size:0.85rem;">
-            ${q ? 'Aucun commerçant correspondant à la recherche.' : '⏳ En attente des données en direct... (Écoute active NTFY)'}
+            ${q ? 'Aucun commerçant correspondant à la recherche.' : '👤 Aucun commerçant enregistré pour le moment.<br><span style="font-size:0.75rem;">Les nouveaux inscrits apparaîtront ici automatiquement en temps réel.</span>'}
           </div>
         `;
         return;
@@ -1301,11 +1323,26 @@
               <a href="https://wa.me/237${u.phone}?text=Bonjour%20${encodeURIComponent(u.name)},%20votre%20compte%20Carnet%20de%20Cr%C3%A9dit%20est%20actif%20!" target="_blank" class="btn btn-sm btn-whatsapp" style="width:auto; padding:6px 10px; font-size:0.75rem;">
                 WhatsApp
               </a>
+              <button class="btn btn-sm btn-outline" onclick="deleteCarnetHubMerchant('${u.phone}', '${u.ntfyId || ''}')" style="border-color:#ef4444; color:#ef4444; padding:5px 8px; font-size:0.72rem;">
+                Supprimer
+              </button>
             </div>
           </div>
         `;
       });
       container.innerHTML = html;
+    }
+
+    function deleteCarnetHubMerchant(phone, ntfyId) {
+      if (!confirm('Voulez-vous supprimer ce commerçant de la liste ?')) return;
+      const deleted = JSON.parse(localStorage.getItem('cc_admin_deleted_keys') || '[]');
+      if (phone && !deleted.includes('phone_' + phone)) deleted.push('phone_' + phone);
+      if (ntfyId && !deleted.includes(ntfyId)) deleted.push(ntfyId);
+      localStorage.setItem('cc_admin_deleted_keys', JSON.stringify(deleted));
+
+      carnetLiveMerchants = carnetLiveMerchants.filter(m => m.phone !== phone);
+      localStorage.setItem('cc_admin_hub_merchants', JSON.stringify(carnetLiveMerchants));
+      renderCarnetDashboard();
     }
 
     async function handleCarnetUnlock() {
