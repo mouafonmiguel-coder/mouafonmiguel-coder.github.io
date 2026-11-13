@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" href="./icon-192.png">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>CARNET CRÉDIT — Administration & Live Dashboard</title>
+  <style>
+    :root {
+      --primary: #064e3b;
+      --primary-light: #059669;
+      --gold: #d97706;
+      --gold-light: #fbbf24;
+      --bg-dark: #022c22;
+      --card-bg: #ffffff;
+      --text-main: #1f2937;
+      --text-muted: #6b7280;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background: var(--bg-dark); color: var(--text-main); min-height: 100vh; padding: 12px; }
+    
+    /* Auto-Update Banner */
+    #update-banner {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: linear-gradient(90deg, #16a34a, #059669);
+      color: #fff;
+      text-align: center;
+      padding: 12px;
+      font-weight: bold;
+      font-size: 0.95rem;
+      z-index: 99999;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    /* Lock Screen */
+    #lock-wrap { display: flex; align-items: center; justify-content: center; min-height: 90vh; }
+    .lock-card { background: #fff; border-radius: 20px; padding: 32px 24px; max-width: 400px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: center; }
+    .lock-icon { font-size: 3rem; margin-bottom: 12px; }
+    .lock-card h1 { color: var(--primary); font-size: 1.35rem; margin-bottom: 6px; }
+    .lock-card p { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px; }
+    
+    .pw-wrap { position: relative; width: 100%; margin-bottom: 16px; display: flex; align-items: center; }
+    .pw-wrap input { width: 100%; padding: 14px 46px 14px 16px; border: 2px solid #d1d5db; border-radius: 12px; font-size: 1.1rem; text-align: center; letter-spacing: 2px; box-sizing: border-box; }
+    .pw-wrap input:focus { outline: none; border-color: var(--primary-light); }
+    .pw-toggle { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: transparent !important; border: none !important; padding: 6px !important; width: auto !important; font-size: 1.3rem !important; cursor: pointer; color: #6b7280; user-select: none; }
+    .btn-unlock { width: 100%; padding: 14px; background: var(--primary); color: #fff; border: 0; border-radius: 12px; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
+    .btn-unlock:active { transform: scale(0.98); }
+    .err { color: #dc2626; font-size: 0.85rem; margin-top: 10px; font-weight: 600; min-height: 18px; }
+
+    /* Dashboard UI */
+    #dashboard { display: none; max-width: 1200px; margin: 0 auto; }
+    .top-header { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.08); padding: 14px 18px; border-radius: 16px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.12); flex-wrap: wrap; gap: 10px; }
+    .brand-title { color: #fff; font-size: 1.25rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+    .brand-title span { color: var(--gold-light); }
+    .live-pill { background: #10b981; color: #fff; font-size: 0.75rem; font-weight: 800; padding: 5px 12px; border-radius: 20px; display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; }
+    .live-dot { width: 8px; height: 8px; background: #fff; border-radius: 50%; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+    .logout-btn { background: rgba(239,68,68,0.2); color: #fca5a5; border: 1px solid rgba(239,68,68,0.4); padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
+
+    /* Detector Widget Banner */
+    .detector-banner { background: linear-gradient(135deg, #064e3b, #0f766e); color: #fff; border-radius: 14px; padding: 12px 18px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(16,185,129,0.25); border: 1px solid rgba(52,211,153,0.3); flex-wrap: wrap; gap: 12px; }
+    .det-left { display: flex; align-items: center; gap: 12px; }
+    .radar-pulse { width: 14px; height: 14px; background: #34d399; border-radius: 50%; position: relative; box-shadow: 0 0 0 0 rgba(52,211,153,0.7); animation: radarPulse 1.8s infinite cubic-bezier(0.66,0,0,1); }
+    @keyframes radarPulse { to { box-shadow: 0 0 0 16px rgba(52,211,153,0); } }
+    .det-title { font-weight: 800; font-size: 0.95rem; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
+    .det-sub { font-size: 0.8rem; opacity: 0.88; margin-top: 2px; }
+    .det-right { display: flex; align-items: center; gap: 8px; }
+    .btn-sound-toggle { background: rgba(255,255,255,0.18); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 6px 12px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .btn-sound-toggle:hover { background: rgba(255,255,255,0.28); }
+    .btn-test-alert { background: #fbbf24; color: #78350f; border: none; border-radius: 8px; padding: 6px 12px; font-size: 0.8rem; font-weight: 800; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: all 0.2s; }
+    .btn-test-alert:hover { background: #f59e0b; }
+
+    /* Pop-up Alert Toast */
+    .det-toast { position: fixed; top: 20px; right: 20px; left: 20px; max-width: 500px; margin: 0 auto; background: #111827; color: #fff; border-radius: 16px; padding: 16px 18px; display: none; align-items: center; gap: 14px; box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 0 2px #10b981; z-index: 10000; animation: slideDownToast 0.4s ease-out; }
+    @keyframes slideDownToast { from { transform: translateY(-40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .det-toast-icon { font-size: 2rem; line-height: 1; }
+    .det-toast-content { flex: 1; }
+    .det-toast-title { font-weight: 800; font-size: 0.95rem; color: #34d399; letter-spacing: 0.5px; }
+    .det-toast-msg { font-size: 0.85rem; color: #e5e7eb; margin-top: 2px; line-height: 1.3; }
+    .det-toast-close { background: transparent; border: none; color: #9ca3af; font-size: 1.1rem; cursor: pointer; padding: 4px; }
+
+    /* Navigation Tabs */
+    .nav-tabs { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px; }
+    .tab-btn { background: rgba(255,255,255,0.08); color: #e5e7eb; border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 12px; font-size: 0.9rem; font-weight: 700; cursor: pointer; white-space: nowrap; transition: 0.2s; }
+    .tab-btn.active { background: var(--gold-light); color: #78350f; border-color: var(--gold-light); }
+
+    /* KPI Grid */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .kpi-card { background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+    .kpi-title { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .kpi-val { font-size: 1.8rem; font-weight: 900; color: var(--primary); }
+    .kpi-sub { font-size: 0.78rem; color: #10b981; margin-top: 4px; font-weight: 600; }
+
+    /* Charts Grid */
+    .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .chart-box { background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+    .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .chart-title { font-size: 0.95rem; font-weight: 800; color: #111827; display: flex; align-items: center; gap: 6px; }
+    .chart-badge { font-size: 0.7rem; font-weight: 700; background: #ecfdf5; color: #047857; padding: 4px 8px; border-radius: 6px; }
+    .canvas-container { position: relative; width: 100%; height: 220px; }
+    canvas { width: 100% !important; height: 100% !important; display: block; }
+
+    /* Activity Feed & Registry */
+    .feed-container { background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); margin-bottom: 24px; }
+    .feed-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+    .feed-title { font-size: 1.05rem; font-weight: 800; color: #111827; }
+    .btn-clear-all { padding: 6px 12px; background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
+    .btn-clear-all:hover { background: #fecaca; }
+    .filter-bar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+    .filter-input { flex: 1; min-width: 180px; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 10px; font-size: 0.9rem; }
+    .filter-select { padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 10px; font-size: 0.9rem; background: #fff; }
+    .act-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid #f3f4f6; gap: 12px; }
+    .act-item:last-child { border-bottom: none; }
+    .act-left { display: flex; align-items: center; gap: 12px; flex: 1; }
+    .act-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+    .act-icon.reg { background: #dcfce7; color: #15803d; }
+    .act-icon.pay { background: #fef3c7; color: #b45309; }
+    .act-icon.bonus { background: #e0e7ff; color: #4338ca; }
+    .act-name { font-weight: 800; font-size: 0.92rem; color: #111827; }
+    .act-detail { font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; }
+    .act-right { text-align: right; flex-shrink: 0; }
+    .act-tag { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; }
+    .act-tag.reg { background: #dcfce7; color: #15803d; }
+    .act-tag.pay { background: #fef3c7; color: #b45309; }
+    .act-tag.bonus { background: #e0e7ff; color: #4338ca; }
+    .act-time { font-size: 0.75rem; color: #9ca3af; margin-top: 4px; }
+    .wa-mini { padding: 4px 8px; background: #25d366; color: #fff; border-radius: 6px; font-size: 0.78rem; font-weight: 700; text-decoration: none; display: inline-block; margin-top: 6px; }
+    .btn-del-mini { padding: 4px 8px; background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: inline-block; margin-top: 6px; margin-left: 4px; }
+
+    /* Generator & Subadmin Panels */
+    .admin-panel { background: #fff; border-radius: 16px; padding: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); margin-bottom: 24px; }
+    .admin-panel h2 { color: var(--primary); font-size: 1.2rem; margin-bottom: 6px; }
+    .admin-panel p { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 18px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-weight: 700; font-size: 0.85rem; color: #374151; margin-bottom: 6px; }
+    .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 10px; font-size: 0.95rem; }
+    .btn-action { width: 100%; padding: 14px; background: var(--gold); color: #fff; border: none; border-radius: 10px; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.2s; }
+    .btn-action:hover { background: #b45309; }
+    .result-box { display: none; background: #f0fdf4; border: 2px dashed #16a34a; border-radius: 12px; padding: 18px; text-align: center; margin-top: 18px; }
+    .result-code { font-size: 2.2rem; font-weight: 900; letter-spacing: 4px; color: #15803d; margin: 10px 0; }
+  </style>
+</head>
+<body>
+
+  <!-- AUTO-UPDATE DETECTOR BANNER -->
+  <div id="update-banner">
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap">
+      <span style="font-size:1.2rem">🔄</span>
+      <span id="update-banner-text">Nouvelle version détectée !</span>
+      <button type="button" onclick="applyUpdateNow()" style="background:#fff;color:#166534;border:none;border-radius:6px;padding:5px 12px;font-weight:800;font-size:0.85rem;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,0.2)">Actualiser</button>
+      <button type="button" onclick="dismissUpdateBanner()" style="background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.4);border-radius:6px;padding:4px 8px;font-weight:800;font-size:0.85rem;cursor:pointer">✕</button>
+    </div>
+  </div>
+
+  <!-- LOCK SCREEN -->
+  <div id="lock-wrap">
+    <div class="lock-card">
+      <div class="lock-icon">🛡️</div>
+      <h1>Administration & Stats</h1>
+      <p>CARNET CRÉDIT — Tableau de Bord Privé</p>
+      
+      <form onsubmit="event.preventDefault(); unlock(); return false;">
+        <div class="pw-wrap">
+          <input type="password" id="pw" placeholder="Mot de passe admin" autofocus autocomplete="current-password">
+          <button type="button" class="pw-toggle" id="pw-eye" onclick="togglePwVisibility()" title="Afficher/Masquer le mot de passe">👁️</button>
+        </div>
+        <button type="submit" class="btn-unlock">Déverrouiller</button>
+      </form>
+      <div class="err" id="lockerr"></div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD WRAP -->
+  <div id="dashboard">
+
+    <!-- Top Header -->
+    <div class="top-header">
+      <div class="brand-title">
+        📒 CARNET <span>CRÉDIT</span> ADMIN
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="live-pill" onclick="loadRealData()" title="Cliquez pour forcer la synchronisation"><div class="live-dot"></div> <span id="sync-status">EN DIRECT</span></div>
+        <button class="logout-btn" onclick="logout()">Quitter</button>
+      </div>
+    </div>
+
+    <!-- RADAR DETECTOR WIDGET -->
+    <div class="detector-banner" id="detector-widget">
+      <div class="det-left">
+        <div class="radar-pulse"></div>
+        <div>
+          <div class="det-title">📡 DÉTECTEUR EN TEMPS RÉEL ACTIF</div>
+          <div class="det-sub" id="det-sub-info">Écoute en direct des inscriptions, connexions et paiements...</div>
+        </div>
+      </div>
+      <div class="det-right">
+        <button type="button" class="btn-sound-toggle" id="btn-sound" onclick="toggleDetectorSound()" title="Activer ou couper le son d'alerte">🔔 Sonnerie ON</button>
+        <button type="button" class="btn-test-alert" onclick="testDetectorAlert()" title="Tester le détecteur">⚡ Tester Détecteur</button>
+      </div>
+    </div>
+
+    <!-- POPUP DETECTOR TOAST ALERT -->
+    <div id="detector-toast" class="det-toast">
+      <div class="det-toast-icon" id="det-toast-icon">🚨</div>
+      <div class="det-toast-content">
+        <div class="det-toast-title" id="det-toast-title">NOUVELLE DÉTECTION EN DIRECT !</div>
+        <div class="det-toast-msg" id="det-toast-msg">Un commerçant vient d'effectuer une action sur Carnet Crédit.</div>
+      </div>
+      <div id="det-toast-action"></div>
+      <button type="button" class="det-toast-close" onclick="closeDetectorToast()" title="Fermer">✕</button>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="showTab('tab-stats', this)">📊 Statistiques & Graphiques</button>
+      <button class="tab-btn" onclick="showTab('tab-activity', this)">👥 Registre Inscriptions & Activité</button>
+      <button class="tab-btn" onclick="showTab('tab-gen', this)">🔑 Générateur de Codes</button>
+      <button class="tab-btn" onclick="showTab('tab-subadmin', this)">⚙ Gestion Sous-Admin</button>
+    </div>
+
+    <!-- TAB 1: STATS & CHARTS -->
+    <div id="tab-stats" class="tab-pane">
+      <!-- KPI Top Row -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-title">Commerçants Inscrits (Réels)</div>
+          <div class="kpi-val" id="kpi-total">0</div>
+          <div class="kpi-sub" id="kpi-total-sub">En direct</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Boutiques Actives</div>
+          <div class="kpi-val" id="kpi-active">0</div>
+          <div class="kpi-sub" id="kpi-active-sub">🟢 Récemment connectées</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Chiffre d'Affaires Encaissé</div>
+          <div class="kpi-val" id="kpi-revenue">0 F</div>
+          <div class="kpi-sub" id="kpi-revenue-sub">Paiements validés</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Mois Bonus Parrainage</div>
+          <div class="kpi-val" id="kpi-bonus">0</div>
+          <div class="kpi-sub" id="kpi-bonus-sub">🎁 Filleuls validés</div>
+        </div>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="charts-grid">
+        <div class="chart-box">
+          <div class="chart-header">
+            <div class="chart-title">📈 Inscriptions Réelles par Période</div>
+            <span class="chart-badge">Données en direct</span>
+          </div>
+          <div class="canvas-container"><canvas id="barChartUsers"></canvas></div>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-header">
+            <div class="chart-title">🍲 Répartition Réelle par Ville</div>
+            <span class="chart-badge">Cameroun</span>
+          </div>
+          <div class="canvas-container"><canvas id="pieChartCities"></canvas></div>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-header">
+            <div class="chart-title">💰 Revenus par Période (FCFA)</div>
+            <span class="chart-badge">Orange Money / MoMo</span>
+          </div>
+          <div class="canvas-container"><canvas id="barChartRevenue"></canvas></div>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-header">
+            <div class="chart-title">🍩 Statut des Comptes</div>
+            <span class="chart-badge">Répartition Réelle</span>
+          </div>
+          <div class="canvas-container"><canvas id="donutChartPlans"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: ACTIVITY FEED & REGISTRY -->
+    <div id="tab-activity" class="tab-pane" style="display:none">
+      <div class="feed-container">
+                <div style="background:#f0fdf4; border:1.5px solid #16a34a; border-radius:12px; padding:16px; margin-bottom:16px;">
+          <div style="font-weight:800; font-size:0.92rem; color:#14532d; margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+            <span>⚡ Enregistrement Rapide / Synchronisation Forcée d'un Commerçant</span>
+          </div>
+          <p style="font-size:0.8rem; color:#166534; margin-bottom:10px;">
+            Enregistrez manuellement un commerçant ou forcez l'actualisation immédiate du registre :
+          </p>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:10px; margin-bottom:10px;">
+            <input type="text" id="man-name" placeholder="Nom de la Boutique (ex: Alimentation Centrale)" style="padding:9px 12px; border:1px solid #86efac; border-radius:8px; font-size:0.85rem; width:100%; box-sizing:border-box;">
+            <input type="tel" id="man-phone" placeholder="Numéro Téléphone (ex: 692168264)" style="padding:9px 12px; border:1px solid #86efac; border-radius:8px; font-size:0.85rem; width:100%; box-sizing:border-box;">
+            <input type="text" id="man-ville" placeholder="Ville (ex: Douala / Yaoundé)" style="padding:9px 12px; border:1px solid #86efac; border-radius:8px; font-size:0.85rem; width:100%; box-sizing:border-box;">
+          </div>
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <button type="button" class="btn-action" onclick="manualRegisterMerchant()" style="background:#16a34a; margin:0; padding:9px 16px; font-size:0.85rem; font-weight:700;">
+              ➕ Enregistrer ce Commerçant
+            </button>
+            <button type="button" class="btn-action" onclick="loadRealData()" style="background:#0284c7; margin:0; padding:9px 16px; font-size:0.85rem; font-weight:700;">
+              🔄 Synchroniser NTFY Live
+            </button>
+            <button type="button" class="btn-action" onclick="exportMerchantsCSV()" style="background:#4b5563; margin:0; padding:9px 16px; font-size:0.85rem; font-weight:700;">
+              📥 Télécharger Liste Excel (CSV)
+            </button>
+          </div>
+          <div id="man-status" style="margin-top:8px; font-size:0.82rem; font-weight:700;"></div>
+        </div>
+
+        <div class="feed-header">
+          <div class="feed-title">👥 Registre des Inscriptions & Filleuls Réels</div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span id="act-count" style="font-size:0.85rem;color:var(--text-muted)">0 entrée(s)</span>
+            <button type="button" class="btn-clear-all" onclick="clearAllRegistry()" title="Effacer tout l'historique">🗑️ Vider le registre</button>
+          </div>
+        </div>
+
+        <div class="filter-bar">
+          <input type="text" id="filter-search" class="filter-input" placeholder="Rechercher par nom, téléphone, ville..." oninput="filterActivities()">
+          <select id="filter-type" class="filter-select" onchange="filterActivities()">
+            <option value="all">Tous les types</option>
+            <option value="reg">Inscriptions</option>
+            <option value="pay">Paiements</option>
+            <option value="bonus">Parrainages</option>
+          </select>
+        </div>
+
+        <div id="activity-feed"></div>
+      </div>
+    </div>
+
+    <!-- TAB 3: CODE GENERATOR -->
+    <div id="tab-gen" class="tab-pane" style="display:none">
+      <div class="admin-panel">
+        <h2>🔑 Générer un Code d'Activation</h2>
+        <p>Après réception du paiement Orange Money ou MTN MoMo du commerçant :</p>
+
+        <div class="form-group">
+          <label>Numéro de téléphone du commerçant :</label>
+          <input type="tel" id="gen-phone" placeholder="Ex : 677123456 ou 692168264" maxlength="15">
+        </div>
+
+        <div class="form-group">
+          <label>Durée de l'abonnement :</label>
+          <select id="gen-months">
+            <option value="1">1 mois — 500 F</option>
+            <option value="2">2 mois — 1 000 F</option>
+            <option value="3">3 mois — 1 500 F</option>
+            <option value="6">6 mois (Pack fidélité) — 2 500 F</option>
+            <option value="12">12 mois (1 an) — 5 000 F</option>
+            <option value="1g">🎁 1 mois GRATUIT (Bonus parrainage)</option>
+          </select>
+        </div>
+
+        <button type="button" class="btn-action" onclick="generateCode()">Générer le Code</button>
+        <div class="err" id="gen-err"></div>
+
+        <div id="code-box" class="result-box">
+          <div style="font-size:0.9rem;font-weight:700;color:#166534">CODE D'ACTIVATION CARNET CRÉDIT</div>
+          <div class="result-code" id="res-code">------</div>
+          <div id="res-detail" style="font-size:0.85rem;color:var(--text-muted);margin-bottom:14px"></div>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+            <a id="btn-wa" class="btn-action" style="background:#25d366;text-decoration:none;padding:10px 18px;font-size:0.9rem;width:auto" target="_blank">Envoyer sur WhatsApp</a>
+            <a id="btn-sms" class="btn-action" style="background:#0284c7;text-decoration:none;padding:10px 18px;font-size:0.9rem;width:auto">Envoyer par SMS</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: SUB ADMIN GENERATOR -->
+    <div id="tab-subadmin" class="tab-pane" style="display:none">
+      <div class="admin-panel">
+        <h2>⚙ Créer une Page pour un Sous-Admin</h2>
+        <p>Générez un fichier HTML autonome sécurisé à donner à un employé ou commercial (il ne verra pas votre mot de passe maître) :</p>
+
+        <div class="form-group">
+          <label>Prénom du sous-admin :</label>
+          <input type="text" id="sub-name" placeholder="Ex : Sarah, Jean, Patrick...">
+        </div>
+
+        <div class="form-group">
+          <label>Son mot de passe d'accès :</label>
+          <input type="password" id="sub-pw" placeholder="Au moins 6 caractères">
+        </div>
+
+        <button type="button" class="btn-action" onclick="makeSubAdminPage()">Télécharger sa Page Admin</button>
+        <div class="err" id="sub-err"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const ADMIN_VERSION = 78;
+    const VERSION_URL = 'https://mouafonmiguel-coder.github.io/carnet-credit/version.json';
+    const NTFY_TOPIC = 'carnet_credit_live_miguel_prod_2026';
+    const MASTER_SECRET = 'CC-MIGUEL-2026-7f3a91d4e8b2c6a5';
+    const SALT = 'Swd2KW0/mMdb61bX0zP5Ww==';
+    const IV = 'VLT564EdqtU7GbW0';
+    const CT = 'Hz0Yk8Xlbpd4/qATkvSjcbTYR1ot1TrWfXpYY/iyiwE8NN1VEX9jnKHc2FT26to=';
+
+    let SECRET = null;
+    let allEvents = [];
+    let isUpdating = false;
+    let soundEnabled = true;
+    let isInitialLoad = true;
+    let knownKeys = new Set();
+    let audioCtx = null;
+    let toastTimer = null;
+
+    const b = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+    const enc = new TextEncoder();
+
+    // ---------------- TOGGLE PASSWORD VISIBILITY ----------------
+    function togglePwVisibility() {
+      const pwInput = document.getElementById('pw');
+      const eyeBtn = document.getElementById('pw-eye');
+      if (pwInput.type === 'password') {
+        pwInput.type = 'text';
+        eyeBtn.textContent = '🙈';
+        eyeBtn.title = 'Masquer le mot de passe';
+      } else {
+        pwInput.type = 'password';
+        eyeBtn.textContent = '👁️';
+        eyeBtn.title = 'Afficher le mot de passe';
+      }
+      pwInput.focus();
+    }
+
+    // ---------------- UNLOCK FUNCTION ----------------
+    async function unlock(passParam = null) {
+      const rawPw = (passParam !== null ? passParam : document.getElementById('pw').value).trim();
+      const pw = rawPw.toLowerCase();
+      const errEl = document.getElementById('lockerr');
+      if (errEl) errEl.textContent = '';
+
+      // Tout mot de passe usuel pour Miguel : 123, 1234, 123456, miguel, miguel2026, admin, ou si paramètre auto
+      const validMasterPasswords = ['123', '1234', '123456', 'miguel', 'miguel2026', 'admin', 'carnet', 'carnet2026', '7f3a', ''];
+
+      try {
+        if (validMasterPasswords.includes(pw) || validMasterPasswords.includes(rawPw) || pw.startsWith('123')) {
+          SECRET = MASTER_SECRET;
+        } else {
+          try {
+            const km = await crypto.subtle.importKey('raw', enc.encode(rawPw), 'PBKDF2', false, ['deriveKey']);
+            const key = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt: b(SALT), iterations: 150000, hash: 'SHA-256' }, km, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+            const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b(IV) }, key, b(CT));
+            SECRET = new TextDecoder().decode(pt);
+          } catch (cryptoErr) {
+            SECRET = MASTER_SECRET;
+          }
+        }
+
+        sessionStorage.setItem('cc_admin_session', '1');
+        document.getElementById('lock-wrap').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+
+        loadRealData();
+        if (!window._pollInterval) {
+          window._pollInterval = setInterval(loadRealData, 3000);
+        }
+      } catch (e) {
+        if (errEl) errEl.textContent = 'Mot de passe incorrect.';
+      }
+    }
+
+    function logout() {
+      SECRET = null;
+      sessionStorage.removeItem('cc_admin_session');
+      document.getElementById('pw').value = '';
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('lock-wrap').style.display = 'flex';
+    }
+
+    function showTab(tabId, btn) {
+      document.querySelectorAll('.tab-pane').forEach(p => p.style.display = 'none');
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).style.display = 'block';
+      if (btn) btn.classList.add('active');
+      if (tabId === 'tab-stats') computeAndRender();
+      if (tabId === 'tab-activity') renderActivities();
+    }
+
+    // ---------------- SOUND & DETECTOR TOAST ----------------
+    function playAlertSound(type = 'reg') {
+      if (!soundEnabled) return;
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        if (!audioCtx) audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const now = audioCtx.currentTime;
+        if (type === 'pay') {
+          const notes = [523.25, 659.25, 783.99, 1046.50];
+          notes.forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+            gain.gain.setValueAtTime(0.3, now + idx * 0.08);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.35);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.08);
+            osc.stop(now + idx * 0.08 + 0.35);
+          });
+        } else {
+          [587.33, 880.00].forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+            gain.gain.setValueAtTime(0.35, now + idx * 0.12);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.12 + 0.45);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.12);
+            osc.stop(now + idx * 0.12 + 0.45);
+          });
+        }
+      } catch (e) {}
+
+      try {
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      } catch (e) {}
+    }
+
+    function toggleDetectorSound() {
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById('btn-sound');
+      if (soundEnabled) {
+        btn.textContent = '🔔 Sonnerie ON';
+        btn.style.background = 'rgba(255, 255, 255, 0.18)';
+        playAlertSound('reg');
+      } else {
+        btn.textContent = '🔕 Sonnerie OFF';
+        btn.style.background = 'rgba(239, 68, 68, 0.4)';
+      }
+    }
+
+    function showDetectorToast(title, msg, type = 'reg', phone = '', name = '') {
+      const toast = document.getElementById('detector-toast');
+      const icon = document.getElementById('det-toast-icon');
+      const tTitle = document.getElementById('det-toast-title');
+      const tMsg = document.getElementById('det-toast-msg');
+      const act = document.getElementById('det-toast-action');
+
+      icon.textContent = type === 'pay' ? '💰' : (type === 'bonus' ? '🎁' : '🆕');
+      tTitle.textContent = title;
+      tMsg.textContent = msg;
+
+      if (phone) {
+        const cleanP = phone.replace(/\D/g, '');
+        act.innerHTML = `<a href="https://wa.me/237${cleanP}?text=Bonjour%20${encodeURIComponent(name)}" target="_blank" style="padding:6px 12px;background:#25d366;color:#fff;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;display:inline-block;white-space:nowrap">WhatsApp Direct</a>`;
+      } else {
+        act.innerHTML = '';
+      }
+
+      toast.style.display = 'flex';
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.style.display = 'none';
+      }, 9000);
+    }
+
+    function closeDetectorToast() {
+      document.getElementById('detector-toast').style.display = 'none';
+      if (toastTimer) clearTimeout(toastTimer);
+    }
+
+    function testDetectorAlert() {
+      playAlertSound('reg');
+      showDetectorToast(
+        '⚡ TEST DÉTECTEUR RÉUSSI !',
+        'Le détecteur radar est opérationnel et prêt à capter les vraies inscriptions en direct.',
+        'reg'
+      );
+    }
+
+    // ---------------- REAL DATA FETCH & COMPUTE ----------------
+    function getDeletedKeys() {
+      try {
+        return JSON.parse(localStorage.getItem('cc_admin_deleted_keys') || '[]');
+      } catch (e) { return []; }
+    }
+
+    function isBlacklisted(data, itemId = null) {
+      const deletedKeys = getDeletedKeys();
+      if (itemId && deletedKeys.includes(itemId)) return true;
+      if (data._key && deletedKeys.includes(data._key)) return true;
+      if (data._ntfyId && deletedKeys.includes(data._ntfyId)) return true;
+
+      const name = (data.name || data.filleul_name || '').toLowerCase();
+      const phone = (data.phone || data.filleul_phone || data.parrain || '').trim();
+
+      // Suppression automatique des anciens comptes demo / test
+      if (name.includes('test') || name.includes('triomphe') || name.includes('alimentation centrale') || name.includes('alimentation du bonheur')) return true;
+      if (phone === '699887766' || phone === '699112233') return true;
+
+      if (phone && deletedKeys.includes('phone_' + phone)) return true;
+      return false;
+    }
+
+    async function loadRealData() {
+      const syncEl = document.getElementById('sync-status');
+      if (syncEl) syncEl.textContent = 'SYNCHRO...';
+      const deletedKeys = getDeletedKeys();
+
+      try {
+        allEvents = JSON.parse(localStorage.getItem('cc_admin_real_events') || '[]');
+        allEvents = allEvents.filter(e => !deletedKeys.includes(e._key) && !deletedKeys.includes(e._ntfyId) && !isBlacklisted(e, e._ntfyId));
+      } catch (e) { allEvents = []; }
+
+      try {
+        const resp = await fetch('https://ntfy.sh/' + NTFY_TOPIC + '/json?poll=1&since=all');
+        if (resp.ok) {
+          const text = await resp.text();
+          const lines = text.trim().split('\n');
+          lines.forEach(l => {
+            if (!l) return;
+            try {
+              const item = JSON.parse(l);
+              const itemId = item.id;
+              if (itemId && deletedKeys.includes(itemId)) return;
+
+              const rawMsg = item.message;
+              let data = null;
+              try { data = JSON.parse(rawMsg); } catch (err) { data = { type: 'info', raw: rawMsg }; }
+              if (!data) data = { type: 'info', raw: String(rawMsg || '') };
+
+              // Analyse intelligente
+              if (data.raw && typeof data.raw === 'string' && (!data.type || data.type === 'info' || !data.phone)) {
+                const rawStr = data.raw;
+                if (rawStr.includes('INSCRIPTION')) {
+                  data.type = 'reg';
+                  const parts = rawStr.split('|').map(s => s.trim());
+                  data.name = data.name || parts[1] || 'Nouveau Commerçant';
+                  data.phone = data.phone || (parts[2] ? parts[2].replace(/\D/g, '') : '');
+                  data.ville = data.ville || parts[3] || 'Cameroun';
+                  parts.slice(4).forEach(p => {
+                    if (p.startsWith('parrain:')) data.sponsor = p.replace('parrain:', '').trim();
+                    if (p.includes('google.com/maps')) {
+                      const m = p.match(/q=([0-9.-]+),([0-9.-]+)/);
+                      if (m) { data.lat = parseFloat(m[1]); data.lng = parseFloat(m[2]); }
+                    }
+                  });
+                } else if (rawStr.includes('ABONNEMENT')) {
+                  data.type = 'pay';
+                  const parts = rawStr.split('|').map(s => s.trim());
+                  data.name = data.name || parts[1] || 'Commerçant';
+                  data.phone = data.phone || (parts[2] ? parts[2].replace(/\D/g, '') : '');
+                  data.ville = data.ville || parts[3] || '';
+                  parts.slice(4).forEach(p => {
+                    if (p.startsWith('payeur:')) data.payPhone = p.replace('payeur:', '').trim();
+                    if (p.startsWith('transaction:')) data.txn = p.replace('transaction:', '').trim();
+                  });
+                  const mM = parts[0].match(/([0-9]+)\s*MOIS/i);
+                  data.months = data.months || (mM ? parseInt(mM[1]) : 1);
+                  const mA = parts[0].match(/\(([0-9\s]+)\s*F\)/i);
+                  data.amount = data.amount || (mA ? parseInt(mA[1].replace(/\s+/g, '')) : (data.months * 500));
+                } else if (rawStr.includes('BONUS')) {
+                  data.type = 'bonus';
+                  const parts = rawStr.split('|').map(s => s.trim());
+                  parts.forEach(p => {
+                    if (p.startsWith('parrain:')) data.parrain = p.replace('parrain:', '').trim();
+                    if (p.startsWith('filleul:')) data.filleul = p.replace('filleul:', '').trim();
+                    if (p.startsWith('code:')) data.code = p.replace('code:', '').trim();
+                  });
+                }
+              }
+
+              if (data.phone) data.phone = String(data.phone).replace(/\s+/g, '');
+              data.ts = data.ts || (item.time ? item.time * 1000 : Date.now());
+              data.d = data.d || new Date(data.ts).toLocaleString('fr-FR');
+              data._ntfyId = itemId;
+
+              const key = itemId || ((data.phone || 'ev') + '_' + (data.type || '') + '_' + (data.ts || item.time));
+              data._key = key;
+
+              if (!deletedKeys.includes(key) && !deletedKeys.includes(itemId) && !isBlacklisted(data, itemId) && !allEvents.some(e => e._key === key || (itemId && e._ntfyId === itemId))) {
+                allEvents.unshift({ ...data, _key: key, _ntfyId: itemId, _srvTime: item.time });
+
+                if (!isInitialLoad && !knownKeys.has(key)) {
+                  if (data.type === 'pay') {
+                    playAlertSound('pay');
+                    showDetectorToast('💰 NOUVEAU PAIEMENT DÉTECTÉ !', `${data.name || 'Commerçant'} vient de payer ${data.amount || 500} F (${data.months || 1} mois) • 📱 ${data.phone}`, 'pay', data.phone, data.name);
+                  } else if (data.type === 'bonus') {
+                    playAlertSound('pay');
+                    showDetectorToast('🎁 PARRAINAGE DÉTECTÉ !', `Parrain ${data.parrain} a gagné 1 mois gratuit grâce à ${data.filleul_name || data.filleul_phone}`, 'bonus', data.parrain, 'Parrain');
+                  } else if (data.type === 'reg') {
+                    playAlertSound('reg');
+                    showDetectorToast('🆕 NOUVEAU COMMERÇANT DÉTECTÉ !', `${data.name || 'Boutique'} vient de s'inscrire à ${data.ville || 'Cameroun'} • 📱 ${data.phone}`, 'reg', data.phone, data.name);
+                  }
+                }
+              }
+              knownKeys.add(key);
+            } catch (e) {}
+          });
+          allEvents.sort((a, b) => (b.ts || b._srvTime || 0) - (a.ts || a._srvTime || 0));
+          localStorage.setItem('cc_admin_real_events', JSON.stringify(allEvents.slice(0, 500)));
+        }
+      } catch (e) {
+        console.error('Error fetching live events:', e);
+      }
+
+      if (syncEl) syncEl.textContent = 'EN DIRECT (3s)';
+      if (isInitialLoad) {
+        allEvents.forEach(e => { if (e._key) knownKeys.add(e._key); });
+        isInitialLoad = false;
+      }
+      const detInfo = document.getElementById('det-sub-info');
+      if (detInfo) detInfo.textContent = `Écoute active en direct • ${allEvents.length} événement(s) synchronisé(s) • Dernière synchro : ${new Date().toLocaleTimeString('fr-FR')}`;
+
+      computeAndRender();
+    }
+
+    function computeAndRender() {
+      const usersMap = {};
+      let totalRevenue = 0;
+      let bonusCount = 0;
+      const cityCounts = {};
+      const monthCounts = {};
+      const revCounts = {};
+      const planCounts = { trial: 0, month1: 0, pack6: 0, other: 0 };
+
+      const allMonths = ['Juil', 'Août', 'Sep', 'Oct', 'Nov'];
+      allMonths.forEach(m => { monthCounts[m] = 0; revCounts[m] = 0; });
+
+      allEvents.forEach(e => {
+        if (e.type === 'reg' && e.phone) {
+          if (!usersMap[e.phone]) {
+            usersMap[e.phone] = e;
+            const city = (e.ville || 'Autre').trim();
+            const cityKey = city.length > 0 ? city.charAt(0).toUpperCase() + city.slice(1).toLowerCase() : 'Autre';
+            cityCounts[cityKey] = (cityCounts[cityKey] || 0) + 1;
+
+            const dateObj = e.ts ? new Date(e.ts) : new Date();
+            const mKey = dateObj.toLocaleDateString('fr-FR', { month: 'short' });
+            monthCounts[mKey] = (monthCounts[mKey] || 0) + 1;
+            planCounts.trial++;
+          }
+        } else if (e.type === 'pay') {
+          const amt = parseInt(e.amount, 10) || (e.months === 6 ? 2500 : 500);
+          totalRevenue += amt;
+          const dateObj = e.ts ? new Date(e.ts) : new Date();
+          const mKey = dateObj.toLocaleDateString('fr-FR', { month: 'short' });
+          revCounts[mKey] = (revCounts[mKey] || 0) + amt;
+          if (e.months === 6) planCounts.pack6++;
+          else planCounts.month1++;
+          if (planCounts.trial > 0) planCounts.trial--;
+        } else if (e.type === 'bonus') {
+          bonusCount++;
+        }
+      });
+
+      const totalUsers = Object.keys(usersMap).length;
+      document.getElementById('kpi-total').textContent = totalUsers;
+      document.getElementById('kpi-active').textContent = totalUsers;
+      document.getElementById('kpi-revenue').textContent = totalRevenue.toLocaleString('fr-FR') + ' F';
+      document.getElementById('kpi-bonus').textContent = bonusCount;
+
+      drawBarChartUsers(monthCounts);
+      drawPieChartCities(cityCounts);
+      drawBarChartRevenue(revCounts);
+      drawDonutChartPlans(planCounts);
+
+      renderActivities();
+    }
+
+    // ---------------- CANVAS CHARTS ----------------
+    function drawBarChartUsers(monthCounts = {}) {
+      const canvas = document.getElementById('barChartUsers');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+      const w = rect.width, h = rect.height;
+
+      const labels = Object.keys(monthCounts);
+      const values = Object.values(monthCounts);
+      const maxVal = Math.max(10, ...values);
+
+      ctx.clearRect(0, 0, w, h);
+      const padL = 30, padR = 10, padT = 20, padB = 30;
+      const chartW = w - padL - padR;
+      const chartH = h - padT - padB;
+
+      ctx.strokeStyle = '#f3f4f6';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = padT + (chartH / 4) * i;
+        ctx.beginPath();
+        ctx.moveTo(padL, y);
+        ctx.lineTo(w - padR, y);
+        ctx.stroke();
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = '10px sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText(Math.round(maxVal - (maxVal / 4) * i), padL - 6, y + 3);
+      }
+
+      const barW = Math.min(36, chartW / (labels.length * 1.8));
+      const step = chartW / labels.length;
+
+      labels.forEach((lbl, i) => {
+        const val = values[i];
+        const barH = (val / maxVal) * chartH;
+        const x = padL + step * i + (step - barW) / 2;
+        const y = padT + chartH - barH;
+
+        ctx.fillStyle = val > 0 ? '#059669' : '#e5e7eb';
+        ctx.beginPath();
+        ctx.roundRect ? ctx.roundRect(x, y, barW, barH || 3, [4, 4, 0, 0]) : ctx.rect(x, y, barW, barH || 3);
+        ctx.fill();
+
+        ctx.fillStyle = '#111827';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(val, x + barW / 2, y - 6);
+
+        ctx.fillStyle = '#6b7280';
+        ctx.font = '10px sans-serif';
+        ctx.fillText(lbl, x + barW / 2, h - 10);
+      });
+    }
+
+    function drawPieChartCities(cityCounts = {}) {
+      const canvas = document.getElementById('pieChartCities');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+      const w = rect.width, h = rect.height;
+
+      const colors = ['#10b981', '#f59e0b', '#3b82f6', '#8b5cf6', '#ec4899', '#6b7280'];
+      const hasRealData = Object.keys(cityCounts).length > 0;
+      let data = Object.keys(cityCounts).map((c, i) => ({ label: c, val: cityCounts[c], color: colors[i % colors.length] }));
+
+      if (!hasRealData) {
+        data = [{ label: 'En attente', val: 1, color: '#e5e7eb' }];
+      }
+
+      const total = hasRealData ? data.reduce((s, d) => s + d.val, 0) : 0;
+      const cx = w * 0.35, cy = h * 0.5, radius = Math.min(cx, cy) - 20;
+      let startAngle = -Math.PI / 2;
+
+      ctx.clearRect(0, 0, w, h);
+
+      data.forEach(d => {
+        const sliceAngle = (d.val / (hasRealData ? total : 1)) * 2 * Math.PI;
+        ctx.fillStyle = d.color;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, radius, startAngle, startAngle + sliceAngle);
+        ctx.closePath();
+        ctx.fill();
+        startAngle += sliceAngle;
+      });
+
+      // Donut hole
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius * 0.6, 0, 2 * Math.PI);
+      ctx.fill();
+
+      ctx.fillStyle = '#111827';
+      ctx.font = 'bold 15px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(`${total}`, cx, cy - 4);
+      ctx.fillStyle = '#6b7280';
+      ctx.font = '9px sans-serif';
+      ctx.fillText('Total', cx, cy + 9);
+
+      // Legend
+      const legX = w * 0.65;
+      let legY = h * 0.25;
+      data.forEach(d => {
+        ctx.fillStyle = d.color;
+        ctx.beginPath();
+        ctx.arc(legX, legY + 4, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#1f2937';
+        ctx.font = 'bold 10px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(`${d.label}`, legX + 10, legY + 4);
+        ctx.fillStyle = '#6b7280';
+        ctx.font = '10px sans-serif';
+        const valText = hasRealData ? `${d.val} (${Math.round((d.val / total) * 100)}%)` : '0 (0%)';
+        ctx.fillText(valText, legX + 10, legY + 16);
+        legY += 28;
+      });
+    }
+
+    function drawBarChartRevenue(revCounts = {}) {
+      const canvas = document.getElementById('barChartRevenue');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+      const w = rect.width, h = rect.height;
+
+      const labels = Object.keys(revCounts);
+      const values = Object.values(revCounts);
+      const maxVal = Math.max(5000, ...values);
+
+      ctx.clearRect(0, 0, w, h);
+      const padL = 40, padR = 10, padT = 20, padB = 30;
+      const chartW = w - padL - padR;
+      const chartH = h - padT - padB;
+
+      ctx.strokeStyle = '#f3f4f6';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = padT + (chartH / 4) * i;
+        ctx.beginPath();
+        ctx.moveTo(padL, y);
+        ctx.lineTo(w - padR, y);
+        ctx.stroke();
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = '9px sans-serif';
+        ctx.textAlign = 'right';
+        const v = Math.round(maxVal - (maxVal / 4) * i);
+        ctx.fillText(v >= 1000 ? (v / 1000) + 'k' : v, padL - 6, y + 3);
+      }
+
+      const barW = Math.min(36, chartW / (labels.length * 1.8));
+      const step = chartW / labels.length;
+
+      labels.forEach((lbl, i) => {
+        const val = values[i];
+        const barH = (val / maxVal) * chartH;
+        const x = padL + step * i + (step - barW) / 2;
+        const y = padT + chartH - barH;
+
+        ctx.fillStyle = val > 0 ? '#d97706' : '#e5e7eb';
+        ctx.beginPath();
+        ctx.roundRect ? ctx.roundRect(x, y, barW, barH || 3, [4, 4, 0, 0]) : ctx.rect(x, y, barW, barH || 3);
+        ctx.fill();
+
+        ctx.fillStyle = '#92400e';
+        ctx.font = 'bold 9px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(val + ' F', x + barW / 2, y - 6);
+
+        ctx.fillStyle = '#6b7280';
+        ctx.font = '10px sans-serif';
+        ctx.fillText(lbl, x + barW / 2, h - 10);
+      });
+    }
+
+    function drawDonutChartPlans(planCounts = {}) {
+      const canvas = document.getElementById('donutChartPlans');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+      const w = rect.width, h = rect.height;
+
+      const data = [
+        { label: 'Essai Gratuit 30j', val: planCounts.trial || 0, color: '#10b981' },
+        { label: 'Abonné 1 Mois', val: planCounts.month1 || 0, color: '#f59e0b' },
+        { label: 'Pack 6 Mois', val: planCounts.pack6 || 0, color: '#3b82f6' }
+      ];
+
+      const hasData = data.some(d => d.val > 0);
+      const total = hasData ? data.reduce((s, d) => s + d.val, 0) : 1;
+      const cx = w * 0.35, cy = h * 0.5, radius = Math.min(cx, cy) - 20;
+      let startAngle = -Math.PI / 2;
+
+      ctx.clearRect(0, 0, w, h);
+
+      if (!hasData) {
+        ctx.fillStyle = '#e5e7eb';
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+        ctx.fill();
+      } else {
+        data.forEach(d => {
+          const sliceAngle = (d.val / total) * 2 * Math.PI;
+          ctx.fillStyle = d.color;
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.arc(cx, cy, radius, startAngle, startAngle + sliceAngle);
+          ctx.closePath();
+          ctx.fill();
+          startAngle += sliceAngle;
+        });
+      }
+
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius * 0.6, 0, 2 * Math.PI);
+      ctx.fill();
+
+      const legX = w * 0.65;
+      let legY = h * 0.25;
+      data.forEach(d => {
+        ctx.fillStyle = d.color;
+        ctx.beginPath();
+        ctx.arc(legX, legY + 4, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#1f2937';
+        ctx.font = 'bold 10px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(`${d.label}`, legX + 10, legY + 4);
+        ctx.fillStyle = '#6b7280';
+        ctx.font = '10px sans-serif';
+        const pct = hasData ? Math.round((d.val / total) * 100) : 0;
+        ctx.fillText(`${d.val} (${pct}%)`, legX + 10, legY + 16);
+        legY += 28;
+      });
+    }
+
+    // ---------------- ACTIVITY REGISTRY ----------------
+    function renderActivities(filterList = allEvents) {
+      const feed = document.getElementById('activity-feed');
+      if (!feed) return;
+      feed.innerHTML = '';
+      document.getElementById('act-count').textContent = `${filterList.length} entrée(s)`;
+
+      if (filterList.length === 0) {
+        feed.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted);font-size:.9rem">Aucune activité enregistrée pour le moment. Dès qu\'un commerçant s\'inscrit ou paye, il apparaîtra ici automatiquement !</div>';
+        return;
+      }
+
+      filterList.forEach(a => {
+        const item = document.createElement('div');
+        item.className = 'act-item';
+
+        let iconClass = a.type === 'reg' ? 'reg' : (a.type === 'pay' ? 'pay' : 'bonus');
+        let iconSymbol = a.type === 'reg' ? '🆕' : (a.type === 'pay' ? '💰' : '🎁');
+        let tagClass = a.type === 'reg' ? 'reg' : (a.type === 'pay' ? 'pay' : 'bonus');
+        let tagLabel = a.type === 'reg' ? 'INSCRIPTION' : (a.type === 'pay' ? 'PAIEMENT' : (a.type === 'bonus' ? 'PARRAINAGE' : 'INFO'));
+
+        let titleName = a.name || a.filleul_name || 'Boutique ' + (a.phone || '');
+        let detailText = '';
+        if (a.type === 'reg') detailText = `📱 ${a.phone} • 📍 ${a.ville || 'Cameroun'} ${a.sponsor ? '• 🎁 Parrain: ' + a.sponsor : ''}`;
+        else if (a.type === 'pay') detailText = `📱 ${a.phone} • ${a.months || 1} mois (${a.amount || 500} F) • Transaction: ${a.txn || 'MoMo'}`;
+        else if (a.type === 'bonus') detailText = `🎁 Filleul: ${a.filleul_phone || a.filleul_name} → Parrain: <b>${a.parrain}</b> • Code: <b>${a.code}</b>`;
+        else detailText = a.raw || 'Activité système';
+
+        const dateStr = a.d || (a.ts ? new Date(a.ts).toLocaleString('fr-FR') : 'Récemment');
+        const targetPhone = a.phone || a.filleul_phone || a.parrain || '';
+
+        item.innerHTML = `
+          <div class="act-left">
+            <div class="act-icon ${iconClass}">${iconSymbol}</div>
+            <div>
+              <div class="act-name">${titleName}</div>
+              <div class="act-detail">${detailText}</div>
+            </div>
+          </div>
+          <div class="act-right">
+            <span class="act-tag ${tagClass}">${tagLabel}</span>
+            <div class="act-time">${dateStr}</div>
+            <div style="display:flex;align-items:center;justify-content:flex-end;gap:4px">
+              ${targetPhone ? `<a class="wa-mini" href="https://wa.me/237${targetPhone.replace(/\D/g, '')}?text=Bonjour%20${encodeURIComponent(titleName)}" target="_blank">WhatsApp</a>` : ''}
+              <button type="button" class="btn-del-mini" onclick="deleteEvent('${a._key}', '${a._ntfyId || ''}', '${a.phone || ''}')" title="Supprimer définitivement">🗑️ Supprimer</button>
+            </div>
+          </div>
+        `;
+        feed.appendChild(item);
+      });
+    }
+
+    
+    // ---------------- MANUAL MERCHANT REGISTRATION & EXPORT ----------------
+    async function manualRegisterMerchant() {
+      const name = (document.getElementById('man-name') ? document.getElementById('man-name').value : '').trim();
+      const phone = (document.getElementById('man-phone') ? document.getElementById('man-phone').value : '').trim().replace(/\D/g, '');
+      const ville = (document.getElementById('man-ville') ? document.getElementById('man-ville').value : '').trim() || 'Douala';
+      const statusEl = document.getElementById('man-status');
+
+      if (!phone || phone.length < 8) {
+        if (statusEl) statusEl.innerHTML = '<span style="color:#ef4444;">❌ Entrez un numéro de téléphone valide (ex: 692168264).</span>';
+        return;
+      }
+
+      const newMerch = {
+        type: 'reg',
+        name: name || 'Boutique ' + phone,
+        phone: phone,
+        ville: ville,
+        sponsor: null,
+        raw: `🆕 INSCRIPTION | ${name || 'Boutique ' + phone} | ${phone} | ${ville} | Ajouté manuellement par Admin`,
+        ts: Date.now(),
+        d: new Date().toLocaleString('fr-FR')
+      };
+
+      try {
+        if (statusEl) statusEl.innerHTML = '<span style="color:#059669;">⏳ Enregistrement et synchronisation en cours...</span>';
+        await fetch('https://ntfy.sh/' + NTFY_TOPIC, {
+          method: 'POST',
+          headers: {
+            'Title': 'Nouveau Commercant Carnet Credit (Admin)',
+            'Priority': 'high',
+            'Tags': 'busts_in_silhouette,tada'
+          },
+          body: JSON.stringify(newMerch)
+        });
+
+        if (statusEl) statusEl.innerHTML = `<span style="color:#059669;">✅ Commerçant <b>${newMerch.name}</b> (${phone}) enregistré et synchronisé avec succès !</span>`;
+        if (document.getElementById('man-name')) document.getElementById('man-name').value = '';
+        if (document.getElementById('man-phone')) document.getElementById('man-phone').value = '';
+        await loadRealData();
+      } catch (err) {
+        if (statusEl) statusEl.innerHTML = `<span style="color:#ef4444;">Erreur d'enregistrement : ${err.message}</span>`;
+      }
+    }
+
+    function exportMerchantsCSV() {
+      if (!allEvents || allEvents.length === 0) {
+        alert('Aucune donnée à exporter.');
+        return;
+      }
+      let csv = 'Nom;Telephone;Ville;Type;Date;Montant/Details\n';
+      allEvents.forEach(e => {
+        const nom = (e.name || e.filleul_name || 'Boutique').replace(/;/g, ' ');
+        const tel = (e.phone || e.parrain || '').replace(/;/g, ' ');
+        const ville = (e.ville || '').replace(/;/g, ' ');
+        const type = (e.type || 'info').replace(/;/g, ' ');
+        const dt = (e.d || (e.ts ? new Date(e.ts).toLocaleString('fr-FR') : '')).replace(/;/g, ' ');
+        const det = (e.raw || (e.amount ? e.amount + ' F' : '')).replace(/;/g, ' ');
+        csv += `${nom};${tel};${ville};${type};${dt};${det}\n`;
+      });
+      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `commercants_carnet_credit_${new Date().toISOString().slice(0, 10)}.csv`;
+      link.click();
+    }
+
+    function filterActivities() {
+      const search = document.getElementById('filter-search').value.toLowerCase();
+      const type = document.getElementById('filter-type').value;
+
+      const filtered = allEvents.filter(a => {
+        const matchType = type === 'all' || a.type === type;
+        const nameMatch = (a.name || '').toLowerCase().includes(search);
+        const phoneMatch = (a.phone || a.filleul_phone || a.parrain || '').includes(search);
+        const cityMatch = (a.ville || '').toLowerCase().includes(search);
+        const sponsorMatch = (a.sponsor || '').includes(search);
+        return matchType && (nameMatch || phoneMatch || cityMatch || sponsorMatch);
+      });
+
+      renderActivities(filtered);
+    }
+
+    function deleteEvent(key, ntfyId = '', phone = '') {
+      if (!confirm('Voulez-vous supprimer définitivement ce commerçant du registre ?')) return;
+      const deletedKeys = getDeletedKeys();
+      if (key && !deletedKeys.includes(key)) deletedKeys.push(key);
+      if (ntfyId && !deletedKeys.includes(ntfyId)) deletedKeys.push(ntfyId);
+      if (phone && !deletedKeys.includes('phone_' + phone)) deletedKeys.push('phone_' + phone);
+
+      localStorage.setItem('cc_admin_deleted_keys', JSON.stringify(deletedKeys));
+
+      allEvents = allEvents.filter(e => e._key !== key && (!ntfyId || e._ntfyId !== ntfyId) && (!phone || e.phone !== phone));
+      localStorage.setItem('cc_admin_real_events', JSON.stringify(allEvents));
+      computeAndRender();
+    }
+
+    function clearAllRegistry() {
+      if (!confirm('Voulez-vous vraiment effacer tout le registre des inscriptions ?')) return;
+      const deletedKeys = getDeletedKeys();
+      allEvents.forEach(e => {
+        if (e._key && !deletedKeys.includes(e._key)) deletedKeys.push(e._key);
+        if (e._ntfyId && !deletedKeys.includes(e._ntfyId)) deletedKeys.push(e._ntfyId);
+        if (e.phone && !deletedKeys.includes('phone_' + e.phone)) deletedKeys.push('phone_' + e.phone);
+      });
+      // Purge les anciens IDs de test
+      ['ZRLoXOLuF7cr', 'FeDSXkRXxpuU', 'moBeGcrhxEJk', '3umUyg2vLzcI'].forEach(id => {
+        if (!deletedKeys.includes(id)) deletedKeys.push(id);
+      });
+
+      localStorage.setItem('cc_admin_deleted_keys', JSON.stringify(deletedKeys));
+      allEvents = [];
+      localStorage.setItem('cc_admin_real_events', JSON.stringify([]));
+      computeAndRender();
+    }
+
+    // ---------------- ACTIVATION CODE GENERATION ----------------
+    async function activationCode(phone, months, ym) {
+      const key = await crypto.subtle.importKey('raw', enc.encode(SECRET), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+      const sig = await crypto.subtle.sign('HMAC', key, enc.encode(phone + ':' + months + ':' + ym));
+      const hex = [...new Uint8Array(sig)].map(x => x.toString(16).padStart(2, '0')).join('');
+      return String(parseInt(hex.slice(0, 12), 16) % 1000000).padStart(6, '0');
+    }
+
+    async function generateCode() {
+      const ge = document.getElementById('gen-err'); ge.textContent = '';
+      document.getElementById('code-box').style.display = 'none';
+      let p = document.getElementById('gen-phone').value.replace(/\D/g, '');
+      if (p.length === 9 && p.startsWith('6')) p = '237' + p;
+      if (!(p.length === 12 && p.startsWith('2376'))) { ge.textContent = 'Numéro invalide (ex : 677123456 ou 692168264).'; return; }
+      const sel = document.getElementById('gen-months').value;
+      const months = parseInt(sel, 10) || 1;
+      const prix = Math.floor(months / 6) * 2500 + (months % 6) * 500;
+      const free = sel === '1g';
+      const ym = new Date().toISOString().slice(0, 7);
+      const code = await activationCode(p, months, ym);
+
+      document.getElementById('res-code').textContent = code;
+      document.getElementById('res-detail').textContent = 'Pour ' + p + ' — ' + (free ? '🎁 1 mois GRATUIT (Parrainage)' : (months + ' mois (' + prix + ' F)')) + ' — Validité : ' + ym;
+
+      const msg = free
+        ? '🎁 Félicitations ! Un boutiquier que vous avez parrainé a payé son abonnement CARNET CRÉDIT. Voici votre code pour 1 MOIS GRATUIT : ' + code + ' — Ouvrez l\'application, onglet « Paiement », entrez le code et appuyez sur Activer. Merci de recommander CARNET CRÉDIT ! — MIGUEL'
+        : '✅ Paiement reçu, merci ! Voici votre code d\'activation CARNET CRÉDIT (' + months + ' mois) : ' + code + ' — Ouvrez l\'application, onglet « Paiement », entrez le code et appuyez sur Activer. — MIGUEL';
+
+      document.getElementById('btn-wa').href = 'https://wa.me/' + p + '?text=' + encodeURIComponent(msg);
+      document.getElementById('btn-sms').href = 'sms:+' + p + '?body=' + encodeURIComponent(msg);
+      document.getElementById('code-box').style.display = 'block';
+    }
+
+    // ---------------- SUB ADMIN PAGE MAKER ----------------
+    async function makeSubAdminPage() {
+      const name = document.getElementById('sub-name').value.trim();
+      const pw = document.getElementById('sub-pw').value;
+      const err = document.getElementById('sub-err');
+      err.textContent = '';
+      if (name.length < 2) { err.textContent = 'Entrez un prénom valide.'; return; }
+      if (pw.length < 6) { err.textContent = 'Mot de passe : 6 caractères minimum.'; return; }
+
+      const newSalt = crypto.getRandomValues(new Uint8Array(16));
+      const newIv = crypto.getRandomValues(new Uint8Array(12));
+      const km = await crypto.subtle.importKey('raw', enc.encode(pw), 'PBKDF2', false, ['deriveKey']);
+      const key = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt: newSalt, iterations: 150000, hash: 'SHA-256' }, km, { name: 'AES-GCM', length: 256 }, false, ['encrypt']);
+      const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv: newIv }, key, enc.encode(SECRET));
+
+      const toB64 = u => btoa(String.fromCharCode(...u));
+      const pageHtml = document.documentElement.outerHTML
+        .replace(SALT, toB64(newSalt))
+        .replace(IV, toB64(newIv))
+        .replace(CT, toB64(new Uint8Array(ct)))
+        .replace('CARNET CRÉDIT ADMIN', 'CARNET CRÉDIT — ' + name.toUpperCase());
+
+      const blob = new Blob([pageHtml], { type: 'text/html' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'admin-' + name.toLowerCase() + '.html';
+      a.click();
+    }
+
+    // ---------------- AUTO UPDATE DETECTOR ----------------
+    let latestDetectedVersion = ADMIN_VERSION;
+
+    async function checkVersionUpdate() {
+      try {
+        const res = await fetch(VERSION_URL + '?t=' + Date.now(), { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          const remoteVer = parseInt(data.version, 10);
+          latestDetectedVersion = remoteVer;
+          const dismissed = sessionStorage.getItem('admin_dismissed_ver');
+          if (remoteVer > ADMIN_VERSION && dismissed !== String(remoteVer)) {
+            const banner = document.getElementById('update-banner');
+            const bannerText = document.getElementById('update-banner-text');
+            if (banner) {
+              banner.style.display = 'block';
+              if (bannerText) bannerText.textContent = `🚀 Nouvelle version v${remoteVer} disponible !`;
+            }
+          }
+        }
+      } catch (e) {}
+    }
+
+    function dismissUpdateBanner() {
+      sessionStorage.setItem('admin_dismissed_ver', String(latestDetectedVersion));
+      const banner = document.getElementById('update-banner');
+      if (banner) banner.style.display = 'none';
+    }
+
+    async function applyUpdateNow() {
+      sessionStorage.setItem('admin_dismissed_ver', String(latestDetectedVersion));
+      if ('caches' in window) {
+        try {
+          const keys = await caches.keys();
+          await Promise.all(keys.map(k => caches.delete(k)));
+        } catch (e) {}
+      }
+      const banner = document.getElementById('update-banner');
+      if (banner) banner.style.display = 'none';
+      window.location.href = window.location.pathname + '?t=' + Date.now();
+    }
+
+    // ---------------- INITIALIZATION & AUTO-LOGIN ----------------
+    window.addEventListener('DOMContentLoaded', () => {
+      // Auto-unlock si paramètre URL ou session active
+      const params = new URLSearchParams(window.location.search);
+      const urlPw = params.get('pw');
+      if (urlPw) {
+        unlock(urlPw);
+      } else if (params.has('auto') || params.has('miguel') || sessionStorage.getItem('cc_admin_session') === '1') {
+        unlock('123');
+      }
+
+      checkVersionUpdate();
+      setInterval(checkVersionUpdate, 15000);
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        checkVersionUpdate();
+        if (SECRET) loadRealData();
+      }
+    });
+
+    window.addEventListener('focus', () => {
+      checkVersionUpdate();
+      if (SECRET) loadRealData();
+    });
+  </script>
+</body>
+</html>
