@@ -1,7 +1,7 @@
 {
-  "name": "KAMER EXPRESS — Coursier 237",
-  "short_name": "KamerExpress",
-  "description": "Vos courses, colis, certifications et démarches universitaires à Yaoundé et Bertoua.",
+  "name": "TAMANOA EXPRESS — Coursier 237",
+  "short_name": "TamanoaExpress",
+  "description": "TAMANOA EXPRESS — Coursier 237 : Plateforme de courses, colis, démarches et coursiers professionnels au Cameroun.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#0a192f",
