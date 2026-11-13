@@ -1,7 +1,7 @@
 // TAMANOA EXPRESS (Coursier 237) - Service Worker
-// Version: 2.38.0 (Network-First Cache)
+// Version: 2.39.0 (Network-First Cache)
 
-const CACHE_NAME = 'tamanoa-v38';
+const CACHE_NAME = 'tamanoa-v39';
 const ASSETS_TO_CACHE = [
   './',
   'manifest.webmanifest',
