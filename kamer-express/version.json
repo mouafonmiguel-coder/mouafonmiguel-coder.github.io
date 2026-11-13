@@ -1,12 +1,15 @@
 {
   "app": "KAMER_EXPRESS_COURSIER_237",
-  "version": "2.10.1",
-  "build": 2026111322,
+  "version": "2.11.0",
+  "build": 2026111323,
   "lastUpdated": "13 Novembre 2026",
   "features": [
-    "Exemple de nom mis à jour : 'Ex: Jean Paul'",
+    "Carte interactive et Radar GPS en direct des coursiers dans l'application",
+    "Géolocalisation en temps réel (GPS) et calcul de distance aux agents",
+    "Filtres par ville (Yaoundé, Douala, Bafoussam, Garoua, Kribi, etc.) et statut",
+    "Fiches détaillées des agents certifiés avec contact direct WhatsApp et commande immédiate",
+    "Formulaire de candidature coursier avec CNI et plan de localisation conservé",
     "Saisie libre et personnalisée du type de prestation dans le formulaire de commande",
-    "Icône œil pour mot de passe et code PIN",
     "Photos et statuts officiels de Miguel et JAMIL"
   ]
 }
