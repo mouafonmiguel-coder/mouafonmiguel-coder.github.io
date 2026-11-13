@@ -150,8 +150,9 @@
   <div id="update-banner">
     <div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap">
       <span style="font-size:1.2rem">🔄</span>
-      <span id="update-banner-text">Mise à jour détectée ! Rafraîchissement automatique en cours...</span>
-      <button type="button" onclick="applyUpdateNow()" style="background:#fff;color:#166534;border:none;border-radius:6px;padding:4px 10px;font-weight:800;font-size:0.8rem;cursor:pointer">Actualiser direct</button>
+      <span id="update-banner-text">Nouvelle version détectée !</span>
+      <button type="button" onclick="applyUpdateNow()" style="background:#fff;color:#166534;border:none;border-radius:6px;padding:5px 12px;font-weight:800;font-size:0.85rem;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,0.2)">Actualiser</button>
+      <button type="button" onclick="dismissUpdateBanner()" style="background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.4);border-radius:6px;padding:4px 8px;font-weight:800;font-size:0.85rem;cursor:pointer">✕</button>
     </div>
   </div>
 
@@ -370,7 +371,7 @@
   </div>
 
   <script>
-    const ADMIN_VERSION = 74;
+    const ADMIN_VERSION = 76;
     const VERSION_URL = 'https://mouafonmiguel-coder.github.io/carnet-credit/version.json';
     const NTFY_TOPIC = 'carnet_credit_live_miguel_prod_2026';
     const MASTER_SECRET = 'CC-MIGUEL-2026-7f3a91d4e8b2c6a5';
@@ -1096,43 +1097,45 @@
     }
 
     // ---------------- AUTO UPDATE DETECTOR ----------------
+    let latestDetectedVersion = ADMIN_VERSION;
+
     async function checkVersionUpdate() {
-      if (isUpdating) return;
       try {
         const res = await fetch(VERSION_URL + '?t=' + Date.now(), { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
           const remoteVer = parseInt(data.version, 10);
-          if (remoteVer > ADMIN_VERSION) {
-            isUpdating = true;
+          latestDetectedVersion = remoteVer;
+          const dismissed = sessionStorage.getItem('admin_dismissed_ver');
+          if (remoteVer > ADMIN_VERSION && dismissed !== String(remoteVer)) {
             const banner = document.getElementById('update-banner');
             const bannerText = document.getElementById('update-banner-text');
             if (banner) {
               banner.style.display = 'block';
-              if (bannerText) bannerText.textContent = `🚀 Nouvelle mise à jour v${remoteVer} détectée ! Rafraîchissement automatique...`;
+              if (bannerText) bannerText.textContent = `🚀 Nouvelle version v${remoteVer} disponible !`;
             }
-            if ('caches' in window) {
-              try {
-                const keys = await caches.keys();
-                await Promise.all(keys.map(k => caches.delete(k)));
-              } catch (e) {}
-            }
-            setTimeout(() => {
-              window.location.reload(true);
-            }, 1200);
           }
         }
       } catch (e) {}
     }
 
-    function applyUpdateNow() {
+    function dismissUpdateBanner() {
+      sessionStorage.setItem('admin_dismissed_ver', String(latestDetectedVersion));
+      const banner = document.getElementById('update-banner');
+      if (banner) banner.style.display = 'none';
+    }
+
+    async function applyUpdateNow() {
+      sessionStorage.setItem('admin_dismissed_ver', String(latestDetectedVersion));
       if ('caches' in window) {
-        caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k)))).finally(() => {
-          window.location.reload(true);
-        });
-      } else {
-        window.location.reload(true);
+        try {
+          const keys = await caches.keys();
+          await Promise.all(keys.map(k => caches.delete(k)));
+        } catch (e) {}
       }
+      const banner = document.getElementById('update-banner');
+      if (banner) banner.style.display = 'none';
+      window.location.href = window.location.pathname + '?t=' + Date.now();
     }
 
     // ---------------- INITIALIZATION & AUTO-LOGIN ----------------
