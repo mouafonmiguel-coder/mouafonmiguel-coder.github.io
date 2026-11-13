@@ -1489,44 +1489,72 @@
 
         <!-- SOUS-ONGLET 5 : TARIFS & PRESTATIONS (GÉRÉ PAR MIGUEL & JAMIL) -->
         <div id="admin-subtab-prices" class="admin-subtab-pane">
-          <div style="background:#ffffff; border:1px solid var(--border-color); border-radius:var(--radius-md); padding:16px;">
-            <h3 style="font-size: 0.98rem; font-weight: 800; color: var(--blue-deep); margin-bottom: 8px;">
-              Gestion des Tarifs par Miguel & Jamil
-            </h3>
-            <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 14px;">
-              Ajustez vos prix de base pour chaque prestation. Les modifications s'appliquent immédiatement sur l'application.
+          <div style="background:#ffffff; border:1.5px solid var(--gold-border); border-radius:var(--radius-md); padding:16px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+              <div style="font-size:1.4rem;">💰</div>
+              <div>
+                <h3 style="font-size: 1rem; font-weight: 800; color: var(--blue-deep); margin:0;">
+                  Gestion des Tarifs par Miguel & Jamil
+                </h3>
+                <div style="font-size: 0.75rem; color: var(--gold-primary); font-weight:700;">
+                  Mise à jour automatique en temps réel sur toute l'application
+                </div>
+              </div>
+            </div>
+
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 14px; line-height:1.4;">
+              Fixez ici les tarifs de chaque prestation. Lorsque vous cliquez sur <strong>Enregistrer</strong>, les nouveaux prix sont <strong>immédiatement appliqués</strong> sur la page d'accueil, la page des prestations et le calcul des commandes.
             </p>
 
             <div class="form-group">
-              <label class="form-label">Mode d'affichage public des prix :</label>
-              <select id="adminPriceDisplayMode" class="form-control">
-                <option value="quote">Mode "Sur devis" (Les clients demandent, Miguel et Jamil fixent le prix)</option>
-                <option value="custom">Mode "Afficher les Tarifs" (Affiche les prix configurés ci-dessous)</option>
+              <label class="form-label" style="font-weight:800; color:var(--blue-deep);">Mode d'affichage public des prix :</label>
+              <select id="adminPriceDisplayMode" class="form-control" style="font-weight:700;">
+                <option value="custom">🟢 Afficher les prix configurés en FCFA (Ex: Dès 1 500 F, Dès 2 500 F...)</option>
+                <option value="quote">🔵 Afficher "Sur devis / Fixé par l'Admin"</option>
               </select>
             </div>
 
-            <div class="form-group">
-              <label class="form-label">1. Courses et achats en ville (FCFA) :</label>
-              <input type="number" id="adminPriceCourses" class="form-control" step="100">
+            <div style="display:grid; grid-template-columns:1fr; gap:10px; margin-top:12px;">
+              
+              <div style="background:#f8fafc; border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:10px;">
+                <label class="form-label" style="font-weight:800; color:var(--blue-deep); margin-bottom:4px;">
+                  🛒 1. Courses & Achats en ville (FCFA) :
+                </label>
+                <input type="number" id="adminPriceCourses" class="form-control" step="100" placeholder="1500" style="font-weight:800; font-size:1rem; color:var(--blue-royal);">
+              </div>
+
+              <div style="background:#f8fafc; border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:10px;">
+                <label class="form-label" style="font-weight:800; color:var(--blue-deep); margin-bottom:4px;">
+                  🛡️ 2. Certification & Légalisation de documents (FCFA) :
+                </label>
+                <input type="number" id="adminPriceCertif" class="form-control" step="100" placeholder="2500" style="font-weight:800; font-size:1rem; color:var(--blue-royal);">
+              </div>
+
+              <div style="background:#f8fafc; border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:10px;">
+                <label class="form-label" style="font-weight:800; color:var(--blue-deep); margin-bottom:4px;">
+                  🧳 3. Collecte & Expédition de colis (FCFA) :
+                </label>
+                <input type="number" id="adminPriceColis" class="form-control" step="100" placeholder="2000" style="font-weight:800; font-size:1rem; color:var(--blue-royal);">
+              </div>
+
+              <div style="background:#f8fafc; border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:10px;">
+                <label class="form-label" style="font-weight:800; color:var(--blue-deep); margin-bottom:4px;">
+                  🎓 4. Retrait diplômes & actes universitaires (FCFA) :
+                </label>
+                <input type="number" id="adminPriceUniv" class="form-control" step="100" placeholder="3000" style="font-weight:800; font-size:1rem; color:var(--blue-royal);">
+              </div>
+
+              <div style="background:#f8fafc; border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:10px;">
+                <label class="form-label" style="font-weight:800; color:var(--danger); margin-bottom:4px;">
+                  ⚡ Supplément Course Express Urgente (FCFA) :
+                </label>
+                <input type="number" id="adminPriceUrgent" class="form-control" step="100" placeholder="1000" style="font-weight:800; font-size:1rem; color:var(--danger);">
+              </div>
+
             </div>
-            <div class="form-group">
-              <label class="form-label">2. Certification de documents (FCFA) :</label>
-              <input type="number" id="adminPriceCertif" class="form-control" step="100">
-            </div>
-            <div class="form-group">
-              <label class="form-label">3. Collecte & Expédition de colis (FCFA) :</label>
-              <input type="number" id="adminPriceColis" class="form-control" step="100">
-            </div>
-            <div class="form-group">
-              <label class="form-label">4. Retrait documents universitaires (FCFA) :</label>
-              <input type="number" id="adminPriceUniv" class="form-control" step="100">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Supplément Course Express Urgente (FCFA) :</label>
-              <input type="number" id="adminPriceUrgent" class="form-control" step="100">
-            </div>
-            <button class="btn btn-gold" onclick="saveAdminPrices()">
-              Enregistrer les nouveaux tarifs
+
+            <button class="btn btn-gold" style="margin-top:14px; padding:12px; font-size:0.95rem; font-weight:900;" onclick="saveAdminPrices()">
+              💾 Enregistrer & Appliquer Immédiatement sur l'App &rarr;
             </button>
           </div>
         </div>
@@ -1751,8 +1779,8 @@
        JAVASCRIPT LOGIC
        ======================================================================== -->
   <script>
-    const APP_VERSION = '2.5.1';
-    const APP_BUILD = 2026111307;
+    const APP_VERSION = '2.5.2';
+    const APP_BUILD = 2026111308;
 
     const DEFAULT_AVATAR_MIGUEL = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231e3a8a'/><circle cx='50' cy='38' r='20' fill='%23d97706'/><path d='M20,90 Q50,60 80,90' fill='%23f59e0b'/><text x='50' y='44' font-family='sans-serif' font-size='18' font-weight='bold' fill='%230a192f' text-anchor='middle'>M</text></svg>";
     const DEFAULT_AVATAR_JAMIL = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230f2341'/><circle cx='50' cy='38' r='20' fill='%23f59e0b'/><path d='M20,90 Q50,60 80,90' fill='%23d97706'/><text x='50' y='44' font-family='sans-serif' font-size='18' font-weight='bold' fill='%230a192f' text-anchor='middle'>J</text></svg>";
@@ -2430,11 +2458,11 @@
         colis: parseInt(document.getElementById('adminPriceColis').value) || 2000,
         univ: parseInt(document.getElementById('adminPriceUniv').value) || 3000,
         urgentBonus: parseInt(document.getElementById('adminPriceUrgent').value) || 1000,
-        displayMode: document.getElementById('adminPriceDisplayMode').value || 'quote'
+        displayMode: document.getElementById('adminPriceDisplayMode').value || 'custom'
       };
 
       saveStoredPrices(newPrices);
-      alertInApp('Nouveaux tarifs enregistrés avec succès par l\'Admin !');
+      alertInApp('✅ Nouveaux tarifs enregistrés avec succès ! Les prix sont maintenant à jour sur l\'application.');
       updatePricesDisplay();
       renderDetailedServices();
       updateOrderPriceSummary();
