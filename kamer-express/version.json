@@ -1,12 +1,12 @@
 {
   "app": "KAMER_EXPRESS_COURSIER_237",
-  "version": "2.4.0",
-  "build": 2026111305,
+  "version": "2.5.0",
+  "build": 2026111306,
   "lastUpdated": "13 Novembre 2026",
   "features": [
-    "Bouton direct '📷 Ajouter ma Photo' sur les fiches de Miguel et Jamil",
-    "Upload instantané de photo de profil avec prévisualisation immédiate",
-    "Protection sécurisée par code secret PIN Administrateur (2026)",
-    "Affichage public de la photo avec bordure dorée officielle"
+    "Mode Guide & Présentation exclusif pour les visiteurs",
+    "Verrouillage de l'accès complet : Inscription obligatoire pour commander et voir toutes les prestations",
+    "Déblocage instantané de l'application dès la création de compte ou connexion",
+    "Boutons d'ajout de photo de profil pour Miguel et Jamil sécurisés par code PIN 2026"
   ]
 }
