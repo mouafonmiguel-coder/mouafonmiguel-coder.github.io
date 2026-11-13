@@ -1,0 +1,24 @@
+{
+  "name": "ADMIN CARNET CR\u00c9DIT \u2014 Miguel",
+  "short_name": "Admin Carnet",
+  "description": "Application d'administration officielle d\u00e9di\u00e9e \u00e0 Carnet de Cr\u00e9dit Digital.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#064e3b",
+  "theme_color": "#064e3b",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
