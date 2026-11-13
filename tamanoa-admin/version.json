@@ -1,10 +1,14 @@
 {
   "app": "ADMIN_TAMANOA_EXPRESS",
-  "version": "2.22.0",
-  "build": 2026111339,
-  "lastUpdated": "13 Novembre 2026",
+  "version": "2.23.0",
+  "build": 2026111344,
+  "lastUpdated": "13 Novembre 2026 - Purge compl\u00e8te base d\u00e9mo coursiers",
   "admins": [
     "Miguel (Charg\u00e9 de Communication - Yaound\u00e9)",
     "JAMIL (Charg\u00e9 de Communication - Bertoua)"
+  ],
+  "changes": [
+    "Suppression int\u00e9grale des 9 faux coursiers d\u00e9mo de la base de donn\u00e9es",
+    "KPI Coursiers r\u00e9initialis\u00e9 \u00e0 0 avec synchronisation en temps r\u00e9el sur les vrais candidats"
   ]
 }
