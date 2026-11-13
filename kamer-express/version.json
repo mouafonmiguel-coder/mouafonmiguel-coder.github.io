@@ -1,11 +1,11 @@
 {
   "app": "KAMER_EXPRESS_COURSIER_237",
-  "version": "2.10.0",
-  "build": 2026111321,
+  "version": "2.10.1",
+  "build": 2026111322,
   "lastUpdated": "13 Novembre 2026",
   "features": [
+    "Exemple de nom mis à jour : 'Ex: Jean Paul'",
     "Saisie libre et personnalisée du type de prestation dans le formulaire de commande",
-    "Liste de suggestions intelligentes avec champ de texte modifiable par le client",
     "Icône œil pour mot de passe et code PIN",
     "Photos et statuts officiels de Miguel et JAMIL"
   ]
