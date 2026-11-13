@@ -1,0 +1,13 @@
+{
+  "app": "ADMIN_HUB_MIGUEL_237",
+  "version": "1.0.0",
+  "build": 2026111301,
+  "lastUpdated": "13 Novembre 2026",
+  "features": [
+    "Hub d'administration unifié pour Kamer Express et Carnet de Crédit",
+    "Gestion des tarifs de coursier Miguel (Yaoundé) & Jamil (Bertoua)",
+    "Suivi des reçus de transaction et commandes clients",
+    "Déblocage et gestion des abonnements Carnet Crédit",
+    "Système d'Auto-Update Automatique et Silencieux"
+  ]
+}
