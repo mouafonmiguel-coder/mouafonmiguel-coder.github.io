@@ -591,10 +591,20 @@
       } catch (e) { return []; }
     }
 
-    function isBlacklisted(data) {
+    function isBlacklisted(data, itemId = null) {
+      const deletedKeys = getDeletedKeys();
+      if (itemId && deletedKeys.includes(itemId)) return true;
+      if (data._key && deletedKeys.includes(data._key)) return true;
+      if (data._ntfyId && deletedKeys.includes(data._ntfyId)) return true;
+
       const name = (data.name || data.filleul_name || '').toLowerCase();
       const phone = (data.phone || data.filleul_phone || data.parrain || '').trim();
-      if (name.includes('alimentation du bonheur') || phone === '699887766') return true;
+
+      // Suppression automatique des anciens comptes demo / test
+      if (name.includes('test') || name.includes('triomphe') || name.includes('alimentation centrale') || name.includes('alimentation du bonheur')) return true;
+      if (phone === '699887766' || phone === '699112233') return true;
+
+      if (phone && deletedKeys.includes('phone_' + phone)) return true;
       return false;
     }
 
@@ -605,7 +615,7 @@
 
       try {
         allEvents = JSON.parse(localStorage.getItem('cc_admin_real_events') || '[]');
-        allEvents = allEvents.filter(e => !deletedKeys.includes(e._key) && !isBlacklisted(e));
+        allEvents = allEvents.filter(e => !deletedKeys.includes(e._key) && !deletedKeys.includes(e._ntfyId) && !isBlacklisted(e, e._ntfyId));
       } catch (e) { allEvents = []; }
 
       try {
@@ -617,12 +627,15 @@
             if (!l) return;
             try {
               const item = JSON.parse(l);
+              const itemId = item.id;
+              if (itemId && deletedKeys.includes(itemId)) return;
+
               const rawMsg = item.message;
               let data = null;
               try { data = JSON.parse(rawMsg); } catch (err) { data = { type: 'info', raw: rawMsg }; }
               if (!data) data = { type: 'info', raw: String(rawMsg || '') };
 
-              // Analyse intelligente des donnees NTFY (JSON ou chaine brute)
+              // Analyse intelligente
               if (data.raw && typeof data.raw === 'string' && (!data.type || data.type === 'info' || !data.phone)) {
                 const rawStr = data.raw;
                 if (rawStr.includes('INSCRIPTION')) {
@@ -666,10 +679,13 @@
               if (data.phone) data.phone = String(data.phone).replace(/\s+/g, '');
               data.ts = data.ts || (item.time ? item.time * 1000 : Date.now());
               data.d = data.d || new Date(data.ts).toLocaleString('fr-FR');
+              data._ntfyId = itemId;
 
-              const key = (data.phone || 'ev') + '_' + (data.type || '') + '_' + (data.ts || item.time);
-              if (!deletedKeys.includes(key) && !isBlacklisted(data) && !allEvents.some(e => e._key === key)) {
-                allEvents.unshift({ ...data, _key: key, _srvTime: item.time });
+              const key = itemId || ((data.phone || 'ev') + '_' + (data.type || '') + '_' + (data.ts || item.time));
+              data._key = key;
+
+              if (!deletedKeys.includes(key) && !deletedKeys.includes(itemId) && !isBlacklisted(data, itemId) && !allEvents.some(e => e._key === key || (itemId && e._ntfyId === itemId))) {
+                allEvents.unshift({ ...data, _key: key, _ntfyId: itemId, _srvTime: item.time });
 
                 if (!isInitialLoad && !knownKeys.has(key)) {
                   if (data.type === 'pay') {
@@ -694,13 +710,13 @@
         console.error('Error fetching live events:', e);
       }
 
-      if (syncEl) syncEl.textContent = 'EN DIRECT';
+      if (syncEl) syncEl.textContent = 'EN DIRECT (3s)';
       if (isInitialLoad) {
         allEvents.forEach(e => { if (e._key) knownKeys.add(e._key); });
         isInitialLoad = false;
       }
       const detInfo = document.getElementById('det-sub-info');
-      if (detInfo) detInfo.textContent = `Écoute active • ${allEvents.length} commerçant(s) synchronisé(s) • Dernière synchro : ${new Date().toLocaleTimeString('fr-FR')}`;
+      if (detInfo) detInfo.textContent = `Écoute active en direct • ${allEvents.length} événement(s) synchronisé(s) • Dernière synchro : ${new Date().toLocaleTimeString('fr-FR')}`;
 
       computeAndRender();
     }
@@ -1061,7 +1077,7 @@
             <div class="act-time">${dateStr}</div>
             <div style="display:flex;align-items:center;justify-content:flex-end;gap:4px">
               ${targetPhone ? `<a class="wa-mini" href="https://wa.me/237${targetPhone.replace(/\D/g, '')}?text=Bonjour%20${encodeURIComponent(titleName)}" target="_blank">WhatsApp</a>` : ''}
-              <button type="button" class="btn-del-mini" onclick="deleteEvent('${a._key}')" title="Supprimer">🗑️ Supprimer</button>
+              <button type="button" class="btn-del-mini" onclick="deleteEvent('${a._key}', '${a._ntfyId || ''}', '${a.phone || ''}')" title="Supprimer définitivement">🗑️ Supprimer</button>
             </div>
           </div>
         `;
@@ -1152,22 +1168,33 @@
       renderActivities(filtered);
     }
 
-    function deleteEvent(key) {
+    function deleteEvent(key, ntfyId = '', phone = '') {
+      if (!confirm('Voulez-vous supprimer définitivement ce commerçant du registre ?')) return;
       const deletedKeys = getDeletedKeys();
-      if (!deletedKeys.includes(key)) {
-        deletedKeys.push(key);
-        localStorage.setItem('cc_admin_deleted_keys', JSON.stringify(deletedKeys));
-      }
-      allEvents = allEvents.filter(e => e._key !== key);
+      if (key && !deletedKeys.includes(key)) deletedKeys.push(key);
+      if (ntfyId && !deletedKeys.includes(ntfyId)) deletedKeys.push(ntfyId);
+      if (phone && !deletedKeys.includes('phone_' + phone)) deletedKeys.push('phone_' + phone);
+
+      localStorage.setItem('cc_admin_deleted_keys', JSON.stringify(deletedKeys));
+
+      allEvents = allEvents.filter(e => e._key !== key && (!ntfyId || e._ntfyId !== ntfyId) && (!phone || e.phone !== phone));
       localStorage.setItem('cc_admin_real_events', JSON.stringify(allEvents));
       computeAndRender();
     }
 
     function clearAllRegistry() {
+      if (!confirm('Voulez-vous vraiment effacer tout le registre des inscriptions ?')) return;
       const deletedKeys = getDeletedKeys();
       allEvents.forEach(e => {
         if (e._key && !deletedKeys.includes(e._key)) deletedKeys.push(e._key);
+        if (e._ntfyId && !deletedKeys.includes(e._ntfyId)) deletedKeys.push(e._ntfyId);
+        if (e.phone && !deletedKeys.includes('phone_' + e.phone)) deletedKeys.push('phone_' + e.phone);
       });
+      // Purge les anciens IDs de test
+      ['ZRLoXOLuF7cr', 'FeDSXkRXxpuU', 'moBeGcrhxEJk', '3umUyg2vLzcI'].forEach(id => {
+        if (!deletedKeys.includes(id)) deletedKeys.push(id);
+      });
+
       localStorage.setItem('cc_admin_deleted_keys', JSON.stringify(deletedKeys));
       allEvents = [];
       localStorage.setItem('cc_admin_real_events', JSON.stringify([]));
