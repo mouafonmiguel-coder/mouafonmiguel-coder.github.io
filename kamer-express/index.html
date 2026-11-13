@@ -2501,8 +2501,14 @@
         try {
           let parsed = JSON.parse(stored);
           if (Array.isArray(parsed)) {
-            // Suppression automatique et définitive des anciens comptes démo
-            parsed = parsed.filter(u => !['usr-1', 'usr-2', 'usr-3'].includes(u.id) && !['Nathalie Manga', 'Alain Ndongo', 'Clarisse Fotso'].includes(u.name));
+            // Suppression automatique et définitive des anciens comptes démo et test
+            parsed = parsed.filter(u => {
+              const name = (u.name || '').toLowerCase().trim();
+              if (['usr-1', 'usr-2', 'usr-3'].includes(u.id)) return false;
+              if (['jean', 'nathalie manga', 'alain ndongo', 'clarisse fotso', 'test', 'demo'].includes(name)) return false;
+              if (name.includes('jean') || name.includes('test')) return false;
+              return true;
+            });
             saveStoredUsers(parsed);
             return parsed;
           }
@@ -4184,10 +4190,13 @@
                 <div class="user-item-phone">📞 ${u.phone} &bull; 📍 ${u.city}</div>
                 <div class="user-item-meta">📦 ${u.ordersCount || 0} commande(s) &bull; Inscrit le ${u.createdAt}</div>
               </div>
-              <div style="display:flex; gap:6px;">
-                <a href="https://wa.me/237${u.phone}?text=Bonjour%20${encodeURIComponent(u.name)},%20Tamanoa%20Express%20vous%20salue%20!" target="_blank" class="btn btn-whatsapp btn-sm" style="width:auto; padding:6px 10px;">
+              <div style="display:flex; gap:6px; align-items:center;">
+                <a href="https://wa.me/237${u.phone.replace(/\D/g, '')}?text=Bonjour%20${encodeURIComponent(u.name)},%20Tamanoa%20Express%20vous%20salue%20!" target="_blank" class="btn btn-whatsapp btn-sm" style="width:auto; padding:6px 10px;">
                   WhatsApp
                 </a>
+                <button class="btn btn-sm btn-outline" onclick="deleteKeAdminUser('${u.phone}')" style="border-color:#ef4444; color:#ef4444; padding:5px 8px; font-size:0.72rem;">
+                  Supprimer
+                </button>
               </div>
             </div>
           `;
@@ -4217,6 +4226,15 @@
         }
         logContainer.innerHTML = logHtml;
       }
+    }
+
+    function deleteKeAdminUser(phone) {
+      if (!confirm('Supprimer ce client ?')) return;
+      let users = getStoredUsers();
+      users = users.filter(u => (u.phone || '').trim() !== phone.trim());
+      saveStoredUsers(users);
+      renderAdminDashboard();
+      alertInApp('Client supprimé.');
     }
 
     function renderAdminProfilesEditor() {
