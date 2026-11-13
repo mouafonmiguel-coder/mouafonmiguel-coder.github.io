@@ -1,16 +1,14 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.17.0",
-  "build": 2026111329,
+  "version": "2.18.0",
+  "build": 2026111330,
   "lastUpdated": "13 Novembre 2026",
   "features": [
-    "Renommage officiel de l'application en TAMANOA EXPRESS (Coursier 237)",
-    "Nouveau logo et sigle officiel TE (Tamanoa Express)",
-    "Mise à jour des reçus, manifestes, termes et messages WhatsApp sous le nom Tamanoa Express",
-    "Suppression intégrale du bouton Admin de la barre de navigation publique",
-    "Accès secret Administrateurs (Miguel & JAMIL) via URL directe #admin ou triple-clic logo",
-    "Superviseur GPS des trajets et livraisons en temps réel dans le Dashboard Admin",
-    "Termes & Conditions Générales d'Utilisation (CGU) et Sécurité maximale SHA-256",
-    "Photos et statuts officiels de Miguel et JAMIL"
+    "Suppression du montant convenu fixe 2500 FCFA sur le reçu officiel",
+    "Intégration du bouton et lien de paiement sécurisé en ligne Fapshi (https://pay.fapshi.com/97799594)",
+    "Comptes de règlement officiels de Miguel : Orange Money (692 16 82 64) et MTN MoMo (653 59 63 05)",
+    "Instructions de règlement dynamiques et signature cryptographique sur les reçus et WhatsApp",
+    "Renommage officiel en TAMANOA EXPRESS (Coursier 237)",
+    "Accès secret Administrateurs (Miguel & JAMIL) via URL directe #admin ou triple-clic logo"
   ]
 }
