@@ -1,15 +1,15 @@
 {
   "app": "KAMER_EXPRESS_COURSIER_237",
-  "version": "2.13.0",
-  "build": 2026111325,
+  "version": "2.14.0",
+  "build": 2026111326,
   "lastUpdated": "13 Novembre 2026",
   "features": [
-    "Tracker GPS Administrateur : Visualisation de TOUS les trajets et de TOUTES les livraisons en temps réel",
-    "Tracés d'itinéraires complets (Point A Départ ➔ Point B Arrivée) avec position exacte du coursier",
-    "Suivi de la progression en %, vitesse en direct et boutons d'inspection / centrage sur trajet",
-    "Termes & Conditions Générales d'Utilisation (CGU) et Mentions Légales intégrés",
-    "Sécurité maximale anti-piratage : Chiffrement SHA-256 et protection anti-force brute",
-    "Signature numérique cryptographique sur les reçus de transaction",
+    "Géolocalisation automatique garantie et balise de tracking anti-contournement pour TOUS les agents",
+    "Balise GPS sectorielle automatique même si l'agent refuse ou désactive la permission de localisation",
+    "Synchronisation immédiate de chaque coursier sur la Carte Live et sur le Superviseur Admin (Miguel & JAMIL)",
+    "Interface épurée : Nettoyage des doublons d'icônes/émojis sur les onglets et filtres de villes",
+    "Superviseur GPS de tous les trajets et livraisons en temps réel dans le Dashboard Admin",
+    "Termes & Conditions Générales d'Utilisation (CGU) et Sécurité maximale SHA-256",
     "Photos et statuts officiels de Miguel et JAMIL"
   ]
 }
