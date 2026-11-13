@@ -1,9 +1,9 @@
-// Service Worker Carnet Credit v77
-const CACHE_NAME = 'cc-v77';
+// Service Worker Carnet Credit v78 (Live Sync Production)
+const CACHE_NAME = 'cc-v78';
 const ASSETS = [
   './',
   './index.html',
-  './index-BYCfg6OX.js',
+  './index-CC78LIVE.js',
   './index-CZLuv8pD.css',
   './manifest.webmanifest',
   './version.json'
