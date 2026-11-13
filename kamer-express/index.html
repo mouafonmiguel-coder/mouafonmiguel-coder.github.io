@@ -1119,16 +1119,7 @@
           </select>
         </div>
 
-        <!-- Récapitulatif Tarif Estimatif -->
-        <div style="background: var(--blue-light); border: 1px solid var(--blue-royal); border-radius: var(--radius-md); padding: 12px; margin-bottom: 14px;">
-          <div style="font-size: 0.78rem; color: var(--blue-royal); font-weight: 700;">Estimation du tarif :</div>
-          <div id="orderEstimatedPrice" style="font-size: 1.3rem; font-weight: 900; color: var(--gold-primary);">
-            Sur devis / Tarif Admin
-          </div>
-          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">
-            Un reçu officiel de transaction avec code de suivi vous est délivré à chaque commande.
-          </div>
-        </div>
+
 
         <button type="submit" class="btn btn-gold">
           Valider ma commande & Générer le Reçu &rarr;
@@ -1596,8 +1587,8 @@
        JAVASCRIPT LOGIC
        ======================================================================== -->
   <script>
-    const APP_VERSION = '2.3.0';
-    const APP_BUILD = 2026111303;
+    const APP_VERSION = '2.3.1';
+    const APP_BUILD = 2026111304;
 
     const DEFAULT_AVATAR_MIGUEL = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231e3a8a'/><circle cx='50' cy='38' r='20' fill='%23d97706'/><path d='M20,90 Q50,60 80,90' fill='%23f59e0b'/><text x='50' y='44' font-family='sans-serif' font-size='18' font-weight='bold' fill='%230a192f' text-anchor='middle'>M</text></svg>";
     const DEFAULT_AVATAR_JAMIL = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230f2341'/><circle cx='50' cy='38' r='20' fill='%23f59e0b'/><path d='M20,90 Q50,60 80,90' fill='%23d97706'/><text x='50' y='44' font-family='sans-serif' font-size='18' font-weight='bold' fill='%230a192f' text-anchor='middle'>J</text></svg>";
@@ -2011,19 +2002,7 @@
     }
 
     function updateOrderPriceSummary() {
-      const p = getStoredPrices();
-      const service = document.getElementById('orderService').value;
-      const urgency = document.getElementById('orderUrgency').value;
-
-      let base = p[service] || 1500;
-      if (urgency === 'urgent') base += (p.urgentBonus || 1000);
-
-      const priceEl = document.getElementById('orderEstimatedPrice');
-      if (p.displayMode === 'quote') {
-        priceEl.innerText = 'Dès ' + base.toLocaleString() + ' FCFA (Sur devis)';
-      } else {
-        priceEl.innerText = base.toLocaleString() + ' FCFA';
-      }
+      // Pas d'affichage de prix estimatif - Les tarifs sont fixés par Miguel & Jamil
     }
 
     // ========================================================================
@@ -2112,7 +2091,7 @@
       document.getElementById('modalReceiptTo').innerText = order.toLoc;
       document.getElementById('modalReceiptUrgency').innerText = (order.urgency === 'urgent' ? 'Express Urgent' : 'Standard');
       document.getElementById('modalReceiptPaymentMode').innerText = order.paymentMode;
-      document.getElementById('modalReceiptPrice').innerText = order.price.toLocaleString() + ' FCFA';
+      document.getElementById('modalReceiptPrice').innerText = (order.priceText || (order.price ? order.price.toLocaleString() + ' FCFA' : 'Fixé par l\'Admin (Sur devis)'));
 
       // WhatsApp URL
       const waMsg = `*REÇU DE TRANSACTION KAMER EXPRESS (COURSIER 237)*%0A%0A` +
