@@ -298,9 +298,14 @@
 
       <!-- TAB 5 : COURSIERS -->
       <div id="tab-coursiers" class="tab-pane">
-        <h3 style="font-size:0.95rem; font-weight:800; color:var(--blue-deep); margin-bottom:10px;">
-          Coursiers Partenaires & Validation
-        </h3>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+          <h3 style="font-size:0.95rem; font-weight:800; color:var(--blue-deep); margin:0;">
+            Coursiers Partenaires & Validation
+          </h3>
+          <button class="btn btn-sm btn-outline" onclick="purgeAllCoursiers()" style="color:var(--danger); border-color:var(--danger); font-size:0.75rem; padding:5px 10px; font-weight:800; display:flex; align-items:center; gap:4px;">
+            🗑️ Tout purger (0 coursiers)
+          </button>
+        </div>
         <div id="coursiersContainer"></div>
       </div>
 
@@ -607,8 +612,8 @@
 
     function getCoursiers() {
       let couriers = JSON.parse(localStorage.getItem('ke_couriers_v5') || '[]');
-      const demoIds = ['ag-yde-1', 'ag-yde-2', 'ag-yde-3', 'ag-dla-1', 'ag-dla-2', 'ag-bta-1', 'ag-bta-2', 'ag-bda-1', 'ag-baf-1'];
-      const demoNames = ['Marcel Mbengono', 'Christian Njoya', 'Fabrice Kamga', 'Emmanuel Epoh', 'Arsène Ndongo', 'Alain Ndongo', 'Clarisse Fotso'];
+      const demoIds = ['ag-yde-1', 'ag-yde-2', 'ag-yde-3', 'ag-dla-1', 'ag-dla-2', 'ag-dla-3', 'ag-bfs-1', 'ag-gra-1', 'ag-krb-1', 'ag-bta-1', 'ag-bta-2', 'ag-bda-1', 'ag-baf-1'];
+      const demoNames = ['Marcel Mbengono', 'Christian Njoya', 'Fabrice Kamga', 'Emmanuel Epoh', 'Cédric Talla', 'Arsène Ndongo', 'Rodrigue Fogue', 'Ahmadou Bello', 'Patrick Mengue', 'Alain Ndongo', 'Clarisse Fotso'];
       couriers = couriers.filter(c => !demoIds.includes(c.id) && !demoNames.includes(c.name));
       localStorage.setItem('ke_couriers_v5', JSON.stringify(couriers));
       return couriers;
@@ -630,7 +635,7 @@
       let html = '';
       coursiers.forEach(c => {
         html += `
-          <div class="item-card" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div class="item-card" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:8px;">
             <div>
               <div style="font-weight:800; font-size:0.88rem; color:var(--blue-deep);">${c.name}</div>
               <div style="font-size:0.75rem; color:var(--text-muted);">📞 ${c.phone} &bull; 📍 ${c.city} (${c.district || ''})</div>
@@ -638,13 +643,34 @@
                 ${c.isCertified ? '🟢 Coursier Certifié &bull; Actif' : '⏳ En attente de validation'}
               </div>
             </div>
-            <a href="https://wa.me/237${(c.phone||'').replace(/\D/g, '')}" target="_blank" class="btn btn-sm btn-whatsapp">
-              WhatsApp
-            </a>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <a href="https://wa.me/237${(c.phone||'').replace(/\D/g, '')}" target="_blank" class="btn btn-sm btn-whatsapp">
+                WhatsApp
+              </a>
+              <button class="btn btn-sm btn-outline" onclick="deleteCoursier('${c.id || c.phone}')" style="color:var(--danger); border-color:var(--danger); display:flex; align-items:center; gap:4px; padding:6px 10px; font-weight:700;" title="Supprimer ce coursier">
+                🗑️ Supprimer
+              </button>
+            </div>
           </div>
         `;
       });
       container.innerHTML = html;
+    }
+
+    function deleteCoursier(id) {
+      if (!confirm('Supprimer définitivement ce coursier ?')) return;
+      let couriers = JSON.parse(localStorage.getItem('ke_couriers_v5') || '[]');
+      couriers = couriers.filter(c => c.id !== id && c.phone !== id);
+      localStorage.setItem('ke_couriers_v5', JSON.stringify(couriers));
+      renderCoursiers();
+      if (typeof initMap === 'function') initMap();
+    }
+
+    function purgeAllCoursiers() {
+      if (!confirm('Voulez-vous supprimer tous les coursiers démo et remettre le compteur à 0 ?')) return;
+      localStorage.setItem('ke_couriers_v5', '[]');
+      renderCoursiers();
+      if (typeof initMap === 'function') initMap();
     }
 
     function renderPrices() {
