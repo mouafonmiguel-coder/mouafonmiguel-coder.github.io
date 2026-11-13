@@ -452,15 +452,36 @@
       position: relative;
     }
     .admin-avatar-wrap {
-      width: 64px;
-      height: 64px;
+      width: 68px;
+      height: 68px;
       margin: 0 auto 8px auto;
       border-radius: 50%;
-      overflow: hidden;
-      border: 2.5px solid var(--gold-bright);
-      box-shadow: 0 4px 12px rgba(217,119,6,0.25);
       position: relative;
       background: #ffffff;
+    }
+    .admin-avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2.5px solid var(--gold-bright);
+      box-shadow: 0 4px 12px rgba(217,119,6,0.25);
+    }
+    .avatar-camera-badge {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      background: var(--blue-royal);
+      color: #ffffff;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      border: 2px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
     }
     .admin-avatar-img {
       width: 100%;
@@ -1384,6 +1405,23 @@
   </div>
 
   <!-- ========================================================================
+       MODAL : SÉCURITÉ PIN POUR AJOUT DE PHOTO ADMIN
+       ======================================================================== -->
+  <div id="adminPhotoPinModal" class="modal-overlay">
+    <div class="modal-content" style="max-width:340px; text-align:center;">
+      <div style="font-size:2rem; margin-bottom:6px;">🔒</div>
+      <div class="modal-title" style="margin-bottom:6px;">Sécurité Administrateur</div>
+      <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:12px;">Entrez votre code secret PIN (2026) pour ajouter votre photo de profil :</p>
+      <input type="password" id="photoPinInput" class="form-control" placeholder="Code PIN (2026)" style="text-align:center; font-size:1.1rem; letter-spacing:3px; margin-bottom:10px;">
+      <div id="photoPinError" style="font-size:0.72rem; color:var(--danger); margin-bottom:8px; display:none;">Code PIN incorrect.</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <button class="btn btn-outline btn-sm" onclick="closeAdminPhotoPinModal()">Annuler</button>
+        <button class="btn btn-gold btn-sm" onclick="validatePhotoPinAndUpload()">Valider</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
        MODAL : AUTHENTIFICATION CLIENT (CONNEXION & INSCRIPTION)
        ======================================================================== -->
   <div id="authModal" class="modal-overlay">
@@ -1587,8 +1625,8 @@
        JAVASCRIPT LOGIC
        ======================================================================== -->
   <script>
-    const APP_VERSION = '2.3.1';
-    const APP_BUILD = 2026111304;
+    const APP_VERSION = '2.4.0';
+    const APP_BUILD = 2026111305;
 
     const DEFAULT_AVATAR_MIGUEL = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231e3a8a'/><circle cx='50' cy='38' r='20' fill='%23d97706'/><path d='M20,90 Q50,60 80,90' fill='%23f59e0b'/><text x='50' y='44' font-family='sans-serif' font-size='18' font-weight='bold' fill='%230a192f' text-anchor='middle'>M</text></svg>";
     const DEFAULT_AVATAR_JAMIL = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230f2341'/><circle cx='50' cy='38' r='20' fill='%23f59e0b'/><path d='M20,90 Q50,60 80,90' fill='%23d97706'/><text x='50' y='44' font-family='sans-serif' font-size='18' font-weight='bold' fill='%230a192f' text-anchor='middle'>J</text></svg>";
@@ -1954,20 +1992,83 @@
       admins.forEach(adm => {
         html += `
           <div class="admin-profile-card">
-            <div class="admin-avatar-wrap">
-              <img src="${adm.photoUrl || (adm.city === 'Yaoundé' ? DEFAULT_AVATAR_MIGUEL : DEFAULT_AVATAR_JAMIL)}" class="admin-avatar-img" alt="${adm.name}">
+            <div class="admin-avatar-wrap" onclick="triggerAdminPhotoUpload('${adm.id}')" style="cursor:pointer;" title="Cliquez pour changer la photo">
+              <img src="${adm.photoUrl || (adm.city === 'Yaoundé' ? DEFAULT_AVATAR_MIGUEL : DEFAULT_AVATAR_JAMIL)}" class="admin-avatar-img" alt="${adm.name}" id="home-avatar-img-${adm.id}">
+              <div class="avatar-camera-badge">📷</div>
             </div>
             <div class="admin-name-title">${adm.name}</div>
             <div>
               <span class="admin-status-badge">${adm.statusTitle || '👑 Administrateur'}</span>
             </div>
-            <a href="https://wa.me/237${adm.phone}?text=Bonjour%20${encodeURIComponent(adm.name)},%20j'aimerais%20solliciter%20un%20service%20coursier%20sur%20Kamer%20Express" target="_blank" class="btn btn-whatsapp btn-sm" style="margin-top:2px;">
-              WhatsApp
-            </a>
+            <div style="display:flex; flex-direction:column; gap:5px; margin-top:4px;">
+              <a href="https://wa.me/237${adm.phone}?text=Bonjour%20${encodeURIComponent(adm.name)},%20j'aimerais%20solliciter%20un%20service%20coursier%20sur%20Kamer%20Express" target="_blank" class="btn btn-whatsapp btn-sm">
+                WhatsApp
+              </a>
+              <button class="btn btn-outline btn-sm" style="font-size:0.72rem; padding:4px 6px; color:var(--blue-royal); border-color:var(--blue-royal);" onclick="triggerAdminPhotoUpload('${adm.id}')">
+                📷 Ajouter ma Photo
+              </button>
+            </div>
+            <input type="file" id="admin-home-photo-input-${adm.id}" accept="image/*" style="display:none;" onchange="handleAdminPhotoUpload('${adm.id}', this)">
           </div>
         `;
       });
       list.innerHTML = html;
+    }
+
+    let pendingPhotoAdminId = null;
+
+    function triggerAdminPhotoUpload(adminId) {
+      if (sessionStorage.getItem('ke_admin_auth') === '2026') {
+        const fileInput = document.getElementById('admin-home-photo-input-' + adminId);
+        if (fileInput) fileInput.click();
+      } else {
+        pendingPhotoAdminId = adminId;
+        const modal = document.getElementById('adminPhotoPinModal');
+        if (modal) {
+          document.getElementById('photoPinInput').value = '';
+          document.getElementById('photoPinError').style.display = 'none';
+          modal.classList.add('active');
+        }
+      }
+    }
+
+    function closeAdminPhotoPinModal() {
+      const modal = document.getElementById('adminPhotoPinModal');
+      if (modal) modal.classList.remove('active');
+      pendingPhotoAdminId = null;
+    }
+
+    function validatePhotoPinAndUpload() {
+      const pin = document.getElementById('photoPinInput').value.trim();
+      const err = document.getElementById('photoPinError');
+      if (pin === '2026') {
+        sessionStorage.setItem('ke_admin_auth', '2026');
+        closeAdminPhotoPinModal();
+        if (pendingPhotoAdminId) {
+          const fileInput = document.getElementById('admin-home-photo-input-' + pendingPhotoAdminId);
+          if (fileInput) fileInput.click();
+        }
+      } else {
+        if (err) err.style.display = 'block';
+      }
+    }
+
+    function handleAdminPhotoUpload(adminId, input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          let admins = getStoredAdmins();
+          let adm = admins.find(a => a.id === adminId);
+          if (adm) {
+            adm.photoUrl = e.target.result;
+            saveStoredAdmins(admins);
+            alertInApp('✅ Photo de profil de ' + adm.name + ' enregistrée avec succès !');
+            renderHomeAdmins();
+            renderAdminProfilesEditor();
+          }
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
     }
 
     function startOrderForService(serviceKey) {
