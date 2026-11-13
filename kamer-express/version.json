@@ -1,12 +1,11 @@
 {
   "app": "KAMER_EXPRESS_COURSIER_237",
-  "version": "2.5.0",
-  "build": 2026111306,
+  "version": "2.5.1",
+  "build": 2026111307,
   "lastUpdated": "13 Novembre 2026",
   "features": [
-    "Mode Guide & Présentation exclusif pour les visiteurs",
-    "Verrouillage de l'accès complet : Inscription obligatoire pour commander et voir toutes les prestations",
-    "Déblocage instantané de l'application dès la création de compte ou connexion",
-    "Boutons d'ajout de photo de profil pour Miguel et Jamil sécurisés par code PIN 2026"
+    "Gestion exclusive des profils et photos Administrateurs dans l'Espace Admin (PIN 2026)",
+    "Cartes publiques de Direction épurées et professionnelles (Miguel & Jamil avec contact direct WhatsApp)",
+    "Mode Guide & Présentation pour visiteurs et inscription obligatoire pour débloquer l'application"
   ]
 }
