@@ -1,8 +1,8 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.30.0",
-  "build": 2026111348,
-  "lastUpdated": "13 Novembre 2026 - R\u00e9tablissement Int\u00e9gral Accueil et Inscription",
+  "version": "2.31.0",
+  "build": 2026111349,
+  "lastUpdated": "13 Novembre 2026 - Version Stable 100% Blind\u00e9e",
   "direction": {
     "miguel": "Charg\u00e9 de Communication (Yaound\u00e9)",
     "jamil": "Charg\u00e9 de Communication (Bertoua)"
@@ -10,6 +10,7 @@
   "features": [
     "Affichage imm\u00e9diat et garanti des profils Miguel & JAMIL sous la section Accueil",
     "Cr\u00e9ation de compte et connexion 100% op\u00e9rationnelles",
+    "Re\u00e7u officiel avec hash SHA-256 et modal de transaction infaillible",
     "Prestation : Retrait de dipl\u00f4mes et extrait de casier judiciaire"
   ]
 }
