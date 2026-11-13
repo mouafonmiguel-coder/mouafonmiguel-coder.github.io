@@ -1,12 +1,11 @@
 {
   "app": "KAMER_EXPRESS_COURSIER_237",
-  "version": "2.3.0",
-  "build": 2026111303,
+  "version": "2.3.1",
+  "build": 2026111304,
   "lastUpdated": "13 Novembre 2026",
   "features": [
-    "Direction & Profils officiels des Administrateurs Miguel & Jamil avec Statut Admin",
-    "Génération systématique de Reçu Officiel de Transaction pour chaque commande",
-    "Historique complet des reçus accessible par les clients et les administrateurs",
-    "Option d'impression et de partage WhatsApp du reçu de transaction"
+    "Suppression complète de la boîte d'estimation de prix dans le formulaire de commande",
+    "Tarifs fixés et négociés directement par les Administrateurs Miguel & Jamil",
+    "Reçu de transaction officiel généré à chaque commande"
   ]
 }
