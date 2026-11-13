@@ -1,15 +1,14 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.36.0",
-  "build": 2026111354,
-  "lastUpdated": "13 Novembre 2026 - Termes & Conditions int\u00e9gr\u00e9s dans la page d'inscription",
+  "version": "2.37.0",
+  "build": 2026111355,
+  "lastUpdated": "13 Novembre 2026 - Nettoyage Accueil (Suppression du footer termes)",
   "direction": {
     "miguel": "Charg\u00e9 de Communication (Yaound\u00e9)",
     "jamil": "Charg\u00e9 de Communication (Bertoua)"
   },
   "features": [
-    "Affichage direct et lisible des Termes & Conditions G\u00e9n\u00e9rales dans le formulaire d'inscription",
-    "Choix explicite : J'accepte ou Je refuse",
-    "Blocage s\u00e9curis\u00e9 si les conditions sont refus\u00e9es"
+    "Suppression du bloc de pied de page sur l'accueil",
+    "Maintien exclusif des Termes & Conditions dans le formulaire d'inscription"
   ]
 }
