@@ -287,6 +287,32 @@
     <!-- TAB 2: ACTIVITY FEED & REGISTRY -->
     <div id="tab-activity" class="tab-pane" style="display:none">
       <div class="feed-container">
+                <div style="background:#f0fdf4; border:1.5px solid #16a34a; border-radius:12px; padding:16px; margin-bottom:16px;">
+          <div style="font-weight:800; font-size:0.92rem; color:#14532d; margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+            <span>⚡ Enregistrement Rapide / Synchronisation Forcée d'un Commerçant</span>
+          </div>
+          <p style="font-size:0.8rem; color:#166534; margin-bottom:10px;">
+            Enregistrez manuellement un commerçant ou forcez l'actualisation immédiate du registre :
+          </p>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:10px; margin-bottom:10px;">
+            <input type="text" id="man-name" placeholder="Nom de la Boutique (ex: Alimentation Centrale)" style="padding:9px 12px; border:1px solid #86efac; border-radius:8px; font-size:0.85rem; width:100%; box-sizing:border-box;">
+            <input type="tel" id="man-phone" placeholder="Numéro Téléphone (ex: 692168264)" style="padding:9px 12px; border:1px solid #86efac; border-radius:8px; font-size:0.85rem; width:100%; box-sizing:border-box;">
+            <input type="text" id="man-ville" placeholder="Ville (ex: Douala / Yaoundé)" style="padding:9px 12px; border:1px solid #86efac; border-radius:8px; font-size:0.85rem; width:100%; box-sizing:border-box;">
+          </div>
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <button type="button" class="btn-action" onclick="manualRegisterMerchant()" style="background:#16a34a; margin:0; padding:9px 16px; font-size:0.85rem; font-weight:700;">
+              ➕ Enregistrer ce Commerçant
+            </button>
+            <button type="button" class="btn-action" onclick="loadRealData()" style="background:#0284c7; margin:0; padding:9px 16px; font-size:0.85rem; font-weight:700;">
+              🔄 Synchroniser NTFY Live
+            </button>
+            <button type="button" class="btn-action" onclick="exportMerchantsCSV()" style="background:#4b5563; margin:0; padding:9px 16px; font-size:0.85rem; font-weight:700;">
+              📥 Exporter CSV
+            </button>
+          </div>
+          <div id="man-status" style="margin-top:8px; font-size:0.82rem; font-weight:700;"></div>
+        </div>
+
         <div class="feed-header">
           <div class="feed-title">👥 Registre des Inscriptions & Filleuls Réels</div>
           <div style="display:flex;align-items:center;gap:10px">
@@ -371,7 +397,7 @@
   </div>
 
   <script>
-    const ADMIN_VERSION = 76;
+    const ADMIN_VERSION = 78;
     const VERSION_URL = 'https://mouafonmiguel-coder.github.io/carnet-credit/version.json';
     const NTFY_TOPIC = 'carnet_credit_live_miguel_prod_2026';
     const MASTER_SECRET = 'CC-MIGUEL-2026-7f3a91d4e8b2c6a5';
@@ -437,7 +463,7 @@
 
         loadRealData();
         if (!window._pollInterval) {
-          window._pollInterval = setInterval(loadRealData, 10000);
+          window._pollInterval = setInterval(loadRealData, 3000);
         }
       } catch (e) {
         if (errEl) errEl.textContent = 'Mot de passe incorrect.';
@@ -594,7 +620,54 @@
               const rawMsg = item.message;
               let data = null;
               try { data = JSON.parse(rawMsg); } catch (err) { data = { type: 'info', raw: rawMsg }; }
-              const key = (data.phone || '') + '_' + (data.type || '') + '_' + (data.ts || item.time);
+              if (!data) data = { type: 'info', raw: String(rawMsg || '') };
+
+              // Analyse intelligente des donnees NTFY (JSON ou chaine brute)
+              if (data.raw && typeof data.raw === 'string' && (!data.type || data.type === 'info' || !data.phone)) {
+                const rawStr = data.raw;
+                if (rawStr.includes('INSCRIPTION')) {
+                  data.type = 'reg';
+                  const parts = rawStr.split('|').map(s => s.trim());
+                  data.name = data.name || parts[1] || 'Nouveau Commerçant';
+                  data.phone = data.phone || (parts[2] ? parts[2].replace(/\D/g, '') : '');
+                  data.ville = data.ville || parts[3] || 'Cameroun';
+                  parts.slice(4).forEach(p => {
+                    if (p.startsWith('parrain:')) data.sponsor = p.replace('parrain:', '').trim();
+                    if (p.includes('google.com/maps')) {
+                      const m = p.match(/q=([0-9.-]+),([0-9.-]+)/);
+                      if (m) { data.lat = parseFloat(m[1]); data.lng = parseFloat(m[2]); }
+                    }
+                  });
+                } else if (rawStr.includes('ABONNEMENT')) {
+                  data.type = 'pay';
+                  const parts = rawStr.split('|').map(s => s.trim());
+                  data.name = data.name || parts[1] || 'Commerçant';
+                  data.phone = data.phone || (parts[2] ? parts[2].replace(/\D/g, '') : '');
+                  data.ville = data.ville || parts[3] || '';
+                  parts.slice(4).forEach(p => {
+                    if (p.startsWith('payeur:')) data.payPhone = p.replace('payeur:', '').trim();
+                    if (p.startsWith('transaction:')) data.txn = p.replace('transaction:', '').trim();
+                  });
+                  const mM = parts[0].match(/([0-9]+)\s*MOIS/i);
+                  data.months = data.months || (mM ? parseInt(mM[1]) : 1);
+                  const mA = parts[0].match(/\(([0-9\s]+)\s*F\)/i);
+                  data.amount = data.amount || (mA ? parseInt(mA[1].replace(/\s+/g, '')) : (data.months * 500));
+                } else if (rawStr.includes('BONUS')) {
+                  data.type = 'bonus';
+                  const parts = rawStr.split('|').map(s => s.trim());
+                  parts.forEach(p => {
+                    if (p.startsWith('parrain:')) data.parrain = p.replace('parrain:', '').trim();
+                    if (p.startsWith('filleul:')) data.filleul = p.replace('filleul:', '').trim();
+                    if (p.startsWith('code:')) data.code = p.replace('code:', '').trim();
+                  });
+                }
+              }
+
+              if (data.phone) data.phone = String(data.phone).replace(/\s+/g, '');
+              data.ts = data.ts || (item.time ? item.time * 1000 : Date.now());
+              data.d = data.d || new Date(data.ts).toLocaleString('fr-FR');
+
+              const key = (data.phone || 'ev') + '_' + (data.type || '') + '_' + (data.ts || item.time);
               if (!deletedKeys.includes(key) && !isBlacklisted(data) && !allEvents.some(e => e._key === key)) {
                 allEvents.unshift({ ...data, _key: key, _srvTime: item.time });
 
@@ -994,6 +1067,73 @@
         `;
         feed.appendChild(item);
       });
+    }
+
+    
+    // ---------------- MANUAL MERCHANT REGISTRATION & EXPORT ----------------
+    async function manualRegisterMerchant() {
+      const name = (document.getElementById('man-name') ? document.getElementById('man-name').value : '').trim();
+      const phone = (document.getElementById('man-phone') ? document.getElementById('man-phone').value : '').trim().replace(/\D/g, '');
+      const ville = (document.getElementById('man-ville') ? document.getElementById('man-ville').value : '').trim() || 'Douala';
+      const statusEl = document.getElementById('man-status');
+
+      if (!phone || phone.length < 8) {
+        if (statusEl) statusEl.innerHTML = '<span style="color:#ef4444;">❌ Entrez un numéro de téléphone valide (ex: 692168264).</span>';
+        return;
+      }
+
+      const newMerch = {
+        type: 'reg',
+        name: name || 'Boutique ' + phone,
+        phone: phone,
+        ville: ville,
+        sponsor: null,
+        raw: `🆕 INSCRIPTION | ${name || 'Boutique ' + phone} | ${phone} | ${ville} | Ajouté manuellement par Admin`,
+        ts: Date.now(),
+        d: new Date().toLocaleString('fr-FR')
+      };
+
+      try {
+        if (statusEl) statusEl.innerHTML = '<span style="color:#059669;">⏳ Enregistrement et synchronisation en cours...</span>';
+        await fetch('https://ntfy.sh/' + NTFY_TOPIC, {
+          method: 'POST',
+          headers: {
+            'Title': 'Nouveau Commercant Carnet Credit (Admin)',
+            'Priority': 'high',
+            'Tags': 'busts_in_silhouette,tada'
+          },
+          body: JSON.stringify(newMerch)
+        });
+
+        if (statusEl) statusEl.innerHTML = `<span style="color:#059669;">✅ Commerçant <b>${newMerch.name}</b> (${phone}) enregistré et synchronisé avec succès !</span>`;
+        if (document.getElementById('man-name')) document.getElementById('man-name').value = '';
+        if (document.getElementById('man-phone')) document.getElementById('man-phone').value = '';
+        await loadRealData();
+      } catch (err) {
+        if (statusEl) statusEl.innerHTML = `<span style="color:#ef4444;">Erreur d'enregistrement : ${err.message}</span>`;
+      }
+    }
+
+    function exportMerchantsCSV() {
+      if (!allEvents || allEvents.length === 0) {
+        alert('Aucune donnée à exporter.');
+        return;
+      }
+      let csv = 'Nom;Telephone;Ville;Type;Date;Montant/Details\n';
+      allEvents.forEach(e => {
+        const nom = (e.name || e.filleul_name || 'Boutique').replace(/;/g, ' ');
+        const tel = (e.phone || e.parrain || '').replace(/;/g, ' ');
+        const ville = (e.ville || '').replace(/;/g, ' ');
+        const type = (e.type || 'info').replace(/;/g, ' ');
+        const dt = (e.d || (e.ts ? new Date(e.ts).toLocaleString('fr-FR') : '')).replace(/;/g, ' ');
+        const det = (e.raw || (e.amount ? e.amount + ' F' : '')).replace(/;/g, ' ');
+        csv += `${nom};${tel};${ville};${type};${dt};${det}\n`;
+      });
+      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `commercants_carnet_credit_${new Date().toISOString().slice(0, 10)}.csv`;
+      link.click();
     }
 
     function filterActivities() {
