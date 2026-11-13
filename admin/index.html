@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#0a192f">
-  <meta name="description" content="ADMIN HUB — Miguel : L'application d'administration centralisée pour Kamer Express et Carnet de Crédit.">
+  <meta name="description" content="ADMIN 237 — Miguel : L'application d'administration centralisée pour Kamer Express et Carnet de Crédit.">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="manifest.webmanifest">
-  <title>👑 ADMIN HUB — Miguel | Kamer Express & Carnet Crédit</title>
+  <title>👑 ADMIN 237 — Miguel & JAMIL | Tamanoa Express & Carnet Crédit</title>
 
   <style>
     :root {
@@ -457,8 +457,8 @@
     <div class="brand-wrap">
       <div class="brand-logo-icon">👑</div>
       <div>
-        <div class="brand-title">ADMIN HUB — Miguel</div>
-        <div class="brand-tagline">KAMER EXPRESS &bull; CARNET DE CRÉDIT</div>
+        <div class="brand-title">ADMIN 237 — Miguel</div>
+        <div class="brand-tagline">TAMANOA EXPRESS &bull; CARNET CRÉDIT</div>
       </div>
     </div>
     <button class="btn btn-sm btn-outline" style="color:#ffffff; border-color:rgba(255,255,255,0.3); width:auto;" onclick="lockHub()">
@@ -679,32 +679,44 @@
         <!-- Outil Déblocage & Ajout Rapide Carnet Crédit -->
         <div class="item-card" style="border:1.5px solid #16a34a; background:#f0fdf4; margin-bottom:14px;">
           <h3 style="font-size:0.92rem; font-weight:800; color:#14532d; margin-bottom:6px;">
-            ⚡ Déblocage Rapide & Synchronisation Client
+            ⚡ Déblocage & Générateur de Code Secret Client
           </h3>
           <p style="font-size:0.75rem; color:#166534; margin-bottom:10px;">
-            Entrez le numéro du client ayant payé par Orange Money (692 16 82 64) ou MTN MoMo (653 59 63 05) :
+            Règlement reçu sur Orange Money (<strong>692 16 82 64</strong>) ou MTN MoMo (<strong>653 59 63 05</strong>) :
           </p>
           <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:8px; margin-bottom:8px;">
-            <input type="text" id="carnetUnlockName" class="form-control" placeholder="Nom de la boutique (optionnel)" style="background:#ffffff;">
-            <input type="tel" id="carnetUnlockPhone" class="form-control" placeholder="Numéro client (ex: 692168264)" style="background:#ffffff;">
+            <input type="text" id="carnetUnlockName" class="form-control" placeholder="Nom de la boutique" style="background:#ffffff;">
+            <input type="tel" id="carnetUnlockPhone" class="form-control" placeholder="Numéro Téléphone (ex: 692168264)" style="background:#ffffff;">
             <input type="text" id="carnetUnlockVille" class="form-control" placeholder="Ville (ex: Douala)" style="background:#ffffff;">
           </div>
           <div class="form-group">
             <select id="carnetUnlockPack" class="form-control" style="background:#ffffff;">
-              <option value="1">Pack 1 Mois (500 FCFA)</option>
-              <option value="6">Pack 6 Mois (2 500 FCFA)</option>
-              <option value="12">Pack 12 Mois (5 000 FCFA)</option>
+              <option value="1">Pack 1 Mois — 500 FCFA</option>
+              <option value="2">Pack 2 Mois — 1 000 FCFA</option>
+              <option value="3">Pack 3 Mois — 1 500 FCFA</option>
+              <option value="6">Pack 6 Mois (Fidélité) — 2 500 FCFA</option>
+              <option value="12">Pack 12 Mois (Annuel) — 5 000 FCFA</option>
             </select>
           </div>
-          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
             <button class="btn btn-green" onclick="handleCarnetUnlock()" style="flex:1;">
-              ⚡ Valider le Paiement & Débloquer &rarr;
+              ⚡ Valider & Débloquer &rarr;
             </button>
-            <button class="btn btn-outline" onclick="fetchCarnetLiveData()" style="border-color:#16a34a; color:#16a34a; padding:8px 14px; font-weight:700;">
-              🔄 Actualiser
+            <button class="btn btn-gold" onclick="handleGenerateCodeInHub()" style="padding:8px 14px; font-weight:700;">
+              🔑 Générer Code PIN
+            </button>
+            <button class="btn btn-outline" onclick="exportCarnetHubCSV()" style="border-color:#16a34a; color:#16a34a; padding:8px 14px; font-weight:700;">
+              📥 Liste Excel (CSV)
             </button>
           </div>
-          <div id="carnetUnlockStatus" style="margin-top:8px; font-size:0.8rem; font-weight:700;"></div>
+          <div id="carnetUnlockStatus" style="margin-top:6px; font-size:0.82rem; font-weight:700;"></div>
+          <div id="carnetGeneratedCodeBox" style="display:none; margin-top:10px; padding:12px; background:#ffffff; border:1.5px solid #d97706; border-radius:8px; text-align:center;">
+            <div style="font-size:0.75rem; color:#b45309; font-weight:700;">CODE SECRET D'ACTIVATION À ENVOYER AU CLIENT :</div>
+            <div id="carnetGeneratedCodeVal" style="font-size:1.8rem; font-weight:900; letter-spacing:4px; color:#b45309; margin:6px 0;">000000</div>
+            <a id="carnetSendWaBtn" href="#" target="_blank" class="btn btn-sm btn-whatsapp" style="display:inline-block; margin-top:4px;">
+              💬 Envoyer le Code par WhatsApp au Client
+            </a>
+          </div>
         </div>
 
         <!-- Liste des Commerçants Carnet Crédit -->
@@ -723,12 +735,38 @@
         
         <div class="section-head">
           <h2 class="section-title">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-            Auto-Update & Synchronisation
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+            Application Mobile & Mises à Jour
           </h2>
         </div>
 
-        <div class="radar-box">
+        <!-- CARTE TÉLÉCHARGEMENT APK ANDROID NATIVE -->
+        <div class="item-card" style="border:2px solid #d97706; background:linear-gradient(135deg, #0a192f 0%, #1e3a8a 100%); color:#ffffff; margin-bottom:14px; padding:18px;">
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+            <div style="font-size:2rem; background:rgba(255,255,255,0.1); border-radius:12px; width:50px; height:50px; display:flex; align-items:center; justify-content:center;">
+              👑
+            </div>
+            <div>
+              <div style="font-size:1.05rem; font-weight:900; color:#f59e0b;">APPLICATION ANDROID OFFICIELLE</div>
+              <div style="font-size:0.75rem; color:#cbd5e1;">ADMIN 237 — Miguel & JAMIL (v1.3.0)</div>
+            </div>
+          </div>
+          <p style="font-size:0.8rem; line-height:1.4; color:#e2e8f0; margin-bottom:14px;">
+            Installez l'application native complète sur votre smartphone Android pour piloter Tamanoa Express et Carnet Crédit en toute autonomie :
+          </p>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <a href="../admin-apk/AdminMiguel.apk" download class="btn btn-gold" style="text-decoration:none; text-align:center; padding:12px 16px; font-weight:800; font-size:0.92rem; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 12px rgba(217,119,6,0.35);">
+              <span>📲 Télécharger AdminMiguel.apk</span>
+              <span style="font-size:0.75rem; opacity:0.9;">(Android)</span>
+            </a>
+            <button id="pwaInstallBtn" class="btn btn-outline" onclick="installPwaApp()" style="color:#ffffff; border-color:rgba(255,255,255,0.4); padding:10px 14px; font-size:0.82rem; font-weight:700;">
+              📲 Installer comme App Web (PWA Écran d'Accueil)
+            </button>
+          </div>
+        </div>
+
+        <!-- STATUT DES VERSIONS EN LIGNE -->
+        <div class="radar-box" style="margin-bottom:14px;">
           <div style="display:flex; align-items:center; gap:12px;">
             <div class="radar-pulse"></div>
             <div>
@@ -741,29 +779,46 @@
           </button>
         </div>
 
-        <div class="item-card">
+        <div class="item-card" style="margin-bottom:14px;">
           <h3 style="font-size:0.88rem; font-weight:800; color:var(--blue-deep); margin-bottom:8px;">
-            État des Applications de Miguel :
+            État des Systèmes Déployés :
           </h3>
           <div style="display:flex; flex-direction:column; gap:8px; font-size:0.8rem;">
             <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:#f1f5f9; border-radius:6px;">
-              <span><strong>Kamer Express (Coursier 237) :</strong></span>
-              <span style="color:var(--success); font-weight:800;">● v2.3.0 (En Ligne)</span>
+              <span><strong>Tamanoa Express (Coursier 237) :</strong></span>
+              <span style="color:var(--success); font-weight:800;">● v2.20.0 (En Ligne)</span>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:#f1f5f9; border-radius:6px;">
-              <span><strong>Carnet de Crédit :</strong></span>
-              <span style="color:var(--success); font-weight:800;">● v77 (En Ligne)</span>
+              <span><strong>Carnet de Crédit Digital :</strong></span>
+              <span style="color:var(--success); font-weight:800;">● v78 Live Sync (En Ligne)</span>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:#f1f5f9; border-radius:6px;">
-              <span><strong>Admin Hub :</strong></span>
-              <span style="color:var(--success); font-weight:800;">● v1.0.0 (En Ligne)</span>
+              <span><strong>Admin Hub Central :</strong></span>
+              <span style="color:var(--success); font-weight:800;">● v1.3.0 (En Ligne)</span>
             </div>
           </div>
 
-          <div style="margin-top:14px;">
-            <button class="btn btn-blue btn-sm" onclick="forceRefreshAllApps()">
+          <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn btn-blue btn-sm" onclick="forceRefreshAllApps()" style="flex:1;">
               ⚡ Forcer l'actualisation globale (Vider les caches)
             </button>
+          </div>
+        </div>
+
+        <!-- RACCOURCIS CONSOLES DÉDIÉES -->
+        <div class="item-card">
+          <h3 style="font-size:0.88rem; font-weight:800; color:var(--blue-deep); margin-bottom:8px;">
+            Liens & Consoles Spécialisées :
+          </h3>
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:0.8rem;">
+            <a href="../kamer-express/#admin" target="_blank" style="padding:10px; background:#eff6ff; border-radius:6px; color:#1e3a8a; text-decoration:none; font-weight:700; display:flex; justify-content:space-between; align-items:center;">
+              <span>🏍️ Console Secrète Tamanoa Express (#admin)</span>
+              <span>&rarr;</span>
+            </a>
+            <a href="../carnet-credit/admin-miguel-7f3a.html" target="_blank" style="padding:10px; background:#ecfdf5; border-radius:6px; color:#065f46; text-decoration:none; font-weight:700; display:flex; justify-content:space-between; align-items:center;">
+              <span>📒 Console Complète Carnet Crédit (admin-miguel)</span>
+              <span>&rarr;</span>
+            </a>
           </div>
         </div>
 
@@ -1278,6 +1333,88 @@
 
       if (badge) badge.textContent = '🟢 LIVE SYNC (3s)';
       renderCarnetDashboard();
+    }
+
+    
+    // ========================================================================
+    // CODE GENERATION & EXPORT LOGIC
+    // ========================================================================
+    const MASTER_SECRET_CC = 'CC-MIGUEL-2026-7f3a91d4e8b2c6a5';
+    const encText = new TextEncoder();
+
+    async function handleGenerateCodeInHub() {
+      const phoneInput = document.getElementById('carnetUnlockPhone');
+      const packSelect = document.getElementById('carnetUnlockPack');
+      const codeBox = document.getElementById('carnetGeneratedCodeBox');
+      const codeVal = document.getElementById('carnetGeneratedCodeVal');
+      const waBtn = document.getElementById('carnetSendWaBtn');
+
+      let rawPhone = (phoneInput ? phoneInput.value : '').replace(/\D/g, '');
+      if (rawPhone.length < 8) {
+        alertInApp('Veuillez entrer le numéro du commerçant (ex: 692168264).');
+        return;
+      }
+      if (rawPhone.length === 9 && rawPhone.startsWith('6')) rawPhone = '237' + rawPhone;
+
+      const months = parseInt(packSelect.value, 10) || 1;
+      const now = new Date();
+      const ym = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+
+      try {
+        const key = await crypto.subtle.importKey('raw', encText.encode(MASTER_SECRET_CC), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+        const sig = await crypto.subtle.sign('HMAC', key, encText.encode(rawPhone + ':' + months + ':' + ym));
+        const hex = [...new Uint8Array(sig)].map(x => x.toString(16).padStart(2, '0')).join('');
+        const code = String(parseInt(hex.slice(0, 12), 16) % 1000000).padStart(6, '0');
+
+        codeVal.textContent = code;
+        codeBox.style.display = 'block';
+
+        const waText = encodeURIComponent(`Bonjour, voici votre code d'activation Carnet de Crédit (${months} mois) : *${code}* . Ouvrez l'application, allez dans « Débloquer mon Carnet » et collez votre code.`);
+        waBtn.href = `https://wa.me/${rawPhone}?text=${waText}`;
+
+        alertInApp(`🔑 Code généré avec succès : ${code}`);
+      } catch (err) {
+        alertInApp('Erreur de génération : ' + err.message);
+      }
+    }
+
+    function exportCarnetHubCSV() {
+      if (!carnetLiveMerchants || carnetLiveMerchants.length === 0) {
+        alertInApp('Aucun commerçant à exporter.');
+        return;
+      }
+      let csv = 'Nom Boutique;Telephone;Ville;Statut/Pack;Date Inscription\n';
+      carnetLiveMerchants.forEach(m => {
+        csv += `${(m.name||'').replace(/;/g,' ')};${(m.phone||'').replace(/;/g,' ')};${(m.ville||'').replace(/;/g,' ')};${(m.pack||'').replace(/;/g,' ')};${(m.date||'').replace(/;/g,' ')}\n`;
+      });
+      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `commercants_carnet_credit_${new Date().toISOString().slice(0, 10)}.csv`;
+      link.click();
+    }
+
+    // PWA Install Prompt
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const btn = document.getElementById('pwaInstallBtn');
+      if (btn) btn.style.display = 'block';
+    });
+
+    function installPwaApp() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            alertInApp('✅ Application installée avec succès sur votre écran d accueil !');
+          }
+          deferredPrompt = null;
+        });
+      } else {
+        alertInApp('ℹ️ Pour installer l application : appuyez sur les 3 points en haut à droite de votre navigateur Chrome, puis sur « Ajouter à l écran d accueil ».');
+      }
     }
 
     function renderCarnetDashboard() {
