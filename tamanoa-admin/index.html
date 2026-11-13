@@ -420,7 +420,7 @@
       const orders = getOrders();
       document.getElementById('kpiOrders').innerText = orders.length;
       const rev = orders.reduce((s, o) => s + (o.price || 0), 0);
-      document.getElementById('kpiRevenue').innerText = rev.toLocaleString() + ' F';
+      document.getElementById('kpiRevenue').innerText = 'Sur devis';
 
       if (orders.length === 0) {
         container.innerHTML = `<div class="item-card" style="text-align:center; padding:30px; color:var(--text-muted); font-size:0.85rem; border:1px dashed #cbd5e1;">
@@ -677,12 +677,9 @@
       const container = document.getElementById('pricesContainer');
       container.innerHTML = `
         <div class="item-card">
-          <div style="font-weight:800; font-size:0.9rem; color:var(--blue-deep); margin-bottom:8px;">Grille Tarifaire Indicative :</div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:0.8rem;">
-            <div style="padding:8px; background:#f8fafc; border-radius:6px;"><strong>Dépôt de pli :</strong> 1 500 – 2 500 F</div>
-            <div style="padding:8px; background:#f8fafc; border-radius:6px;"><strong>Colis urgent :</strong> 2 500 – 4 000 F</div>
-            <div style="padding:8px; background:#f8fafc; border-radius:6px;"><strong>Achats express :</strong> 2 000 – 3 500 F</div>
-            <div style="padding:8px; background:#f8fafc; border-radius:6px;"><strong>Légalisation :</strong> 3 500 – 6 000 F</div>
+          <div style="font-weight:800; font-size:0.9rem; color:var(--blue-deep); margin-bottom:8px;">Tarification des Prestations :</div>
+          <div style="padding:14px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; font-size:0.85rem; color:var(--blue-deep); line-height:1.5;">
+            ℹ️ <strong>Tarification 100% sur devis :</strong> Aucun montant fixe n'est imposé par défaut. Les tarifs sont convenus directement entre le client et la Direction (<strong>Miguel</strong> &bull; 692 16 82 64 ou <strong>JAMIL</strong> &bull; 656 99 53 69) en fonction du trajet et de la nature du colis.
           </div>
         </div>
       `;
@@ -713,7 +710,7 @@
           <div>👤 <strong>Client :</strong> ${o.clientName} (${o.clientPhone})</div>
           <div>📍 <strong>Trajet :</strong> ${o.fromLoc} &rarr; ${o.toLoc} (${o.city})</div>
           <div>📦 <strong>Prestation :</strong> ${o.serviceTitle}</div>
-          <div>💰 <strong>Montant Payé :</strong> <span style="font-size:1rem; font-weight:900; color:var(--blue-deep);">${o.price.toLocaleString()} FCFA</span></div>
+          <div>💰 <strong>Montant :</strong> <span style="font-size:0.95rem; font-weight:900; color:var(--blue-deep);">Sur devis (accord Direction)</span></div>
           <div>💳 <strong>Mode :</strong> ${o.paymentMode}</div>
           <div>🕒 <strong>Date :</strong> ${o.createdAt}</div>
         </div>
