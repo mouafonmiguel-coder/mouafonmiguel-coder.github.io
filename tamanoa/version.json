@@ -1,15 +1,15 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.33.0",
-  "build": 2026111351,
-  "lastUpdated": "13 Novembre 2026 - Cr\u00e9ation de compte Instantan\u00e9e & Sans Cache",
+  "version": "2.34.0",
+  "build": 2026111352,
+  "lastUpdated": "13 Novembre 2026 - Termes & Conditions Directement Accessibles",
   "direction": {
     "miguel": "Charg\u00e9 de Communication (Yaound\u00e9)",
     "jamil": "Charg\u00e9 de Communication (Bertoua)"
   },
   "features": [
-    "Bouton Cr\u00e9er mon compte avec d\u00e9clenchement direct sans interm\u00e9diaire",
-    "Mise \u00e0 jour imm\u00e9diate du Service Worker sans cache bloquant",
-    "Affichage direct des cartes Accueil de Miguel & JAMIL"
+    "Affichage complet des Termes & CGU, S\u00e9curit\u00e9 SHA-256, Confidentialit\u00e9 et Mentions L\u00e9gales",
+    "Pied de page avec acc\u00e8s 1-clic aux Termes et Conditions",
+    "Modal interactif \u00e0 4 onglets complets"
   ]
 }
