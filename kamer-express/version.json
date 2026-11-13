@@ -1,0 +1,12 @@
+{
+  "app": "KAMER_EXPRESS_COURSIER_237",
+  "version": "2.2.0",
+  "build": 2026111302,
+  "lastUpdated": "13 Novembre 2026",
+  "features": [
+    "Gestion dynamique des tarifs par Miguel & Jamil dans le Dashboard Admin",
+    "Dashboard statistique complet : nombre d'agents, clients inscrits et suivi d'activité",
+    "Détecteur automatique de mise à jour pour les nouvelles fonctionnalités",
+    "Mode d'affichage des prestations sur devis ou tarif personnalisé"
+  ]
+}
