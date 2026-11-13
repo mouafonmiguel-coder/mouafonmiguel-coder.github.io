@@ -1,15 +1,15 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.38.0",
-  "build": 2026111356,
-  "lastUpdated": "13 Novembre 2026 - Bouton Corbeille & Purge Coursiers dans l'Admin",
+  "version": "2.39.0",
+  "build": 2026111357,
+  "lastUpdated": "13 Novembre 2026 - Tarification 100% Sur Devis (Aucun montant fixe impos\u00e9)",
   "direction": {
     "miguel": "Charg\u00e9 de Communication (Yaound\u00e9)",
     "jamil": "Charg\u00e9 de Communication (Bertoua)"
   },
   "features": [
-    "Bouton Corbeille (\ud83d\uddd1\ufe0f Supprimer) ajout\u00e9 sur chaque fiche de coursier",
-    "Bouton de purge globale '\ud83d\uddd1\ufe0f Tout purger' pour r\u00e9initialiser le compteur \u00e0 0",
-    "Filtrage automatique et purge d\u00e9finitive de tous les anciens coursiers d\u00e9mo"
+    "Suppression totale de tout montant fixe (2500 FCFA, 1500 FCFA, etc.)",
+    "Affichage 'Sur devis / Selon la distance' sur tous les re\u00e7us et prestations",
+    "Tarification enti\u00e8rement libre et n\u00e9goci\u00e9e par Miguel et JAMIL"
   ]
 }
