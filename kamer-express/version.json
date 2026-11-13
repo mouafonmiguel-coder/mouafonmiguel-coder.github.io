@@ -1,15 +1,16 @@
 {
   "app": "KAMER_EXPRESS_COURSIER_237",
-  "version": "2.11.0",
-  "build": 2026111323,
+  "version": "2.12.0",
+  "build": 2026111324,
   "lastUpdated": "13 Novembre 2026",
   "features": [
+    "Termes & Conditions Générales d'Utilisation (CGU) et Mentions Légales intégrés",
+    "Sécurité maximale anti-piratage : Chiffrement SHA-256 et sel applicatif sur les mots de passe",
+    "Protection anti-force brute (Rate Limiter avec verrouillage automatique après 5 échecs)",
+    "Signature numérique cryptographique infalsifiable sur tous les reçus de transaction",
+    "Journal d'audit de sécurité et scanner d'intégrité de la base de données dans l'espace Admin",
     "Carte interactive et Radar GPS en direct des coursiers dans l'application",
     "Géolocalisation en temps réel (GPS) et calcul de distance aux agents",
-    "Filtres par ville (Yaoundé, Douala, Bafoussam, Garoua, Kribi, etc.) et statut",
-    "Fiches détaillées des agents certifiés avec contact direct WhatsApp et commande immédiate",
-    "Formulaire de candidature coursier avec CNI et plan de localisation conservé",
-    "Saisie libre et personnalisée du type de prestation dans le formulaire de commande",
     "Photos et statuts officiels de Miguel et JAMIL"
   ]
 }
