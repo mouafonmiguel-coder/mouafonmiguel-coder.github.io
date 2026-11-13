@@ -1989,8 +1989,8 @@
         name: 'Miguel',
         phone: '692168264',
         city: 'Yaoundé',
-        role: 'Administrateur Principal',
-        statusTitle: '👑 Administrateur Principal (Yaoundé)',
+        role: 'Chargé de Communication',
+        statusTitle: '📢 Chargé de Communication (Yaoundé)',
         isAdmin: true,
         photoUrl: DEFAULT_AVATAR_MIGUEL
       },
@@ -2427,8 +2427,8 @@
       if (miguel) {
         miguel.name = 'Miguel';
         miguel.city = 'Yaoundé';
-        miguel.role = 'Administrateur Principal';
-        miguel.statusTitle = '👑 Administrateur Principal (Yaoundé)';
+        miguel.role = 'Chargé de Communication';
+        miguel.statusTitle = '📢 Chargé de Communication (Yaoundé)';
         if (!miguel.photoUrl || miguel.photoUrl.startsWith('data:image/svg+xml')) {
           miguel.photoUrl = DEFAULT_AVATAR_MIGUEL;
         }
@@ -4257,7 +4257,7 @@
               <div>
                 <div style="font-size:0.95rem; font-weight:900; color:var(--blue-deep);">${adm.name}</div>
                 <div style="font-size:0.75rem; color:#92400e; font-weight:800; background:var(--gold-light); display:inline-block; padding:2px 6px; border-radius:4px; margin-top:2px;">
-                  ${adm.id === 'admin-miguel' ? '👑' : '📢'} ${adm.role} (${adm.city})
+                  📢 ${adm.role} (${adm.city})
                 </div>
               </div>
             </div>
