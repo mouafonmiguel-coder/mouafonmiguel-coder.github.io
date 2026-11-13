@@ -887,6 +887,98 @@
       height: 20px;
       stroke-width: 2.2;
     }
+
+    /* ========================================================================
+       GUIDE & RESTRICTED ACCESS STYLES
+       ======================================================================== */
+    .guide-badge-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(217, 119, 6, 0.15);
+      color: var(--gold-primary);
+      border: 1px solid rgba(217, 119, 6, 0.35);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 12px;
+    }
+
+    .account-unlock-card {
+      background: linear-gradient(135deg, #0a192f 0%, #1e3a8a 100%);
+      border: 2px solid var(--gold-primary);
+      border-radius: var(--radius-lg);
+      padding: 20px 16px;
+      text-align: center;
+      color: #ffffff;
+      margin: 18px 0;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .account-unlock-icon {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.12);
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid var(--gold-primary);
+    }
+
+    .account-unlock-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--gold-light);
+      margin-bottom: 6px;
+    }
+
+    .account-unlock-desc {
+      font-size: 0.82rem;
+      color: #e2e8f0;
+      line-height: 1.45;
+      margin-bottom: 14px;
+    }
+
+    .member-welcome-banner {
+      background: linear-gradient(135deg, #052e16 0%, #166534 100%);
+      border: 1px solid #22c55e;
+      border-radius: var(--radius-lg);
+      padding: 14px 16px;
+      color: #ffffff;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.15);
+    }
+
+    .nav-icon-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-lock-badge {
+      position: absolute;
+      top: -4px;
+      right: -6px;
+      font-size: 0.58rem;
+      background: #ef4444;
+      color: #ffffff;
+      border-radius: 50%;
+      width: 14px;
+      height: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid var(--card-bg);
+      font-weight: 900;
+    }
+
   </style>
 </head>
 <body>
@@ -936,79 +1028,113 @@
          ======================================================================== -->
     <main id="tab-home" class="tab-page active">
       
-      <!-- Bannière Hero -->
-      <div class="hero-banner">
-        <div class="hero-badge-city">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-          Yaoundé & Bertoua
-        </div>
-        <h1 class="hero-title">Simplifiez votre vie, <span>confiez-nous</span> vos besoins !</h1>
-        <p class="hero-desc">
-          Courses express, certification de documents, expédition de colis et démarches administratives sous la direction de vos administrateurs référents.
-        </p>
+      <!-- Bandeau Guide pour les visiteurs non connectés -->
+      <div id="guestGuideHero">
+        <div class="hero-banner">
+          <div class="guide-badge-top">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            Guide & Présentation Officielle
+          </div>
+          <div class="hero-badge-city" style="margin-bottom:8px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            Yaoundé & Bertoua
+          </div>
+          <h1 class="hero-title">Bienvenue sur <span>Kamer Express</span> (Coursier 237) !</h1>
+          <p class="hero-desc">
+            Simplifiez votre quotidien : courses express, certification de documents, expédition de colis et démarches administratives sous le contrôle direct de vos administrateurs référents.
+          </p>
 
-        <!-- Statistiques SANS EMOJIS -->
-        <div class="stats-clean-row">
-          <div class="stat-clean-item">
-            <div class="stat-number">100%</div>
-            <div class="stat-label">Fiable & Rapide</div>
+          <!-- Statistiques de Confiance -->
+          <div class="stats-clean-row">
+            <div class="stat-clean-item">
+              <div class="stat-number">100%</div>
+              <div class="stat-label">Fiable & Sécurisé</div>
+            </div>
+            <div class="stat-clean-item">
+              <div class="stat-number">Certifié</div>
+              <div class="stat-label">CNI & Domicile</div>
+            </div>
+            <div class="stat-clean-item">
+              <div class="stat-number">2 Villes</div>
+              <div class="stat-label">Yaoundé & Bertoua</div>
+            </div>
           </div>
-          <div class="stat-clean-item">
-            <div class="stat-number">Certifié</div>
-            <div class="stat-label">CNI & Domicile</div>
+        </div>
+
+        <!-- Guide Explicatif : Comment ça marche ? -->
+        <div class="how-it-works-box">
+          <div class="section-head">
+            <h2 class="section-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+              Guide : Comment utiliser l'application ?
+            </h2>
           </div>
-          <div class="stat-clean-item">
-            <div class="stat-number">2 Villes</div>
-            <div class="stat-label">Yaoundé & Bertoua</div>
+          <div class="steps-timeline">
+            <div class="step-item">
+              <div class="step-num-badge">1</div>
+              <div class="step-content">
+                <div class="step-title">Créer votre Compte Gratuit</div>
+                <div class="step-desc">Inscrivez-vous en 15 secondes avec votre numéro WhatsApp pour débloquer l'accès complet à toutes les prestations.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num-badge">2</div>
+              <div class="step-content">
+                <div class="step-title">Choisir votre Prestation</div>
+                <div class="step-desc">Courses urbaines, dépôt/retrait de colis en agence, démarches administratives ou retrait de diplômes.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num-badge">3</div>
+              <div class="step-content">
+                <div class="step-title">Prise en charge par l'Administrateur</div>
+                <div class="step-desc">Miguel (Admin Yaoundé) ou Jamil (Admin Bertoua) prend directement en charge et sécurise votre mission.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num-badge">4</div>
+              <div class="step-content">
+                <div class="step-title">Livraison & Reçu de Transaction Officiel</div>
+                <div class="step-desc">Un reçu officiel numéroté vous est remis avec toutes les clarifications nécessaires.</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Section Explicative : Comment ça marche ? -->
-      <div class="how-it-works-box">
-        <div class="section-head">
-          <h2 class="section-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
-            Comment ça marche ?
-          </h2>
-        </div>
-        <div class="steps-timeline">
-          <div class="step-item">
-            <div class="step-num-badge">1</div>
-            <div class="step-content">
-              <div class="step-title">Inscription / Connexion</div>
-              <div class="step-desc">Créez votre compte en 15 secondes avec votre nom et numéro WhatsApp.</div>
+      <!-- Bandeau Espace Membre Actif (Visible uniquement quand connecté) -->
+      <div id="memberWelcomeHero" style="display:none;">
+        <div class="member-welcome-banner">
+          <div>
+            <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:#86efac; font-weight:800; margin-bottom:2px;">
+              ✨ Espace Membre Débloqué
             </div>
-          </div>
-          <div class="step-item">
-            <div class="step-num-badge">2</div>
-            <div class="step-content">
-              <div class="step-title">Choix de la Prestation</div>
-              <div class="step-desc">Sélectionnez le service souhaité (Course, Colis, Certification, Diplôme).</div>
+            <div style="font-size:1.15rem; font-weight:900; color:#ffffff;" id="memberWelcomeName">
+              Bonjour !
             </div>
-          </div>
-          <div class="step-item">
-            <div class="step-num-badge">3</div>
-            <div class="step-content">
-              <div class="step-title">Prise en charge par l'Administrateur</div>
-              <div class="step-desc">Miguel (Admin Yaoundé) ou Jamil (Admin Bertoua) prend en charge votre mission.</div>
-            </div>
-          </div>
-          <div class="step-item">
-            <div class="step-num-badge">4</div>
-            <div class="step-content">
-              <div class="step-title">Livraison & Reçu de Transaction</div>
-              <div class="step-desc">Votre reçu officiel de transaction est généré avec toutes les clarifications.</div>
+            <div style="font-size:0.8rem; color:#dcfce7; margin-top:2px;">
+              Votre compte est actif. Vous pouvez commander et consulter vos reçus en toute liberté.
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Nos Prestations Populaires (Sans prix codés en dur) -->
-      <div class="section-head">
+      <!-- Direction & Administrateurs (Miguel & Jamil) -->
+      <div class="section-head" style="margin-top: 10px;">
+        <h2 class="section-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+          Direction & Administrateurs Référents
+        </h2>
+      </div>
+      <div class="admins-grid" id="homeAdminsList">
+        <!-- Rendu dynamique des Administrateurs Miguel & Jamil -->
+      </div>
+
+      <!-- Nos Prestations (Aperçu) -->
+      <div class="section-head" style="margin-top: 20px;">
         <h2 class="section-title">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-          Nos Prestations
+          Nos Prestations Proposées
         </h2>
         <span style="font-size: 0.75rem; color: var(--gold-primary); font-weight: 800; cursor: pointer;" onclick="switchTab('services')">Tout voir &rarr;</span>
       </div>
@@ -1017,21 +1143,27 @@
         <!-- Rendu dynamique par updatePricesDisplay() -->
       </div>
 
-      <!-- Direction & Administrateurs (Miguel & Jamil) -->
-      <div class="section-head" style="margin-top: 20px;">
-        <h2 class="section-title">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-          Direction & Administrateurs
-        </h2>
-      </div>
-      <div class="admins-grid" id="homeAdminsList">
-        <!-- Rendu dynamique des Administrateurs Miguel & Jamil -->
+      <!-- CARTE D'ACTION : VERROUILLAGE / DÉBLOCAGE COMPTE POUR VISITEURS -->
+      <div id="guestLockCard" class="account-unlock-card">
+        <div class="account-unlock-icon">🔒</div>
+        <div class="account-unlock-title">Créez votre compte pour accéder à toute l'application</div>
+        <p class="account-unlock-desc">
+          Pour passer une commande de course, consulter toutes les prestations en détail ou postuler comme coursier, <strong>créez votre compte client en 15 secondes</strong>.
+        </p>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <button class="btn btn-gold" onclick="openAuthModal(); switchAuthTab('register');">
+            🚀 Créer mon Compte Gratuit & Débloquer &rarr;
+          </button>
+          <button class="btn btn-outline btn-sm" onclick="openAuthModal(); switchAuthTab('login');" style="color:#ffffff; border-color:rgba(255,255,255,0.4);">
+            Déjà inscrit ? Se connecter
+          </button>
+        </div>
       </div>
 
-      <!-- Boutons d'action rapides -->
-      <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;">
+      <!-- BOUTONS D'ACTIONS RAPIDES POUR MEMBRES CONNECTÉS -->
+      <div id="memberQuickActions" style="display:none; flex-direction:column; gap:8px; margin-top: 14px;">
         <button class="btn btn-gold" onclick="switchTab('order')">
-          Passer une commande maintenant &rarr;
+          🛒 Passer une commande maintenant &rarr;
         </button>
         <button class="btn btn-outline btn-sm" onclick="openClientReceiptsModal()">
           🧾 Voir l'historique de mes reçus de transaction
@@ -1601,18 +1733,27 @@
   <nav class="bottom-nav">
     <button class="nav-btn active" onclick="switchTab('home')" id="nav-btn-home">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-      <span>Accueil</span>
+      <span id="nav-label-home">Guide</span>
     </button>
     <button class="nav-btn" onclick="switchTab('services')" id="nav-btn-services">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+      <div class="nav-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+        <span class="nav-lock-badge" id="lock-badge-services">🔒</span>
+      </div>
       <span>Prestations</span>
     </button>
     <button class="nav-btn" onclick="switchTab('order')" id="nav-btn-order">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+      <div class="nav-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        <span class="nav-lock-badge" id="lock-badge-order">🔒</span>
+      </div>
       <span>Commander</span>
     </button>
     <button class="nav-btn" onclick="switchTab('join-agent')" id="nav-btn-join-agent">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+      <div class="nav-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+        <span class="nav-lock-badge" id="lock-badge-join">🔒</span>
+      </div>
       <span>Devenir Agent</span>
     </button>
     <button class="nav-btn" onclick="switchTab('admin')" id="nav-btn-admin">
@@ -1625,8 +1766,8 @@
        JAVASCRIPT LOGIC
        ======================================================================== -->
   <script>
-    const APP_VERSION = '2.4.0';
-    const APP_BUILD = 2026111305;
+    const APP_VERSION = '2.5.0';
+    const APP_BUILD = 2026111306;
 
     const DEFAULT_AVATAR_MIGUEL = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231e3a8a'/><circle cx='50' cy='38' r='20' fill='%23d97706'/><path d='M20,90 Q50,60 80,90' fill='%23f59e0b'/><text x='50' y='44' font-family='sans-serif' font-size='18' font-weight='bold' fill='%230a192f' text-anchor='middle'>M</text></svg>";
     const DEFAULT_AVATAR_JAMIL = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230f2341'/><circle cx='50' cy='38' r='20' fill='%23f59e0b'/><path d='M20,90 Q50,60 80,90' fill='%23d97706'/><text x='50' y='44' font-family='sans-serif' font-size='18' font-weight='bold' fill='%230a192f' text-anchor='middle'>J</text></svg>";
@@ -1756,6 +1897,8 @@
     // ========================================================================
     // AUTHENTIFICATION CLIENT
     // ========================================================================
+    let pendingAction = null;
+
     function updateAuthUI() {
       const user = getCurrentUser();
       const authDot = document.getElementById('headerAuthDot');
@@ -1764,6 +1907,17 @@
       const regForm = document.getElementById('authRegisterForm');
       const loginForm = document.getElementById('authLoginForm');
       const tabs = document.getElementById('authTabsContainer');
+      const guestHero = document.getElementById('guestGuideHero');
+      const memberHero = document.getElementById('memberWelcomeHero');
+      const guestLockCard = document.getElementById('guestLockCard');
+      const memberQuickActions = document.getElementById('memberQuickActions');
+      const navLabelHome = document.getElementById('nav-label-home');
+      const memberWelcomeName = document.getElementById('memberWelcomeName');
+
+      // Lock badges on tabs
+      const badgeServices = document.getElementById('lock-badge-services');
+      const badgeOrder = document.getElementById('lock-badge-order');
+      const badgeJoin = document.getElementById('lock-badge-join');
 
       if (user) {
         if (authDot) authDot.style.background = '#22c55e';
@@ -1777,6 +1931,19 @@
         if (loginForm) loginForm.style.display = 'none';
         if (tabs) tabs.style.display = 'none';
 
+        // Home View in Member Mode
+        if (guestHero) guestHero.style.display = 'none';
+        if (memberHero) memberHero.style.display = 'block';
+        if (memberWelcomeName) memberWelcomeName.innerText = 'Bonjour, ' + user.name + ' ! 👋';
+        if (guestLockCard) guestLockCard.style.display = 'none';
+        if (memberQuickActions) memberQuickActions.style.display = 'flex';
+        if (navLabelHome) navLabelHome.innerText = 'Accueil';
+
+        // Hide lock badges
+        if (badgeServices) badgeServices.style.display = 'none';
+        if (badgeOrder) badgeOrder.style.display = 'none';
+        if (badgeJoin) badgeJoin.style.display = 'none';
+
         // Auto-fill order form
         const orderName = document.getElementById('orderClientName');
         const orderPhone = document.getElementById('orderClientPhone');
@@ -1787,6 +1954,19 @@
         if (authText) authText.innerText = 'S\'inscrire';
         if (loggedView) loggedView.style.display = 'none';
         if (tabs) tabs.style.display = 'grid';
+        
+        // Home View in Guide Mode
+        if (guestHero) guestHero.style.display = 'block';
+        if (memberHero) memberHero.style.display = 'none';
+        if (guestLockCard) guestLockCard.style.display = 'block';
+        if (memberQuickActions) memberQuickActions.style.display = 'none';
+        if (navLabelHome) navLabelHome.innerText = 'Guide';
+
+        // Show lock badges
+        if (badgeServices) badgeServices.style.display = 'inline-flex';
+        if (badgeOrder) badgeOrder.style.display = 'inline-flex';
+        if (badgeJoin) badgeJoin.style.display = 'inline-flex';
+
         switchAuthTab('register');
       }
     }
@@ -1838,6 +2018,7 @@
         alertInApp('Ce numéro est déjà inscrit. Vous êtes maintenant connecté !');
         setCurrentUser(existing);
         closeAuthModal();
+        handlePostAuthRedirect();
         return;
       }
 
@@ -1855,8 +2036,9 @@
       saveStoredUsers(users);
       setCurrentUser(newUser);
       closeAuthModal();
-      alertInApp('Compte créé avec succès ! Bienvenue sur Kamer Express.');
+      alertInApp('🎉 Compte créé avec succès ! Bienvenue ' + newUser.name.split(' ')[0] + '. Vous avez maintenant accès à toute l\'application !');
       renderAdminDashboard();
+      handlePostAuthRedirect();
     }
 
     function handleLoginSubmit(e) {
@@ -1881,18 +2063,47 @@
 
       setCurrentUser(user);
       closeAuthModal();
-      alertInApp('Ravi de vous revoir, ' + user.name.split(' ')[0] + ' !');
+      alertInApp('👋 Ravi de vous revoir, ' + user.name.split(' ')[0] + ' ! Accès complet activé.');
+      handlePostAuthRedirect();
+    }
+
+    function handlePostAuthRedirect() {
+      if (pendingAction) {
+        const action = pendingAction;
+        pendingAction = null;
+        if (action.type === 'tab') {
+          switchTab(action.tab);
+        } else if (action.type === 'order') {
+          startOrderForService(action.service);
+        } else if (action.type === 'receipts') {
+          openClientReceiptsModal();
+        }
+      } else {
+        updateAuthUI();
+      }
     }
 
     function logoutUser() {
       setCurrentUser(null);
-      alertInApp('Vous avez été déconnecté.');
+      switchTab('home');
+      alertInApp('Vous avez été déconnecté. L\'application est revenue en mode Guide.');
     }
 
     // ========================================================================
-    // TABS SWITCHING
+    // TABS SWITCHING (AVEC VERROUILLAGE SÉCURISÉ POUR NON-CONNECTÉS)
     // ========================================================================
     function switchTab(tabId) {
+      const user = getCurrentUser();
+
+      // Vérification d'accès : pour voir Prestations, Commander ou Devenir Agent, le client DOIT créer un compte ou se connecter !
+      if (!user && (tabId === 'services' || tabId === 'order' || tabId === 'join-agent')) {
+        pendingAction = { type: 'tab', tab: tabId };
+        openAuthModal();
+        switchAuthTab('register');
+        alertInApp('🔒 Veuillez créer un compte (ou vous connecter) pour accéder à cette section et passer vos commandes.');
+        return;
+      }
+
       const tabs = ['home', 'services', 'order', 'join-agent', 'admin'];
       tabs.forEach(t => {
         const page = document.getElementById('tab-' + t);
@@ -2072,6 +2283,14 @@
     }
 
     function startOrderForService(serviceKey) {
+      const user = getCurrentUser();
+      if (!user) {
+        pendingAction = { type: 'order', service: serviceKey };
+        openAuthModal();
+        switchAuthTab('register');
+        alertInApp('🔒 Créez d\'abord votre compte pour commander cette prestation.');
+        return;
+      }
       switchTab('order');
       const select = document.getElementById('orderService');
       if (select) {
@@ -2225,9 +2444,16 @@
     // MODAL HISTORIQUE DES REÇUS DU CLIENT
     // ========================================================================
     function openClientReceiptsModal() {
+      const currentUser = getCurrentUser();
+      if (!currentUser) {
+        pendingAction = { type: 'receipts' };
+        openAuthModal();
+        switchAuthTab('register');
+        alertInApp('🔒 Créez un compte ou connectez-vous pour consulter vos reçus de transaction.');
+        return;
+      }
       const container = document.getElementById('clientReceiptsListContainer');
       const orders = getStoredOrders();
-      const currentUser = getCurrentUser();
 
       let clientOrders = orders;
       if (currentUser) {
