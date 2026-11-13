@@ -1,0 +1,14 @@
+{
+  "name": "admin-miguel-apk",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ADMIN 237 - Application d Administration Tamanoa Express & Carnet Credit",
+  "dependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/core": "^6.2.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.2.0",
+    "@capacitor/assets": "^3.0.5"
+  }
+}
