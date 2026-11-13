@@ -1,43 +1,73 @@
-// Service Worker TAMANOA EXPRESS (Coursier 237) - Network First for Live Pages
-const CACHE_NAME = 'tamanoa-v33';
-const ASSETS = [
+// TAMANOA EXPRESS (Coursier 237) - Service Worker
+// Version: 2.35.0 (Network-First Cache)
+
+const CACHE_NAME = 'tamanoa-v35';
+const ASSETS_TO_CACHE = [
   './',
-  './index.html',
-  './manifest.webmanifest',
-  './icon-192.png',
-  './icon-512.png',
-  './version.json'
+  'manifest.webmanifest',
+  'icon-192.png',
+  'icon-512.png'
 ];
 
-self.addEventListener('install', (e) => {
+self.addEventListener('install', (event) => {
   self.skipWaiting();
-  e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(ASSETS_TO_CACHE).catch(err => {
+        console.warn('SW: Cache install warning', err);
+      });
+    })
   );
 });
 
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches.keys().then((keys) => Promise.all(
-      keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))
-    )).then(() => self.clients.claim())
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.filter((key) => key !== CACHE_NAME).map((key) => {
+          console.log('SW: Suppressing old cache', key);
+          return caches.delete(key);
+        })
+      );
+    }).then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('fetch', (e) => {
-  if (e.request.mode === 'navigate' || e.request.url.includes('index.html') || e.request.url.includes('version.json')) {
-    e.respondWith(
-      fetch(e.request)
+// Network-First strategy for index.html and version.json to ensure instant updates
+self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
+  
+  if (url.pathname.endsWith('index.html') || url.pathname.endsWith('/') || url.pathname.endsWith('version.json')) {
+    event.respondWith(
+      fetch(event.request)
         .then((response) => {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(e.request, clone));
+          if (response && response.status === 200) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
           return response;
         })
-        .catch(() => caches.match(e.request))
+        .catch(() => caches.match(event.request))
     );
-  } else {
-    e.respondWith(
-      caches.match(e.request).then((res) => res || fetch(e.request))
-    );
+    return;
   }
+
+  // Stale-While-Revalidate for other static assets
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {
+      const fetchPromise = fetch(event.request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200 && event.request.method === 'GET') {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+        return networkResponse;
+      }).catch((err) => {
+        return cachedResponse;
+      });
+
+      return cachedResponse || fetchPromise;
+    })
+  );
 });
