@@ -1,12 +1,12 @@
 {
   "app": "KAMER_EXPRESS_COURSIER_237",
-  "version": "2.8.2",
-  "build": 2026111314,
+  "version": "2.8.3",
+  "build": 2026111315,
   "lastUpdated": "13 Novembre 2026",
   "features": [
-    "Affichage direct et très visible des numéros de téléphone de Miguel (692 16 82 64) et Jamil (656 99 53 69)",
+    "Suppression de l'encadré téléphone en doublon sur les cartes d'administrateurs",
+    "Numéros de téléphone directement intégrés dans les boutons WhatsApp de Miguel (692 16 82 64) et Jamil (656 99 53 69)",
     "Photos officielles de Miguel MIGUEL et Jamil intégrées en haute définition",
-    "Couverture nationale : Déploiement officiel sur TOUT LE CAMEROUN (10 Régions)",
-    "Contrôle direct et instantané de chaque prix dans l'Espace Admin par Miguel & Jamil"
+    "Couverture nationale : Déploiement officiel sur TOUT LE CAMEROUN (10 Régions)"
   ]
 }
