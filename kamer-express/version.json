@@ -1,12 +1,12 @@
 {
   "app": "KAMER_EXPRESS_COURSIER_237",
-  "version": "2.5.2",
-  "build": 2026111308,
+  "version": "2.6.0",
+  "build": 2026111309,
   "lastUpdated": "13 Novembre 2026",
   "features": [
-    "Contrôle direct et instantané de chaque prix dans l'Espace Admin par Miguel & Jamil",
-    "Mise à jour en temps réel des tarifs sur l'Accueil, Prestations et Commandes",
-    "Sélection de mode d'affichage (Prix FCFA personnalisés ou Sur devis)",
-    "Gestion exclusive des profils et photos Administrateurs dans l'Admin"
+    "Couverture nationale : Déploiement officiel sur TOUT LE CAMEROUN (10 Régions)",
+    "Suppression des mentions restrictives 'Yaoundé & Bertoua' et '2 Villes'",
+    "Sélection de toutes les villes du Cameroun (Douala, Yaoundé, Bafoussam, Bertoua, Garoua, etc.) pour les commandes et inscriptions",
+    "Contrôle direct et instantané de chaque prix dans l'Espace Admin par Miguel & Jamil"
   ]
 }
