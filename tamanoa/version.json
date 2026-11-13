@@ -1,15 +1,15 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.28.0",
-  "build": 2026111346,
-  "lastUpdated": "13 Novembre 2026 - Inscription 100% Fluide et Fiable",
+  "version": "2.30.0",
+  "build": 2026111348,
+  "lastUpdated": "13 Novembre 2026 - R\u00e9tablissement Int\u00e9gral Accueil et Inscription",
   "direction": {
     "miguel": "Charg\u00e9 de Communication (Yaound\u00e9)",
     "jamil": "Charg\u00e9 de Communication (Bertoua)"
   },
   "features": [
-    "Correction int\u00e9grale du module d'inscription et de connexion client",
-    "Support de tous les formats de num\u00e9ros camerounais (6xx, +237, 237)",
-    "D\u00e9blocage instantan\u00e9 de l'espace membre et des commandes"
+    "Affichage imm\u00e9diat et garanti des profils Miguel & JAMIL sous la section Accueil",
+    "Cr\u00e9ation de compte et connexion 100% op\u00e9rationnelles",
+    "Prestation : Retrait de dipl\u00f4mes et extrait de casier judiciaire"
   ]
 }
