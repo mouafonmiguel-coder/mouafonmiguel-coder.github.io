@@ -1,11 +1,11 @@
 {
   "app": "KAMER_EXPRESS_COURSIER_237",
-  "version": "2.6.1",
-  "build": 2026111310,
+  "version": "2.7.0",
+  "build": 2026111311,
   "lastUpdated": "13 Novembre 2026",
   "features": [
-    "Présentation épurée des prestations sur la page Guide (sans mention 'Sur devis')",
-    "Affichage clair des différentes prestations et explications détaillées",
+    "Intégration de la photo officielle de profil de Jamil (Administrateur Référent)",
+    "Affichage haute définition avec bordure dorée de Direction sur la page Guide",
     "Couverture nationale : Déploiement officiel sur TOUT LE CAMEROUN (10 Régions)",
     "Contrôle direct et instantané de chaque prix dans l'Espace Admin par Miguel & Jamil"
   ]
