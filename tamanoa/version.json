@@ -1,15 +1,15 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.34.0",
-  "build": 2026111352,
-  "lastUpdated": "13 Novembre 2026 - Termes & Conditions Directement Accessibles",
+  "version": "2.35.0",
+  "build": 2026111353,
+  "lastUpdated": "13 Novembre 2026 - Fix Critique Inscription saveStoredUsers",
   "direction": {
     "miguel": "Charg\u00e9 de Communication (Yaound\u00e9)",
     "jamil": "Charg\u00e9 de Communication (Bertoua)"
   },
   "features": [
-    "Affichage complet des Termes & CGU, S\u00e9curit\u00e9 SHA-256, Confidentialit\u00e9 et Mentions L\u00e9gales",
-    "Pied de page avec acc\u00e8s 1-clic aux Termes et Conditions",
-    "Modal interactif \u00e0 4 onglets complets"
+    "Correction critique de l'enregistrement de compte (d\u00e9finition de saveStoredUsers)",
+    "Correction du calculateur de prix de commande (updateOrderPriceSummary)",
+    "Cr\u00e9ation et connexion instantan\u00e9es des clients sans aucun blocage"
   ]
 }
