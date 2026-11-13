@@ -1,5 +1,5 @@
-// Service Worker TAMANOA EXPRESS (Coursier 237)
-const CACHE_NAME = 'tamanoa-v22';
+// Service Worker TAMANOA EXPRESS (Coursier 237) - Network First for Live Pages
+const CACHE_NAME = 'tamanoa-v33';
 const ASSETS = [
   './',
   './index.html',
@@ -10,8 +10,9 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (e) => {
+  self.skipWaiting();
   e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
 });
 
@@ -24,7 +25,19 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-  e.respondWith(
-    fetch(e.request).catch(() => caches.match(e.request))
-  );
+  if (e.request.mode === 'navigate' || e.request.url.includes('index.html') || e.request.url.includes('version.json')) {
+    e.respondWith(
+      fetch(e.request)
+        .then((response) => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(e.request, clone));
+          return response;
+        })
+        .catch(() => caches.match(e.request))
+    );
+  } else {
+    e.respondWith(
+      caches.match(e.request).then((res) => res || fetch(e.request))
+    );
+  }
 });
