@@ -1,10 +1,10 @@
 {
   "app": "KAMER_EXPRESS_COURSIER_237",
-  "version": "2.8.1",
-  "build": 2026111313,
+  "version": "2.8.2",
+  "build": 2026111314,
   "lastUpdated": "13 Novembre 2026",
   "features": [
-    "Bouton d'inscription épuré : 'Créer mon compte' (sans émojis)",
+    "Affichage direct et très visible des numéros de téléphone de Miguel (692 16 82 64) et Jamil (656 99 53 69)",
     "Photos officielles de Miguel MIGUEL et Jamil intégrées en haute définition",
     "Couverture nationale : Déploiement officiel sur TOUT LE CAMEROUN (10 Régions)",
     "Contrôle direct et instantané de chaque prix dans l'Espace Admin par Miguel & Jamil"
