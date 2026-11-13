@@ -1,11 +1,12 @@
 {
   "app": "KAMER_EXPRESS_COURSIER_237",
-  "version": "2.9.2",
-  "build": 2026111320,
+  "version": "2.10.0",
+  "build": 2026111321,
   "lastUpdated": "13 Novembre 2026",
   "features": [
-    "Icône œil interactif pour afficher/masquer le mot de passe (Inscription, Connexion, Code PIN Admin)",
-    "Noms de Direction 'Miguel' et 'JAMIL' avec leurs photos officielles et contacts directs",
-    "Couverture nationale : Déploiement officiel sur TOUT LE CAMEROUN (10 Régions)"
+    "Saisie libre et personnalisée du type de prestation dans le formulaire de commande",
+    "Liste de suggestions intelligentes avec champ de texte modifiable par le client",
+    "Icône œil pour mot de passe et code PIN",
+    "Photos et statuts officiels de Miguel et JAMIL"
   ]
 }
