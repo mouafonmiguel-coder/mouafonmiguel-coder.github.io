@@ -1,8 +1,8 @@
 {
   "app": "ADMIN_HUB_MIGUEL_237",
-  "version": "1.0.0",
-  "build": 2026111301,
-  "lastUpdated": "13 Novembre 2026",
+  "version": "1.1.0",
+  "build": 2026111333,
+  "lastUpdated": "13 Novembre 2026 - Synchro Live NTFY Carnet Credit",
   "features": [
     "Hub d'administration unifié pour Kamer Express et Carnet de Crédit",
     "Gestion des tarifs de coursier Miguel (Yaoundé) & Jamil (Bertoua)",
