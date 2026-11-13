@@ -1,15 +1,15 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.35.0",
-  "build": 2026111353,
-  "lastUpdated": "13 Novembre 2026 - Fix Critique Inscription saveStoredUsers",
+  "version": "2.36.0",
+  "build": 2026111354,
+  "lastUpdated": "13 Novembre 2026 - Termes & Conditions int\u00e9gr\u00e9s dans la page d'inscription",
   "direction": {
     "miguel": "Charg\u00e9 de Communication (Yaound\u00e9)",
     "jamil": "Charg\u00e9 de Communication (Bertoua)"
   },
   "features": [
-    "Correction critique de l'enregistrement de compte (d\u00e9finition de saveStoredUsers)",
-    "Correction du calculateur de prix de commande (updateOrderPriceSummary)",
-    "Cr\u00e9ation et connexion instantan\u00e9es des clients sans aucun blocage"
+    "Affichage direct et lisible des Termes & Conditions G\u00e9n\u00e9rales dans le formulaire d'inscription",
+    "Choix explicite : J'accepte ou Je refuse",
+    "Blocage s\u00e9curis\u00e9 si les conditions sont refus\u00e9es"
   ]
 }
