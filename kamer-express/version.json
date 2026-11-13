@@ -1,11 +1,12 @@
 {
   "app": "KAMER_EXPRESS_COURSIER_237",
-  "version": "2.5.1",
-  "build": 2026111307,
+  "version": "2.5.2",
+  "build": 2026111308,
   "lastUpdated": "13 Novembre 2026",
   "features": [
-    "Gestion exclusive des profils et photos Administrateurs dans l'Espace Admin (PIN 2026)",
-    "Cartes publiques de Direction épurées et professionnelles (Miguel & Jamil avec contact direct WhatsApp)",
-    "Mode Guide & Présentation pour visiteurs et inscription obligatoire pour débloquer l'application"
+    "Contrôle direct et instantané de chaque prix dans l'Espace Admin par Miguel & Jamil",
+    "Mise à jour en temps réel des tarifs sur l'Accueil, Prestations et Commandes",
+    "Sélection de mode d'affichage (Prix FCFA personnalisés ou Sur devis)",
+    "Gestion exclusive des profils et photos Administrateurs dans l'Admin"
   ]
 }
