@@ -1,16 +1,15 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.32.0",
-  "build": 2026111350,
-  "lastUpdated": "13 Novembre 2026 - Inscription & Connexion 100% D\u00e9bloqu\u00e9es",
+  "version": "2.33.0",
+  "build": 2026111351,
+  "lastUpdated": "13 Novembre 2026 - Cr\u00e9ation de compte Instantan\u00e9e & Sans Cache",
   "direction": {
     "miguel": "Charg\u00e9 de Communication (Yaound\u00e9)",
     "jamil": "Charg\u00e9 de Communication (Bertoua)"
   },
   "features": [
-    "Bouton Cr\u00e9er mon compte 100% interactif et infaillible",
-    "Affichage imm\u00e9diat des profils Miguel & JAMIL sous la section Accueil",
-    "Cr\u00e9ation de compte et connexion instantan\u00e9es",
-    "Re\u00e7u officiel avec hash SHA-256 et modal de transaction"
+    "Bouton Cr\u00e9er mon compte avec d\u00e9clenchement direct sans interm\u00e9diaire",
+    "Mise \u00e0 jour imm\u00e9diate du Service Worker sans cache bloquant",
+    "Affichage direct des cartes Accueil de Miguel & JAMIL"
   ]
 }
