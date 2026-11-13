@@ -523,7 +523,7 @@
       let admins = JSON.parse(localStorage.getItem('ke_admins_v5') || '[]');
       if (admins.length === 0) {
         admins = [
-          { id: 'admin-miguel', name: 'Miguel', phone: '692168264', city: 'Yaoundé', role: 'Administrateur Principal', photoUrl: DEFAULT_AVATAR_MIGUEL },
+          { id: 'admin-miguel', name: 'Miguel', phone: '692168264', city: 'Yaoundé', role: 'Chargé de Communication', photoUrl: DEFAULT_AVATAR_MIGUEL },
           { id: 'admin-jamil', name: 'JAMIL', phone: '656995369', city: 'Bertoua', role: 'Chargé de Communication', photoUrl: DEFAULT_AVATAR_JAMIL }
         ];
       } else {
@@ -531,7 +531,7 @@
         if (m) {
           m.name = 'Miguel';
           m.city = 'Yaoundé';
-          m.role = 'Administrateur Principal';
+          m.role = 'Chargé de Communication';
           if (!m.photoUrl || m.photoUrl.startsWith('data:image/svg+xml')) m.photoUrl = DEFAULT_AVATAR_MIGUEL;
         }
         const j = admins.find(a => a.id === 'admin-jamil');
@@ -554,7 +554,7 @@
               <div>
                 <div style="font-weight:900; font-size:1.05rem; color:var(--blue-deep);">${adm.name}</div>
                 <div style="font-size:0.75rem; font-weight:800; color:#92400e; background:var(--gold-light); display:inline-block; padding:2px 8px; border-radius:4px; margin-top:3px;">
-                  ${adm.id === 'admin-miguel' ? '👑' : '📢'} ${adm.role} (${adm.city})
+                  📢 ${adm.role} (${adm.city})
                 </div>
               </div>
             </div>
@@ -660,7 +660,7 @@
       leafletMap = L.map('trackingMap').setView([3.8480, 11.5021], 12);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(leafletMap);
 
-      L.marker([3.8480, 11.5021]).addTo(leafletMap).bindPopup('👑 Direction Tamanoa Express — Miguel (Administrateur Principal - Yaoundé)').openPopup();
+      L.marker([3.8480, 11.5021]).addTo(leafletMap).bindPopup('📢 Direction Tamanoa Express — Miguel (Chargé de Communication - Yaoundé)').openPopup();
       L.marker([4.5773, 13.6846]).addTo(leafletMap).bindPopup('📢 JAMIL — Chargé de Communication (Bertoua)');
     }
 
