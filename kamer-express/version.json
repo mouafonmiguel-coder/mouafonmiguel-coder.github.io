@@ -1,17 +1,16 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.20.0",
-  "build": 2026111333,
-  "lastUpdated": "13 Novembre 2026 - Suppression totale des comptes et commandes démo",
+  "version": "2.21.0",
+  "build": 2026111338,
+  "lastUpdated": "13 Novembre 2026 - Rôles officiels : Miguel Administrateur Principal & JAMIL Chargé de Communication",
+  "direction": {
+    "miguel": "Administrateur Principal (Yaoundé)",
+    "jamil": "Chargé de Communication (Bertoua)"
+  },
   "features": [
     "Suppression de l'option espèces/cash pour sécuriser 100% des flux financiers vers la Direction",
     "Modes de paiement numériques exclusifs : Passerelle Fapshi (OM / MoMo / Carte), Orange Money 692 16 82 64 et MTN MoMo 653 59 63 05",
     "Suppression du montant fixe 2500 FCFA sur le reçu officiel",
     "Renommage officiel en TAMANOA EXPRESS (Coursier 237)"
-  ],
-  "changes": [
-    "Suppression intégrale et définitive de tous les comptes et commandes de test/démo (Nathalie Manga, Alain Ndongo, Clarisse Fotso)",
-    "Base de données locale propre et prête pour les vrais clients en production",
-    "Paiements 100% numériques Fapshi, OM (692 16 82 64) et MoMo (653 59 63 05) de Miguel"
   ]
 }
