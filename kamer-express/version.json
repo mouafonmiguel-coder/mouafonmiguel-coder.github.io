@@ -1,12 +1,12 @@
 {
   "app": "KAMER_EXPRESS_COURSIER_237",
-  "version": "2.2.0",
-  "build": 2026111302,
+  "version": "2.3.0",
+  "build": 2026111303,
   "lastUpdated": "13 Novembre 2026",
   "features": [
-    "Gestion dynamique des tarifs par Miguel & Jamil dans le Dashboard Admin",
-    "Dashboard statistique complet : nombre d'agents, clients inscrits et suivi d'activité",
-    "Détecteur automatique de mise à jour pour les nouvelles fonctionnalités",
-    "Mode d'affichage des prestations sur devis ou tarif personnalisé"
+    "Direction & Profils officiels des Administrateurs Miguel & Jamil avec Statut Admin",
+    "Génération systématique de Reçu Officiel de Transaction pour chaque commande",
+    "Historique complet des reçus accessible par les clients et les administrateurs",
+    "Option d'impression et de partage WhatsApp du reçu de transaction"
   ]
 }
