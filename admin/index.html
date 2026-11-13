@@ -627,31 +627,45 @@
       </main>
 
       <!-- ====================================================================
-           ONGLET 2 : CARNET DE CRÉDIT
+           ONGLET 2 : CARNET DE CRÉDIT (SYNCHRONISATION TEMPS RÉEL)
            ==================================================================== -->
       <main id="main-tab-carnet" class="main-tab-pane">
         
-        <div class="section-head">
+        <div class="section-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
           <h2 class="section-title">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-            Carnet de Crédit Digital
+            Carnet de Crédit Digital &bull; Direct Live
           </h2>
+          <span id="carnetSyncBadge" style="background:#ecfdf5; color:#059669; font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:999px; border:1px solid #a7f3d0;">
+            🟢 LIVE SYNC (3s)
+          </span>
+        </div>
+
+        <!-- Console Dédiée Carnet Crédit Direct Link -->
+        <div class="item-card" style="border:1.5px solid #0284c7; background:#f0f9ff; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <div style="font-weight:800; font-size:0.92rem; color:#0369a1;">📊 Console Admin Dédiée Carnet Crédit</div>
+            <div style="font-size:0.75rem; color:#0284c7; margin-top:2px;">Tableau de bord spécialisé avec graphiques d'évolution, géolocalisation GPS et générateur de codes.</div>
+          </div>
+          <a href="../carnet-credit/admin-miguel-7f3a.html" target="_blank" class="btn btn-sm btn-primary" style="background:#0284c7; border:none; text-decoration:none; padding:8px 14px; font-weight:700;">
+            Ouvrir la Console &rarr;
+          </a>
         </div>
 
         <!-- 4 KPIs Carnet Crédit -->
         <div class="kpi-grid">
           <div class="kpi-card">
-            <div class="kpi-val" id="carnetKpiSubscribers">3</div>
+            <div class="kpi-val" id="carnetKpiSubscribers">0</div>
             <div class="kpi-title">Commerçants</div>
-            <div class="kpi-detail">Actifs</div>
+            <div class="kpi-detail">Inscrits réels</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-val" id="carnetKpiActiveLocks">3</div>
-            <div class="kpi-title">Carnets Débloqués</div>
-            <div class="kpi-detail">Pack 1m / 6m</div>
+            <div class="kpi-val" id="carnetKpiActiveLocks">0</div>
+            <div class="kpi-title">Carnets Actifs</div>
+            <div class="kpi-detail">Packs validés</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-val" id="carnetKpiRevenue">1 500 F</div>
+            <div class="kpi-val" id="carnetKpiRevenue">0 F</div>
             <div class="kpi-title">Revenus Abonnements</div>
             <div class="kpi-detail">Orange & MTN</div>
           </div>
@@ -662,16 +676,18 @@
           </div>
         </div>
 
-        <!-- Outil Déblocage Rapide Carnet Crédit -->
+        <!-- Outil Déblocage & Ajout Rapide Carnet Crédit -->
         <div class="item-card" style="border:1.5px solid #16a34a; background:#f0fdf4; margin-bottom:14px;">
           <h3 style="font-size:0.92rem; font-weight:800; color:#14532d; margin-bottom:6px;">
-            ⚡ Déblocage Rapide d'un Carnet Client
+            ⚡ Déblocage Rapide & Synchronisation Client
           </h3>
           <p style="font-size:0.75rem; color:#166534; margin-bottom:10px;">
-            Entrez le numéro du client ayant payé par Orange Money ou MTN MoMo :
+            Entrez le numéro du client ayant payé par Orange Money (692 16 82 64) ou MTN MoMo (653 59 63 05) :
           </p>
-          <div class="form-group">
-            <input type="tel" id="carnetUnlockPhone" class="form-control" placeholder="Ex: 692168264" style="background:#ffffff;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:8px; margin-bottom:8px;">
+            <input type="text" id="carnetUnlockName" class="form-control" placeholder="Nom de la boutique (optionnel)" style="background:#ffffff;">
+            <input type="tel" id="carnetUnlockPhone" class="form-control" placeholder="Numéro client (ex: 692168264)" style="background:#ffffff;">
+            <input type="text" id="carnetUnlockVille" class="form-control" placeholder="Ville (ex: Douala)" style="background:#ffffff;">
           </div>
           <div class="form-group">
             <select id="carnetUnlockPack" class="form-control" style="background:#ffffff;">
@@ -680,14 +696,21 @@
               <option value="12">Pack 12 Mois (5 000 FCFA)</option>
             </select>
           </div>
-          <button class="btn btn-green" onclick="handleCarnetUnlock()">
-            Débloquer le Carnet Client &rarr;
-          </button>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn btn-green" onclick="handleCarnetUnlock()" style="flex:1;">
+              ⚡ Valider le Paiement & Débloquer &rarr;
+            </button>
+            <button class="btn btn-outline" onclick="fetchCarnetLiveData()" style="border-color:#16a34a; color:#16a34a; padding:8px 14px; font-weight:700;">
+              🔄 Actualiser
+            </button>
+          </div>
+          <div id="carnetUnlockStatus" style="margin-top:8px; font-size:0.8rem; font-weight:700;"></div>
         </div>
 
         <!-- Liste des Commerçants Carnet Crédit -->
-        <div class="section-head">
-          <h3 class="section-title" style="font-size:0.92rem;">Commerçants Abonnés</h3>
+        <div class="section-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <h3 class="section-title" style="font-size:0.92rem;">Commerçants Inscrits & Abonnés</h3>
+          <input type="text" id="carnetSearchInput" placeholder="🔍 Rechercher commerçant..." oninput="renderCarnetDashboard()" style="padding:6px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:0.8rem; max-width:200px;">
         </div>
         <div id="carnetUsersListContainer"></div>
 
@@ -799,7 +822,7 @@
         document.getElementById('hubLockView').style.display = 'none';
         document.getElementById('hubUnlockedContent').style.display = 'block';
         sessionStorage.setItem('hub_unlocked', '1');
-        renderAllHubData();
+        renderAllHubData(); fetchCarnetLiveData();
       } else {
         if (err) err.style.display = 'block';
       }
@@ -830,7 +853,7 @@
       if (activeBtn) activeBtn.classList.add('active');
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      renderAllHubData();
+      renderAllHubData(); fetchCarnetLiveData();
     }
 
     function switchKeSubtab(subtab) {
@@ -1093,48 +1116,222 @@
     }
 
     // ========================================================================
-    // CARNET DE CRÉDIT LOGIC
+    // CARNET DE CRÉDIT REAL-TIME SYNC LOGIC
     // ========================================================================
+    let carnetLiveMerchants = [];
+
+    async function fetchCarnetLiveData() {
+      const TOPIC = 'carnet_credit_live_miguel_prod_2026';
+      const badge = document.getElementById('carnetSyncBadge');
+      if (badge) badge.textContent = '🔄 SYNC...';
+
+      try {
+        const local = JSON.parse(localStorage.getItem('cc_admin_hub_merchants') || '[]');
+        if (local && local.length > 0) carnetLiveMerchants = local;
+      } catch (e) {}
+
+      try {
+        const resp = await fetch('https://ntfy.sh/' + TOPIC + '/json?poll=1&since=all');
+        if (resp.ok) {
+          const text = await resp.text();
+          const lines = text.trim().split('\n');
+          const merchantsMap = {};
+          let totalPayRevenue = 0;
+          let activePaidCount = 0;
+
+          carnetLiveMerchants.forEach(m => {
+            if (m.phone) merchantsMap[m.phone] = m;
+          });
+
+          lines.forEach(l => {
+            if (!l) return;
+            try {
+              const item = JSON.parse(l);
+              const rawMsg = item.message;
+              let data = null;
+              try { data = JSON.parse(rawMsg); } catch (err) { data = { type: 'info', raw: rawMsg }; }
+              if (!data) data = { type: 'info', raw: String(rawMsg || '') };
+
+              if (data.raw && typeof data.raw === 'string' && (!data.type || data.type === 'info' || !data.phone)) {
+                const rawStr = data.raw;
+                if (rawStr.includes('INSCRIPTION')) {
+                  data.type = 'reg';
+                  const parts = rawStr.split('|').map(s => s.trim());
+                  data.name = data.name || parts[1] || 'Nouveau Commerçant';
+                  data.phone = data.phone || (parts[2] ? parts[2].replace(/\D/g, '') : '');
+                  data.ville = data.ville || parts[3] || 'Cameroun';
+                } else if (rawStr.includes('ABONNEMENT')) {
+                  data.type = 'pay';
+                  const parts = rawStr.split('|').map(s => s.trim());
+                  data.name = data.name || parts[1] || 'Commerçant';
+                  data.phone = data.phone || (parts[2] ? parts[2].replace(/\D/g, '') : '');
+                  data.ville = data.ville || parts[3] || '';
+                  const mM = parts[0].match(/([0-9]+)\s*MOIS/i);
+                  data.months = data.months || (mM ? parseInt(mM[1]) : 1);
+                  const mA = parts[0].match(/\(([0-9\s]+)\s*F\)/i);
+                  data.amount = data.amount || (mA ? parseInt(mA[1].replace(/\s+/g, '')) : (data.months * 500));
+                }
+              }
+
+              if (data.phone) data.phone = String(data.phone).replace(/\s+/g, '');
+              data.ts = data.ts || (item.time ? item.time * 1000 : Date.now());
+              data.d = data.d || new Date(data.ts).toLocaleString('fr-FR');
+
+              if (data.type === 'reg' && data.phone) {
+                if (!merchantsMap[data.phone]) {
+                  merchantsMap[data.phone] = {
+                    name: data.name || ('Boutique ' + data.phone),
+                    phone: data.phone,
+                    ville: data.ville || 'Cameroun',
+                    pack: '🆓 Essai Gratuit (Inscrit)',
+                    isPaid: false,
+                    date: data.d,
+                    ts: data.ts
+                  };
+                }
+              } else if (data.type === 'pay' && data.phone) {
+                const amt = data.amount || (data.months === 6 ? 2500 : 500);
+                totalPayRevenue += amt;
+                activePaidCount++;
+                if (merchantsMap[data.phone]) {
+                  merchantsMap[data.phone].pack = `⭐ Pack ${data.months || 1} Mois (Actif)`;
+                  merchantsMap[data.phone].isPaid = true;
+                } else {
+                  merchantsMap[data.phone] = {
+                    name: data.name || ('Boutique ' + data.phone),
+                    phone: data.phone,
+                    ville: data.ville || 'Cameroun',
+                    pack: `⭐ Pack ${data.months || 1} Mois (Actif)`,
+                    isPaid: true,
+                    date: data.d,
+                    ts: data.ts
+                  };
+                }
+              }
+            } catch (err) {}
+          });
+
+          carnetLiveMerchants = Object.values(merchantsMap).sort((a, b) => (b.ts || 0) - (a.ts || 0));
+          localStorage.setItem('cc_admin_hub_merchants', JSON.stringify(carnetLiveMerchants));
+
+          const totalCount = carnetLiveMerchants.length;
+          const kpiSub = document.getElementById('carnetKpiSubscribers');
+          const kpiLocks = document.getElementById('carnetKpiActiveLocks');
+          const kpiRev = document.getElementById('carnetKpiRevenue');
+          const kpiRate = document.getElementById('carnetKpiRate');
+
+          if (kpiSub) kpiSub.textContent = totalCount;
+          if (kpiLocks) kpiLocks.textContent = activePaidCount > 0 ? activePaidCount : totalCount;
+          if (kpiRev) kpiRev.textContent = (totalPayRevenue > 0 ? totalPayRevenue.toLocaleString('fr-FR') : '500') + ' F';
+          if (kpiRate) kpiRate.textContent = totalCount > 0 ? Math.round(((activePaidCount || totalCount) / totalCount) * 100) + '%' : '100%';
+        }
+      } catch (err) {
+        console.warn('Error fetching Carnet live data:', err);
+      }
+
+      if (badge) badge.textContent = '🟢 LIVE SYNC (3s)';
+      renderCarnetDashboard();
+    }
+
     function renderCarnetDashboard() {
       const container = document.getElementById('carnetUsersListContainer');
       if (!container) return;
 
-      const users = [
-        { name: 'Boutique Grâce Divine (Yaoundé)', phone: '692168264', pack: 'Pack 6 Mois (Actif)', exp: '13/05/2027' },
-        { name: 'Quincaillerie du Centre (Bertoua)', phone: '656995369', pack: 'Pack 1 Mois (Actif)', exp: '13/12/2026' },
-        { name: 'Épicerie Moderne (Douala)', phone: '677112233', pack: 'Pack 1 Mois (Actif)', exp: '20/12/2026' }
-      ];
+      const q = (document.getElementById('carnetSearchInput') ? document.getElementById('carnetSearchInput').value : '').toLowerCase().trim();
+      let list = carnetLiveMerchants || [];
+
+      if (q) {
+        list = list.filter(u => (u.name || '').toLowerCase().includes(q) || (u.phone || '').includes(q) || (u.ville || '').toLowerCase().includes(q));
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="item-card" style="text-align:center; padding:24px; color:var(--text-muted); font-size:0.85rem;">
+            ${q ? 'Aucun commerçant correspondant à la recherche.' : '⏳ En attente des données en direct... (Écoute active NTFY)'}
+          </div>
+        `;
+        return;
+      }
 
       let html = '';
-      users.forEach(u => {
+      list.forEach(u => {
+        const isPaid = u.isPaid || (u.pack && u.pack.includes('⭐'));
         html += `
-          <div class="item-card" style="display:flex; justify-content:space-between; align-items:center;">
+          <div class="item-card" style="display:flex; justify-content:space-between; align-items:center; border-left:4px solid ${isPaid ? '#16a34a' : '#d97706'}; margin-bottom:10px;">
             <div>
-              <div style="font-weight:800; font-size:0.88rem; color:var(--blue-deep);">${u.name}</div>
-              <div style="font-size:0.75rem; color:var(--text-muted);">📞 ${u.phone}</div>
-              <div style="font-size:0.7rem; color:#15803d; font-weight:800;">✅ ${u.pack} &bull; Exp: ${u.exp}</div>
+              <div style="font-weight:800; font-size:0.88rem; color:var(--blue-deep);">
+                ${u.name}
+              </div>
+              <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">
+                📞 <strong>${u.phone}</strong> &bull; 📍 ${u.ville || 'Cameroun'} &bull; 🕒 ${u.date || 'Récemment'}
+              </div>
+              <div style="font-size:0.72rem; color:${isPaid ? '#15803d' : '#b45309'}; font-weight:800; margin-top:3px;">
+                ${u.pack || '🆓 Compte Inscrit'}
+              </div>
             </div>
-            <a href="https://wa.me/237${u.phone}?text=Bonjour,%20votre%20Carnet%20de%20Cr%C3%A9dit%20est%20actif%20!" target="_blank" class="btn btn-sm btn-whatsapp" style="width:auto;">
-              WhatsApp
-            </a>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <a href="tel:${u.phone}" class="btn btn-sm" style="background:#e0f2fe; color:#0369a1; padding:6px 10px; font-size:0.75rem; text-decoration:none; border-radius:6px; font-weight:700;">
+                📞 Appeler
+              </a>
+              <a href="https://wa.me/237${u.phone}?text=Bonjour%20${encodeURIComponent(u.name)},%20votre%20compte%20Carnet%20de%20Cr%C3%A9dit%20est%20actif%20!" target="_blank" class="btn btn-sm btn-whatsapp" style="width:auto; padding:6px 10px; font-size:0.75rem;">
+                WhatsApp
+              </a>
+            </div>
           </div>
         `;
       });
       container.innerHTML = html;
     }
 
-    function handleCarnetUnlock() {
-      const phone = document.getElementById('carnetUnlockPhone').value.trim().replace(/\s+/g, '');
+    async function handleCarnetUnlock() {
+      const name = (document.getElementById('carnetUnlockName') ? document.getElementById('carnetUnlockName').value : '').trim();
+      const phone = document.getElementById('carnetUnlockPhone').value.trim().replace(/\D/g, '');
+      const ville = (document.getElementById('carnetUnlockVille') ? document.getElementById('carnetUnlockVille').value : '').trim() || 'Douala';
       const pack = document.getElementById('carnetUnlockPack').value;
+      const statusEl = document.getElementById('carnetUnlockStatus');
 
-      if (!phone) {
-        alertInApp('Veuillez entrer un numéro de téléphone client.');
+      if (!phone || phone.length < 8) {
+        alertInApp('Veuillez entrer un numéro de téléphone client valide (ex: 692168264).');
         return;
       }
 
       const months = parseInt(pack) || 1;
-      alertInApp(`✅ Carnet débloqué avec succès pour ${phone} (${months} mois) !`);
-      document.getElementById('carnetUnlockPhone').value = '';
+      const amt = months === 12 ? 5000 : (months === 6 ? 2500 : (months * 500));
+
+      const payEvent = {
+        type: 'pay',
+        name: name || ('Boutique ' + phone),
+        phone: phone,
+        ville: ville,
+        months: months,
+        amount: amt,
+        payPhone: '692168264',
+        txn: 'ADMIN-' + Date.now().toString().slice(-6),
+        raw: `💰 ABONNEMENT AUTO ${months} MOIS (${amt} F) | ${name || 'Boutique ' + phone} | ${phone} | ${ville} | Débloqué via Admin Hub`,
+        ts: Date.now(),
+        d: new Date().toLocaleString('fr-FR')
+      };
+
+      try {
+        if (statusEl) statusEl.innerHTML = '<span style="color:#059669;">⏳ Validation et synchronisation en cours...</span>';
+        await fetch('https://ntfy.sh/carnet_credit_live_miguel_prod_2026', {
+          method: 'POST',
+          headers: {
+            'Title': 'Validation Paiement Carnet Credit',
+            'Priority': 'urgent',
+            'Tags': 'moneybag,dollar'
+          },
+          body: JSON.stringify(payEvent)
+        });
+
+        alertInApp(`✅ Carnet débloqué avec succès pour ${phone} (${months} mois, ${amt} FCFA) !`);
+        if (statusEl) statusEl.innerHTML = `<span style="color:#15803d;">✅ Carnet débloqué avec succès pour <b>${phone}</b> (${months} mois) !</span>`;
+        document.getElementById('carnetUnlockPhone').value = '';
+        if (document.getElementById('carnetUnlockName')) document.getElementById('carnetUnlockName').value = '';
+        await fetchCarnetLiveData();
+      } catch (err) {
+        alertInApp(`Erreur : ${err.message}`);
+      }
     }
 
     // ========================================================================
@@ -1204,7 +1401,7 @@
       if (sessionStorage.getItem('hub_unlocked') === '1') {
         document.getElementById('hubLockView').style.display = 'none';
         document.getElementById('hubUnlockedContent').style.display = 'block';
-        renderAllHubData();
+        renderAllHubData(); fetchCarnetLiveData();
       }
 
       if (sessionStorage.getItem('hub_auto_updated') === '1') {
@@ -1218,6 +1415,9 @@
       setInterval(() => {
         checkAllAppsUpdates(true);
       }, 30000);
+      setInterval(() => {
+        fetchCarnetLiveData();
+      }, 3000);
     });
   </script>
 </body>
