@@ -355,7 +355,14 @@
             <option value="1">1 mois — 500 F</option>
             <option value="2">2 mois — 1 000 F</option>
             <option value="3">3 mois — 1 500 F</option>
+            <option value="4">4 mois — 2 000 F</option>
+            <option value="5">5 mois — 2 500 F</option>
             <option value="6">6 mois (Pack fidélité) — 2 500 F</option>
+            <option value="7">7 mois — 3 000 F</option>
+            <option value="8">8 mois — 3 500 F</option>
+            <option value="9">9 mois — 4 000 F</option>
+            <option value="10">10 mois — 4 500 F</option>
+            <option value="11">11 mois — 5 000 F</option>
             <option value="12">12 mois (1 an) — 5 000 F</option>
             <option value="1g">🎁 1 mois GRATUIT (Bonus parrainage)</option>
           </select>
@@ -1220,7 +1227,8 @@
       if (!(p.length === 12 && p.startsWith('2376'))) { ge.textContent = 'Numéro invalide (ex : 677123456 ou 692168264).'; return; }
       const sel = document.getElementById('gen-months').value;
       const months = parseInt(sel, 10) || 1;
-      const prix = Math.floor(months / 6) * 2500 + (months % 6) * 500;
+      const priceMap = { 1:500, 2:1000, 3:1500, 4:2000, 5:2500, 6:2500, 7:3000, 8:3500, 9:4000, 10:4500, 11:5000, 12:5000 };
+      const prix = free ? 0 : (priceMap[months] || (months * 500));
       const free = sel === '1g';
       const ym = new Date().toISOString().slice(0, 7);
       const code = await activationCode(p, months, ym);
