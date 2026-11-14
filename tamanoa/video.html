@@ -3,63 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TAMANOA EXPRESS — Vidéo Promotionnelle YouTube Officielle</title>
+    <title>Tamanoa Express - Vidéo Promotionnelle</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
-        body { background: #0a0f1d; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 15px; }
-        .player-card { background: #111827; border: 2px solid #f59e0b; border-radius: 20px; width: 100%; max-width: 720px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .header { background: linear-gradient(135deg, #1e3a8a, #0f172a); padding: 18px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #f59e0b; }
-        .logo-badge { background: #f59e0b; color: #0f172a; font-weight: 900; font-size: 20px; padding: 6px 12px; border-radius: 10px; }
-        .header-title h1 { font-size: 18px; font-weight: 800; color: #ffffff; }
-        .header-title p { font-size: 12px; color: #f59e0b; font-weight: 600; }
-        .video-wrapper { position: relative; width: 100%; background: #000; }
-        video { width: 100%; height: auto; display: block; border-radius: 0; }
-        .content { padding: 20px; }
-        .title { font-size: 16px; font-weight: 700; color: #ffffff; margin-bottom: 8px; }
-        .desc { font-size: 13px; color: #94a3b8; line-height: 1.5; margin-bottom: 20px; }
-        .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 10px; font-size: 14px; font-weight: 800; border-radius: 12px; text-decoration: none; text-align: center; cursor: pointer; transition: 0.2s; }
-        .btn-download { background: #22c55e; color: #ffffff; box-shadow: 0 4px 15px rgba(34,197,94,0.3); }
-        .btn-youtube { background: #dc2626; color: #ffffff; box-shadow: 0 4px 15px rgba(220,38,38,0.3); }
-        .btn-app { grid-column: span 2; background: linear-gradient(135deg, #1e3a8a, #0284c7); color: #ffffff; box-shadow: 0 4px 15px rgba(2,132,199,0.3); }
-        .footer { margin-top: 15px; font-size: 11px; color: #64748b; text-align: center; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #0b0f19;
+            color: #f8fafc;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .container {
+            width: 100%;
+            max-width: 640px;
+            background: #111827;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo-badge {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: #111827;
+            font-size: 14px;
+        }
+        .brand-text h1 {
+            font-size: 15px;
+            font-weight: 800;
+            color: #f8fafc;
+        }
+        .brand-text p {
+            font-size: 11px;
+            color: #f59e0b;
+            font-weight: 600;
+        }
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .format-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+        .tab-btn {
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: #1e293b;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .tab-btn.active {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+        }
+        .btn-download {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #0f172a;
+            font-weight: 800;
+            font-size: 15px;
+            padding: 14px;
+            border-radius: 14px;
+            text-decoration: none;
+            box-shadow: 0 10px 20px -5px rgba(245, 158, 11, 0.4);
+            transition: all 0.2s;
+        }
+        .btn-download:active {
+            transform: scale(0.98);
+        }
+        .btn-shorts {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #ef4444;
+            color: #fff;
+            font-weight: 800;
+            font-size: 14px;
+            padding: 14px;
+            border-radius: 14px;
+            text-decoration: none;
+        }
+        .btn-yt {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #1e293b;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 12px;
+            border-radius: 14px;
+            text-decoration: none;
+        }
+        .info-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 12px;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
-    <div class="player-card">
+    <div class="container">
         <div class="header">
-            <div class="logo-badge">TE</div>
-            <div class="header-title">
-                <h1>TAMANOA EXPRESS (Coursier 237)</h1>
-                <p>Vidéo Promotionnelle Officielle YouTube</p>
+            <div class="brand">
+                <div class="logo-badge">TE</div>
+                <div class="brand-text">
+                    <h1>TAMANOA EXPRESS</h1>
+                    <p>Vidéo Officielle HD (52s)</p>
+                </div>
             </div>
+            <a href="/tamanoa/shorts.html" class="tab-btn" style="padding: 6px 12px; font-size: 11px; background: #ef4444; border: none; color: #fff;">
+                📱 Voir Format Shorts
+            </a>
         </div>
+
         <div class="video-wrapper">
-            <video controls playsinline preload="auto" poster="icon-512.png">
-                <source src="promo.mp4" type="video/mp4">
-                Votre navigateur ne supporte pas la lecture de vidéos.
+            <video controls playsinline preload="auto">
+                <source src="/tamanoa/promo.mp4" type="video/mp4">
+                Votre navigateur ne prend pas en charge la lecture vidéo.
             </video>
         </div>
+
         <div class="content">
-            <div class="title">🎬 Vidéo Officielle : Présentation & Services Tamanoa Express</div>
-            <div class="desc">
-                Découvrez comment simplifier votre quotidien : courses express, certification de documents, expédition de colis et démarches administratives sécurisées au Cameroun.
+            <div class="format-tabs">
+                <a href="/tamanoa/video.html" class="tab-btn active">📺 Format Standard 16:9</a>
+                <a href="/tamanoa/shorts.html" class="tab-btn">📱 Format Shorts 9:16</a>
             </div>
-            <div class="actions">
-                <a href="promo.mp4" download="Tamanoa_Express_HD_YouTube.mp4" class="btn btn-download">
-                    📥 Télécharger MP4 (4.8 Mo)
-                </a>
-                <a href="https://www.youtube.com/@MIGUELMOUAFON" target="_blank" class="btn btn-youtube">
-                    ▶️ Chaîne YouTube
-                </a>
-                <a href="./" class="btn btn-app">
-                    🚀 Ouvrir l'Application Tamanoa Express
-                </a>
+
+            <a href="/tamanoa/promo.mp4" download="Tamanoa_Express_Video_HD.mp4" class="btn-download">
+                📥 Télécharger Format Standard 16:9 (5.2 Mo)
+            </a>
+            
+            <a href="/tamanoa/shorts.mp4" download="Tamanoa_Express_Shorts_9x16.mp4" class="btn-shorts">
+                ⚡ Télécharger Format Shorts 9:16 (2.2 Mo)
+            </a>
+
+            <a href="https://www.youtube.com/@MIGUELMOUAFON" target="_blank" class="btn-yt">
+                🔴 Chaîne YouTube Officielle @MIGUELMOUAFON
+            </a>
+
+            <div class="info-card">
+                ✅ <b>Durée complète (51.8 secondes) :</b> Voix off de haute clarté, fond sonore harmonieux, rôles officiels de Miguel (Yaoundé) et JAMIL (Bertoua), règle zéro espèces et lien web officiel.
             </div>
         </div>
-    </div>
-    <div class="footer">
-        © 2026 TAMANOA EXPRESS (Coursier 237) — Direction & Communication Officielle (Yaoundé & Bertoua)
     </div>
 </body>
 </html>
