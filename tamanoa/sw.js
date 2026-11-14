@@ -1,9 +1,10 @@
-// TAMANOA EXPRESS (Coursier 237) - Service Worker
-// Version: 2.41.0 (Official TE Logo & Network-First Cache)
+// TAMANOA EXPRESS (Coursier 237) - High-Resilience Service Worker
+// Version: 2.42.0 (Ultra-Fast Offline & Low-Bandwidth Support)
 
-const CACHE_NAME = 'tamanoa-v41';
+const CACHE_NAME = 'tamanoa-v42';
 const ASSETS_TO_CACHE = [
   './',
+  'index.html',
   'manifest.webmanifest',
   'icon-192.png',
   'icon-512.png',
@@ -26,7 +27,7 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((keys) => {
       return Promise.all(
         keys.filter((key) => key !== CACHE_NAME).map((key) => {
-          console.log('SW: Suppressing old cache', key);
+          console.log('SW: Purging old cache', key);
           return caches.delete(key);
         })
       );
@@ -34,26 +35,58 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Network-First strategy for index.html, icons and version.json to ensure instant updates
+// Helper: fetch with strict timeout (1500ms) for low-bandwidth resilience
+function timeoutFetch(request, timeoutMs = 1500) {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error('Network timeout'));
+    }, timeoutMs);
+
+    fetch(request)
+      .then((response) => {
+        clearTimeout(timer);
+        resolve(response);
+      })
+      .catch((err) => {
+        clearTimeout(timer);
+        reject(err);
+      });
+  });
+}
+
+// Fetch handler: Fast network-first with instant cache fallback
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
-  
-  if (url.pathname.endsWith('index.html') || url.pathname.endsWith('/') || url.pathname.endsWith('version.json') || url.pathname.endsWith('icon-192.png') || url.pathname.endsWith('icon-512.png')) {
+
+  // For app shell and core resources: try network with 1.5s timeout, fallback to cache immediately
+  if (url.origin === location.origin) {
     event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          if (response && response.status === 200) {
-            const clone = response.clone();
+      timeoutFetch(event.request, 1500)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const clone = networkResponse.clone();
             caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
           }
-          return response;
+          return networkResponse;
         })
-        .catch(() => caches.match(event.request))
+        .catch(() => {
+          // Network failed or timed out: serve from cache
+          return caches.match(event.request).then((cached) => {
+            if (cached) return cached;
+            if (event.request.mode === 'navigate') {
+              return caches.match('./') || caches.match('index.html');
+            }
+            return new Response('Connexion instable. Mode hors-ligne activé.', {
+              status: 503,
+              headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+            });
+          });
+        })
     );
     return;
   }
 
-  // Stale-While-Revalidate for other static assets
+  // For external resources (Leaflet, OSM tiles, etc.): Stale-While-Revalidate
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       const fetchPromise = fetch(event.request).then((networkResponse) => {
@@ -64,9 +97,7 @@ self.addEventListener('fetch', (event) => {
           });
         }
         return networkResponse;
-      }).catch((err) => {
-        return cachedResponse;
-      });
+      }).catch(() => cachedResponse);
 
       return cachedResponse || fetchPromise;
     })
