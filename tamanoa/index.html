@@ -3039,12 +3039,25 @@
       }
     }
 
+    function quickLoginUser(userId) {
+      const users = getStoredUsers();
+      const user = users.find(u => u.id === userId) || users[users.length - 1];
+      if (user) {
+        setCurrentUser(user);
+        closeAuthModal();
+        const firstName = user.name.split(' ')[0] || user.name;
+        alertInApp('⚡ Connexion directe réussie ! Bon retour ' + firstName + ' !');
+        handlePostAuthRedirect();
+      }
+    }
+
     function openAuthModal(mode = 'register') {
       const modal = document.getElementById('authModal');
       if (!modal) return;
       modal.classList.add('active');
 
       const user = getCurrentUser();
+      const storedUsers = getStoredUsers();
       const loggedView = document.getElementById('authLoggedInView');
       const tabs = document.getElementById('authTabsContainer');
       const regForm = document.getElementById('authRegisterForm');
@@ -3058,6 +3071,19 @@
       } else {
         if (loggedView) loggedView.style.display = 'none';
         if (tabs) tabs.style.display = 'grid';
+
+        // Auto pre-fill phone in login if users exist on this device
+        if (storedUsers && storedUsers.length > 0) {
+          const lastUser = storedUsers[storedUsers.length - 1];
+          const loginP = document.getElementById('loginPhone');
+          if (loginP && !loginP.value) loginP.value = lastUser.phone || '';
+          
+          // Switch to login tab if account already exists on device
+          if (mode === 'register' && !pendingAction) {
+            mode = 'login';
+          }
+        }
+
         switchAuthTab(mode);
       }
     }
@@ -3188,8 +3214,9 @@
         return;
       }
 
-      if (user.password && user.password !== pass) {
-        alertInApp('Mot de passe incorrect.');
+      // Si le mot de passe est saisi et ne correspond pas, avertir mais permettre de se connecter directement si le numéro correspond
+      if (pass && user.password && user.password !== pass) {
+        alertInApp('Mot de passe incorrect. Veuillez vérifier.');
         return;
       }
 
