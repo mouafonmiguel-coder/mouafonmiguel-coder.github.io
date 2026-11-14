@@ -623,20 +623,24 @@ Ou copiez-collez directement les colonnes de votre Google Sheet !" style="width:
       } catch (e) { return []; }
     }
 
-    function isBlacklisted(data, itemId = null) {
+        function isBlacklisted(data, itemId = null) {
       const deletedKeys = getDeletedKeys();
       if (itemId && deletedKeys.includes(itemId)) return true;
       if (data._key && deletedKeys.includes(data._key)) return true;
       if (data._ntfyId && deletedKeys.includes(data._ntfyId)) return true;
 
-      const name = (data.name || data.filleul_name || '').toLowerCase();
-      const phone = (data.phone || data.filleul_phone || data.parrain || '').trim();
+      const name = (data.name || data.filleul_name || '').toLowerCase().trim();
+      const phone = (data.phone || data.filleul_phone || data.parrain || '').replace(/\D/g, '');
+
+      // Check deleted by name or phone
+      if (name && deletedKeys.includes('name_' + name)) return true;
+      if (phone && deletedKeys.includes('phone_' + phone)) return true;
+      if (name && deletedKeys.some(k => k.startsWith('name_') && k.replace('name_', '') === name)) return true;
 
       // Suppression automatique des anciens comptes demo / test
       if (name.includes('test') || name.includes('triomphe') || name.includes('alimentation centrale') || name.includes('alimentation du bonheur')) return true;
       if (phone === '699887766' || phone === '699112233') return true;
 
-      if (phone && deletedKeys.includes('phone_' + phone)) return true;
       return false;
     }
 
@@ -1231,7 +1235,7 @@ Ou copiez-collez directement les colonnes de votre Google Sheet !" style="width:
             <div class="act-time">${dateStr}</div>
             <div style="display:flex;align-items:center;justify-content:flex-end;gap:4px">
               ${targetPhone ? `<a class="wa-mini" href="https://wa.me/237${targetPhone.replace(/\D/g, '')}?text=Bonjour%20${encodeURIComponent(titleName)}" target="_blank">WhatsApp</a>` : ''}
-              <button type="button" class="btn-del-mini" onclick="deleteEvent('${a._key}', '${a._ntfyId || ''}', '${a.phone || ''}')" title="Supprimer définitivement">🗑️ Supprimer</button>
+              <button type="button" class="btn-del-mini" onclick="deleteEvent('${a._key}', '${a._ntfyId || ''}', '${a.phone || ''}', '${encodeURIComponent(a.name || '')}')" title="Supprimer définitivement">🗑️ Supprimer</button>
             </div>
           </div>
         `;
@@ -1322,18 +1326,34 @@ Ou copiez-collez directement les colonnes de votre Google Sheet !" style="width:
       renderActivities(filtered);
     }
 
-    function deleteEvent(key, ntfyId = '', phone = '') {
-      if (!confirm('Voulez-vous supprimer définitivement ce commerçant du registre ?')) return;
+        function deleteEvent(key, ntfyId = '', phone = '', encodedName = '') {
+      const name = decodeURIComponent(encodedName || '').trim();
+      const dispName = name || phone || 'cette entrée';
+      if (!confirm('Supprimer définitivement ' + dispName + ' du registre ?')) return;
+
       const deletedKeys = getDeletedKeys();
       if (key && !deletedKeys.includes(key)) deletedKeys.push(key);
       if (ntfyId && !deletedKeys.includes(ntfyId)) deletedKeys.push(ntfyId);
-      if (phone && !deletedKeys.includes('phone_' + phone)) deletedKeys.push('phone_' + phone);
+      
+      const cleanPhone = (phone || '').replace(/\D/g, '');
+      if (cleanPhone && !deletedKeys.includes('phone_' + cleanPhone)) deletedKeys.push('phone_' + cleanPhone);
+      
+      const cleanName = (name || '').toLowerCase().trim();
+      if (cleanName && !deletedKeys.includes('name_' + cleanName)) deletedKeys.push('name_' + cleanName);
 
       localStorage.setItem('cc_admin_deleted_keys', JSON.stringify(deletedKeys));
 
-      allEvents = allEvents.filter(e => e._key !== key && (!ntfyId || e._ntfyId !== ntfyId) && (!phone || e.phone !== phone));
+      allEvents = allEvents.filter(e => {
+        if (e._key === key) return false;
+        if (ntfyId && e._ntfyId === ntfyId) return false;
+        if (cleanPhone && (e.phone || '').replace(/\D/g, '') === cleanPhone) return false;
+        if (cleanName && (e.name || '').toLowerCase().trim() === cleanName) return false;
+        return true;
+      });
+
       localStorage.setItem('cc_admin_real_events', JSON.stringify(allEvents));
       computeAndRender();
+      showDetectorToast('🗑️ ' + dispName + ' supprimé définitivement du registre.');
     }
 
     function clearAllRegistry() {
