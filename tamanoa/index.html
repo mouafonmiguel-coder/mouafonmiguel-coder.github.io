@@ -2236,7 +2236,12 @@
             </button>
           </div>
         </div>
-        <button type="button" class="btn btn-blue" onclick="handleLoginSubmit(event)" style="margin-top:6px;">
+        <div style="display:flex; justify-content:flex-end; align-items:center; margin-top:-6px; margin-bottom:12px;">
+          <button type="button" onclick="resetPasswordPrompt()" style="background:none; border:none; color:var(--blue-royal); font-weight:700; font-size:0.75rem; cursor:pointer; text-decoration:underline; padding:0;">
+            🔄 Mot de passe oublié ? Réinitialiser en 1 clic
+          </button>
+        </div>
+        <button type="button" class="btn btn-blue" onclick="handleLoginSubmit(event)" style="margin-top:6px; width:100%;">
           Se connecter
         </button>
       </form>
@@ -3114,6 +3119,68 @@
       }
     }
 
+    function normalizeCameroonPhone(p) {
+      if (!p) return '';
+      let s = String(p).trim().replace(/\D/g, '');
+      if (s.startsWith('237') && s.length === 12) {
+        s = s.substring(3);
+      }
+      return s;
+    }
+
+    function resetPasswordPrompt() {
+      const phoneInput = document.getElementById('loginPhone');
+      let rawPhone = phoneInput ? phoneInput.value : '';
+      let cleanPhone = normalizeCameroonPhone(rawPhone);
+
+      let targetPhone = cleanPhone;
+      if (!targetPhone) {
+        targetPhone = prompt('Entrez votre numéro WhatsApp (ex: 692168264) :');
+        targetPhone = normalizeCameroonPhone(targetPhone);
+      }
+      if (!targetPhone) return;
+
+      let users = getStoredUsers();
+      let user = users.find(u => {
+        const uPhone = normalizeCameroonPhone(u.phone);
+        return uPhone === targetPhone || (uPhone && targetPhone && (uPhone.endsWith(targetPhone) || targetPhone.endsWith(uPhone)));
+      });
+
+      const promptLabel = user ? `Entrez votre nouveau mot de passe pour ${user.name} (${targetPhone}) :` : `Définir un mot de passe pour le numéro ${targetPhone} :`;
+      const newPass = prompt(promptLabel);
+      if (!newPass || !newPass.trim()) {
+        alertInApp('Opération annulée. Le mot de passe ne peut pas être vide.');
+        return;
+      }
+
+      const cleanPass = newPass.trim();
+      if (user) {
+        user.password = cleanPass;
+        saveStoredUsers(users);
+        setCurrentUser(user);
+        closeAuthModal();
+        const firstName = user.name.split(' ')[0] || user.name;
+        alertInApp('✅ Mot de passe mis à jour avec succès ! Bon retour ' + firstName + ' !');
+        handlePostAuthRedirect();
+      } else {
+        const newUser = {
+          id: 'usr-' + Date.now(),
+          name: 'Client ' + targetPhone,
+          phone: targetPhone,
+          city: 'Yaoundé',
+          password: cleanPass,
+          ordersCount: 0,
+          createdAt: new Date().toISOString().split('T')[0]
+        };
+        users.push(newUser);
+        saveStoredUsers(users);
+        setCurrentUser(newUser);
+        closeAuthModal();
+        alertInApp('🎉 Compte initialisé et connecté avec succès !');
+        handlePostAuthRedirect();
+      }
+    }
+
     function handleRegisterSubmit(e) {
       if (e && e.preventDefault) e.preventDefault();
       const nameInput = document.getElementById('regName');
@@ -3123,12 +3190,9 @@
 
       const name = (nameInput ? nameInput.value : '').trim();
       let rawPhone = (phoneInput ? phoneInput.value : '').trim().replace(/\s+/g, '');
-      let cleanPhone = rawPhone.replace(/\D/g, '');
-      if (cleanPhone.startsWith('237') && cleanPhone.length === 12) {
-        cleanPhone = cleanPhone.substring(3);
-      }
-      const city = cityInput ? cityInput.value : 'Yaoundé';
-      const pass = passInput ? passInput.value : '';
+      let cleanPhone = normalizeCameroonPhone(rawPhone);
+      const city = (cityInput ? cityInput.value : '').trim() || 'Yaoundé';
+      const pass = (passInput ? passInput.value : '').trim();
 
       if (!name) {
         alertInApp('Veuillez entrer votre nom complet.');
@@ -3153,11 +3217,21 @@
       }
 
       let users = getStoredUsers();
-      let existing = users.find(u => u.phone === cleanPhone || u.phone === rawPhone);
-      if (existing) {
-        alertInApp('Ce numéro est déjà inscrit. Vous êtes maintenant connecté !');
-        setCurrentUser(existing);
+      let existingIndex = users.findIndex(u => {
+        const uPhone = normalizeCameroonPhone(u.phone);
+        return uPhone === cleanPhone || (uPhone && cleanPhone && (uPhone.endsWith(cleanPhone) || cleanPhone.endsWith(uPhone)));
+      });
+
+      if (existingIndex !== -1) {
+        // Met à jour immédiatement le mot de passe, le nom et la ville
+        users[existingIndex].password = pass;
+        if (name) users[existingIndex].name = name;
+        if (city) users[existingIndex].city = city;
+        saveStoredUsers(users);
+        setCurrentUser(users[existingIndex]);
         closeAuthModal();
+        const firstName = users[existingIndex].name.split(' ')[0] || users[existingIndex].name;
+        alertInApp('🎉 Compte et mot de passe synchronisés avec succès ! Bon retour ' + firstName + ' !');
         handlePostAuthRedirect();
         return;
       }
@@ -3192,38 +3266,51 @@
       const passInput = document.getElementById('loginPassword');
 
       let rawPhone = (phoneInput ? phoneInput.value : '').trim().replace(/\s+/g, '');
-      let cleanPhone = rawPhone.replace(/\D/g, '');
-      if (cleanPhone.startsWith('237') && cleanPhone.length === 12) {
-        cleanPhone = cleanPhone.substring(3);
-      }
-      const pass = passInput ? passInput.value : '';
+      let cleanPhone = normalizeCameroonPhone(rawPhone);
+      const pass = (passInput ? passInput.value : '').trim();
 
       if (!cleanPhone) {
         alertInApp('Veuillez entrer votre numéro WhatsApp.');
+        if (phoneInput) phoneInput.focus();
         return;
       }
 
       let users = getStoredUsers();
-      let user = users.find(u => u.phone === cleanPhone || u.phone === rawPhone);
+      let user = users.find(u => {
+        const uPhone = normalizeCameroonPhone(u.phone);
+        return uPhone === cleanPhone || (uPhone && cleanPhone && (uPhone.endsWith(cleanPhone) || cleanPhone.endsWith(uPhone)));
+      });
 
       if (!user) {
-        alertInApp('Numéro non reconnu. Veuillez d\'abord créer votre compte !');
-        switchAuthTab('register');
-        const regP = document.getElementById('regPhone');
-        if (regP) regP.value = cleanPhone;
+        // Si le compte n'est pas encore présent sur cet appareil, le créer automatiquement avec le mot de passe saisi
+        const newUser = {
+          id: 'usr-' + Date.now(),
+          name: 'Client ' + cleanPhone,
+          phone: cleanPhone,
+          city: 'Yaoundé',
+          password: pass || '123456',
+          ordersCount: 0,
+          createdAt: new Date().toISOString().split('T')[0]
+        };
+        users.push(newUser);
+        saveStoredUsers(users);
+        setCurrentUser(newUser);
+        closeAuthModal();
+        alertInApp('🎉 Compte activé et connecté avec succès ! Bienvenue sur Tamanoa Express.');
+        handlePostAuthRedirect();
         return;
       }
 
-      // Si le mot de passe est saisi et ne correspond pas, avertir mais permettre de se connecter directement si le numéro correspond
-      if (pass && user.password && user.password !== pass) {
-        alertInApp('Mot de passe incorrect. Veuillez vérifier.');
-        return;
+      // L'utilisateur existe : synchroniser son mot de passe avec celui saisi pour ne jamais le bloquer
+      if (pass) {
+        user.password = pass;
+        saveStoredUsers(users);
       }
 
       setCurrentUser(user);
       closeAuthModal();
       const firstName = user.name.split(' ')[0] || user.name;
-      alertInApp('👋 Ravi de vous revoir, ' + firstName + ' ! Accès complet activé.');
+      alertInApp('👋 Ravi de vous revoir, ' + firstName + ' ! Connexion réussie.');
       handlePostAuthRedirect();
     }
 
