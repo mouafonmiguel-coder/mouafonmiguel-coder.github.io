@@ -1,9 +1,9 @@
 {
-  "version": 85,
-  "updated_at": "2026-11-14T09:00:00Z",
+  "version": 86,
+  "updated_at": "2026-11-14T11:05:00Z",
   "features": [
-    "Restauration Note Vocale / Audio Recorder",
-    "Restauration Reçus de transaction",
-    "Correction chargement et inscription"
+    "Synchronisation temps r\u00e9el NTFY des commer\u00e7ants inscrits",
+    "Visibilit\u00e9 automatique de ZOULETOU et nouveaux clients sur Admin Dashboard",
+    "Suppression totale des comptes d\u00e9mo / faux profils"
   ]
 }
