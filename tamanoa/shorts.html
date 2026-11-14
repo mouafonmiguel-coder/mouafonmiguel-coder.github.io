@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tamanoa Express - YouTube Shorts (9:16)</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #0b0f19;
+            color: #f8fafc;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: #111827;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo-badge {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: #111827;
+            font-size: 14px;
+        }
+        .brand-text h1 {
+            font-size: 15px;
+            font-weight: 800;
+            color: #f8fafc;
+        }
+        .brand-text p {
+            font-size: 11px;
+            color: #f59e0b;
+            font-weight: 600;
+        }
+        .shorts-tag {
+            background: #ef4444;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 9/16;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .content {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .btn-download {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #0f172a;
+            font-weight: 800;
+            font-size: 14px;
+            padding: 14px;
+            border-radius: 14px;
+            text-decoration: none;
+            box-shadow: 0 10px 20px -5px rgba(245, 158, 11, 0.4);
+            transition: all 0.2s;
+        }
+        .btn-download:active {
+            transform: scale(0.98);
+        }
+        .btn-yt {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #ef4444;
+            color: #fff;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 12px;
+            border-radius: 14px;
+            text-decoration: none;
+        }
+        .info-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 12px;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="brand">
+                <div class="logo-badge">TE</div>
+                <div class="brand-text">
+                    <h1>TAMANOA EXPRESS</h1>
+                    <p>Format YouTube Shorts (9:16)</p>
+                </div>
+            </div>
+            <div class="shorts-tag">SHORTS</div>
+        </div>
+
+        <div class="video-wrapper">
+            <video controls playsinline preload="auto" poster="/tamanoa/icon-512.png">
+                <source src="/tamanoa/shorts.mp4" type="video/mp4">
+                Votre navigateur ne prend pas en charge la lecture vidéo.
+            </video>
+        </div>
+
+        <div class="content">
+            <a href="/tamanoa/shorts.mp4" download="Tamanoa_Express_YouTube_Shorts_9x16.mp4" class="btn-download">
+                📥 Télécharger le Short MP4 (2.2 Mo)
+            </a>
+            <a href="https://www.youtube.com/@MIGUELMOUAFON" target="_blank" class="btn-yt">
+                🔴 Chaîne YouTube @MIGUELMOUAFON
+            </a>
+            <div class="info-card">
+                💡 <b>Prêt pour YouTube Shorts :</b> Résolution verticale 1080x1920 (9:16), durée 51.8 secondes, voix off + musique de fond, zones de sécurité mobile respectées.
+            </div>
+        </div>
+    </div>
+</body>
+</html>
