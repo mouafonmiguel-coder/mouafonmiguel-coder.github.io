@@ -313,6 +313,35 @@
           <div id="man-status" style="margin-top:8px; font-size:0.82rem; font-weight:700;"></div>
         </div>
 
+        <!-- MODULE IMPORTATION GOOGLE DOCS / SHEETS / CSV -->
+        <div style="background:#f8fafc; border:2px dashed #93c5fd; border-radius:12px; padding:16px; margin-bottom:20px;">
+          <div style="font-weight:800; font-size:0.95rem; color:#1e3a8a; margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+            <span>📥 Importer les Inscrits depuis Google Sheet / Google Doc / Fichier CSV</span>
+          </div>
+          <p style="font-size:0.8rem; color:#64748b; margin-bottom:12px;">
+            Collez ci-dessous les lignes de votre Google Sheet / Google Doc (ou importez un fichier CSV). Le système détecte automatiquement le nom, le numéro et la ville de chaque personne.
+          </p>
+          <textarea id="bulk-paste-area" placeholder="Exemples de formats acceptés :
+ZOULETOU, 698000000, Yaoundé
+Mamadou Diallo | 677123456 | Douala
+Alice Kouam - 655443322 - Bafoussam
+Ou copiez-collez directement les colonnes de votre Google Sheet !" style="width:100%; height:90px; padding:10px; border:1px solid #cbd5e1; border-radius:8px; font-family:monospace; font-size:0.82rem; margin-bottom:10px; box-sizing:border-box;"></textarea>
+
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <button type="button" class="btn-action" onclick="importBulkText()" style="background:#2563eb; margin:0; padding:9px 18px; font-size:0.85rem; font-weight:700;">
+              ⚡ Importer le Texte Collé
+            </button>
+            <label style="background:#0f172a; color:#fff; padding:9px 16px; border-radius:8px; font-size:0.85rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+              📁 Choisir Fichier CSV <input type="file" id="csv-file-input" accept=".csv,.txt" onchange="importCSVFile(event)" style="display:none;">
+            </label>
+            <button type="button" class="btn-action" onclick="document.getElementById('bulk-paste-area').value=''" style="background:#94a3b8; margin:0; padding:9px 14px; font-size:0.82rem;">
+              Effacer
+            </button>
+          </div>
+          <div id="bulk-status" style="margin-top:10px; font-size:0.85rem; font-weight:700;"></div>
+        </div>
+
+
         <div class="feed-header">
           <div class="feed-title">👥 Registre des Inscriptions & Filleuls Réels</div>
           <div style="display:flex;align-items:center;gap:10px">
@@ -1031,6 +1060,128 @@
         ctx.fillText(`${d.val} (${pct}%)`, legX + 10, legY + 16);
         legY += 28;
       });
+    }
+
+    
+    // ---------------- BULK IMPORT GOOGLE SHEET / CSV / TEXT ----------------
+    function parseMerchantLine(line) {
+      if (!line || !line.trim()) return null;
+      const raw = line.trim();
+      if (raw.startsWith('#') || raw.toLowerCase().startsWith('nom') || raw.toLowerCase().startsWith('timestamp')) return null;
+
+      // Extract phone: look for 9-digit Cameroonian numbers
+      const phoneMatch = raw.match(/(?:237|\+237)?\s*([62]\s*[0-9]{2}(?:\s*[0-9]{2}){3}|[62][0-9]{8})/);
+      let phone = '';
+      if (phoneMatch) {
+        phone = phoneMatch[1].replace(/\D/g, '');
+      }
+
+      // Delimiters: comma, semicolon, tab, pipe, dash
+      let parts = [];
+      if (raw.includes(',')) parts = raw.split(',').map(s => s.trim());
+      else if (raw.includes(';')) parts = raw.split(';').map(s => s.trim());
+      else if (raw.includes('\t')) parts = raw.split('\t').map(s => s.trim());
+      else if (raw.includes('|')) parts = raw.split('|').map(s => s.trim());
+      else if (raw.includes(' - ')) parts = raw.split(' - ').map(s => s.trim());
+      else parts = [raw];
+
+      let name = '';
+      let ville = 'Cameroun';
+
+      if (parts.length >= 2) {
+        // Find part with phone
+        const pIdx = parts.findIndex(p => p.replace(/\D/g, '').length >= 9);
+        if (pIdx > 0) {
+          name = parts.slice(0, pIdx).join(' ').trim();
+          if (parts.length > pIdx + 1) {
+            ville = parts.slice(pIdx + 1).join(' ').trim();
+          }
+        } else if (pIdx === 0) {
+          name = parts[1] || 'Commerçant';
+          ville = parts[2] || 'Cameroun';
+        } else {
+          name = parts[0];
+          ville = parts[1] || 'Cameroun';
+        }
+      } else {
+        name = raw.replace(phone, '').replace(/[|;,\-]/g, '').trim() || 'Commerçant';
+      }
+
+      // Cleanup
+      name = name.replace(/^[0-9\s\-\.,|]+/, '').trim() || 'Commerçant';
+      if (!phone && phoneMatch) phone = phoneMatch[0].replace(/\D/g, '');
+      if (phone.length > 9) phone = phone.slice(-9);
+
+      if (!name || name.length < 2) name = 'Boutique ' + (phone || 'Inconnue');
+      return { name, phone: phone || '690000000', ville: ville || 'Cameroun' };
+    }
+
+    async function importBulkText() {
+      const area = document.getElementById('bulk-paste-area');
+      const statusEl = document.getElementById('bulk-status');
+      if (!area || !statusEl) return;
+      const text = area.value.trim();
+      if (!text) {
+        statusEl.innerHTML = '<span style="color:#dc2626;">❌ Veuillez coller du texte ou des lignes de votre fichier Google Doc/Sheet d'abord.</span>';
+        return;
+      }
+
+      const lines = text.split(/\r?\n/);
+      statusEl.innerHTML = '<span style="color:#0284c7;">⏳ Traitement et synchronisation en cours...</span>';
+
+      let count = 0;
+      const imported = [];
+
+      for (const line of lines) {
+        const item = parseMerchantLine(line);
+        if (item && item.name) {
+          const newMerch = {
+            type: 'reg',
+            name: item.name,
+            phone: item.phone,
+            ville: item.ville,
+            ts: Date.now() - (count * 1000),
+            d: new Date().toLocaleString('fr-FR'),
+            raw: `🆕 INSCRIPTION | ${item.name} | ${item.phone} | ${item.ville} | 📍 Importé depuis Google Docs/Sheet`
+          };
+
+          const key = 'imp_' + item.phone + '_' + Date.now() + '_' + count;
+          newMerch._key = key;
+
+          if (!allEvents.some(e => e.phone === item.phone && e.type === 'reg')) {
+            allEvents.unshift(newMerch);
+            imported.push(newMerch);
+            count++;
+
+            // Stream to NTFY
+            try {
+              fetch('https://ntfy.sh/' + NTFY_TOPIC, {
+                method: 'POST',
+                headers: { 'Title': 'Nouveau Commercant Carnet Credit (Import)', 'Tags': 'tada,inbox_tray' },
+                body: JSON.stringify(newMerch)
+              }).catch(()=>{});
+            } catch(e) {}
+          }
+        }
+      }
+
+      localStorage.setItem('cc_admin_real_events', JSON.stringify(allEvents.slice(0, 500)));
+      computeAndRender();
+
+      statusEl.innerHTML = `<span style="color:#059669;">✅ ${count} commerçant(s) importé(s) et synchronisé(s) avec succès dans votre registre !</span>`;
+      area.value = '';
+    }
+
+    function importCSVFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const content = e.target.result;
+        document.getElementById('bulk-paste-area').value = content;
+        importBulkText();
+      };
+      reader.readAsText(file);
     }
 
     // ---------------- ACTIVITY REGISTRY ----------------
