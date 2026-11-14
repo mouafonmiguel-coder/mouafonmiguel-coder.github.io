@@ -1,5 +1,1 @@
-{
-  "version": 78,
-  "build": 2026111332,
-  "updated_at": "2026-11-13T13:40:00Z"
-}
+{"version": 80, "updated_at": "2026-11-14T08:00:00Z", "features": ["Audio recording", "Digital transaction receipts"]}
