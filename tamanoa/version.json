@@ -1,16 +1,16 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.41.0",
-  "build": 2026111402,
-  "lastUpdated": "14 Novembre 2026 - Nouveau Logo Officiel TE (Tamanoa Express) et Cache Purge",
+  "version": "2.42.0",
+  "build": 2026111403,
+  "lastUpdated": "14 Novembre 2026 - Ultra-Haute Résilience Réseau & Chargement Instantané Hors-Ligne",
   "direction": {
     "miguel": "Chargé de Communication (Yaoundé)",
     "jamil": "Chargé de Communication (Bertoua)"
   },
   "features": [
-    "Nouveau Logo Officiel TE (Tamanoa Express)",
-    "Icônes d'application PWA haute définition 192px et 512px",
-    "Purge automatique du cache de l'ancien logo KE",
-    "Auto-connexion directe et mémorisation permanente"
+    "Chargement instantané sans blocage même sur réseau faible 2G/3G/EDGE",
+    "Support hors-ligne résilient avec bascule automatique sur cache en 1.5s",
+    "Scripts cartographiques non-bloquants (chargement asynchrone)",
+    "Nouveau Logo Officiel TE et auto-connexion permanente"
   ]
 }
