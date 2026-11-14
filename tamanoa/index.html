@@ -8,6 +8,13 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="./icon-192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="./icon-512.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Tamanoa Express">
+  <meta name="application-name" content="Tamanoa Express">
+
   <!-- LEAFLET MAPS CSS & JS FOR REAL-TIME GPS TRACKING -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -15,6 +22,142 @@
   <title>TAMANOA EXPRESS — Coursier 237</title>
 
   <style>
+    
+    /* ========================================================================
+       INSTALL PWA & MOBILE BANNER STYLES
+       ======================================================================== */
+    .btn-install-header {
+      background: linear-gradient(135deg, var(--gold-bright), var(--gold-primary));
+      color: var(--blue-deep);
+      border: none;
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.78rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+      transition: all 0.2s;
+    }
+    .btn-install-header:active { transform: scale(0.95); }
+
+    .install-pwa-banner {
+      background: linear-gradient(135deg, #1e3a8a, #0f172a);
+      border: 2px solid var(--gold-bright);
+      border-radius: 18px;
+      padding: 16px 18px;
+      margin: 16px 0;
+      color: #ffffff;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    }
+    .install-pwa-icon {
+      font-size: 2rem;
+      background: rgba(245, 158, 11, 0.15);
+      border-radius: 14px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .install-pwa-content { flex: 1; }
+    .install-pwa-title {
+      font-size: 1rem;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+    .install-pwa-sub {
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+    .install-pwa-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .btn-install-action {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #0f172a;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4);
+      transition: transform 0.2s;
+    }
+    .btn-install-action:active { transform: scale(0.96); }
+    .btn-install-help {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #ffffff;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Modal Guide Installation */
+    .guide-step-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+      text-align: left;
+    }
+    .guide-step-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .guide-step-num {
+      width: 26px;
+      height: 26px;
+      background: var(--blue-royal);
+      color: #ffffff;
+      border-radius: 50%;
+      font-weight: 800;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .guide-step-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--blue-deep);
+    }
+    .guide-step-desc {
+      font-size: 0.8rem;
+      color: #475569;
+      line-height: 1.45;
+      padding-left: 36px;
+    }
+    .guide-alert-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 14px;
+      text-align: left;
+      font-size: 0.8rem;
+      color: #991b1b;
+      line-height: 1.4;
+    }
+
     /* ========================================================================
        VARIABLES & DESIGN SYSTEM (BLEU ROI, OR PROFOND, BLANC PUR)
        ======================================================================== */
@@ -1096,6 +1239,9 @@
       </div>
     </div>
     <div class="header-actions">
+      <button class="btn-install-header" id="btnInstallHeader" onclick="triggerInstallApp()">
+        <span>📲</span> <span>Installer</span>
+      </button>
       <button class="user-auth-btn" onclick="openAuthModal()" id="headerAuthBtn">
         <div class="user-avatar-dot" id="headerAuthDot"></div>
         <span id="headerAuthText">S'inscrire</span>
@@ -1113,6 +1259,19 @@
          ======================================================================== -->
     <main id="tab-home" class="tab-page active">
       
+      <!-- BANNIÈRE D'INSTALLATION DE L'APPLICATION MOBILE -->
+      <div class="install-pwa-banner" id="homeInstallBanner">
+        <div class="install-pwa-icon">📲</div>
+        <div class="install-pwa-content">
+          <div class="install-pwa-title">Télécharger & Installer Tamanoa Express</div>
+          <div class="install-pwa-sub">Installez l'application directement sur votre smartphone pour commander vos courses en 1 clic sans passer par le Play Store.</div>
+          <div class="install-pwa-actions">
+            <button class="btn-install-action" onclick="triggerInstallApp()">🚀 Installer maintenant</button>
+            <button class="btn-install-help" onclick="openInstallGuideModal()">ℹ️ Comment faire ?</button>
+          </div>
+        </div>
+      </div>
+
       <!-- Bandeau Guide pour les visiteurs non connectés -->
       <div id="guestGuideHero">
         <div class="hero-banner">
@@ -4800,6 +4959,78 @@ function renderAdminCertificationList() {
     }
 
     // ========================================================================
+    
+    // ========================================================================
+    // PWA & GESTION DE L'INSTALLATION MOBILE
+    // ========================================================================
+    let deferredInstallPrompt = null;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      console.log('PWA: beforeinstallprompt capturé avec succès');
+      const headerBtn = document.getElementById('btnInstallHeader');
+      if (headerBtn) headerBtn.style.display = 'inline-flex';
+      const homeBanner = document.getElementById('homeInstallBanner');
+      if (homeBanner) homeBanner.style.display = 'flex';
+    });
+
+    window.addEventListener('appinstalled', () => {
+      deferredInstallPrompt = null;
+      alertInApp('🎉 Félicitations ! Tamanoa Express est installée sur votre téléphone.');
+      const homeBanner = document.getElementById('homeInstallBanner');
+      if (homeBanner) homeBanner.style.display = 'none';
+      const headerBtn = document.getElementById('btnInstallHeader');
+      if (headerBtn) headerBtn.style.display = 'none';
+    });
+
+    function triggerInstallApp() {
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        deferredInstallPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            alertInApp('✅ Installation de Tamanoa Express acceptée !');
+          }
+          deferredInstallPrompt = null;
+        });
+      } else {
+        openInstallGuideModal();
+      }
+    }
+
+    function triggerNativeInstallOrClose() {
+      if (deferredInstallPrompt) {
+        closeInstallGuideModal();
+        deferredInstallPrompt.prompt();
+      } else {
+        closeInstallGuideModal();
+        alertInApp('💡 Suivez les instructions ci-dessus dans Chrome ou Safari.');
+      }
+    }
+
+    function openInstallGuideModal() {
+      const modal = document.getElementById('installGuideModal');
+      if (modal) modal.classList.add('active');
+    }
+
+    function closeInstallGuideModal() {
+      const modal = document.getElementById('installGuideModal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    // Enregistrement officiel du Service Worker PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => {
+            console.log('Tamanoa Service Worker actif (PWA Ready):', reg.scope);
+          })
+          .catch(err => {
+            console.warn('Tamanoa Service Worker notice:', err);
+          });
+      });
+    }
+
     // INITIALISATION DE L'APPLICATION
     // ========================================================================
     window.addEventListener('DOMContentLoaded', () => {
@@ -4821,5 +5052,96 @@ function renderAdminCertificationList() {
       }, 60000);
     });
   </script>
+
+  <!-- ========================================================================
+       MODAL GUIDE D'INSTALLATION SUR MOBILE (ANDROID & IPHONE)
+       ======================================================================== -->
+  <div id="installGuideModal" class="modal-overlay">
+    <div class="modal-content" style="max-width:440px;max-height:90vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;border-bottom:1px solid #e2e8f0;padding-bottom:10px;">
+        <div style="font-size:1.1rem;font-weight:900;color:var(--blue-deep);display:flex;align-items:center;gap:8px;">
+          📲 Installer sur votre Téléphone
+        </div>
+        <button onclick="closeInstallGuideModal()" style="background:none;border:none;font-size:1.4rem;color:#64748b;cursor:pointer;">&times;</button>
+      </div>
+
+      <div style="text-align:center;margin-bottom:16px;">
+        <p style="font-size:0.85rem;color:#475569;">
+          Tamanoa Express est une application web moderne (PWA). Vous pouvez l'installer instantanément sur votre écran d'accueil sans passer par le Play Store !
+        </p>
+      </div>
+
+      <!-- ONGLET GUIDE ANDROID -->
+      <div style="font-weight:800;color:var(--blue-royal);font-size:0.95rem;margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+        🤖 Sur Android (Google Chrome) :
+      </div>
+
+      <div class="guide-step-card">
+        <div class="guide-step-header">
+          <div class="guide-step-num">1</div>
+          <div class="guide-step-title">Ouvrir dans Google Chrome</div>
+        </div>
+        <div class="guide-step-desc">
+          Si vous avez ouvert ce lien depuis <strong>WhatsApp</strong>, cliquez sur les <strong>3 petits points ⋮ en haut à droite</strong> puis choisissez <strong>« Ouvrir dans Chrome »</strong>.
+        </div>
+      </div>
+
+      <div class="guide-step-card">
+        <div class="guide-step-header">
+          <div class="guide-step-num">2</div>
+          <div class="guide-step-title">Cliquer sur le menu de Chrome</div>
+        </div>
+        <div class="guide-step-desc">
+          Touchez les <strong>3 petits points ⋮</strong> en haut à droite du navigateur Google Chrome.
+        </div>
+      </div>
+
+      <div class="guide-step-card">
+        <div class="guide-step-header">
+          <div class="guide-step-num">3</div>
+          <div class="guide-step-title">Installer l'application</div>
+        </div>
+        <div class="guide-step-desc">
+          Cliquez sur <strong>« Installer l'application »</strong> (ou <strong>« Ajouter à l'écran d'accueil »</strong>). L'icône officielle Tamanoa Express s'installe directement sur votre téléphone !
+        </div>
+      </div>
+
+      <!-- ONGLET GUIDE IPHONE -->
+      <div style="font-weight:800;color:var(--blue-royal);font-size:0.95rem;margin:16px 0 8px 0;display:flex;align-items:center;gap:6px;">
+        🍏 Sur iPhone / iPad (Safari) :
+      </div>
+
+      <div class="guide-step-card">
+        <div class="guide-step-header">
+          <div class="guide-step-num">1</div>
+          <div class="guide-step-title">Bouton Partager de Safari</div>
+        </div>
+        <div class="guide-step-desc">
+          Dans Safari, touchez le bouton <strong>Partager ⎋</strong> (carré avec la flèche vers le haut en bas de votre écran).
+        </div>
+      </div>
+
+      <div class="guide-step-card">
+        <div class="guide-step-header">
+          <div class="guide-step-num">2</div>
+          <div class="guide-step-title">Ajouter sur l'écran d'accueil</div>
+        </div>
+        <div class="guide-step-desc">
+          Faites défiler vers le bas et touchez <strong>« Sur l'écran d'accueil ➕ »</strong> puis validez avec <strong>« Ajouter »</strong>.
+        </div>
+      </div>
+
+      <!-- Alerte WhatsApp -->
+      <div class="guide-alert-box">
+        <strong>⚠️ Pourquoi WhatsApp affiche parfois une erreur ?</strong><br>
+        Le navigateur intégré de WhatsApp bloque les installations pour des raisons de sécurité. En ouvrant le lien dans <strong>Google Chrome</strong> ou <strong>Safari</strong>, l'installation fonctionne à 100% !
+      </div>
+
+      <div style="margin-top:16px;">
+        <button class="btn btn-gold btn-block" onclick="triggerNativeInstallOrClose()">J'ai compris / Installer</button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
