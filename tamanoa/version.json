@@ -1,16 +1,16 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.40.0",
-  "build": 2026111401,
-  "lastUpdated": "14 Novembre 2026 - Guide et Installation PWA Mobile en 1 Clic",
+  "version": "2.41.0",
+  "build": 2026111402,
+  "lastUpdated": "14 Novembre 2026 - Nouveau Logo Officiel TE (Tamanoa Express) et Cache Purge",
   "direction": {
     "miguel": "Chargé de Communication (Yaoundé)",
     "jamil": "Chargé de Communication (Bertoua)"
   },
   "features": [
-    "Enregistrement officiel du Service Worker PWA",
-    "Bouton et bannière d'installation 1-clic sur smartphone (Android & iPhone)",
-    "Guide interactif d'installation pour résoudre les blocages WhatsApp/Facebook",
-    "Support du mode plein écran autonome sans barre d'adresse"
+    "Nouveau Logo Officiel TE (Tamanoa Express)",
+    "Icônes d'application PWA haute définition 192px et 512px",
+    "Purge automatique du cache de l'ancien logo KE",
+    "Auto-connexion directe et mémorisation permanente"
   ]
 }
