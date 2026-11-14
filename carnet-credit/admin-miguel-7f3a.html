@@ -2,6 +2,9 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <link rel=manifest href=./manifest.webmanifest>
+  <link rel=icon type=image/png href=./icon-192.png>
+  <link rel=apple-touch-icon href=./icon-192.png>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -1122,7 +1125,7 @@ Ou copiez-collez directement les colonnes de votre Google Sheet !" style="width:
       if (!area || !statusEl) return;
       const text = area.value.trim();
       if (!text) {
-        statusEl.innerHTML = '<span style="color:#dc2626;">❌ Veuillez coller du texte ou des lignes de votre fichier Google Doc/Sheet d'abord.</span>';
+        statusEl.innerHTML = "<span style='color:#dc2626;'>❌ Veuillez coller du texte ou des lignes de votre fichier Google Doc/Sheet d’abord.</span>";
         return;
       }
 
