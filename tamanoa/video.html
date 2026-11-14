@@ -2,39 +2,171 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vidéo Promotionnelle - Tamanoa Express</title>
-    <meta name="theme-color" content="#0a192f">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tamanoa Express - Vidéo Promotionnelle Officielle</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background: #0a192f; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        .card { width: 100%; max-width: 600px; background: #1e293b; border-radius: 20px; border: 2px solid #f59e0b; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
-        h1 { font-size: 22px; margin-bottom: 6px; color: #ffffff; }
-        h1 span { color: #f59e0b; }
-        p.sub { font-size: 14px; color: #cbd5e1; margin-bottom: 18px; }
-        .video-box { position: relative; width: 100%; border-radius: 12px; overflow: hidden; background: #000; margin-bottom: 18px; aspect-ratio: 16/9; }
-        video { width: 100%; height: 100%; display: block; object-fit: contain; }
-        .btn-dl { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a; padding: 15px; border-radius: 12px; font-size: 17px; font-weight: 800; text-decoration: none; margin-bottom: 12px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); }
-        .btn-app { display: inline-block; width: 100%; background: #2563eb; color: #ffffff; padding: 12px; border-radius: 12px; font-size: 15px; font-weight: 700; text-decoration: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #090e17 0%, #0f172a 50%, #1e293b 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 960px;
+            background: rgba(30, 41, 59, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6), 0 0 30px rgba(245, 158, 11, 0.15);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #d97706, #f59e0b);
+            color: #0f172a;
+            font-weight: 800;
+            font-size: 13px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+        h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+        p.subtitle {
+            color: #94a3b8;
+            font-size: 15px;
+        }
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            border-radius: 18px;
+            overflow: hidden;
+            background: #000;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            border: 2px solid rgba(255,255,255,0.08);
+            margin-bottom: 25px;
+        }
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 28px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .btn-download {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: #0f172a;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+        }
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 22px rgba(245, 158, 11, 0.6);
+        }
+        .btn-app {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-app:hover {
+            background: rgba(255, 255, 255, 0.18);
+            transform: translateY(-2px);
+        }
+        .info-grid {
+            margin-top: 25px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            text-align: center;
+        }
+        .info-card {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .info-card h4 {
+            color: #f59e0b;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .info-card p {
+            color: #cbd5e1;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>TAMANOA <span>EXPRESS</span></h1>
-        <p class="sub">Vidéo Promotionnelle Officielle (Full HD + Voix & Musique)</p>
-        <div class="video-box">
-            <video controls autoplay playsinline preload="auto">
-                <source src="./promo.mp4" type="video/mp4">
-                <source src="./Video_Promotion_Tamanoa_Express_YouTube.mp4" type="video/mp4">
-                Votre navigateur ne peut pas lire cette vidéo.
+    <div class="container">
+        <div class="header">
+            <span class="badge">Vidéo Promotionnelle 1080p HD</span>
+            <h1>TAMANOA EXPRESS (Coursier 237)</h1>
+            <p class="subtitle">Votre partenaire de confiance à Yaoundé & Bertoua</p>
+        </div>
+
+        <div class="video-wrapper">
+            <video controls playsinline preload="metadata" poster="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1920' height='1080' viewBox='0 0 1920 1080'><rect width='1920' height='1080' fill='%230f172a'/><text x='960' y='540' font-size='48' font-weight='bold' fill='%23f59e0b' text-anchor='middle' font-family='sans-serif'>TAMANOA EXPRESS - COURSIER 237</text></svg>">
+                <source src="promo.mp4" type="video/mp4">
+                Votre navigateur ne prend pas en charge la lecture de vidéos MP4.
             </video>
         </div>
-        <a href="./promo.mp4" download="Tamanoa_Express_Video_Promo.mp4" class="btn-dl">
-            ⬇️ TÉLÉCHARGER LA VIDÉO MP4
-        </a>
-        <a href="./index.html" class="btn-app">
-            🚀 Ouvrir l'Application Tamanoa Express
-        </a>
+
+        <div class="actions">
+            <a href="promo.mp4" download="Tamanoa_Express_Promo_YouTube.mp4" class="btn btn-download">
+                ⬇️ Télécharger la Vidéo MP4 (Full HD)
+            </a>
+            <a href="https://mouafonmiguel-coder.github.io/tamanoa/" class="btn btn-app">
+                🚀 Accéder à l'Application Tamanoa
+            </a>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <h4>⚡ Rapidité 237</h4>
+                <p>Yaoundé & Bertoua</p>
+            </div>
+            <div class="info-card">
+                <h4>🛡️ Sécurité</h4>
+                <p>Reçus numériques infalsifiables</p>
+            </div>
+            <div class="info-card">
+                <h4>💳 Zéro Espèces</h4>
+                <p>100% Orange Money, MoMo & Fapshi</p>
+            </div>
+        </div>
     </div>
 </body>
 </html>
