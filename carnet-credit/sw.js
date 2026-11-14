@@ -1,10 +1,10 @@
-// Service Worker Carnet Credit v80 (Audio & Reçu Digital)
-const CACHE_NAME = 'cc-v80';
+// Service Worker Carnet Credit v85 (Audio & Reçu & Fix Chargement)
+const CACHE_NAME = 'cc-v85';
 const ASSETS = [
   './',
   './index.html',
-  './index-BieVZwz-.js',
-  './index-jUoQoF3c.css',
+  './index-G0iod3r_.js',
+  './index-CZLuv8pD.css',
   './manifest.webmanifest',
   './version.json'
 ];
