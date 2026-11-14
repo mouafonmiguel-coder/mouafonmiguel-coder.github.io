@@ -1368,25 +1368,38 @@
           </div>
         </div>
 
-        <!-- CONTACTS OFFICIELS -->
-        <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:6px;">
-          <div style="font-weight:800; font-size:0.82rem; color:#166534; display:flex; align-items:center; gap:6px;">
-            <span>🛡️</span> Direction & Assistance Directe WhatsApp :
+        <!-- CONTACTS OFFICIELS & VIDÉO YOUTUBE (POUR MIGUEL) -->
+        <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:14px; display:flex; flex-direction:column; gap:8px;">
+          <div style="font-weight:800; font-size:0.85rem; color:#166534; display:flex; align-items:center; gap:6px;">
+            <span>🛡️</span> Direction & Assistance Officielle :
           </div>
-          <div style="font-size:0.8rem; color:#1e293b;">
-            • <b>Miguel (Chargé de Communication Yaoundé) :</b> <a href="https://wa.me/237692168264" style="color:#15803d; font-weight:700; text-decoration:none;">692 16 82 64</a> / <a href="https://wa.me/237653596305" style="color:#15803d; font-weight:700; text-decoration:none;">653 59 63 05</a><br>
-            • <b>JAMIL (Chargé de Communication Bertoua) :</b> <a href="https://wa.me/237656995369" style="color:#15803d; font-weight:700; text-decoration:none;">656 99 53 69</a>
+          <div style="font-size:0.82rem; color:#1e293b; line-height:1.6;">
+            • <b>Miguel (Chargé de Communication Yaoundé) :</b> 
+              <a href="https://wa.me/237692168264" style="color:#15803d; font-weight:700; text-decoration:none;">WhatsApp: 692 16 82 64</a> / 
+              <a href="https://wa.me/237653596305" style="color:#15803d; font-weight:700; text-decoration:none;">653 59 63 05</a>
+              <div style="margin-top:4px;">
+                <a href="video.html" style="background:#dc2626; color:#ffffff; font-weight:800; font-size:0.75rem; padding:5px 12px; border-radius:6px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; box-shadow:0 2px 8px rgba(220,38,38,0.3);">
+                  ▶️ Voir la Vidéo YouTube Officielle (Miguel)
+                </a>
+              </div>
+            <div style="margin-top:6px;">
+              • <b>JAMIL (Chargé de Communication Bertoua) :</b> 
+              <a href="https://wa.me/237656995369" style="color:#15803d; font-weight:700; text-decoration:none;">WhatsApp: 656 99 53 69</a>
+            </div>
           </div>
         </div>
 
-        <!-- BOUTON D'ACTION IMMÉDIATE -->
-        <div style="margin-top:16px; text-align:center;">
+        <!-- BOUTON VIDÉO YOUTUBE DANS LE GUIDE -->
+        <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">
           <button type="button" class="btn-primary" onclick="switchTab('order')" style="width:100%; padding:14px; font-size:0.95rem; font-weight:800; background:linear-gradient(135deg, #1e3a8a, #0284c7); border:none; border-radius:12px; color:#ffffff; cursor:pointer; box-shadow:0 4px 15px rgba(2,132,199,0.35);">
             🚀 Commander une Prestation Maintenant
           </button>
+          <a href="video.html" style="display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px; font-size:0.88rem; font-weight:800; background:linear-gradient(135deg, #dc2626, #991b1b); border-radius:12px; color:#ffffff; text-decoration:none; box-shadow:0 4px 15px rgba(220,38,38,0.35); width:100%; box-sizing:border-box;">
+            🎬 Regarder la Vidéo Officielle YouTube de Tamanoa Express
+          </a>
         </div>
 
-      </div>
+        </div>
 
       <div id="guestGuideHero">
         <div class="hero-banner">
@@ -3816,6 +3829,7 @@
       let html = '';
       admins.forEach(adm => {
         const formatted = formatPhoneDisplay(adm.phone);
+        const isMiguel = adm.id === 'admin-miguel' || adm.name.toLowerCase().includes('miguel');
         html += `
           <div class="admin-profile-card">
             <div class="admin-avatar-wrap">
@@ -3823,13 +3837,17 @@
             </div>
             <div class="admin-name-title">${adm.name}</div>
             <div>
-              <span class="admin-status-badge">${adm.statusTitle || '👑 Administrateur'}</span>
+              <span class="admin-status-badge">${adm.statusTitle || '📢 Chargé de Communication'}</span>
             </div>
             
-            <div style="margin-top:10px;">
+            <div style="margin-top:10px; display:flex; flex-direction:column; gap:6px;">
               <a href="https://wa.me/237${adm.phone}?text=Bonjour%20${encodeURIComponent(adm.name)},%20j'aimerais%20solliciter%20un%20service%20coursier%20sur%20Tamanoa%20Express" target="_blank" class="btn btn-whatsapp btn-sm" style="font-weight:800; font-size:0.8rem; padding:8px 4px;">
-                WhatsApp (${formatted})
+                💬 WhatsApp (${formatted})
               </a>
+              ${isMiguel ? `
+              <a href="video.html" class="btn btn-sm" style="background:linear-gradient(135deg, #dc2626, #b91c1c); color:#ffffff; font-weight:800; font-size:0.78rem; padding:7px 4px; border-radius:8px; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:5px; box-shadow:0 3px 10px rgba(220,38,38,0.35);">
+                ▶️ Vidéo YouTube Officielle
+              </a>` : ''}
             </div>
           </div>
         `;
