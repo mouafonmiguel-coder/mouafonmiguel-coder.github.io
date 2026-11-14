@@ -1,16 +1,16 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.42.0",
-  "build": 2026111403,
-  "lastUpdated": "14 Novembre 2026 - Ultra-Haute Résilience Réseau & Chargement Instantané Hors-Ligne",
+  "version": "2.43.0",
+  "build": 2026111404,
+  "lastUpdated": "14 Novembre 2026 - Mode 100% Hors-Ligne (Offline-First Cache-First)",
   "direction": {
     "miguel": "Chargé de Communication (Yaoundé)",
     "jamil": "Chargé de Communication (Bertoua)"
   },
   "features": [
-    "Chargement instantané sans blocage même sur réseau faible 2G/3G/EDGE",
-    "Support hors-ligne résilient avec bascule automatique sur cache en 1.5s",
-    "Scripts cartographiques non-bloquants (chargement asynchrone)",
-    "Nouveau Logo Officiel TE et auto-connexion permanente"
+    "Fonctionnement 100% hors-ligne sans connexion internet requise",
+    "Stratégie Cache-First pour une ouverture instantanée en 0 milliseconde",
+    "Suppression totale de toute dépendance réseau externe",
+    "Bandeau d'auto-détection du mode hors-ligne"
   ]
 }
