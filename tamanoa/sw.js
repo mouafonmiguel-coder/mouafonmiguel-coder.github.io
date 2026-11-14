@@ -1,12 +1,13 @@
 // TAMANOA EXPRESS (Coursier 237) - Service Worker
-// Version: 2.39.0 (Network-First Cache)
+// Version: 2.41.0 (Official TE Logo & Network-First Cache)
 
-const CACHE_NAME = 'tamanoa-v39';
+const CACHE_NAME = 'tamanoa-v41';
 const ASSETS_TO_CACHE = [
   './',
   'manifest.webmanifest',
   'icon-192.png',
-  'icon-512.png'
+  'icon-512.png',
+  'version.json'
 ];
 
 self.addEventListener('install', (event) => {
@@ -33,11 +34,11 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Network-First strategy for index.html and version.json to ensure instant updates
+// Network-First strategy for index.html, icons and version.json to ensure instant updates
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   
-  if (url.pathname.endsWith('index.html') || url.pathname.endsWith('/') || url.pathname.endsWith('version.json')) {
+  if (url.pathname.endsWith('index.html') || url.pathname.endsWith('/') || url.pathname.endsWith('version.json') || url.pathname.endsWith('icon-192.png') || url.pathname.endsWith('icon-512.png')) {
     event.respondWith(
       fetch(event.request)
         .then((response) => {
