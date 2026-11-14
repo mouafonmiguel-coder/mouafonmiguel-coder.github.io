@@ -1269,7 +1269,8 @@
           <div class="install-pwa-title">Télécharger & Installer Tamanoa Express</div>
           <div class="install-pwa-sub">Installez l'application directement sur votre smartphone pour commander vos courses en 1 clic sans passer par le Play Store.</div>
           <div class="install-pwa-actions">
-            <button class="btn-install-action" onclick="triggerInstallApp()">🚀 Installer maintenant</button>
+            <button class="btn-install-action" onclick="triggerInstallApp()">🚀 Installer Web App</button>
+            <a href="TamanoaExpress.apk" download="TamanoaExpress.apk" class="btn-install-help" style="text-decoration:none; display:inline-flex; align-items:center; gap:4px; background:rgba(34,197,94,0.25); border-color:#22c55e; color:#22c55e; font-weight:800;">📦 Télécharger APK (.apk)</a>
             <button class="btn-install-help" onclick="openInstallGuideModal()">ℹ️ Comment faire ?</button>
           </div>
         </div>
@@ -5387,8 +5388,21 @@ function renderAdminCertificationList() {
         Le navigateur intégré de WhatsApp bloque les installations pour des raisons de sécurité. En ouvrant le lien dans <strong>Google Chrome</strong> ou <strong>Safari</strong>, l'installation fonctionne à 100% !
       </div>
 
-      <div style="margin-top:16px;">
-        <button class="btn btn-gold btn-block" onclick="triggerNativeInstallOrClose()">J'ai compris / Installer</button>
+      <!-- BOUTON TÉLÉCHARGEMENT DIRECT FICHIER APK ANDROID -->
+      <div style="margin-top:14px; background:#f0fdf4; border:1.5px solid #16a34a; border-radius:12px; padding:12px; text-align:center;">
+        <div style="font-weight:800; font-size:0.88rem; color:#166534; margin-bottom:4px; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <span>📦</span> Téléchargement Direct APK (Téléphones réticents)
+        </div>
+        <p style="font-size:0.75rem; color:#1e293b; margin-bottom:8px; line-height:1.4;">
+          Si votre téléphone refuse d'ajouter l'icône via le navigateur, téléchargez et installez directement le fichier d'installation Android officiel :
+        </p>
+        <a href="TamanoaExpress.apk" download="TamanoaExpress.apk" class="btn btn-green btn-block" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px; font-weight:800; font-size:0.85rem; background:#16a34a; color:#ffffff; border-radius:10px; box-shadow:0 3px 10px rgba(22,163,74,0.35);">
+          📥 Télécharger TamanoaExpress.apk (7.3 Mo)
+        </a>
+      </div>
+
+      <div style="margin-top:14px;">
+        <button class="btn btn-gold btn-block" onclick="triggerNativeInstallOrClose()">J'ai compris / Fermer</button>
       </div>
     </div>
   </div>
