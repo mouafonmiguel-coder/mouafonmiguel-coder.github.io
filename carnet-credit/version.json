@@ -1,1 +1,9 @@
-{"version": 80, "updated_at": "2026-11-14T08:00:00Z", "features": ["Audio recording", "Digital transaction receipts"]}
+{
+  "version": 85,
+  "updated_at": "2026-11-14T09:00:00Z",
+  "features": [
+    "Restauration Note Vocale / Audio Recorder",
+    "Restauration Reçus de transaction",
+    "Correction chargement et inscription"
+  ]
+}
