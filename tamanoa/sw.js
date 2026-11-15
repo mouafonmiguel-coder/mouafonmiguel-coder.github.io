@@ -1,7 +1,7 @@
 // TAMANOA EXPRESS (Coursier 237) - True Offline-First Service Worker
-// Version: 2.43.0 (Zero-Data Offline Execution)
+// Version: 2.44.0 (Jamil TikTok Integration & Zero-Data Offline Execution)
 
-const CACHE_NAME = 'tamanoa-offline-v45';
+const CACHE_NAME = 'tamanoa-offline-v46';
 const OFFLINE_ASSETS = [
   './',
   'index.html',
