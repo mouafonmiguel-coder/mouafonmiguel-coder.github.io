@@ -1,16 +1,16 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.43.0",
-  "build": 2026111404,
-  "lastUpdated": "14 Novembre 2026 - Mode 100% Hors-Ligne (Offline-First Cache-First)",
+  "version": "2.44.0",
+  "build": 2026111501,
+  "lastUpdated": "15 Novembre 2026 - Intégration Compte TikTok Officiel JAMIL (Bertoua)",
   "direction": {
-    "miguel": "Chargé de Communication (Yaoundé)",
-    "jamil": "Chargé de Communication (Bertoua)"
+    "miguel": "Chargé de Communication (Yaoundé) - YouTube @MIGUELMOUAFON",
+    "jamil": "Chargé de Communication (Bertoua) - TikTok @JAMIL"
   },
   "features": [
+    "Bouton officiel TikTok pour JAMIL (Bertoua)",
+    "Bouton officiel YouTube pour Miguel (Yaoundé)",
     "Fonctionnement 100% hors-ligne sans connexion internet requise",
-    "Stratégie Cache-First pour une ouverture instantanée en 0 milliseconde",
-    "Suppression totale de toute dépendance réseau externe",
-    "Bandeau d'auto-détection du mode hors-ligne"
+    "Stratégie Cache-First pour une ouverture instantanée en 0 milliseconde"
   ]
 }
