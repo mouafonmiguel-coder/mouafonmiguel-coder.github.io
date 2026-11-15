@@ -1,17 +1,17 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.47.0",
-  "build": 2026111504,
-  "lastUpdated": "15 Novembre 2026 - Audit Global Sans Bug & Support Bilingue Intégral",
+  "version": "2.48.0",
+  "build": 2026111505,
+  "lastUpdated": "15 Novembre 2026 - Bouton S'inscrire ultra-visible sur tous les smartphones",
   "direction": {
     "miguel": "Chargé de Communication (Yaoundé) - Communication Officer",
     "jamil": "Chargé de Communication (Bertoua) - Communication Officer"
   },
   "features": [
-    "Inscription et Connexion 100% fluides et sans bug",
-    "Sélecteur bilingue instantané (Français 🇫🇷 / English 🇬🇧)",
-    "Calcul et génération de reçu officiel infalsifiable",
-    "Boutons WhatsApp dynamiques (OM JAMIL / MoMo Miguel / Fapshi)",
+    "Bouton doré '👤 S'inscrire' ultra-visible en permanence dans l'en-tête mobile",
+    "Carte d'inscription rapide '✨ S'inscrire maintenant' dès l'arrivée sur l'accueil",
+    "Onglet '👤 Compte' dans la barre de navigation inférieure",
+    "Sélecteur bilingue (FR / EN)",
     "Fonctionnement 100% hors-ligne (Offline-First)"
   ]
 }
