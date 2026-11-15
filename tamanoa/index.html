@@ -2648,8 +2648,8 @@
        JAVASCRIPT LOGIC
        ======================================================================== -->
   <script>
-    const APP_VERSION = '2.50.0';
-    const APP_BUILD = 2026111507;
+    const APP_VERSION = '2.51.0';
+    const APP_BUILD = 2026111508;
 
     function escapeHtml(str) {
       if (str === null || str === undefined) return '';
@@ -3718,6 +3718,32 @@
       }
     }
 
+    
+    // ========================================================================
+    // SYNCHRONISATION CLOUD EN DIRECT MULTI-APPAREILS (NTFY CLOUD TOPIC)
+    // ========================================================================
+    const TAMANOA_CLOUD_TOPIC = 'tamanoa_express_live_sync_2026';
+    const TAMANOA_CLOUD_URL = 'https://ntfy.sh/' + TAMANOA_CLOUD_TOPIC;
+
+    function broadcastCloudEvent(type, payload) {
+      try {
+        fetch(TAMANOA_CLOUD_URL, {
+          method: 'POST',
+          headers: {
+            'Title': type === 'USER_REGISTER' ? 'Nouveau Client Tamanoa Express' : (type === 'ORDER_PLACED' ? 'Nouvelle Commande Tamanoa Express' : 'Candidature Coursier Tamanoa Express'),
+            'Priority': 'high',
+            'Tags': type === 'USER_REGISTER' ? 'busts_in_silhouette,tada' : (type === 'ORDER_PLACED' ? 'package,bell' : 'motorcycle,memo')
+          },
+          body: JSON.stringify({
+            type: type,
+            ...payload
+          })
+        }).catch(err => console.log('Sync note:', err));
+      } catch (err) {
+        console.log('Sync note:', err);
+      }
+    }
+
     function handleRegisterSubmit(e) {
       if (e && e.preventDefault) e.preventDefault();
       const nameInput = document.getElementById('regName');
@@ -3787,6 +3813,18 @@
       saveStoredUsers(users);
       setCurrentUser(newUser);
       closeAuthModal();
+      
+      // Diffusion Cloud en temps réel pour l'Admin Dashboard
+      broadcastCloudEvent('USER_REGISTER', {
+        id: newUser.id,
+        name: newUser.name,
+        phone: newUser.phone,
+        city: newUser.city,
+        createdAt: newUser.createdAt,
+        date: new Date().toLocaleString('fr-FR'),
+        timestamp: Date.now()
+      });
+
       const firstName = newUser.name.split(' ')[0] || newUser.name;
       alertInApp('🎉 Compte créé avec succès ! Bienvenue ' + firstName + '. Vous avez maintenant accès à toute l\'application !');
       try {
@@ -5305,7 +5343,100 @@
       }
     }
 
+    
+    let isCloudSyncing = false;
+    async function syncLiveAdminCloudData() {
+      if (isCloudSyncing) return;
+      isCloudSyncing = true;
+      const statusEl = document.getElementById('adminSyncLiveStatus');
+      if (statusEl) statusEl.innerHTML = '<span style="color:#d97706;">⏳ Synchronisation Cloud en cours...</span>';
+
+      try {
+        const resp = await fetch(TAMANOA_CLOUD_URL + '/json?poll=1&since=all');
+        if (resp.ok) {
+          const text = await resp.text();
+          const lines = text.trim().split('\n');
+          let currentUsers = getStoredUsers();
+          let currentOrders = getStoredOrders();
+          let currentAgents = getStoredAgents();
+          let usersChanged = false;
+          let ordersChanged = false;
+          let agentsChanged = false;
+
+          lines.forEach(line => {
+            if (!line.trim()) return;
+            try {
+              const item = JSON.parse(line);
+              if (item.event === 'message' && item.message) {
+                const payload = JSON.parse(item.message);
+                
+                // 1. SYNCHRONISATION CLIENTS INSCRITS
+                if (payload.type === 'USER_REGISTER' && payload.phone) {
+                  const cleanP = normalizeCameroonPhone(payload.phone);
+                  const existingIdx = currentUsers.findIndex(u => normalizeCameroonPhone(u.phone) === cleanP);
+                  if (existingIdx === -1) {
+                    currentUsers.push({
+                      id: payload.id || ('usr-' + (payload.timestamp || Date.now())),
+                      name: payload.name || ('Client ' + cleanP),
+                      phone: cleanP,
+                      city: payload.city || 'Yaoundé',
+                      ordersCount: payload.ordersCount || 0,
+                      createdAt: payload.createdAt || payload.date || new Date().toISOString().split('T')[0]
+                    });
+                    usersChanged = true;
+                  } else if (payload.name && currentUsers[existingIdx].name.startsWith('Client ')) {
+                    currentUsers[existingIdx].name = payload.name;
+                    usersChanged = true;
+                  }
+                }
+
+                // 2. SYNCHRONISATION COMMANDES
+                if (payload.type === 'ORDER_PLACED' && payload.id) {
+                  const existingOrder = currentOrders.find(o => o.id === payload.id);
+                  if (!existingOrder) {
+                    currentOrders.unshift(payload);
+                    ordersChanged = true;
+                    const u = currentUsers.find(u => normalizeCameroonPhone(u.phone) === normalizeCameroonPhone(payload.clientPhone));
+                    if (u) {
+                      u.ordersCount = (u.ordersCount || 0) + 1;
+                      usersChanged = true;
+                    }
+                  }
+                }
+
+                // 3. SYNCHRONISATION COURSIERS
+                if (payload.type === 'COURIER_APPLY' && payload.phone) {
+                  const existingAgent = currentAgents.find(a => normalizeCameroonPhone(a.phone) === normalizeCameroonPhone(payload.phone));
+                  if (!existingAgent) {
+                    currentAgents.push(payload);
+                    agentsChanged = true;
+                  }
+                }
+              }
+            } catch (e) {}
+          });
+
+          if (usersChanged) saveStoredUsers(currentUsers);
+          if (ordersChanged) saveStoredOrders(currentOrders);
+          if (agentsChanged) saveStoredAgents(currentAgents);
+
+          if (statusEl) {
+            statusEl.innerHTML = `<span style="color:#16a34a; font-weight:800;">🟢 En Direct (${currentUsers.length} clients synchronisés)</span>`;
+          }
+        }
+      } catch (err) {
+        console.warn('Sync fetch error:', err);
+        if (statusEl) statusEl.innerHTML = '<span style="color:#64748b;">📡 Mode local actif</span>';
+      } finally {
+        isCloudSyncing = false;
+        renderAdminDashboardInternal();
+      }
+    }
+
     function renderAdminDashboard() {
+      syncLiveAdminCloudData();
+    }
+    function renderAdminDashboardInternal() {
       const agents = getStoredAgents();
       const users = getStoredUsers();
       const orders = getStoredOrders();
