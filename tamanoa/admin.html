@@ -199,7 +199,10 @@
         <div class="card-title">
           <span>📦</span> Historique & Supervision des Commandes
         </div>
-        <button class="btn-sync-now" style="background:#059669;" onclick="exportOrdersCsv()">📥 Exporter Commandes CSV</button>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn-sync-now" style="background:#059669;" onclick="exportOrdersCsv()">📥 Exporter CSV</button>
+          <button class="btn-del" style="background:rgba(220,38,38,0.25); color:#f87171; border:1px solid #ef4444; padding:6px 12px; border-radius:8px; cursor:pointer;" onclick="clearAllOrders()">🧹 Vider Toutes les Commandes</button>
+        </div>
       </div>
 
       <div class="filter-bar">
@@ -337,10 +340,13 @@
       const syncStatus = document.getElementById('syncStatusText');
       if (syncStatus) syncStatus.innerText = 'SYNCHRO...';
 
+      const deletedOrders = JSON.parse(localStorage.getItem('ke_deleted_orders_v5') || '[]');
+      const deletedClients = JSON.parse(localStorage.getItem('ke_deleted_clients_v5') || '[]');
+
       try {
         // Load local cache first
-        allClients = JSON.parse(localStorage.getItem('ke_users_v5') || '[]');
-        allOrders = JSON.parse(localStorage.getItem('ke_orders_v5') || '[]');
+        allClients = JSON.parse(localStorage.getItem('ke_users_v5') || '[]').filter(c => !deletedClients.includes(c.id) && !deletedClients.includes(String(c.phone).replace(/\D/g, '')));
+        allOrders = JSON.parse(localStorage.getItem('ke_orders_v5') || '[]').filter(o => !deletedOrders.includes(o.id));
         allCouriers = JSON.parse(localStorage.getItem('ke_agents_v5') || '[]');
 
         const resp = await fetch(CLOUD_URL + '/json?poll=1&since=all');
@@ -482,36 +488,106 @@
       if (!container) return;
       const search = (document.getElementById('orderSearchInput')?.value || '').toLowerCase();
 
+      const deletedOrders = JSON.parse(localStorage.getItem('ke_deleted_orders_v5') || '[]');
       const filtered = allOrders.filter(o => 
-        (o.id && o.id.toLowerCase().includes(search)) ||
+        !deletedOrders.includes(o.id) &&
+        ((o.id && o.id.toLowerCase().includes(search)) ||
         (o.clientName && o.clientName.toLowerCase().includes(search)) ||
         (o.clientPhone && o.clientPhone.includes(search)) ||
-        (o.serviceTitle && o.serviceTitle.toLowerCase().includes(search))
+        (o.serviceTitle && o.serviceTitle.toLowerCase().includes(search)))
       );
 
       if (filtered.length === 0) {
-        container.innerHTML = '<div style="text-align:center; padding:30px; color:#94a3b8;">Aucune commande pour le moment.</div>';
+        container.innerHTML = '<div style="text-align:center; padding:30px; color:#94a3b8;">Aucune commande active trouvée.</div>';
         return;
       }
 
       let html = '';
       filtered.forEach(o => {
+        const cleanP = String(o.clientPhone).replace(/\D/g, '');
+        const currentStatus = o.status || 'Validée & Enregistrée';
         html += `
-          <div class="order-item">
+          <div class="order-item" id="order-card-${o.id}">
             <div class="order-head">
-              <span class="order-id">📦 ${o.id}</span>
+              <div>
+                <span class="order-id">📦 ${o.id}</span>
+                <span style="font-size:0.75rem; font-weight:800; margin-left:8px; padding:2px 8px; border-radius:6px; background:#1e3a8a; color:#93c5fd;">
+                  ${currentStatus}
+                </span>
+              </div>
               <span class="order-date">${o.createdAt || o.date || 'Récemment'}</span>
             </div>
-            <div class="order-body">
-              <div><strong>Prestation :</strong> ${o.serviceTitle}</div>
-              <div><strong>Client :</strong> ${o.clientName} (📞 ${o.clientPhone})</div>
-              <div><strong>Trajet :</strong> 📍 Départ: ${o.fromLoc} &rarr; 🏁 Arrivée: ${o.toLoc} (${o.city})</div>
-              <div><strong>Paiement :</strong> ${o.paymentMode}</div>
+            <div class="order-body" style="margin-bottom:10px;">
+              <div style="font-size:0.92rem; font-weight:900; color:#facc15; margin-bottom:4px;">${o.serviceTitle}</div>
+              <div>👤 <strong>Client :</strong> ${o.clientName} (📞 <strong>${o.clientPhone}</strong>)</div>
+              <div>📍 <strong>Trajet :</strong> ${o.fromLoc || 'Départ'} &rarr; 🏁 ${o.toLoc || 'Arrivée'} (${o.city || 'Yaoundé'})</div>
+              <div>💰 <strong>Paiement :</strong> ${o.paymentMode || 'Orange Money / MoMo'}</div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; border-top:1px solid #334155; padding-top:8px;">
+              <div style="display:flex; align-items:center; gap:6px;">
+                <label style="font-size:0.75rem; color:#94a3b8;">Statut :</label>
+                <select style="background:#0f172a; color:#fff; border:1px solid #475569; border-radius:6px; padding:4px 8px; font-size:0.78rem; font-weight:800;" onchange="updateOrderStatusAdmin('${o.id}', this.value)">
+                  <option value="Validée & Enregistrée" ${currentStatus === 'Validée & Enregistrée' ? 'selected' : ''}>Validée</option>
+                  <option value="En cours de livraison" ${currentStatus === 'En cours de livraison' ? 'selected' : ''}>En cours</option>
+                  <option value="Livrée avec succès" ${currentStatus === 'Livrée avec succès' ? 'selected' : ''}>Livrée</option>
+                  <option value="Annulée" ${currentStatus === 'Annulée' ? 'selected' : ''}>Annulée</option>
+                </select>
+              </div>
+              <div style="display:flex; align-items:center; gap:6px;">
+                <a href="https://wa.me/237${cleanP}?text=Bonjour%20${encodeURIComponent(o.clientName)},%20concernant%20votre%20commande%20Tamanoa%20Express%20(${o.id})." target="_blank" class="btn-wa">
+                  💬 WhatsApp
+                </a>
+                <button class="btn-del" onclick="deleteOrderAdmin('${o.id}')">
+                  🗑️ Supprimer
+                </button>
+              </div>
             </div>
           </div>
         `;
       });
       container.innerHTML = html;
+    }
+
+    function updateOrderStatusAdmin(orderId, newStatus) {
+      let ord = allOrders.find(o => o.id === orderId);
+      if (ord) {
+        ord.status = newStatus;
+        localStorage.setItem('ke_orders_v5', JSON.stringify(allOrders));
+        showToast('Statut mis à jour : ' + newStatus);
+        renderOrdersList();
+      }
+    }
+
+    function deleteOrderAdmin(orderId) {
+      if (confirm('Voulez-vous vraiment supprimer définitivement cette commande (' + orderId + ') ?')) {
+        allOrders = allOrders.filter(o => o.id !== orderId);
+        localStorage.setItem('ke_orders_v5', JSON.stringify(allOrders));
+
+        // Enregistrer dans la liste noire des commandes supprimées
+        let deleted = JSON.parse(localStorage.getItem('ke_deleted_orders_v5') || '[]');
+        if (!deleted.includes(orderId)) {
+          deleted.push(orderId);
+          localStorage.setItem('ke_deleted_orders_v5', JSON.stringify(deleted));
+        }
+
+        updateKPIs();
+        renderOrdersList();
+        showToast('🗑️ Commande ' + orderId + ' supprimée avec succès !');
+      }
+    }
+
+    function clearAllOrders() {
+      if (confirm('⚠️ Attention : Voulez-vous vraiment vider tout l\'historique des commandes ?')) {
+        let deleted = JSON.parse(localStorage.getItem('ke_deleted_orders_v5') || '[]');
+        allOrders.forEach(o => { if (!deleted.includes(o.id)) deleted.push(o.id); });
+        localStorage.setItem('ke_deleted_orders_v5', JSON.stringify(deleted));
+
+        allOrders = [];
+        localStorage.setItem('ke_orders_v5', JSON.stringify([]));
+        updateKPIs();
+        renderOrdersList();
+        showToast('🧹 Toutes les commandes ont été effacées.');
+      }
     }
 
     function renderCouriersList() {
@@ -551,9 +627,15 @@
       if (confirm('Voulez-vous vraiment supprimer ce client de la liste ?')) {
         allClients = allClients.filter(c => c.id !== id && String(c.phone).replace(/\D/g, '') !== phone);
         localStorage.setItem('ke_users_v5', JSON.stringify(allClients));
+
+        let deleted = JSON.parse(localStorage.getItem('ke_deleted_clients_v5') || '[]');
+        if (id && !deleted.includes(id)) deleted.push(id);
+        if (phone && !deleted.includes(phone)) deleted.push(phone);
+        localStorage.setItem('ke_deleted_clients_v5', JSON.stringify(deleted));
+
         updateKPIs();
         renderClientsList();
-        showToast('Client supprimé de la liste.');
+        showToast('🗑️ Client supprimé de la liste.');
       }
     }
 
