@@ -1,18 +1,18 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.49.0",
-  "build": 2026111506,
-  "lastUpdated": "15 Novembre 2026 - MoMo Miguel (653 59 63 05) & OM JAMIL (656 99 53 69) - Fapshi retiré",
+  "version": "2.50.0",
+  "build": 2026111507,
+  "lastUpdated": "15 Novembre 2026 - Traduction intégrale bilingue du Guide & Plan d'action",
   "direction": {
     "miguel": "Chargé de Communication (Yaoundé) - Mobile Money: 653 59 63 05",
     "jamil": "Chargé de Communication (Bertoua) - Orange Money: 656 99 53 69"
   },
   "features": [
+    "Traduction bilingue intégrale (Français 🇫🇷 / English 🇬🇧) du Guide Officiel et du Plan d'Action",
+    "Traduction des 4 grandes missions, des étapes, des boutons et de l'espace membre",
     "Attribution exclusive MTN Mobile Money à Miguel sur le 653 59 63 05",
     "Attribution exclusive Orange Money à JAMIL sur le 656 99 53 69",
-    "Suppression totale de la passerelle Fapshi et du numéro 692",
     "Bouton doré '👤 S'inscrire' ultra-visible sur tous les smartphones",
-    "Support bilingue intégral (Français 🇫🇷 / English 🇬🇧)",
     "Fonctionnement 100% hors-ligne (Offline-First)"
   ]
 }
