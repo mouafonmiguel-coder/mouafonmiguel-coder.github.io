@@ -2648,8 +2648,8 @@
        JAVASCRIPT LOGIC
        ======================================================================== -->
   <script>
-    const APP_VERSION = '2.51.0';
-    const APP_BUILD = 2026111508;
+    const APP_VERSION = '2.52.0';
+    const APP_BUILD = 2026111509;
 
     function escapeHtml(str) {
       if (str === null || str === undefined) return '';
@@ -5681,7 +5681,14 @@
         let orders = getStoredOrders();
         orders = orders.filter(o => o.id !== orderId);
         saveStoredOrders(orders);
-        alertInApp('Commande supprimée.');
+
+        let deleted = JSON.parse(localStorage.getItem('ke_deleted_orders_v5') || '[]');
+        if (!deleted.includes(orderId)) {
+          deleted.push(orderId);
+          localStorage.setItem('ke_deleted_orders_v5', JSON.stringify(deleted));
+        }
+
+        alertInApp('🗑️ Commande supprimée avec succès.');
         renderAdminDashboard();
       });
     }
