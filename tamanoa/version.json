@@ -1,18 +1,18 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.50.0",
-  "build": 2026111507,
-  "lastUpdated": "15 Novembre 2026 - Traduction intégrale bilingue du Guide & Plan d'action",
+  "version": "2.51.0",
+  "build": 2026111508,
+  "lastUpdated": "15 Novembre 2026 - Synchronisation Cloud Multi-Appareils en Temps Réel pour l'Admin Dashboard",
   "direction": {
     "miguel": "Chargé de Communication (Yaoundé) - Mobile Money: 653 59 63 05",
     "jamil": "Chargé de Communication (Bertoua) - Orange Money: 656 99 53 69"
   },
   "features": [
-    "Traduction bilingue intégrale (Français 🇫🇷 / English 🇬🇧) du Guide Officiel et du Plan d'Action",
-    "Traduction des 4 grandes missions, des étapes, des boutons et de l'espace membre",
-    "Attribution exclusive MTN Mobile Money à Miguel sur le 653 59 63 05",
-    "Attribution exclusive Orange Money à JAMIL sur le 656 99 53 69",
-    "Bouton doré '👤 S'inscrire' ultra-visible sur tous les smartphones",
+    "Synchronisation Cloud instantanée (ntfy.sh) de tous les clients inscrits à travers tout le Cameroun",
+    "Dashboard Administrateur complet et dédié sur /tamanoa/admin.html",
+    "Liste interactive des clients avec lien WhatsApp direct en 1 clic",
+    "Supervision des commandes et candidatures coursiers en temps réel",
+    "Export CSV / Excel des clients et commandes",
     "Fonctionnement 100% hors-ligne (Offline-First)"
   ]
 }
