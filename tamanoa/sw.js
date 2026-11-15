@@ -1,7 +1,7 @@
 // TAMANOA EXPRESS (Coursier 237) - True Offline-First Service Worker
-// Version: 2.47.0 (Verified Auth Registration, Bilingual French/English & Zero-Data Offline Execution)
+// Version: 2.48.0 (Mobile Header Fix, Inscription Button Everywhere & Zero-Data Offline Execution)
 
-const CACHE_NAME = 'tamanoa-offline-v49';
+const CACHE_NAME = 'tamanoa-offline-v50';
 const OFFLINE_ASSETS = [
   './',
   'index.html',
