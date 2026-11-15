@@ -1666,10 +1666,9 @@
         <div class="form-group">
           <label class="form-label" for="orderPaymentMode">Mode de paiement :</label>
           <select id="orderPaymentMode" class="form-control" style="font-weight:700;">
+            <option value="Orange Money — 656 99 53 69 (JAMIL)">🟠 Orange Money (OM) — 656 99 53 69 (JAMIL)</option>
+            <option value="MTN Mobile Money — 692 16 82 64 / 653 59 63 05 (Miguel)">🟡 MTN Mobile Money (MoMo) — 692 16 82 64 / 653 59 63 05 (Miguel)</option>
             <option value="Fapshi (Paiement en Ligne)">💳 Paiement en Ligne Sécurisé Fapshi (OM / MoMo / Carte)</option>
-            <option value="Orange Money (692 16 82 64)">🟠 Orange Money (OM) — 692 16 82 64 (Miguel)</option>
-            <option value="MTN Mobile Money (653 59 63 05)">🟡 MTN Mobile Money (MoMo) — 653 59 63 05 (Miguel)</option>
-            
           </select>
         </div>
 
@@ -2208,7 +2207,7 @@
               <strong>1. Service & Direction :</strong> TAMANOA EXPRESS (Coursier 237) assure vos courses urbaines, livraisons expresses et démarches administratives sous la direction de <strong>Miguel</strong> (Yaoundé &bull; 692 16 82 64) et <strong>JAMIL</strong> (Bertoua &bull; 656 99 53 69).
             </p>
             <p style="margin: 0 0 6px 0;">
-              <strong>2. Règle Zéro Espèces (Cash Interdit) :</strong> Pour la sécurité absolue des courses, aucun paiement en espèces n'est remis au coursier. Tous les règlements s'effectuent via <strong>Fapshi</strong> ou par Orange Money (692 16 82 64) et MTN MoMo (653 59 63 05) Direction.
+              <strong>2. Règle Zéro Espèces (Cash Interdit) :</strong> Pour la sécurité absolue des courses, aucun paiement en espèces n'est remis au coursier. Tous les règlements s'effectuent via Orange Money (656 99 53 69 - JAMIL), MTN MoMo (692 16 82 64 / 653 59 63 05 - Miguel) ou la passerelle en ligne <strong>Fapshi</strong>.
             </p>
             <p style="margin: 0 0 6px 0;">
               <strong>3. Sécurité SHA-256 & Reçus :</strong> Mots de passe protégés par hachage cryptographique et reçus officiels infalsifiables avec signature numérique SHA-256.
@@ -2422,7 +2421,7 @@
         <div class="terms-article-card">
           <div class="terms-article-title">3. Paiements 100% Numériques & Sécurisés</div>
           <p>
-            Pour la sécurité intégrale des utilisateurs et de la direction, <strong>aucun paiement en espèces (cash) n'est accepté au coursier</strong>. Tous les règlements s'effectuent via la passerelle en ligne officielle <strong>Fapshi</strong> ou directement sur les comptes certifiés Orange Money (<strong>692 16 82 64</strong>) et MTN MoMo (<strong>653 59 63 05</strong>) de la Direction.
+            Pour la sécurité intégrale des utilisateurs et de la direction, <strong>aucun paiement en espèces (cash) n'est accepté au coursier</strong>. Tous les règlements s'effectuent via Orange Money (<strong>656 99 53 69</strong> - JAMIL), MTN Mobile Money (<strong>692 16 82 64 / 653 59 63 05</strong> - Miguel) ou la passerelle en ligne officielle <strong>Fapshi</strong>.
           </p>
         </div>
 
@@ -4109,7 +4108,47 @@
       setVal('modalPaymentPriceBadge', 'Sur devis');
 
       const checksum = order.checksum || generateReceiptChecksum(order.id, order.clientPhone, order.price, order.createdAt);
-      setVal('modalReceiptChecksum', '🔒 SHA-256 : ' + checksum);
+      setVal('modalReceiptChecksum', '🔒 Sécurité Reçu : ' + checksum);
+
+      const payArea = document.getElementById('modalPaymentActionArea');
+      if (payArea) {
+        if (order.paymentMode.includes('Orange Money') || order.paymentMode.includes('JAMIL')) {
+          payArea.innerHTML = `
+            <div style="background:#fff7ed; border:1px solid #fdba74; border-radius:8px; padding:10px; margin-top:4px;">
+              <div style="font-size:0.8rem; font-weight:800; color:#9a3412;">🟠 Compte Orange Money Officiel :</div>
+              <div style="font-size:1.05rem; font-weight:900; color:#c2410c; margin:3px 0;">656 99 53 69 (JAMIL)</div>
+              <div style="font-size:0.73rem; color:#7c2d12;">Règlement via Orange Money (#150# ou Max It) vers ce numéro.</div>
+              <a href="https://wa.me/237656995369?text=Bonjour%20JAMIL,%20je%20viens%20de%20valider%20la%20prestation%20${order.id}%20via%20Orange%20Money." target="_blank" class="btn btn-sm" style="background:#ea580c; color:#fff; font-weight:800; font-size:0.75rem; padding:6px 10px; margin-top:6px; display:inline-flex; align-items:center; gap:5px; text-decoration:none; border-radius:6px;">
+                💬 Confirmer avec JAMIL (WhatsApp) &rarr;
+              </a>
+            </div>
+          `;
+        } else if (order.paymentMode.includes('MTN') || order.paymentMode.includes('Mobile Money') || order.paymentMode.includes('Miguel')) {
+          payArea.innerHTML = `
+            <div style="background:#fefce8; border:1px solid #fde047; border-radius:8px; padding:10px; margin-top:4px;">
+              <div style="font-size:0.8rem; font-weight:800; color:#854d0e;">🟡 Compte MTN Mobile Money Officiel :</div>
+              <div style="font-size:1.05rem; font-weight:900; color:#a16207; margin:3px 0;">692 16 82 64 / 653 59 63 05 (Miguel)</div>
+              <div style="font-size:0.73rem; color:#713f12;">Règlement via MTN MoMo (*126# ou App MoMo) vers ce numéro.</div>
+              <a href="https://wa.me/237692168264?text=Bonjour%20Miguel,%20je%20viens%20de%20valider%20la%20prestation%20${order.id}%20via%20Mobile%20Money." target="_blank" class="btn btn-sm" style="background:#ca8a04; color:#fff; font-weight:800; font-size:0.75rem; padding:6px 10px; margin-top:6px; display:inline-flex; align-items:center; gap:5px; text-decoration:none; border-radius:6px;">
+                💬 Confirmer avec Miguel (WhatsApp) &rarr;
+              </a>
+            </div>
+          `;
+        } else {
+          payArea.innerHTML = `
+            <div style="background:#f0fdf4; border:1px solid #86efac; border-radius:8px; padding:10px; margin-top:4px;">
+              <div style="font-size:0.8rem; font-weight:800; color:#166534;">💳 Paiement en Ligne Sécurisé Fapshi :</div>
+              <div style="font-size:0.73rem; color:#14532d; margin:3px 0;">Règlement immédiat par Orange Money, MTN MoMo ou Carte bancaire.</div>
+              <a href="https://pay.fapshi.com/97799594" target="_blank" class="btn btn-sm" style="background:#16a34a; color:#fff; font-weight:800; font-size:0.75rem; padding:6px 10px; margin-top:6px; display:inline-flex; align-items:center; gap:5px; text-decoration:none; border-radius:6px;">
+                🔒 Payer sur la passerelle Fapshi &rarr;
+              </a>
+            </div>
+          `;
+        }
+      }
+
+      const isJamilRecipient = order.paymentMode.includes('JAMIL') || order.city === 'Bertoua';
+      const targetAdminPhone = isJamilRecipient ? '656995369' : '692168264';
 
       const waMsg = `*REÇU DE TRANSACTION TAMANOA EXPRESS (COURSIER 237)*%0A%0A` +
         `🧾 *N° Transaction :* ${order.id}%0A` +
@@ -4125,7 +4164,7 @@
         `_Conservez ce reçu pour le suivi de votre course._`;
 
       const waBtn = document.getElementById('modalWhatsAppBtn');
-      if (waBtn) waBtn.href = `https://wa.me/237692168264?text=${waMsg}`;
+      if (waBtn) waBtn.href = `https://wa.me/237${targetAdminPhone}?text=${waMsg}`;
 
       document.getElementById('orderSuccessModal').classList.add('active');
     }
