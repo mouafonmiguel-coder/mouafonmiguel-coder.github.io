@@ -1,7 +1,7 @@
 // TAMANOA EXPRESS (Coursier 237) - True Offline-First Service Worker
-// Version: 2.48.0 (Mobile Header Fix, Inscription Button Everywhere & Zero-Data Offline Execution)
+// Version: 2.49.0 (MoMo Miguel 653 59 63 05, OM JAMIL 656 99 53 69, Fapshi Removed & Zero-Data Offline Execution)
 
-const CACHE_NAME = 'tamanoa-offline-v50';
+const CACHE_NAME = 'tamanoa-offline-v51';
 const OFFLINE_ASSETS = [
   './',
   'index.html',
