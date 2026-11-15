@@ -1,16 +1,17 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.44.0",
-  "build": 2026111501,
-  "lastUpdated": "15 Novembre 2026 - Intégration Compte TikTok Officiel JAMIL (Bertoua)",
+  "version": "2.45.0",
+  "build": 2026111502,
+  "lastUpdated": "15 Novembre 2026 - Mise à jour Comptes de Paiement (Orange Money JAMIL & MoMo Miguel)",
   "direction": {
-    "miguel": "Chargé de Communication (Yaoundé) - YouTube @MIGUELMOUAFON",
-    "jamil": "Chargé de Communication (Bertoua) - TikTok @JAMIL"
+    "miguel": "Chargé de Communication (Yaoundé) - Mobile Money: 692 16 82 64 / 653 59 63 05",
+    "jamil": "Chargé de Communication (Bertoua) - Orange Money: 656 99 53 69"
   },
   "features": [
-    "Bouton officiel TikTok pour JAMIL (Bertoua)",
-    "Bouton officiel YouTube pour Miguel (Yaoundé)",
-    "Fonctionnement 100% hors-ligne sans connexion internet requise",
-    "Stratégie Cache-First pour une ouverture instantanée en 0 milliseconde"
+    "Attribution Orange Money au numéro de JAMIL (656 99 53 69)",
+    "Attribution MTN Mobile Money au numéro de Miguel (692 16 82 64 / 653 59 63 05)",
+    "Passerelle en ligne sécurisée Fapshi",
+    "Boutons de confirmation WhatsApp selon le mode de paiement choisi",
+    "Fonctionnement 100% hors-ligne (Offline-First)"
   ]
 }
