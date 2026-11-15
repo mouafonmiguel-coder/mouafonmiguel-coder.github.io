@@ -1,18 +1,18 @@
 {
   "app": "TAMANOA_EXPRESS_COURSIER_237",
-  "version": "2.51.0",
-  "build": 2026111508,
-  "lastUpdated": "15 Novembre 2026 - Synchronisation Cloud Multi-Appareils en Temps Réel pour l'Admin Dashboard",
+  "version": "2.52.0",
+  "build": 2026111509,
+  "lastUpdated": "15 Novembre 2026 - Suppression et gestion complète des commandes dans l'Admin Dashboard",
   "direction": {
     "miguel": "Chargé de Communication (Yaoundé) - Mobile Money: 653 59 63 05",
     "jamil": "Chargé de Communication (Bertoua) - Orange Money: 656 99 53 69"
   },
   "features": [
-    "Synchronisation Cloud instantanée (ntfy.sh) de tous les clients inscrits à travers tout le Cameroun",
-    "Dashboard Administrateur complet et dédié sur /tamanoa/admin.html",
-    "Liste interactive des clients avec lien WhatsApp direct en 1 clic",
-    "Supervision des commandes et candidatures coursiers en temps réel",
-    "Export CSV / Excel des clients et commandes",
+    "Bouton de suppression individuelle '🗑️ Supprimer' pour chaque commande",
+    "Bouton '🧹 Vider Toutes les Commandes' pour effacer tout l'historique",
+    "Mise à jour en direct du statut des commandes (Validée, En cours, Livrée, Annulée)",
+    "Synchronisation Cloud multi-appareils (ntfy.sh) en temps réel",
+    "Dashboard dédié sur /tamanoa/admin.html",
     "Fonctionnement 100% hors-ligne (Offline-First)"
   ]
 }
