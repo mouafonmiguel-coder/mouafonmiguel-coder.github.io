@@ -1,10 +1,10 @@
 {
-  "version": 87,
-  "updated_at": "2026-11-16T08:00:00Z",
+  "version": 88,
+  "updated_at": "2026-11-16T09:00:00Z",
   "features": [
-    "Fonctionnement 100% Hors-Ligne (Offline-First)",
-    "Chargement instantane 0ms depuis le cache local",
-    "Bandeau indicateur Mode Hors-Ligne actif",
-    "Sauvegarde locale permanente des credits, clients et caisse"
+    "Application 100% autonome et integre (Zero-Dependency Offline)",
+    "Suppression immediate du blocage Chargement... sans connexion internet",
+    "Chargement instantane 0ms depuis le cache local Cache-First",
+    "Sauvegarde locale permanente de toutes les donnees commercants"
   ]
 }
