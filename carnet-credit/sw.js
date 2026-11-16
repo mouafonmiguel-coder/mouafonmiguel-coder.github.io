@@ -1,14 +1,14 @@
-// Service Worker Carnet Credit v87 - 100% Offline-First (Cache-First)
-const CACHE_NAME = 'cc-offline-v87';
+// Service Worker Carnet Credit v88 - Zero-Latency Offline-First (Cache-First)
+const CACHE_NAME = 'cc-offline-v88';
 const CORE_ASSETS = [
   './',
   './index.html',
-  './index-G0iod3r_.js',
-  './index-CZLuv8pD.css',
   './manifest.webmanifest',
   './version.json',
   './icons/icon-192.png',
-  './icons/icon-512.png'
+  './icons/icon-512.png',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {
