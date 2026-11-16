@@ -637,9 +637,8 @@ Ou copiez-collez directement les colonnes de votre Google Sheet !" style="width:
       if (phone && deletedKeys.includes('phone_' + phone)) return true;
       if (name && deletedKeys.some(k => k.startsWith('name_') && k.replace('name_', '') === name)) return true;
 
-      // Suppression automatique des anciens comptes demo / test
-      if (name.includes('test') || name.includes('triomphe') || name.includes('alimentation centrale') || name.includes('alimentation du bonheur')) return true;
-      if (phone === '699887766' || phone === '699112233') return true;
+      // Aucune suppression par mot-cle pour preserver tous les vrais commercants
+      if (phone === '699887766') return true;
 
       return false;
     }
