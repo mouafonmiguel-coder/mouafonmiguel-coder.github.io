@@ -1,5 +1,5 @@
-// Service Worker Carnet Credit v88 - Zero-Latency Offline-First (Cache-First)
-const CACHE_NAME = 'cc-offline-v88';
+// Service Worker Carnet Credit v89 - 100% Transparent Offline Execution
+const CACHE_NAME = 'cc-offline-v89';
 const CORE_ASSETS = [
   './',
   './index.html',
