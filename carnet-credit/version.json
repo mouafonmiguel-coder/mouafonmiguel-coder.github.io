@@ -1,10 +1,9 @@
 {
-  "version": 88,
-  "updated_at": "2026-11-16T09:00:00Z",
+  "version": 89,
+  "updated_at": "2026-11-16T09:30:00Z",
   "features": [
-    "Application 100% autonome et integre (Zero-Dependency Offline)",
-    "Suppression immediate du blocage Chargement... sans connexion internet",
-    "Chargement instantane 0ms depuis le cache local Cache-First",
-    "Sauvegarde locale permanente de toutes les donnees commercants"
+    "Suppression du bandeau texte superpose - Mode Hors-Ligne 100% automatique et invisible",
+    "Affichage propre et sans encombrement de l en-tete (Reglages, Quitter, EN)",
+    "Fonctionnement hors connexion 0ms en arriere-plan sans message genant"
   ]
 }
