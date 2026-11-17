@@ -1,10 +1,10 @@
 {
-  "version": 96,
-  "build": 2026111406,
-  "updated_at": "2026-11-14T14:00:00Z",
+  "version": 97,
+  "build": 2026111407,
+  "updated_at": "2026-11-14T14:30:00Z",
   "features": [
-    "Accord CGU avec choix obligatoire (Accepter et continuer vs Refuser et se deconnecter)",
-    "Deconnexion automatique immediate en cas de refus",
-    "Zero emoji"
+    "Suppression totale de l ecran separe Accord CGU",
+    "Validation 100% automatique et directe lors de la creation de compte",
+    "Parcours ultra-fluide sans interruption"
   ]
 }
