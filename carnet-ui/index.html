@@ -1417,8 +1417,10 @@
                         <div class="pin-dot" id="dot-4"></div>
                     </div>
 
-                    <div style="text-align: center; margin-bottom: 12px;">
-                        <a href="#" style="font-size: 12px; font-weight: 600; color: var(--primary-teal); text-decoration: none;">Renvoyer un code par SMS</a>
+                    <div style="text-align: center; margin-bottom: 14px;">
+                        <a href="javascript:void(0)" onclick="openForgotPinModal()" style="font-size: 12.5px; font-weight: 700; color: var(--primary-teal); text-decoration: none; padding: 6px 12px; border-radius: var(--radius-full); background: rgba(27, 91, 87, 0.08); display: inline-flex; align-items: center; gap: 6px;">
+                            <span>💬 Code PIN oublié ? Récupérer par SMS / WhatsApp</span>
+                        </a>
                     </div>
 
                     <!-- Custom Interactive Keypad -->
@@ -1788,8 +1790,56 @@
     </main>
 
     <!-- ============================================== -->
-    <!-- INTERACTIVE MODAL (NEW CREDIT / REPAYMENT)     -->
+    <!-- MODAL: RÉCUPÉRATION DU CODE PIN PAR SMS / WHATSAPP -->
     <!-- ============================================== -->
+    <div class="modal-overlay" id="forgot-pin-modal" onclick="closeForgotPinOnBg(event)">
+        <div class="modal-card">
+            <div class="modal-handle"></div>
+
+            <div style="text-align: center; margin-bottom: 16px;">
+                <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--primary-soft); color: var(--primary-teal); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px auto; font-size: 22px;">🔑</div>
+                <h2 style="font-size: 18px; font-weight: 800; color: var(--primary-dark); margin-bottom: 4px;">Récupération du Code PIN</h2>
+                <p style="font-size: 12px; color: var(--text-secondary);">Recevez un code de sécurité par SMS ou WhatsApp sur votre numéro officiel pour redéfinir votre PIN.</p>
+            </div>
+
+            <!-- Step 1: Request SMS -->
+            <div id="forgot-step-1">
+                <div class="input-group">
+                    <label class="input-label">Votre Numéro de Téléphone (MoMo / OM)</label>
+                    <input type="tel" class="input-field" id="forgot-phone-input" value="653596305" placeholder="ex: 653 59 63 05">
+                </div>
+
+                <button class="btn-primary" onclick="sendOtpSms()">
+                    <span>📩 Envoyer le code par SMS & WhatsApp</span>
+                </button>
+            </div>
+
+            <!-- Step 2: Enter OTP & New PIN -->
+            <div id="forgot-step-2" style="display: none;">
+                <div style="background: #DCFCE7; border: 1px solid #86EFAC; border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 14px; font-size: 12px; color: #166534; font-weight: 600; text-align: center;">
+                    ✅ Code de sécurité envoyé par SMS au <span id="display-otp-phone">+237 653 59 63 05</span>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Code SMS reçu (4 chiffres)</label>
+                    <input type="number" class="input-field" id="otp-code-input" placeholder="ex: 8492" value="8492">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Nouveau Code PIN à 4 chiffres</label>
+                    <input type="password" maxlength="4" class="input-field" id="new-pin-input" placeholder="ex: 1234" value="1234">
+                </div>
+
+                <button class="btn-primary" onclick="verifyOtpAndSetNewPin()">
+                    <span>🔒 Enregistrer & Déverrouiller</span>
+                </button>
+            </div>
+
+            <button class="btn-secondary" style="border: none; margin-top: 8px;" onclick="closeForgotPinModal()">
+                Annuler
+            </button>
+        </div>
+    </div>
     <div class="modal-overlay" id="trans-modal" onclick="closeModalOnBg(event)">
         <div class="modal-card">
             <div class="modal-handle"></div>
@@ -1951,9 +2001,37 @@
             }
         }
 
-        function simulateBiometric() {
-            alert('🔐 Empreinte digitale / Biométrie reconnue avec succès !');
-            switchScreen('screen-dashboard', document.querySelectorAll('.switch-btn')[6]);
+        // Forgot PIN & SMS Recovery Functions
+        function openForgotPinModal() {
+            const modal = document.getElementById('forgot-pin-modal');
+            if (modal) {
+                document.getElementById('forgot-step-1').style.display = 'block';
+                document.getElementById('forgot-step-2').style.display = 'none';
+                modal.classList.add('active');
+            }
+        }
+
+        function closeForgotPinModal() {
+            const modal = document.getElementById('forgot-pin-modal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function closeForgotPinOnBg(e) {
+            if (e.target.id === 'forgot-pin-modal') closeForgotPinModal();
+        }
+
+        function sendOtpSms() {
+            const phone = document.getElementById('forgot-phone-input').value || '653596305';
+            document.getElementById('display-otp-phone').textContent = '+237 ' + phone;
+            document.getElementById('forgot-step-1').style.display = 'none';
+            document.getElementById('forgot-step-2').style.display = 'block';
+        }
+
+        function verifyOtpAndSetNewPin() {
+            const newPin = document.getElementById('new-pin-input').value || '1234';
+            closeForgotPinModal();
+            alert(`✅ Votre nouveau code PIN (${newPin}) a été mis à jour avec succès !\nVotre boutique est maintenant déverrouillée.`);
+            switchScreen('screen-dashboard');
         }
 
         // Modal Logic
