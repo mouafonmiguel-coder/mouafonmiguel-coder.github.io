@@ -1,5 +1,5 @@
-// Service Worker Carnet Credit v96 - CGU Mandatory Decision Options
-const CACHE_NAME = "cc-offline-v96";
+// Service Worker Carnet Credit v97 - CGU 100% Automatic Background Validation
+const CACHE_NAME = "cc-offline-v97";
 const CORE_ASSETS = [
   "./",
   "./index.html",
