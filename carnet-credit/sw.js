@@ -1,5 +1,5 @@
-// Service Worker Carnet Credit v91 - Removed fake status bar & Purged Cache
-const CACHE_NAME = "cc-offline-v91";
+// Service Worker Carnet Credit v92 - Purged Guide square icon boxes
+const CACHE_NAME = "cc-offline-v92";
 const CORE_ASSETS = [
   "./",
   "./index.html",
