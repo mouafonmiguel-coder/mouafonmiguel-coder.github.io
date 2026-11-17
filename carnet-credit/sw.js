@@ -1,84 +1,44 @@
-// Service Worker Carnet Credit v89 - 100% Transparent Offline Execution
-const CACHE_NAME = 'cc-offline-v89';
+// Service Worker Carnet Credit v90 - Modern UI Cache Purge & Offline Support
+const CACHE_NAME = "cc-offline-v90";
 const CORE_ASSETS = [
-  './',
-  './index.html',
-  './manifest.webmanifest',
-  './version.json',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
-  './icon-192.png',
-  './icon-512.png'
+  "./",
+  "./index.html",
+  "./manifest.webmanifest",
+  "./version.json"
 ];
 
-self.addEventListener('install', (event) => {
+self.addEventListener("install", (event) => {
   self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(CORE_ASSETS).catch(err => {
-        console.warn('Cache install warning:', err);
-      });
-    })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_ASSETS))
   );
 });
 
-self.addEventListener('activate', (event) => {
+self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
-        keys.filter((k) => k !== CACHE_NAME).map((k) => {
-          console.log('SW: Suppressing old cache', k);
-          return caches.delete(k);
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
         })
       );
     }).then(() => self.clients.claim())
   );
 });
 
-// Cache-First strategy: Respond IMMEDIATELY from cache (0ms, 100% offline), update in background when online
-self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
-
+self.addEventListener("fetch", (event) => {
+  if (event.request.method !== "GET") return;
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      // 1. If found in cache, return IMMEDIATELY (0ms, 100% offline)
-      if (cachedResponse) {
-        if (navigator.onLine) {
-          fetch(event.request)
-            .then((networkResponse) => {
-              if (networkResponse && networkResponse.status === 200) {
-                const clone = networkResponse.clone();
-                caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-              }
-            })
-            .catch(() => {});
+    fetch(event.request)
+      .then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
         }
-        return cachedResponse;
-      }
-
-      // 2. Fallback for navigation requests (opening the app from URL / bookmark / home screen)
-      if (event.request.mode === 'navigate' || event.request.destination === 'document') {
-        return caches.match('./index.html')
-          .then(res => res || caches.match('./'))
-          .then(res => res || caches.match('index.html'))
-          .then(res => res || fetch(event.request));
-      }
-
-      // 3. Not in cache yet: fetch from network and cache
-      return fetch(event.request)
-        .then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            const clone = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-          }
-          return networkResponse;
-        })
-        .catch(() => {
-          return new Response('Mode hors-ligne actif', {
-            status: 200,
-            headers: { 'Content-Type': 'text/plain; charset=utf-8' }
-          });
-        });
-    })
+        return networkResponse;
+      })
+      .catch(() => caches.match(event.request))
   );
 });
