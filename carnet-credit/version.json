@@ -1,9 +1,10 @@
 {
-  "version": 93,
-  "build": 2026111404,
-  "updated_at": "2026-11-14T13:00:00Z",
+  "version": 95,
+  "build": 2026111405,
+  "updated_at": "2026-11-14T13:30:00Z",
   "features": [
-    "Purge definitive et totale des anciens caches du telephone",
-    "Cartes du guide sans aucun icone ou carre colore"
+    "Detection et notification automatique des mises a jour en arriere-plan sans formulaire manuel",
+    "Installation en 1 clic sans saisie de numero",
+    "Zero emoji et typographie epuree"
   ]
 }
