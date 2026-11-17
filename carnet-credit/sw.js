@@ -1,5 +1,5 @@
-// Service Worker Carnet Credit v95 - 100% Automatic In-App Updates
-const CACHE_NAME = "cc-offline-v95";
+// Service Worker Carnet Credit v96 - CGU Mandatory Decision Options
+const CACHE_NAME = "cc-offline-v96";
 const CORE_ASSETS = [
   "./",
   "./index.html",
