@@ -1,10 +1,9 @@
 {
-  "version": 97,
-  "build": 2026111407,
-  "updated_at": "2026-11-14T14:30:00Z",
+  "version": 98,
+  "build": 2026111408,
+  "updated_at": "2026-11-14T15:00:00Z",
   "features": [
-    "Suppression totale de l ecran separe Accord CGU",
-    "Validation 100% automatique et directe lors de la creation de compte",
-    "Parcours ultra-fluide sans interruption"
+    "Ajout du bouton de fermeture rapide X en haut a droite de tous les tiroirs et modales",
+    "Fermeture instantanee en 1 clic"
   ]
 }
