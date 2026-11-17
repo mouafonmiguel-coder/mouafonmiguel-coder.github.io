@@ -1,12 +1,10 @@
 {
-  "version": 90,
-  "build": 2026111401,
-  "updated_at": "2026-11-14T12:00:00Z",
+  "version": 91,
+  "build": 2026111402,
+  "updated_at": "2026-11-14T12:30:00Z",
   "features": [
-    "Nouvelle interface utilisateur moderne inspiree du design Figma/Dribbble",
-    "Suppression totale de 100% des emojis et remplacement par des icones vectorielles SVG",
-    "Integration du Guide pratique officiel en page d entree",
-    "Recuperation de Code PIN securisee par SMS et WhatsApp",
-    "Verificateur de mise a jour par numero de telephone commercant"
+    "Suppression totale de la fausse barre d heure 13:49, encoche et icones wifi/batterie",
+    "Rendu plein ecran natif parfait pour tous les smartphones",
+    "Cache v91 purge"
   ]
 }
