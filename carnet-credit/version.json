@@ -1,9 +1,9 @@
 {
-  "version": 99,
-  "build": 2026111409,
-  "updated_at": "2026-11-14T15:30:00Z",
+  "version": 100,
+  "build": 2026111410,
+  "updated_at": "2026-11-14T16:00:00Z",
   "features": [
-    "Enchainement automatique vers l ecran Accord CGU obligatoire lors de l inscription",
-    "Deux options claires : J accepte les conditions vs Je refuse et me deconnecter"
+    "Nouveau logo officiel sous forme de Cahier de Credit Digital stylise avec signet vert emeraude",
+    "Harmonie visuelle moderne 100% vectorielle SVG"
   ]
 }
