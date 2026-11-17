@@ -32,7 +32,7 @@
         if ('caches' in window) {
             caches.keys().then(names => {
                 for (let name of names) {
-                    if (name !== 'carnet-credit-pwa-v104') caches.delete(name);
+                    if (name !== 'carnet-credit-pwa-v105') caches.delete(name);
                 }
             });
         }
@@ -284,7 +284,11 @@
             flex: 1;
             flex-direction: column;
             animation: fadeIn 0.25s ease-out forwards;
-            padding: 10px 20px 85px 20px;
+            padding: 10px 20px 40px 20px;
+        }
+
+        .screen-view.has-bottom-nav {
+            padding-bottom: 90px !important;
         }
 
         .screen-view.active {
@@ -1066,21 +1070,21 @@
         .client-tag.warning { background: #FEF3C7; color: #D97706; }
         .client-tag.good { background: #DCFCE7; color: #16A34A; }
 
-        /* Bottom Nav */
+        /* Bottom Nav - Cleanly Docked & Strictly Hidden on Guide/Auth */
         .bottom-nav-bar {
             position: absolute;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 68px;
+            height: 64px;
             background: #FFFFFF;
             border-top: 1px solid var(--card-border);
-            display: flex;
+            display: none; /* Strictly hidden by default until Dashboard/Clients */
             align-items: center;
             justify-content: space-around;
             padding: 0 10px;
-            box-shadow: 0 -4px 16px rgba(13, 59, 55, 0.05);
-            z-index: 20;
+            box-shadow: 0 -4px 16px rgba(13, 59, 55, 0.08);
+            z-index: 50;
             border-radius: 0 0 32px 32px;
         }
 
@@ -1111,7 +1115,7 @@
             height: 100%;
             background: rgba(10, 38, 35, 0.6);
             backdrop-filter: blur(4px);
-            z-index: 100;
+            z-index: 200;
             display: none;
             align-items: flex-end;
             justify-content: center;
@@ -1229,11 +1233,15 @@
                 min-height: 100dvh !important;
                 max-height: 100vh !important;
                 max-height: 100dvh !important;
-                padding-bottom: 75px !important;
             }
             .bottom-nav-bar {
-                border-radius: 0 !important;
+                position: fixed !important;
                 bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+                border-radius: 0 !important;
+                z-index: 100 !important;
                 padding-bottom: env(safe-area-inset-bottom, 0px) !important;
             }
         }
@@ -1559,7 +1567,7 @@
                 <!-- ============================================== -->
                 <!-- 7. SCREEN: DASHBOARD / HOMEPAGE                -->
                 <!-- ============================================== -->
-                <section class="screen-view" id="screen-dashboard">
+                <section class="screen-view has-bottom-nav" id="screen-dashboard">
                     <!-- Top Bar -->
                     <div class="dash-topbar">
                         <div class="shop-identity">
@@ -1645,7 +1653,7 @@
                 <!-- ============================================== -->
                 <!-- 8. SCREEN: CLIENT DETAIL & LEDGER              -->
                 <!-- ============================================== -->
-                <section class="screen-view" id="screen-client-detail">
+                <section class="screen-view has-bottom-nav" id="screen-client-detail">
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
                         <div style="display: flex; align-items: center; gap: 12px;">
                             <button onclick="switchScreen('screen-dashboard')" style="width: 36px; height: 36px; border-radius: 50%; background: #FFFFFF; border: 1px solid var(--card-border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--primary-teal);">
@@ -1687,13 +1695,13 @@
                     </div>
                 </section>
 
-                <!-- Bottom Docked Navigation Bar -->
-                <nav class="bottom-nav-bar" id="bottom-nav">
-                    <div class="nav-item active" onclick="switchScreen('screen-dashboard')">
+                <!-- Bottom Docked Navigation Bar (STRICTLY HIDDEN on Onboarding/Guide) -->
+                <nav class="bottom-nav-bar" id="bottom-nav" style="display: none;">
+                    <div class="nav-item" id="nav-item-home" onclick="switchScreen('screen-dashboard')">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                         <span>Accueil</span>
                     </div>
-                    <div class="nav-item" onclick="switchScreen('screen-client-detail')">
+                    <div class="nav-item" id="nav-item-clients" onclick="switchScreen('screen-client-detail')">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                         <span>Clients</span>
                     </div>
@@ -1787,9 +1795,9 @@
             <div style="background: #F4FAF9; border-radius: var(--radius-md); padding: 12px 14px; border: 1px solid var(--card-border); margin-bottom: 16px;">
                 <p style="font-size: 11.5px; font-weight: 700; color: var(--primary-dark); margin-bottom: 6px;">Améliorations de cette mise à jour :</p>
                 <ul style="font-size: 11.5px; color: var(--text-secondary); margin-left: 16px; line-height: 1.55;">
+                    <li>Correction de l'affichage de la barre de navigation</li>
                     <li>Application mobile PWA installable sur l'écran d'accueil</li>
                     <li>Base de données propre et synchronisation temps réel</li>
-                    <li>Vitesse accrue et fonctionnement hors-ligne optimisé</li>
                 </ul>
             </div>
 
@@ -2204,7 +2212,7 @@
             document.getElementById('modal-amount').value = client.balance > 0 ? client.balance : '';
         }
 
-        // Screen Switching
+        // Screen Switching - Strictly Hides Bottom Nav on Onboarding/Guide
         function switchScreen(screenId, btnElement) {
             document.querySelectorAll('.screen-view').forEach(s => s.classList.remove('active'));
             const target = document.getElementById(screenId);
@@ -2234,13 +2242,24 @@
                 }
             }
 
+            // Show Bottom Nav STRICTLY on Dashboard and Client Detail ONLY
             const bNav = document.getElementById('bottom-nav');
             if (bNav) {
-                if (['screen-guide', 'screen-login', 'screen-pin', 'screen-register', 'screen-agreement', 'screen-permissions'].includes(screenId)) {
-                    bNav.style.display = 'none';
-                } else {
+                if (screenId === 'screen-dashboard' || screenId === 'screen-client-detail') {
                     bNav.style.display = 'flex';
+                } else {
+                    bNav.style.display = 'none';
                 }
+            }
+
+            // Update active state in bottom nav
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            if (screenId === 'screen-dashboard') {
+                const navHome = document.getElementById('nav-item-home');
+                if (navHome) navHome.classList.add('active');
+            } else if (screenId === 'screen-client-detail') {
+                const navClients = document.getElementById('nav-item-clients');
+                if (navClients) navClients.classList.add('active');
             }
 
             if (screenId === 'screen-dashboard') {
