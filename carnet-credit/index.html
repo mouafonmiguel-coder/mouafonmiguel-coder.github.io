@@ -4,20 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Carnet Crédit</title>
-    <!-- Google Fonts: Montserrat & Inter -->
+    <!-- Google Fonts: Montserrat & Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <script>
-        // Automatic Cache Purge
+        // Automatic Cache Purge & Purge of Demo Data
         if ('caches' in window) {
             caches.keys().then(names => {
                 for (let name of names) {
-                    if (name !== 'cc-offline-v102') caches.delete(name);
+                    if (name !== 'cc-offline-v103') caches.delete(name);
                 }
             });
         }
+        // Clear any old mock/demo database
+        try {
+            if (localStorage.getItem('carnet_has_demo') === 'true' || !localStorage.getItem('carnet_db_clean_v1')) {
+                localStorage.removeItem('carnet_demo_data');
+                localStorage.removeItem('carnet_clients');
+                localStorage.removeItem('carnet_transactions');
+                localStorage.setItem('carnet_db_clean_v1', 'true');
+                localStorage.setItem('carnet_has_demo', 'false');
+            }
+        } catch(e) {}
     </script>
     <style>
         :root {
@@ -82,7 +92,7 @@
             max-width: 1200px;
             background: #FFFFFF;
             border-radius: var(--radius-lg);
-            padding: 16px 22px;
+            padding: 14px 22px;
             margin-bottom: 20px;
             box-shadow: 0 8px 30px rgba(13, 59, 55, 0.08);
             border: 1px solid var(--card-border);
@@ -108,16 +118,10 @@
         }
 
         .showcase-title h1 {
-            font-size: 19px;
+            font-size: 20px;
             font-weight: 800;
             color: var(--primary-dark);
             letter-spacing: -0.3px;
-        }
-
-        .showcase-title p {
-            font-size: 12.5px;
-            color: var(--text-secondary);
-            font-weight: 500;
         }
 
         /* Screen Switcher Pills */
@@ -664,6 +668,7 @@
             background: var(--accent-red);
             border-radius: 50%;
             border: 1.5px solid #FFFFFF;
+            display: none;
         }
 
         .dash-search-row {
@@ -868,6 +873,45 @@
             font-weight: 700;
             color: var(--primary-teal);
             text-decoration: none;
+        }
+
+        /* Empty State */
+        .empty-state-box {
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            padding: 32px 20px;
+            text-align: center;
+            border: 1.5px dashed #CDE6E2;
+            margin-top: 10px;
+        }
+
+        .empty-state-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #E8F5F3;
+            color: var(--primary-teal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px auto;
+        }
+
+        .empty-state-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+        }
+
+        .empty-state-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 16px;
+            max-width: 280px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .client-card {
@@ -1221,10 +1265,10 @@
 
                     <div class="input-group">
                         <label class="input-label">Numéro de Téléphone (MoMo / OM)</label>
-                        <input type="tel" class="input-field" id="login-phone" placeholder="ex: 653 59 63 05" value="653596305">
+                        <input type="tel" class="input-field" id="login-phone" placeholder="ex: 6XX XX XX XX">
                     </div>
 
-                    <button class="btn-primary" onclick="switchScreen('screen-pin')">
+                    <button class="btn-primary" onclick="handleLoginSubmit()">
                         <span>Continuer</span>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
                     </button>
@@ -1310,22 +1354,22 @@
 
                     <div class="input-group">
                         <label class="input-label">Nom & Prénom du commerçant</label>
-                        <input type="text" class="input-field" placeholder="ex: Miguel Mouafon" value="Miguel Mouafon">
+                        <input type="text" class="input-field" id="reg-merchant-name" placeholder="ex: Votre nom complet">
                     </div>
 
                     <div class="input-group">
                         <label class="input-label">Nom de la Boutique / Commerce</label>
-                        <input type="text" class="input-field" placeholder="ex: Alimentation Générale Yaoundé" value="Boutique Le Progrès">
+                        <input type="text" class="input-field" id="reg-shop-name" placeholder="ex: Nom de votre commerce">
                     </div>
 
                     <div class="input-group">
                         <label class="input-label">Numéro WhatsApp / MoMo</label>
-                        <input type="tel" class="input-field" placeholder="ex: 653 59 63 05" value="653596305">
+                        <input type="tel" class="input-field" id="reg-phone" placeholder="ex: 6XX XX XX XX">
                     </div>
 
                     <div class="input-group">
                         <label class="input-label">Ville & Marché</label>
-                        <input type="text" class="input-field" placeholder="ex: Marché Mokolo, Yaoundé" value="Yaoundé - Mokolo">
+                        <input type="text" class="input-field" id="reg-location" placeholder="ex: Yaoundé - Mokolo">
                     </div>
 
                     <button class="btn-primary" onclick="proceedFromRegistration()">
@@ -1415,15 +1459,15 @@
                     <!-- Top Bar -->
                     <div class="dash-topbar">
                         <div class="shop-identity">
-                            <div class="shop-avatar">BP</div>
+                            <div class="shop-avatar" id="dash-avatar">CC</div>
                             <div class="shop-info">
-                                <h2>Boutique Le Progrès</h2>
-                                <p>Yaoundé • Mokolo</p>
+                                <h2 id="dash-shop-name">Mon Commerce</h2>
+                                <p id="dash-location">Cameroun</p>
                             </div>
                         </div>
-                        <div class="dash-notif-btn" onclick="openNewModal('credit')">
+                        <div class="dash-notif-btn" onclick="openNewModal('credit')" title="Nouveau Crédit">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                            <div class="dash-notif-badge"></div>
+                            <div class="dash-notif-badge" id="dash-badge"></div>
                         </div>
                     </div>
 
@@ -1431,35 +1475,35 @@
                     <div class="dash-search-row">
                         <div class="search-input-wrap">
                             <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                            <input type="text" class="dash-search-input" placeholder="Rechercher un client ou article...">
+                            <input type="text" class="dash-search-input" id="search-input" placeholder="Rechercher un client ou article..." oninput="filterClients()">
                         </div>
-                        <button class="dash-filter-btn" title="Filtrer">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                        <button class="dash-filter-btn" title="Filtrer" onclick="openNewModal('credit')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                         </button>
                     </div>
 
                     <!-- Filter Chips -->
                     <div class="filter-chips">
-                        <div class="chip active">Tous les clients (14)</div>
-                        <div class="chip">En retard (3)</div>
-                        <div class="chip">En cours (9)</div>
-                        <div class="chip">Soldés (2)</div>
+                        <div class="chip active" id="filter-all" onclick="setFilter('all', this)">Tous les clients (<span id="count-all">0</span>)</div>
+                        <div class="chip" id="filter-pending" onclick="setFilter('pending', this)">En cours (<span id="count-pending">0</span>)</div>
+                        <div class="chip" id="filter-late" onclick="setFilter('late', this)">En retard (<span id="count-late">0</span>)</div>
+                        <div class="chip" id="filter-paid" onclick="setFilter('paid', this)">Soldés (<span id="count-paid">0</span>)</div>
                     </div>
 
                     <!-- KPI Balance Card -->
                     <div class="kpi-card">
                         <div class="kpi-card-glow"></div>
                         <div class="kpi-label">TOTAL DETTES À RECOUVRER</div>
-                        <div class="kpi-amount">745 000 <span style="font-size: 16px; font-weight: 600;">FCFA</span></div>
+                        <div class="kpi-amount"><span id="kpi-total-debt">0</span> <span style="font-size: 16px; font-weight: 600;">FCFA</span></div>
 
                         <div class="kpi-stats-grid">
                             <div class="kpi-stat-item">
-                                <p>Encaissé ce mois</p>
-                                <h3>310 000 FCFA</h3>
+                                <p>Total Encaissé</p>
+                                <h3 id="kpi-total-collected">0 FCFA</h3>
                             </div>
                             <div class="kpi-stat-item">
                                 <p>Taux de recouvrement</p>
-                                <h3>82.4%</h3>
+                                <h3 id="kpi-recovery-rate">0.0%</h3>
                             </div>
                         </div>
                     </div>
@@ -1484,69 +1528,13 @@
 
                     <!-- Clients List Header -->
                     <div class="section-header-row">
-                        <h3>Comptes Clients Récents</h3>
-                        <a href="#">Voir tout (14)</a>
+                        <h3>Comptes Clients</h3>
+                        <a href="javascript:void(0)" onclick="clearDatabaseWithConfirm()" style="color: #94A3B8; font-size: 11px;">Purger la base</a>
                     </div>
 
-                    <!-- Client Cards List -->
-                    <div class="client-card" onclick="switchScreen('screen-client-detail')">
-                        <div class="client-card-top">
-                            <div class="client-user">
-                                <div class="client-avatar" style="background: #FEE2E2; color: #DC2626;">MC</div>
-                                <div class="client-name">
-                                    <h4>Mama Chantal</h4>
-                                    <p>694 22 18 90 • Yaoundé</p>
-                                </div>
-                            </div>
-                            <div class="client-debt-amt">
-                                <h4>45 000 F</h4>
-                                <p>Reste dû</p>
-                            </div>
-                        </div>
-                        <div class="client-card-bottom">
-                            <span class="client-goods">Sac de riz 50kg, Huile Diamaor 5L</span>
-                            <span class="client-tag urgent">Retard 12j</span>
-                        </div>
-                    </div>
-
-                    <div class="client-card" onclick="switchScreen('screen-client-detail')">
-                        <div class="client-card-top">
-                            <div class="client-user">
-                                <div class="client-avatar" style="background: #FEF3C7; color: #D97706;">PR</div>
-                                <div class="client-name">
-                                    <h4>Pa'a Roger</h4>
-                                    <p>675 44 33 21 • Bertoua</p>
-                                </div>
-                            </div>
-                            <div class="client-debt-amt">
-                                <h4>120 000 F</h4>
-                                <p>Reste dû</p>
-                            </div>
-                        </div>
-                        <div class="client-card-bottom">
-                            <span class="client-goods">Ciment 15 sacs, Fer à béton</span>
-                            <span class="client-tag warning">Échéance dans 4j</span>
-                        </div>
-                    </div>
-
-                    <div class="client-card" onclick="switchScreen('screen-client-detail')">
-                        <div class="client-card-top">
-                            <div class="client-user">
-                                <div class="client-avatar" style="background: #DCFCE7; color: #16A34A;">AI</div>
-                                <div class="client-name">
-                                    <h4>Alhaji Ibrahim</h4>
-                                    <p>656 99 53 69 • Yaoundé</p>
-                                </div>
-                            </div>
-                            <div class="client-debt-amt">
-                                <h4 style="color: #16A34A;">0 FCFA</h4>
-                                <p>Soldé</p>
-                            </div>
-                        </div>
-                        <div class="client-card-bottom">
-                            <span class="client-goods">Cartons Savon & Farine</span>
-                            <span class="client-tag good">Intégralement payé</span>
-                        </div>
+                    <!-- Container for dynamic client list -->
+                    <div id="clients-list-container">
+                        <!-- Populated dynamically via JS -->
                     </div>
                 </section>
 
@@ -1554,28 +1542,33 @@
                 <!-- 8. SCREEN: CLIENT DETAIL & LEDGER              -->
                 <!-- ============================================== -->
                 <section class="screen-view" id="screen-client-detail">
-                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-                        <button onclick="switchScreen('screen-dashboard')" style="width: 36px; height: 36px; border-radius: 50%; background: #FFFFFF; border: 1px solid var(--card-border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--primary-teal);">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <button onclick="switchScreen('screen-dashboard')" style="width: 36px; height: 36px; border-radius: 50%; background: #FFFFFF; border: 1px solid var(--card-border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--primary-teal);">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                            </button>
+                            <h2 style="font-size: 16px; font-weight: 800; color: var(--primary-dark);">Fiche & Historique Client</h2>
+                        </div>
+                        <button onclick="deleteCurrentClient()" title="Supprimer ce client" style="width: 34px; height: 34px; border-radius: 50%; background: #FEE2E2; border: 1px solid #FECACA; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #DC2626;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                         </button>
-                        <h2 style="font-size: 16px; font-weight: 800; color: var(--primary-dark);">Fiche & Historique Client</h2>
                     </div>
 
                     <div style="background: #FFFFFF; border-radius: var(--radius-lg); padding: 18px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); margin-bottom: 16px; text-align: center;">
-                        <div style="width: 54px; height: 54px; border-radius: 50%; background: #FEE2E2; color: #DC2626; font-size: 18px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px auto;">MC</div>
-                        <h3 style="font-size: 16px; font-weight: 800; color: var(--primary-dark);">Mama Chantal</h3>
-                        <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">+237 694 22 18 90 • Yaoundé (Mokolo)</p>
+                        <div id="detail-avatar" style="width: 54px; height: 54px; border-radius: 50%; background: var(--primary-soft); color: var(--primary-dark); font-size: 18px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px auto;">--</div>
+                        <h3 id="detail-name" style="font-size: 16px; font-weight: 800; color: var(--primary-dark);">Aucun client sélectionné</h3>
+                        <p id="detail-phone" style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">--</p>
 
                         <div style="background: #FFF5F5; border-radius: var(--radius-md); padding: 12px; border: 1px solid #FED7D7; margin-bottom: 14px;">
                             <p style="font-size: 11px; font-weight: 700; color: #DC2626; text-transform: uppercase;">Solde Restant Dû</p>
-                            <h2 style="font-size: 24px; font-weight: 800; color: #DC2626;">45 000 FCFA</h2>
+                            <h2 id="detail-balance" style="font-size: 24px; font-weight: 800; color: #DC2626;">0 FCFA</h2>
                         </div>
 
                         <div style="display: flex; gap: 8px;">
-                            <button class="btn-primary" style="height: 44px; font-size: 13px;" onclick="sendWhatsAppReminder('Mama Chantal', '45000')">
+                            <button class="btn-primary" style="height: 44px; font-size: 13px;" onclick="sendWhatsAppToCurrentClient()">
                                 Rappel WhatsApp
                             </button>
-                            <button class="btn-secondary" style="height: 44px; font-size: 13px; margin-top: 6px;" onclick="openNewModal('payment')">
+                            <button class="btn-secondary" style="height: 44px; font-size: 13px; margin-top: 6px;" onclick="openPaymentForCurrentClient()">
                                 Encaisser
                             </button>
                         </div>
@@ -1585,20 +1578,8 @@
                         <h3>Historique des Achats & Versements</h3>
                     </div>
 
-                    <div style="background: #FFFFFF; border-radius: var(--radius-md); padding: 12px 14px; border: 1px solid var(--card-border); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <h4 style="font-size: 13px; font-weight: 700; color: var(--primary-dark);">Achat à Crédit</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Sac de riz 50kg + Huile • 14 Septembre</p>
-                        </div>
-                        <span style="font-size: 14px; font-weight: 800; color: #DC2626;">+ 65 000 F</span>
-                    </div>
-
-                    <div style="background: #FFFFFF; border-radius: var(--radius-md); padding: 12px 14px; border: 1px solid var(--card-border); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <h4 style="font-size: 13px; font-weight: 700; color: var(--accent-emerald);">Versement Reçu (MoMo)</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Reçu N° #CC-8942 • 20 Septembre</p>
-                        </div>
-                        <span style="font-size: 14px; font-weight: 800; color: var(--accent-emerald);">- 20 000 F</span>
+                    <div id="detail-history-container">
+                        <!-- Populated dynamically via JS -->
                     </div>
                 </section>
 
@@ -1652,17 +1633,17 @@
 
             <div class="input-group">
                 <label class="input-label">Nom du Client</label>
-                <input type="text" class="input-field" id="modal-client-name" placeholder="ex: Mama Chantal ou nouveau nom">
+                <input type="text" class="input-field" id="modal-client-name" placeholder="ex: Nom complet du client">
             </div>
 
             <div class="input-group">
                 <label class="input-label">Numéro de Téléphone (WhatsApp)</label>
-                <input type="tel" class="input-field" id="modal-client-phone" placeholder="ex: 694 22 18 90">
+                <input type="tel" class="input-field" id="modal-client-phone" placeholder="ex: 6XX XX XX XX">
             </div>
 
             <div class="input-group">
                 <label class="input-label">Montant (FCFA)</label>
-                <input type="number" class="input-field" id="modal-amount" placeholder="ex: 45000">
+                <input type="number" class="input-field" id="modal-amount" placeholder="ex: 25000">
             </div>
 
             <div class="input-group" id="group-goods">
@@ -1671,7 +1652,7 @@
             </div>
 
             <button class="btn-primary" onclick="submitModalTransaction()">
-                <span>Confirmer & Générer Reçu</span>
+                <span>Confirmer & Enregistrer</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </button>
             <button class="btn-secondary" style="border: none;" onclick="closeModal()">
@@ -1702,8 +1683,8 @@
             <div style="background: #F4FAF9; border-radius: var(--radius-md); padding: 12px 14px; border: 1px solid var(--card-border); margin-bottom: 16px;">
                 <p style="font-size: 11.5px; font-weight: 700; color: var(--primary-dark); margin-bottom: 6px;">Améliorations de cette mise à jour :</p>
                 <ul style="font-size: 11.5px; color: var(--text-secondary); margin-left: 16px; line-height: 1.55;">
+                    <li>Base de données propre et synchronisation temps réel</li>
                     <li>Vitesse accrue et fonctionnement hors-ligne optimisé</li>
-                    <li>Synchronisation instantanée des dettes et versements</li>
                     <li>Reçus numériques certifiés et sécurité renforcée</li>
                 </ul>
             </div>
@@ -1741,7 +1722,7 @@
             <div id="forgot-step-1">
                 <div class="input-group">
                     <label class="input-label">Votre Numéro de Téléphone (MoMo / OM)</label>
-                    <input type="tel" class="input-field" id="forgot-phone-input" value="653596305" placeholder="ex: 653 59 63 05">
+                    <input type="tel" class="input-field" id="forgot-phone-input" placeholder="ex: 6XX XX XX XX">
                 </div>
 
                 <button class="btn-primary" onclick="sendOtpSms()">
@@ -1752,17 +1733,17 @@
             <!-- Step 2: Enter OTP & New PIN -->
             <div id="forgot-step-2" style="display: none;">
                 <div style="background: #DCFCE7; border: 1px solid #86EFAC; border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 14px; font-size: 12px; color: #166534; font-weight: 600; text-align: center;">
-                    Code de sécurité envoyé par SMS au <span id="display-otp-phone">+237 653 59 63 05</span>
+                    Code de sécurité envoyé par SMS au <span id="display-otp-phone">+237 ...</span>
                 </div>
 
                 <div class="input-group">
                     <label class="input-label">Code SMS reçu (4 chiffres)</label>
-                    <input type="number" class="input-field" id="otp-code-input" placeholder="ex: 8492" value="8492">
+                    <input type="number" class="input-field" id="otp-code-input" placeholder="ex: 8492">
                 </div>
 
                 <div class="input-group">
                     <label class="input-label">Nouveau Code PIN à 4 chiffres</label>
-                    <input type="password" maxlength="4" class="input-field" id="new-pin-input" placeholder="ex: 1234" value="1234">
+                    <input type="password" maxlength="4" class="input-field" id="new-pin-input" placeholder="ex: 1234">
                 </div>
 
                 <button class="btn-primary" onclick="verifyOtpAndSetNewPin()">
@@ -1776,8 +1757,325 @@
         </div>
     </div>
 
-    <!-- App Logic -->
+    <!-- App Data & Logic -->
     <script>
+        // Database State
+        let db = {
+            merchant: {
+                name: '',
+                shopName: 'Mon Commerce',
+                phone: '',
+                location: 'Cameroun'
+            },
+            clients: [],
+            transactions: []
+        };
+
+        let activeFilter = 'all';
+        let currentSelectedClientId = null;
+
+        // Load Database from LocalStorage
+        function loadDB() {
+            try {
+                const savedMerchant = localStorage.getItem('carnet_merchant_profile');
+                if (savedMerchant) db.merchant = JSON.parse(savedMerchant);
+
+                const savedClients = localStorage.getItem('carnet_clients_v2');
+                if (savedClients) db.clients = JSON.parse(savedClients);
+                else db.clients = [];
+
+                const savedTrans = localStorage.getItem('carnet_transactions_v2');
+                if (savedTrans) db.transactions = JSON.parse(savedTrans);
+                else db.transactions = [];
+            } catch(e) {
+                console.error(e);
+            }
+            updateHeaderProfile();
+            renderDashboard();
+        }
+
+        function saveDB() {
+            try {
+                localStorage.setItem('carnet_merchant_profile', JSON.stringify(db.merchant));
+                localStorage.setItem('carnet_clients_v2', JSON.stringify(db.clients));
+                localStorage.setItem('carnet_transactions_v2', JSON.stringify(db.transactions));
+            } catch(e) {
+                console.error(e);
+            }
+            updateHeaderProfile();
+            renderDashboard();
+        }
+
+        function clearDatabaseWithConfirm() {
+            if (confirm('Voulez-vous réinitialiser et vider complètement toutes les dettes et clients de votre carnet ?')) {
+                db.clients = [];
+                db.transactions = [];
+                saveDB();
+                if (currentSelectedClientId) renderClientDetail(null);
+                alert('La base de données a été vidée avec succès. Votre carnet est propre.');
+            }
+        }
+
+        function updateHeaderProfile() {
+            const shopNameEl = document.getElementById('dash-shop-name');
+            const locEl = document.getElementById('dash-location');
+            const avatarEl = document.getElementById('dash-avatar');
+
+            if (shopNameEl) shopNameEl.textContent = db.merchant.shopName || 'Mon Commerce';
+            if (locEl) locEl.textContent = db.merchant.location || 'Cameroun';
+            if (avatarEl) {
+                const name = db.merchant.shopName || 'CC';
+                const words = name.trim().split(' ');
+                const initials = words.length > 1 ? (words[0][0] + words[1][0]).toUpperCase() : name.substring(0, 2).toUpperCase();
+                avatarEl.textContent = initials || 'CC';
+            }
+        }
+
+        // Render Dashboard & KPIs
+        function renderDashboard() {
+            let totalDebt = 0;
+            let totalCollected = 0;
+
+            db.clients.forEach(c => {
+                totalDebt += Math.max(0, c.balance || 0);
+            });
+
+            db.transactions.forEach(t => {
+                if (t.type === 'payment') {
+                    totalCollected += (t.amount || 0);
+                }
+            });
+
+            const totalSum = totalDebt + totalCollected;
+            const recoveryRate = totalSum > 0 ? ((totalCollected / totalSum) * 100).toFixed(1) : '0.0';
+
+            const totalDebtEl = document.getElementById('kpi-total-debt');
+            const totalCollEl = document.getElementById('kpi-total-collected');
+            const recRateEl = document.getElementById('kpi-recovery-rate');
+
+            if (totalDebtEl) totalDebtEl.textContent = totalDebt.toLocaleString('fr-FR');
+            if (totalCollEl) totalCollEl.textContent = totalCollected.toLocaleString('fr-FR') + ' FCFA';
+            if (recRateEl) recRateEl.textContent = recoveryRate + '%';
+
+            // Filter Counts
+            const countAll = db.clients.length;
+            const countPending = db.clients.filter(c => (c.balance || 0) > 0 && (!c.status || c.status === 'pending')).length;
+            const countLate = db.clients.filter(c => c.status === 'late').length;
+            const countPaid = db.clients.filter(c => (c.balance || 0) <= 0).length;
+
+            if (document.getElementById('count-all')) document.getElementById('count-all').textContent = countAll;
+            if (document.getElementById('count-pending')) document.getElementById('count-pending').textContent = countPending;
+            if (document.getElementById('count-late')) document.getElementById('count-late').textContent = countLate;
+            if (document.getElementById('count-paid')) document.getElementById('count-paid').textContent = countPaid;
+
+            filterClients();
+        }
+
+        function setFilter(filterType, element) {
+            activeFilter = filterType;
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            if (element) element.classList.add('active');
+            filterClients();
+        }
+
+        function filterClients() {
+            const searchInput = document.getElementById('search-input');
+            const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+            const container = document.getElementById('clients-list-container');
+            if (!container) return;
+
+            let filtered = db.clients.filter(c => {
+                const matchSearch = c.name.toLowerCase().includes(query) || (c.phone && c.phone.includes(query)) || (c.lastGoods && c.lastGoods.toLowerCase().includes(query));
+                if (!matchSearch) return false;
+
+                if (activeFilter === 'pending') return (c.balance || 0) > 0 && (!c.status || c.status === 'pending');
+                if (activeFilter === 'late') return c.status === 'late';
+                if (activeFilter === 'paid') return (c.balance || 0) <= 0;
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                if (db.clients.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state-box">
+                            <div class="empty-state-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                            </div>
+                            <h4 class="empty-state-title">Aucun client enregistré</h4>
+                            <p class="empty-state-desc">Votre carnet est prêt et vierge. Cliquez sur Nouveau Crédit pour enregistrer votre premier client.</p>
+                            <button class="btn-primary" style="height: 44px; font-size: 13px;" onclick="openNewModal('credit')">
+                                + Enregistrer un Crédit
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <div class="empty-state-box" style="padding: 20px;">
+                            <p style="font-size: 13px; color: var(--text-secondary);">Aucun client ne correspond à votre recherche.</p>
+                        </div>
+                    `;
+                }
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(c => {
+                const balance = c.balance || 0;
+                const initials = c.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() || 'CL';
+                let tagClass = 'urgent';
+                let tagText = 'Dû';
+
+                if (balance <= 0) {
+                    tagClass = 'good';
+                    tagText = 'Soldé';
+                } else if (c.status === 'late') {
+                    tagClass = 'urgent';
+                    tagText = 'En retard';
+                } else {
+                    tagClass = 'warning';
+                    tagText = 'En cours';
+                }
+
+                html += `
+                    <div class="client-card" onclick="viewClientDetail('${c.id}')">
+                        <div class="client-card-top">
+                            <div class="client-user">
+                                <div class="client-avatar">${initials}</div>
+                                <div class="client-name">
+                                    <h4>${c.name}</h4>
+                                    <p>${c.phone || 'Sans numéro'}</p>
+                                </div>
+                            </div>
+                            <div class="client-debt-amt">
+                                <h4 style="color: ${balance > 0 ? 'var(--accent-red)' : 'var(--accent-emerald)'};">${balance.toLocaleString('fr-FR')} F</h4>
+                                <p>${balance > 0 ? 'Reste dû' : 'Soldé'}</p>
+                            </div>
+                        </div>
+                        <div class="client-card-bottom">
+                            <span class="client-goods">${c.lastGoods || 'Aucun article précisé'}</span>
+                            <span class="client-tag ${tagClass}">${tagText}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Client Detail Screen
+        function viewClientDetail(clientId) {
+            currentSelectedClientId = clientId;
+            const client = db.clients.find(c => c.id === clientId);
+            renderClientDetail(client);
+            switchScreen('screen-client-detail');
+        }
+
+        function renderClientDetail(client) {
+            const nameEl = document.getElementById('detail-name');
+            const phoneEl = document.getElementById('detail-phone');
+            const balanceEl = document.getElementById('detail-balance');
+            const avatarEl = document.getElementById('detail-avatar');
+            const histContainer = document.getElementById('detail-history-container');
+
+            if (!client) {
+                if (nameEl) nameEl.textContent = 'Aucun client sélectionné';
+                if (phoneEl) phoneEl.textContent = '--';
+                if (balanceEl) balanceEl.textContent = '0 FCFA';
+                if (avatarEl) avatarEl.textContent = '--';
+                if (histContainer) {
+                    histContainer.innerHTML = `
+                        <div class="empty-state-box" style="padding: 24px;">
+                            <p style="font-size: 13px; color: var(--text-secondary);">Sélectionnez un client depuis la liste ou ajoutez-en un nouveau.</p>
+                            <button class="btn-primary" style="height: 44px; font-size: 13px; margin-top: 12px;" onclick="openNewModal('credit')">
+                                + Ajouter un Crédit
+                            </button>
+                        </div>
+                    `;
+                }
+                return;
+            }
+
+            const initials = client.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() || 'CL';
+            if (nameEl) nameEl.textContent = client.name;
+            if (phoneEl) phoneEl.textContent = client.phone ? '+237 ' + client.phone : 'Sans numéro';
+            if (balanceEl) {
+                const bal = client.balance || 0;
+                balanceEl.textContent = bal.toLocaleString('fr-FR') + ' FCFA';
+                balanceEl.style.color = bal > 0 ? 'var(--accent-red)' : 'var(--accent-emerald)';
+            }
+            if (avatarEl) avatarEl.textContent = initials;
+
+            // Transactions history for this client
+            const clientTrans = db.transactions.filter(t => t.clientId === client.id);
+            if (clientTrans.length === 0) {
+                histContainer.innerHTML = `
+                    <div style="background: #FFFFFF; border-radius: var(--radius-md); padding: 18px; border: 1px solid var(--card-border); text-align: center;">
+                        <p style="font-size: 12px; color: var(--text-secondary);">Aucune transaction enregistrée pour ce client.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            clientTrans.slice().reverse().forEach(t => {
+                const isCredit = t.type === 'credit';
+                html += `
+                    <div style="background: #FFFFFF; border-radius: var(--radius-md); padding: 12px 14px; border: 1px solid var(--card-border); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h4 style="font-size: 13px; font-weight: 700; color: ${isCredit ? 'var(--primary-dark)' : 'var(--accent-emerald)'};">${isCredit ? 'Achat à Crédit' : 'Versement Reçu'}</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">${t.goods || (isCredit ? 'Articles' : 'Paiement Espèces / MoMo')} • ${t.date || 'Récemment'}</p>
+                        </div>
+                        <span style="font-size: 14px; font-weight: 800; color: ${isCredit ? 'var(--accent-red)' : 'var(--accent-emerald)'};">${isCredit ? '+' : '-'} ${t.amount.toLocaleString('fr-FR')} F</span>
+                    </div>
+                `;
+            });
+
+            histContainer.innerHTML = html;
+        }
+
+        function deleteCurrentClient() {
+            if (!currentSelectedClientId) return;
+            const client = db.clients.find(c => c.id === currentSelectedClientId);
+            if (!client) return;
+
+            if (confirm(`Voulez-vous supprimer définitivement la fiche de ${client.name} et son historique ?`)) {
+                db.clients = db.clients.filter(c => c.id !== currentSelectedClientId);
+                db.transactions = db.transactions.filter(t => t.clientId !== currentSelectedClientId);
+                currentSelectedClientId = null;
+                saveDB();
+                switchScreen('screen-dashboard');
+                alert('Client supprimé avec succès.');
+            }
+        }
+
+        function sendWhatsAppToCurrentClient() {
+            if (!currentSelectedClientId) return;
+            const client = db.clients.find(c => c.id === currentSelectedClientId);
+            if (!client) return;
+
+            const phone = client.phone ? client.phone.replace(/[^0-9]/g, '') : '';
+            const amount = (client.balance || 0).toLocaleString('fr-FR');
+            const shopName = db.merchant.shopName || 'notre boutique';
+            const msg = encodeURIComponent(`Bonjour ${client.name}, petit rappel de votre solde restant de ${amount} FCFA auprès de ${shopName}. Merci pour votre confiance !`);
+            
+            if (phone) {
+                window.open(`https://wa.me/237${phone}?text=${msg}`, '_blank');
+            } else {
+                alert(`Message préparé :\n\nBonjour ${client.name}, solde de ${amount} FCFA auprès de ${shopName}.\n(Veuillez ajouter un numéro WhatsApp au client pour l'envoi direct).`);
+            }
+        }
+
+        function openPaymentForCurrentClient() {
+            if (!currentSelectedClientId) return;
+            const client = db.clients.find(c => c.id === currentSelectedClientId);
+            if (!client) return;
+
+            openNewModal('payment');
+            document.getElementById('modal-client-name').value = client.name;
+            document.getElementById('modal-client-phone').value = client.phone || '';
+            document.getElementById('modal-amount').value = client.balance > 0 ? client.balance : '';
+        }
+
         // Screen Switching
         function switchScreen(screenId, btnElement) {
             document.querySelectorAll('.screen-view').forEach(s => s.classList.remove('active'));
@@ -1818,12 +2116,39 @@
             }
 
             if (screenId === 'screen-dashboard') {
+                renderDashboard();
                 triggerAutoUpdateCheck();
+            } else if (screenId === 'screen-client-detail') {
+                if (!currentSelectedClientId && db.clients.length > 0) {
+                    currentSelectedClientId = db.clients[0].id;
+                }
+                const client = db.clients.find(c => c.id === currentSelectedClientId);
+                renderClientDetail(client);
             }
         }
 
         // Onboarding Flow
+        function handleLoginSubmit() {
+            const phone = document.getElementById('login-phone').value.trim();
+            if (phone) {
+                db.merchant.phone = phone;
+                saveDB();
+            }
+            switchScreen('screen-pin');
+        }
+
         function proceedFromRegistration() {
+            const name = document.getElementById('reg-merchant-name').value.trim();
+            const shopName = document.getElementById('reg-shop-name').value.trim();
+            const phone = document.getElementById('reg-phone').value.trim();
+            const loc = document.getElementById('reg-location').value.trim();
+
+            if (name) db.merchant.name = name;
+            if (shopName) db.merchant.shopName = shopName;
+            if (phone) db.merchant.phone = phone;
+            if (loc) db.merchant.location = loc;
+            saveDB();
+
             switchScreen('screen-agreement');
         }
 
@@ -1838,9 +2163,6 @@
 
         function proceedFromPermissions() {
             switchScreen('screen-dashboard');
-            setTimeout(() => {
-                alert('Félicitations ! Votre compte commerçant et vos CGU ont été validés avec succès.\nBienvenue sur votre tableau de bord Carnet Crédit !');
-            }, 300);
         }
 
         // Toggle Full View vs Phone Mockup
@@ -1875,7 +2197,6 @@
 
             if (pinCode.length === 4) {
                 setTimeout(() => {
-                    alert('Code PIN validé avec succès ! Bienvenue dans votre Carnet Crédit.');
                     pinCode = '';
                     for (let i = 1; i <= 4; i++) {
                         const d = document.getElementById('dot-' + i);
@@ -1911,7 +2232,7 @@
         }
 
         function sendOtpSms() {
-            const phone = document.getElementById('forgot-phone-input').value || '653596305';
+            const phone = document.getElementById('forgot-phone-input').value.trim() || 'votre numéro';
             document.getElementById('display-otp-phone').textContent = '+237 ' + phone;
             document.getElementById('forgot-step-1').style.display = 'none';
             document.getElementById('forgot-step-2').style.display = 'block';
@@ -1920,11 +2241,12 @@
         function verifyOtpAndSetNewPin() {
             const newPin = document.getElementById('new-pin-input').value || '1234';
             closeForgotPinModal();
-            alert(`Votre nouveau code PIN (${newPin}) a été mis à jour avec succès !\nVotre boutique est maintenant déverrouillée.`);
+            alert(`Votre nouveau code PIN a été mis à jour avec succès !\nVotre carnet est déverrouillé.`);
             switchScreen('screen-dashboard');
         }
 
         // Automatic Background Update Checker
+        let updateChecked = false;
         function showAutoUpdateModal() {
             const modal = document.getElementById('auto-update-modal');
             if (modal) modal.classList.add('active');
@@ -1946,6 +2268,8 @@
         }
 
         function triggerAutoUpdateCheck() {
+            if (updateChecked) return;
+            updateChecked = true;
             setTimeout(() => {
                 showAutoUpdateModal();
             }, 2500);
@@ -1963,6 +2287,10 @@
         function closeModal() {
             const modal = document.getElementById('trans-modal');
             if (modal) modal.classList.remove('active');
+            document.getElementById('modal-client-name').value = '';
+            document.getElementById('modal-client-phone').value = '';
+            document.getElementById('modal-amount').value = '';
+            document.getElementById('modal-goods').value = '';
         }
 
         function closeModalOnBg(e) {
@@ -1993,22 +2321,67 @@
         }
 
         function submitModalTransaction() {
-            const name = document.getElementById('modal-client-name').value || 'Client';
-            const amount = document.getElementById('modal-amount').value || '0';
-            
-            if (currentModalType === 'credit') {
-                alert(`Crédit de ${amount} FCFA enregistré avec succès pour ${name} !\nUn reçu WhatsApp a été généré.`);
-            } else {
-                alert(`Remboursement de ${amount} FCFA validé pour ${name} !\nLe solde a été mis à jour.`);
+            const nameInput = document.getElementById('modal-client-name').value.trim();
+            const phoneInput = document.getElementById('modal-client-phone').value.trim();
+            const amountInput = parseFloat(document.getElementById('modal-amount').value) || 0;
+            const goodsInput = document.getElementById('modal-goods').value.trim();
+
+            if (!nameInput) {
+                alert('Veuillez renseigner le nom du client.');
+                return;
             }
+            if (amountInput <= 0) {
+                alert('Veuillez entrer un montant valide supérieur à 0.');
+                return;
+            }
+
+            // Find or create client
+            let client = db.clients.find(c => c.name.toLowerCase() === nameInput.toLowerCase());
+            if (!client) {
+                client = {
+                    id: 'cli_' + Date.now(),
+                    name: nameInput,
+                    phone: phoneInput,
+                    balance: 0,
+                    lastGoods: goodsInput,
+                    status: 'pending'
+                };
+                db.clients.unshift(client);
+            } else {
+                if (phoneInput) client.phone = phoneInput;
+                if (goodsInput) client.lastGoods = goodsInput;
+            }
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+
+            if (currentModalType === 'credit') {
+                client.balance = (client.balance || 0) + amountInput;
+                client.status = 'pending';
+                if (goodsInput) client.lastGoods = goodsInput;
+            } else {
+                client.balance = Math.max(0, (client.balance || 0) - amountInput);
+                if (client.balance === 0) client.status = 'paid';
+            }
+
+            db.transactions.push({
+                id: 'tx_' + Date.now(),
+                clientId: client.id,
+                type: currentModalType,
+                amount: amountInput,
+                goods: goodsInput,
+                date: dateStr
+            });
+
+            saveDB();
             closeModal();
-            switchScreen('screen-dashboard');
+            viewClientDetail(client.id);
         }
 
-        function sendWhatsAppReminder(name, amount) {
-            const text = encodeURIComponent(`Bonjour ${name}, petit rappel de votre solde restant de ${amount} FCFA auprès de la Boutique Le Progrès. Merci pour votre fidélité !`);
-            window.open(`https://wa.me/237694221890?text=${text}`, '_blank');
-        }
+        // Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            loadDB();
+        });
     </script>
 </body>
 </html>
