@@ -1245,10 +1245,9 @@
             <button class="switch-btn" onclick="switchScreen('screen-login', this)">2. Connexion</button>
             <button class="switch-btn" onclick="switchScreen('screen-pin', this)">3. Code PIN</button>
             <button class="switch-btn" onclick="switchScreen('screen-register', this)">4. Inscription</button>
-            <button class="switch-btn" onclick="switchScreen('screen-agreement', this)">5. Accord CGU</button>
-            <button class="switch-btn" onclick="switchScreen('screen-permissions', this)">6. Alertes</button>
-            <button class="switch-btn" onclick="switchScreen('screen-dashboard', this)">7. Dashboard</button>
-            <button class="switch-btn" onclick="switchScreen('screen-client-detail', this)">8. Fiche Client</button>
+            <button class="switch-btn" onclick="switchScreen('screen-permissions', this)">5. Alertes</button>
+            <button class="switch-btn" onclick="switchScreen('screen-dashboard', this)">6. Dashboard</button>
+            <button class="switch-btn" onclick="switchScreen('screen-client-detail', this)">7. Fiche Client</button>
         </div>
 
         <div class="view-controls">
@@ -1423,7 +1422,7 @@
                 <!-- 4. SCREEN: ACCOUNT CREATION                    -->
                 <!-- ============================================== -->
                 <section class="screen-view" id="screen-register">
-                    <span class="splash-badge" style="margin: 5px auto 10px auto; display: table;">ÉTAPE 1 / 3 : INFORMATIONS BOUTIQUE</span>
+                    <span class="splash-badge" style="margin: 5px auto 10px auto; display: table;">CRÉATION DE COMPTE COMMERÇANT</span>
                     <h1 class="app-title-h1">Création de compte</h1>
                     <p class="app-title-p">Renseignez vos coordonnées de commerçant pour initialiser votre carnet.</p>
 
@@ -1450,7 +1449,7 @@
                     <div style="display: flex; align-items: flex-start; gap: 8px; margin: 12px 0 16px 0;">
                         <input type="checkbox" id="cgu-check" checked style="accent-color: var(--primary-teal); margin-top: 3px;">
                         <label for="cgu-check" style="font-size: 11.5px; color: var(--text-secondary); line-height: 1.4;">
-                            J'accepte les <a href="#" onclick="switchScreen('screen-agreement', document.querySelectorAll('.switch-btn')[4])" style="color: var(--primary-teal); font-weight: 700;">Conditions Générales</a> et la politique de confidentialité locale.
+                            Conditions d'utilisation et sécurité des données validées automatiquement.
                         </label>
                     </div>
 
@@ -1461,45 +1460,7 @@
                 </section>
 
                 <!-- ============================================== -->
-                <!-- 5. SCREEN: AGREEMENT / CGU                     -->
-                <!-- ============================================== -->
-                <section class="screen-view" id="screen-agreement">
-                    <span class="splash-badge" style="margin: 5px auto 10px auto; display: table; background: #FEF3C7; color: #D97706; border-color: #FDE68A;">ÉTAPE 2 / 3 : ACCORD DES CONDITIONS (CGU)</span>
-                    <h1 class="app-title-h1">Conditions & Sécurité</h1>
-                    <p class="app-title-p">Veuillez valider les conditions d'utilisation et de protection des dettes clients.</p>
-
-                    <div class="agreement-card">
-                        <div class="agreement-clause">
-                            <h4>1. Confidentialité Totale</h4>
-                            <p>Toutes les dettes, crédits et listes de clients de votre commerce restent strictement confidentiels et protégés.</p>
-                        </div>
-                        <div class="agreement-clause">
-                            <h4>2. Fonctionnement Hors-Ligne</h4>
-                            <p>Vous pouvez enregistrer vos transactions même sans connexion Internet. Les données se synchronisent automatiquement dès le retour du réseau.</p>
-                        </div>
-                        <div class="agreement-clause">
-                            <h4>3. Rappels WhatsApp Certifiés</h4>
-                            <p>Les reçus générés incluent les détails complets de la dette avec signature numérique infalsifiable.</p>
-                        </div>
-                        <div class="agreement-clause">
-                            <h4>4. Sauvegarde Automatique</h4>
-                            <p>En cas de changement de téléphone, retrouvez l'intégralité de votre carnet grâce à votre numéro de téléphone vérifié.</p>
-                        </div>
-                    </div>
-
-                    <button class="btn-primary" onclick="proceedFromAgreement()">
-                        <span>J'accepte les CGU et je continue</span>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                    </button>
-
-                    <button class="btn-secondary" style="border-color: #FECACA; color: #DC2626; margin-top: 10px;" onclick="refuseAgreementAndDisconnect()">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5" style="vertical-align: -2px; margin-right: 4px;"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
-                        <span>Je refuse les conditions (Me déconnecter)</span>
-                    </button>
-                </section>
-
-                <!-- ============================================== -->
-                <!-- 6. SCREEN: PERMISSIONS & NOTIFICATIONS         -->
+                <!-- 5. SCREEN: PERMISSIONS & NOTIFICATIONS         -->
                 <!-- ============================================== -->
                 <section class="screen-view" id="screen-permissions" style="justify-content: flex-end;">
                     <span class="splash-badge" style="margin: 0 auto 10px auto; display: table;">ÉTAPE 3 / 3 : CONFIGURATION DES RAPPELS</span>
@@ -1917,10 +1878,9 @@
                     'screen-login': 1,
                     'screen-pin': 2,
                     'screen-register': 3,
-                    'screen-agreement': 4,
-                    'screen-permissions': 5,
-                    'screen-dashboard': 6,
-                    'screen-client-detail': 7
+                    'screen-permissions': 4,
+                    'screen-dashboard': 5,
+                    'screen-client-detail': 6
                 };
                 if (map[screenId] !== undefined) {
                     const btns = document.querySelectorAll('.switch-btn');
@@ -1932,7 +1892,7 @@
             // Hide bottom nav on onboarding/auth screens
             const bNav = document.getElementById('bottom-nav');
             if (bNav) {
-                if (['screen-guide', 'screen-login', 'screen-pin', 'screen-register', 'screen-agreement', 'screen-permissions'].includes(screenId)) {
+                if (['screen-guide', 'screen-login', 'screen-pin', 'screen-register', 'screen-permissions'].includes(screenId)) {
                     bNav.style.display = 'none';
                 } else {
                     bNav.style.display = 'flex';
@@ -1946,18 +1906,8 @@
 
         // Automatic Sequential Onboarding Flow
         function proceedFromRegistration() {
-            // Automatically transitions to CGU / Agreement screen
-            switchScreen('screen-agreement');
-        }
-
-        function proceedFromAgreement() {
-            // Automatically transitions to Notifications / Permissions screen
+            // Automatically accepts terms & continues seamlessly
             switchScreen('screen-permissions');
-        }
-
-        function refuseAgreementAndDisconnect() {
-            alert('Vous avez refusé les Conditions Générales d\'Utilisation.\nVotre session a été fermée et vous avez été déconnecté.');
-            switchScreen('screen-guide');
         }
 
         function proceedFromPermissions() {
