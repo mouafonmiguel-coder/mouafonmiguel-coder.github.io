@@ -1,10 +1,10 @@
 {
-  "version": 95,
-  "build": 2026111405,
-  "updated_at": "2026-11-14T13:30:00Z",
+  "version": 96,
+  "build": 2026111406,
+  "updated_at": "2026-11-14T14:00:00Z",
   "features": [
-    "Detection et notification automatique des mises a jour en arriere-plan sans formulaire manuel",
-    "Installation en 1 clic sans saisie de numero",
-    "Zero emoji et typographie epuree"
+    "Accord CGU avec choix obligatoire (Accepter et continuer vs Refuser et se deconnecter)",
+    "Deconnexion automatique immediate en cas de refus",
+    "Zero emoji"
   ]
 }
