@@ -1,5 +1,5 @@
-// Service Worker Carnet Credit v97 - CGU 100% Automatic Background Validation
-const CACHE_NAME = "cc-offline-v97";
+// Service Worker Carnet Credit v98 - Added Top-Right Close X Button on All Modals
+const CACHE_NAME = "cc-offline-v98";
 const CORE_ASSETS = [
   "./",
   "./index.html",
