@@ -1,5 +1,5 @@
-// Service Worker Carnet Credit v99 - Automatic CGU Transition with Choice
-const CACHE_NAME = "cc-offline-v99";
+// Service Worker Carnet Credit v100 - Official Ledger Book Logo
+const CACHE_NAME = "cc-offline-v100";
 const CORE_ASSETS = [
   "./",
   "./index.html",
