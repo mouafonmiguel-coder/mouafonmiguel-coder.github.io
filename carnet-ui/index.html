@@ -1411,8 +1411,9 @@
                 <!-- 4. SCREEN: ACCOUNT CREATION                    -->
                 <!-- ============================================== -->
                 <section class="screen-view" id="screen-register">
-                    <h1 class="app-title-h1" style="margin-top: 10px;">Création de compte</h1>
-                    <p class="app-title-p">Rejoignez les milliers de commerçants qui modernisent leur carnet au Cameroun.</p>
+                    <span class="splash-badge" style="margin: 5px auto 10px auto; display: table;">ÉTAPE 1 / 3 : INFORMATIONS BOUTIQUE</span>
+                    <h1 class="app-title-h1">Création de compte</h1>
+                    <p class="app-title-p">Renseignez vos coordonnées de commerçant pour initialiser votre carnet.</p>
 
                     <div class="input-group">
                         <label class="input-label">Nom & Prénom du commerçant</label>
@@ -1441,7 +1442,7 @@
                         </label>
                     </div>
 
-                    <button class="btn-primary" onclick="switchScreen('screen-permissions', document.querySelectorAll('.switch-btn')[5])">
+                    <button class="btn-primary" onclick="proceedFromRegistration()">
                         <span>Créer mon carnet digital</span>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
                     </button>
@@ -1451,8 +1452,9 @@
                 <!-- 5. SCREEN: AGREEMENT / CGU                     -->
                 <!-- ============================================== -->
                 <section class="screen-view" id="screen-agreement">
-                    <h1 class="app-title-h1" style="margin-top: 10px;">Conditions & Sécurité</h1>
-                    <p class="app-title-p">Transparence et sécurité maximale pour vos données financières.</p>
+                    <span class="splash-badge" style="margin: 5px auto 10px auto; display: table; background: #FEF3C7; color: #D97706; border-color: #FDE68A;">ÉTAPE 2 / 3 : ACCORD DES CONDITIONS (CGU)</span>
+                    <h1 class="app-title-h1">Conditions & Sécurité</h1>
+                    <p class="app-title-p">Veuillez valider les conditions d'utilisation et de protection des dettes clients.</p>
 
                     <div class="agreement-card">
                         <div class="agreement-clause">
@@ -1473,8 +1475,8 @@
                         </div>
                     </div>
 
-                    <button class="btn-primary" onclick="switchScreen('screen-dashboard', document.querySelectorAll('.switch-btn')[6])">
-                        <span>J'accepte et je continue</span>
+                    <button class="btn-primary" onclick="proceedFromAgreement()">
+                        <span>J'accepte les CGU et je continue</span>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
                     </button>
                 </section>
@@ -1483,6 +1485,7 @@
                 <!-- 6. SCREEN: PERMISSIONS & NOTIFICATIONS         -->
                 <!-- ============================================== -->
                 <section class="screen-view" id="screen-permissions" style="justify-content: flex-end;">
+                    <span class="splash-badge" style="margin: 0 auto 10px auto; display: table;">ÉTAPE 3 / 3 : CONFIGURATION DES RAPPELS</span>
                     <div class="prism-logo-wrap">
                         <svg class="prism-logo-icon" style="width: 58px; height: 58px;" viewBox="0 0 100 100" fill="none">
                             <polygon points="50,10 90,80 10,80" stroke="#1B5B57" stroke-width="6" fill="none" stroke-linejoin="round"/>
@@ -1505,10 +1508,10 @@
                             </label>
                         </div>
 
-                        <button class="btn-primary" onclick="switchScreen('screen-dashboard', document.querySelectorAll('.switch-btn')[6])">
+                        <button class="btn-primary" onclick="proceedFromPermissions()">
                             Activer & Accéder au Carnet
                         </button>
-                        <button class="btn-secondary" style="border: none; margin-top: 4px;" onclick="switchScreen('screen-dashboard', document.querySelectorAll('.switch-btn')[6])">
+                        <button class="btn-secondary" style="border: none; margin-top: 4px;" onclick="proceedFromPermissions()">
                             Plus tard
                         </button>
                     </div>
@@ -1808,17 +1811,53 @@
             if (btnElement) {
                 document.querySelectorAll('.switch-btn').forEach(b => b.classList.remove('active'));
                 btnElement.classList.add('active');
+            } else {
+                // Find switch btn corresponding to screenId
+                const map = {
+                    'screen-splash': 0,
+                    'screen-login': 1,
+                    'screen-pin': 2,
+                    'screen-register': 3,
+                    'screen-agreement': 4,
+                    'screen-permissions': 5,
+                    'screen-dashboard': 6,
+                    'screen-client-detail': 7
+                };
+                if (map[screenId] !== undefined) {
+                    const btns = document.querySelectorAll('.switch-btn');
+                    btns.forEach(b => b.classList.remove('active'));
+                    if (btns[map[screenId]]) btns[map[screenId]].classList.add('active');
+                }
             }
 
-            // Hide bottom nav on splash & pin screens
+            // Hide bottom nav on onboarding/auth screens
             const bNav = document.getElementById('bottom-nav');
             if (bNav) {
-                if (screenId === 'screen-splash' || screenId === 'screen-pin' || screenId === 'screen-permissions') {
+                if (['screen-splash', 'screen-login', 'screen-pin', 'screen-register', 'screen-agreement', 'screen-permissions'].includes(screenId)) {
                     bNav.style.display = 'none';
                 } else {
                     bNav.style.display = 'flex';
                 }
             }
+        }
+
+        // Automatic Sequential Onboarding Flow
+        function proceedFromRegistration() {
+            // Automatically transitions to CGU / Agreement screen
+            switchScreen('screen-agreement');
+        }
+
+        function proceedFromAgreement() {
+            // Automatically transitions to Notifications / Permissions screen
+            switchScreen('screen-permissions');
+        }
+
+        function proceedFromPermissions() {
+            // Automatically transitions to Dashboard with success toast
+            switchScreen('screen-dashboard');
+            setTimeout(() => {
+                alert('🎉 Félicitations ! Votre compte commerçant et vos CGU ont été validés avec succès.\nBienvenue sur votre tableau de bord Carnet Crédit !');
+            }, 300);
         }
 
         // Toggle Full View vs Phone Mockup
