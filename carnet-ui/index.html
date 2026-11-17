@@ -1243,7 +1243,8 @@
         </div>
 
         <div class="screen-switcher">
-            <button class="switch-btn active" onclick="switchScreen('screen-splash', this)">1. Splash</button>
+            <button class="switch-btn active" onclick="switchScreen('screen-splash', this)">1. Accueil</button>
+            <button class="switch-btn" onclick="switchScreen('screen-guide', this)">📖 Guide</button>
             <button class="switch-btn" onclick="switchScreen('screen-login', this)">2. Connexion</button>
             <button class="switch-btn" onclick="switchScreen('screen-pin', this)">3. Code PIN</button>
             <button class="switch-btn" onclick="switchScreen('screen-register', this)">4. Inscription</button>
@@ -1278,7 +1279,7 @@
                 </div>
 
                 <!-- ============================================== -->
-                <!-- 1. SCREEN: SPLASH                              -->
+                <!-- 1. SCREEN: SPLASH & GUIDE D'ACCUEIL            -->
                 <!-- ============================================== -->
                 <section class="screen-view active" id="screen-splash">
                     <div class="splash-glow"></div>
@@ -1302,15 +1303,96 @@
                             </svg>
                         </div>
 
-                        <span class="splash-badge">VERSION 2.0 DIGITAL</span>
+                        <span class="splash-badge" style="background: rgba(0, 182, 122, 0.15); color: #0D3B37; border-color: #00B67A;">🇨🇲 LE CAHIER DE CRÉDIT DES COMMERÇANTS</span>
                         <h1 class="app-title-h1">CARNET CRÉDIT</h1>
-                        <p class="app-title-p">Gérez vos crédits clients, encaissements et rappels WhatsApp en toute sérénité au Cameroun.</p>
+                        <p class="app-title-p">Remplacez votre vieux cahier papier : suivez vos dettes clients, encaissez vos versements et envoyez des rappels WhatsApp en 1 clic.</p>
 
-                        <button class="btn-primary" onclick="switchScreen('screen-login', document.querySelectorAll('.switch-btn')[1])">
-                            <span>Commencer</span>
+                        <!-- 3-Pillar Guide Preview -->
+                        <div style="background: #F4FAF9; border-radius: var(--radius-md); padding: 12px; margin-bottom: 18px; border: 1px solid var(--card-border); text-align: left;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <div style="width: 26px; height: 26px; border-radius: 50%; background: var(--primary-soft); color: var(--primary-teal); font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">1</div>
+                                <span style="font-size: 12px; font-weight: 700; color: var(--primary-dark);">Enregistrez les crédits en 10 secondes</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <div style="width: 26px; height: 26px; border-radius: 50%; background: var(--primary-soft); color: var(--primary-teal); font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">2</div>
+                                <span style="font-size: 12px; font-weight: 700; color: var(--primary-dark);">Rappels WhatsApp & reçus certifiés</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div style="width: 26px; height: 26px; border-radius: 50%; background: var(--primary-soft); color: var(--primary-teal); font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">3</div>
+                                <span style="font-size: 12px; font-weight: 700; color: var(--primary-dark);">100% Hors-ligne & Zéro perte de données</span>
+                            </div>
+                        </div>
+
+                        <button class="btn-primary" onclick="switchScreen('screen-guide', document.querySelectorAll('.switch-btn')[1])">
+                            <span>Découvrir le Guide Pratique</span>
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
                         </button>
+
+                        <button class="btn-secondary" style="margin-top: 8px;" onclick="switchScreen('screen-login', document.querySelectorAll('.switch-btn')[2])">
+                            Accéder directement à mon compte
+                        </button>
                     </div>
+                </section>
+
+                <!-- ============================================== -->
+                <!-- 1.BIS SCREEN: GUIDE PRATIQUE & EXPLICATIONS     -->
+                <!-- ============================================== -->
+                <section class="screen-view" id="screen-guide">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                        <button onclick="switchScreen('screen-splash', document.querySelectorAll('.switch-btn')[0])" style="width: 36px; height: 36px; border-radius: 50%; background: #FFFFFF; border: 1px solid var(--card-border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--primary-teal);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        </button>
+                        <span class="splash-badge" style="margin: 0;">📖 GUIDE D'UTILISATION</span>
+                        <div style="width: 36px;"></div>
+                    </div>
+
+                    <h1 class="app-title-h1" style="font-size: 20px; text-align: left;">À quoi sert Carnet Crédit ?</h1>
+                    <p class="app-title-p" style="text-align: left; margin-bottom: 16px;">Une solution simple, moderne et 100% sécurisée pour gérer les dettes et les clients de votre commerce au Cameroun.</p>
+
+                    <!-- Guide Step 1 -->
+                    <div style="background: #FFFFFF; border-radius: var(--radius-md); padding: 14px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                            <div style="width: 32px; height: 32px; border-radius: 10px; background: #E0F2FE; color: #0284C7; display: flex; align-items: center; justify-content: center; font-size: 16px;">📖</div>
+                            <h3 style="font-size: 13.5px; font-weight: 800; color: var(--primary-dark);">1. Fini le vieux cahier papier</h3>
+                        </div>
+                        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45;">Ne perdez plus jamais une trace de dette à cause d'une page arrachée ou tachée. Toutes vos ventes à crédit sont enregistrées proprement et protégées.</p>
+                    </div>
+
+                    <!-- Guide Step 2 -->
+                    <div style="background: #FFFFFF; border-radius: var(--radius-md); padding: 14px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                            <div style="width: 32px; height: 32px; border-radius: 10px; background: #FEF3C7; color: #D97706; display: flex; align-items: center; justify-content: center; font-size: 16px;">⚡</div>
+                            <h3 style="font-size: 13.5px; font-weight: 800; color: var(--primary-dark);">2. Saisie en 10 secondes chrono</h3>
+                        </div>
+                        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45;">Tapez le nom du client, le montant et les marchandises (ex: <i>Sac de riz, Ciment, Huile</i>). Le carnet calcule automatiquement les soldes et totaux sans erreur.</p>
+                    </div>
+
+                    <!-- Guide Step 3 -->
+                    <div style="background: #FFFFFF; border-radius: var(--radius-md); padding: 14px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                            <div style="width: 32px; height: 32px; border-radius: 10px; background: #DCFCE7; color: #16A34A; display: flex; align-items: center; justify-content: center; font-size: 16px;">💬</div>
+                            <h3 style="font-size: 13.5px; font-weight: 800; color: var(--primary-dark);">3. Reçus & Rappels WhatsApp certifiés</h3>
+                        </div>
+                        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45;">Envoyez un reçu numérique à chaque achat et envoyez un rappel courtois sur WhatsApp lorsque la date de remboursement approche, sans conflit.</p>
+                    </div>
+
+                    <!-- Guide Step 4 -->
+                    <div style="background: #FFFFFF; border-radius: var(--radius-md); padding: 14px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); margin-bottom: 18px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                            <div style="width: 32px; height: 32px; border-radius: 10px; background: #F3E8FF; color: #9333EA; display: flex; align-items: center; justify-content: center; font-size: 16px;">📴</div>
+                            <h3 style="font-size: 13.5px; font-weight: 800; color: var(--primary-dark);">4. 100% Fonctionnel Hors-Ligne</h3>
+                        </div>
+                        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45;">Même sans connexion Internet au marché de Mokolo, Yaoundé, Bertoua ou Douala, votre carnet fonctionne à la perfection.</p>
+                    </div>
+
+                    <button class="btn-primary" onclick="switchScreen('screen-register', document.querySelectorAll('.switch-btn')[4])">
+                        <span>Créer mon compte commerçant</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+
+                    <button class="btn-secondary" style="margin-top: 8px;" onclick="switchScreen('screen-login', document.querySelectorAll('.switch-btn')[2])">
+                        J'ai déjà un compte (Connexion)
+                    </button>
                 </section>
 
                 <!-- ============================================== -->
@@ -1573,6 +1655,15 @@
                         </div>
                     </div>
 
+                    <!-- Helpful Guide Banner -->
+                    <div onclick="switchScreen('screen-guide', document.querySelectorAll('.switch-btn')[1])" style="background: rgba(0, 182, 122, 0.08); border: 1px dashed var(--accent-emerald); border-radius: var(--radius-md); padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; cursor: pointer;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 16px;">💡</span>
+                            <span style="font-size: 12px; font-weight: 700; color: var(--primary-dark);">Comment fonctionne votre carnet ?</span>
+                        </div>
+                        <span style="font-size: 11px; font-weight: 700; color: var(--primary-teal);">Voir le Guide ›</span>
+                    </div>
+
                     <!-- Quick Actions Row -->
                     <div class="action-quick-row">
                         <div class="action-quick-btn credit" onclick="openNewModal('credit')">
@@ -1815,13 +1906,14 @@
                 // Find switch btn corresponding to screenId
                 const map = {
                     'screen-splash': 0,
-                    'screen-login': 1,
-                    'screen-pin': 2,
-                    'screen-register': 3,
-                    'screen-agreement': 4,
-                    'screen-permissions': 5,
-                    'screen-dashboard': 6,
-                    'screen-client-detail': 7
+                    'screen-guide': 1,
+                    'screen-login': 2,
+                    'screen-pin': 3,
+                    'screen-register': 4,
+                    'screen-agreement': 5,
+                    'screen-permissions': 6,
+                    'screen-dashboard': 7,
+                    'screen-client-detail': 8
                 };
                 if (map[screenId] !== undefined) {
                     const btns = document.querySelectorAll('.switch-btn');
@@ -1833,7 +1925,7 @@
             // Hide bottom nav on onboarding/auth screens
             const bNav = document.getElementById('bottom-nav');
             if (bNav) {
-                if (['screen-splash', 'screen-login', 'screen-pin', 'screen-register', 'screen-agreement', 'screen-permissions'].includes(screenId)) {
+                if (['screen-splash', 'screen-guide', 'screen-login', 'screen-pin', 'screen-register', 'screen-agreement', 'screen-permissions'].includes(screenId)) {
                     bNav.style.display = 'none';
                 } else {
                     bNav.style.display = 'flex';
