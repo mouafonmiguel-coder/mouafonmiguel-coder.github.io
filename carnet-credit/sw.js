@@ -1,5 +1,5 @@
-// Service Worker Carnet Credit v98 - Added Top-Right Close X Button on All Modals
-const CACHE_NAME = "cc-offline-v98";
+// Service Worker Carnet Credit v99 - Automatic CGU Transition with Choice
+const CACHE_NAME = "cc-offline-v99";
 const CORE_ASSETS = [
   "./",
   "./index.html",
