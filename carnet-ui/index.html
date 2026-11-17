@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+
+    <script>
+        // Automatic Cache Purge & Fresh Asset Enforcement
+        if ('caches' in window) {
+            caches.keys().then(names => {
+                for (let name of names) {
+                    if (name !== 'cc-offline-v93') caches.delete(name);
+                }
+            });
+        }
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Carnet Crédit — Nouvelle Interface UI Moderne</title>
