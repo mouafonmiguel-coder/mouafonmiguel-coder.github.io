@@ -1253,10 +1253,17 @@
     <header class="showcase-header">
         <div class="showcase-brand">
             <div class="showcase-logo-icon">
-                <!-- Prism SVG -->
-                <svg width="24" height="24" viewBox="0 0 40 40" fill="none">
-                    <polygon points="20,4 36,32 4,32" stroke="#FFFFFF" stroke-width="3.5" fill="none" stroke-linejoin="round"/>
-                    <polygon points="20,12 30,30 10,30" fill="rgba(0, 182, 122, 0.8)"/>
+                <!-- Ledger Book SVG -->
+                <svg width="26" height="26" viewBox="0 0 100 100" fill="none">
+                    <rect x="22" y="14" width="58" height="72" rx="8" fill="#FFFFFF" />
+                    <rect x="16" y="10" width="60" height="74" rx="8" fill="#1B5B57" stroke="#2C7873" stroke-width="2" />
+                    <path d="M16 18 C16 13.5 19.5 10 24 10 L28 10 L28 84 L24 84 C19.5 84 16 80.5 16 76 Z" fill="#0A2623" />
+                    <line x1="28" y1="10" x2="28" y2="84" stroke="#FFD700" stroke-width="2.5" />
+                    <circle cx="50" cy="42" r="14" fill="#0A2623" stroke="#FFD700" stroke-width="2" />
+                    <path d="M44 38 C41 38 39 40 39 42 C39 44 41 46 44 46" stroke="#00E676" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                    <path d="M55 38 C52 38 50 40 50 42 C50 44 52 46 55 46" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                    <line x1="36" y1="64" x2="64" y2="64" stroke="#529B95" stroke-width="2.5" stroke-linecap="round" />
+                    <polygon points="62,10 68,10 68,90 65,85 62,90" fill="#00E676" />
                 </svg>
             </div>
             <div class="showcase-title">
@@ -1293,20 +1300,34 @@
                 <section class="screen-view active" id="screen-guide">
                     <div class="prism-logo-wrap" style="margin-top: 5px; margin-bottom: 10px;">
                         <!-- Geometric Prism SVG Vector -->
-                        <svg class="prism-logo-icon" style="width: 58px; height: 58px;" viewBox="0 0 100 100" fill="none">
+                        <svg class="prism-logo-icon" style="width: 68px; height: 68px;" viewBox="0 0 100 100" fill="none">
                             <defs>
-                                <linearGradient id="prismGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#00B67A" />
-                                    <stop offset="100%" stop-color="#1B5B57" />
+                                <linearGradient id="bookCoverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#1B5B57" />
+                                    <stop offset="100%" stop-color="#082925" />
                                 </linearGradient>
-                                <linearGradient id="prismGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" stop-color="#529B95" />
-                                    <stop offset="100%" stop-color="#0D3B37" />
+                                <linearGradient id="emeraldBookmark" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#00E676" />
+                                    <stop offset="100%" stop-color="#00B67A" />
                                 </linearGradient>
                             </defs>
-                            <polygon points="50,10 90,80 10,80" stroke="url(#prismGrad1)" stroke-width="6" fill="none" stroke-linejoin="round"/>
-                            <polygon points="50,28 78,74 22,74" fill="url(#prismGrad2)" opacity="0.85"/>
-                            <polygon points="50,42 66,70 34,70" fill="#00B67A"/>
+                            <!-- Back pages -->
+                            <rect x="24" y="16" width="58" height="72" rx="8" fill="#CBD5E1" />
+                            <rect x="20" y="13" width="58" height="72" rx="8" fill="#FFFFFF" />
+                            <!-- Main Cover -->
+                            <rect x="16" y="10" width="60" height="74" rx="8" fill="url(#bookCoverGrad)" stroke="#2C7873" stroke-width="2" />
+                            <!-- Spine Binding -->
+                            <path d="M16 18 C16 13.5 19.5 10 24 10 L28 10 L28 84 L24 84 C19.5 84 16 80.5 16 76 Z" fill="#0A2623" />
+                            <line x1="28" y1="10" x2="28" y2="84" stroke="#FFD700" stroke-width="2.5" />
+                            <!-- Emblem CC -->
+                            <circle cx="50" cy="42" r="14" fill="#0A2623" stroke="#FFD700" stroke-width="2" />
+                            <path d="M44 38 C41 38 39 40 39 42 C39 44 41 46 44 46" stroke="#00E676" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                            <path d="M55 38 C52 38 50 40 50 42 C50 44 52 46 55 46" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                            <!-- Lines -->
+                            <line x1="36" y1="64" x2="64" y2="64" stroke="#529B95" stroke-width="2.5" stroke-linecap="round" />
+                            <line x1="40" y1="70" x2="60" y2="70" stroke="#529B95" stroke-width="2" stroke-linecap="round" opacity="0.7" />
+                            <!-- Ribbon -->
+                            <polygon points="62,10 68,10 68,90 65,85 62,90" fill="url(#emeraldBookmark)" />
                         </svg>
                     </div>
 
@@ -1353,10 +1374,34 @@
                 <!-- ============================================== -->
                 <section class="screen-view" id="screen-login">
                     <div class="prism-logo-wrap" style="margin-top: 10px;">
-                        <svg class="prism-logo-icon" style="width: 54px; height: 54px;" viewBox="0 0 100 100" fill="none">
-                            <polygon points="50,10 90,80 10,80" stroke="#1B5B57" stroke-width="6" fill="none" stroke-linejoin="round"/>
-                            <polygon points="50,28 78,74 22,74" fill="#2C7873" opacity="0.8"/>
-                            <polygon points="50,42 66,70 34,70" fill="#00B67A"/>
+                        <svg class="prism-logo-icon" style="width: 68px; height: 68px;" viewBox="0 0 100 100" fill="none">
+                            <defs>
+                                <linearGradient id="bookCoverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#1B5B57" />
+                                    <stop offset="100%" stop-color="#082925" />
+                                </linearGradient>
+                                <linearGradient id="emeraldBookmark" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#00E676" />
+                                    <stop offset="100%" stop-color="#00B67A" />
+                                </linearGradient>
+                            </defs>
+                            <!-- Back pages -->
+                            <rect x="24" y="16" width="58" height="72" rx="8" fill="#CBD5E1" />
+                            <rect x="20" y="13" width="58" height="72" rx="8" fill="#FFFFFF" />
+                            <!-- Main Cover -->
+                            <rect x="16" y="10" width="60" height="74" rx="8" fill="url(#bookCoverGrad)" stroke="#2C7873" stroke-width="2" />
+                            <!-- Spine Binding -->
+                            <path d="M16 18 C16 13.5 19.5 10 24 10 L28 10 L28 84 L24 84 C19.5 84 16 80.5 16 76 Z" fill="#0A2623" />
+                            <line x1="28" y1="10" x2="28" y2="84" stroke="#FFD700" stroke-width="2.5" />
+                            <!-- Emblem CC -->
+                            <circle cx="50" cy="42" r="14" fill="#0A2623" stroke="#FFD700" stroke-width="2" />
+                            <path d="M44 38 C41 38 39 40 39 42 C39 44 41 46 44 46" stroke="#00E676" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                            <path d="M55 38 C52 38 50 40 50 42 C50 44 52 46 55 46" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                            <!-- Lines -->
+                            <line x1="36" y1="64" x2="64" y2="64" stroke="#529B95" stroke-width="2.5" stroke-linecap="round" />
+                            <line x1="40" y1="70" x2="60" y2="70" stroke="#529B95" stroke-width="2" stroke-linecap="round" opacity="0.7" />
+                            <!-- Ribbon -->
+                            <polygon points="62,10 68,10 68,90 65,85 62,90" fill="url(#emeraldBookmark)" />
                         </svg>
                     </div>
 
@@ -1398,9 +1443,34 @@
                 <!-- ============================================== -->
                 <section class="screen-view" id="screen-pin">
                     <div class="prism-logo-wrap" style="margin-top: 5px;">
-                        <svg class="prism-logo-icon" style="width: 48px; height: 48px;" viewBox="0 0 100 100" fill="none">
-                            <polygon points="50,10 90,80 10,80" stroke="#1B5B57" stroke-width="6" fill="none" stroke-linejoin="round"/>
-                            <polygon points="50,28 78,74 22,74" fill="#2C7873" opacity="0.8"/>
+                        <svg class="prism-logo-icon" style="width: 68px; height: 68px;" viewBox="0 0 100 100" fill="none">
+                            <defs>
+                                <linearGradient id="bookCoverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#1B5B57" />
+                                    <stop offset="100%" stop-color="#082925" />
+                                </linearGradient>
+                                <linearGradient id="emeraldBookmark" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#00E676" />
+                                    <stop offset="100%" stop-color="#00B67A" />
+                                </linearGradient>
+                            </defs>
+                            <!-- Back pages -->
+                            <rect x="24" y="16" width="58" height="72" rx="8" fill="#CBD5E1" />
+                            <rect x="20" y="13" width="58" height="72" rx="8" fill="#FFFFFF" />
+                            <!-- Main Cover -->
+                            <rect x="16" y="10" width="60" height="74" rx="8" fill="url(#bookCoverGrad)" stroke="#2C7873" stroke-width="2" />
+                            <!-- Spine Binding -->
+                            <path d="M16 18 C16 13.5 19.5 10 24 10 L28 10 L28 84 L24 84 C19.5 84 16 80.5 16 76 Z" fill="#0A2623" />
+                            <line x1="28" y1="10" x2="28" y2="84" stroke="#FFD700" stroke-width="2.5" />
+                            <!-- Emblem CC -->
+                            <circle cx="50" cy="42" r="14" fill="#0A2623" stroke="#FFD700" stroke-width="2" />
+                            <path d="M44 38 C41 38 39 40 39 42 C39 44 41 46 44 46" stroke="#00E676" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                            <path d="M55 38 C52 38 50 40 50 42 C50 44 52 46 55 46" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                            <!-- Lines -->
+                            <line x1="36" y1="64" x2="64" y2="64" stroke="#529B95" stroke-width="2.5" stroke-linecap="round" />
+                            <line x1="40" y1="70" x2="60" y2="70" stroke="#529B95" stroke-width="2" stroke-linecap="round" opacity="0.7" />
+                            <!-- Ribbon -->
+                            <polygon points="62,10 68,10 68,90 65,85 62,90" fill="url(#emeraldBookmark)" />
                         </svg>
                     </div>
 
@@ -1529,9 +1599,34 @@
                 <section class="screen-view" id="screen-permissions" style="justify-content: flex-end;">
                     <span class="splash-badge" style="margin: 0 auto 10px auto; display: table;">ÉTAPE 3 / 3 : CONFIGURATION DES RAPPELS</span>
                     <div class="prism-logo-wrap">
-                        <svg class="prism-logo-icon" style="width: 58px; height: 58px;" viewBox="0 0 100 100" fill="none">
-                            <polygon points="50,10 90,80 10,80" stroke="#1B5B57" stroke-width="6" fill="none" stroke-linejoin="round"/>
-                            <polygon points="50,28 78,74 22,74" fill="#2C7873" opacity="0.8"/>
+                        <svg class="prism-logo-icon" style="width: 68px; height: 68px;" viewBox="0 0 100 100" fill="none">
+                            <defs>
+                                <linearGradient id="bookCoverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#1B5B57" />
+                                    <stop offset="100%" stop-color="#082925" />
+                                </linearGradient>
+                                <linearGradient id="emeraldBookmark" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#00E676" />
+                                    <stop offset="100%" stop-color="#00B67A" />
+                                </linearGradient>
+                            </defs>
+                            <!-- Back pages -->
+                            <rect x="24" y="16" width="58" height="72" rx="8" fill="#CBD5E1" />
+                            <rect x="20" y="13" width="58" height="72" rx="8" fill="#FFFFFF" />
+                            <!-- Main Cover -->
+                            <rect x="16" y="10" width="60" height="74" rx="8" fill="url(#bookCoverGrad)" stroke="#2C7873" stroke-width="2" />
+                            <!-- Spine Binding -->
+                            <path d="M16 18 C16 13.5 19.5 10 24 10 L28 10 L28 84 L24 84 C19.5 84 16 80.5 16 76 Z" fill="#0A2623" />
+                            <line x1="28" y1="10" x2="28" y2="84" stroke="#FFD700" stroke-width="2.5" />
+                            <!-- Emblem CC -->
+                            <circle cx="50" cy="42" r="14" fill="#0A2623" stroke="#FFD700" stroke-width="2" />
+                            <path d="M44 38 C41 38 39 40 39 42 C39 44 41 46 44 46" stroke="#00E676" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                            <path d="M55 38 C52 38 50 40 50 42 C50 44 52 46 55 46" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                            <!-- Lines -->
+                            <line x1="36" y1="64" x2="64" y2="64" stroke="#529B95" stroke-width="2.5" stroke-linecap="round" />
+                            <line x1="40" y1="70" x2="60" y2="70" stroke="#529B95" stroke-width="2" stroke-linecap="round" opacity="0.7" />
+                            <!-- Ribbon -->
+                            <polygon points="62,10 68,10 68,90 65,85 62,90" fill="url(#emeraldBookmark)" />
                         </svg>
                     </div>
 
