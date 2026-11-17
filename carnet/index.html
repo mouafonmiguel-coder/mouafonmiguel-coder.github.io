@@ -1,0 +1,2177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+    <script>
+        // Automatic Cache Purge & Fresh Asset Enforcement
+        if ('caches' in window) {
+            caches.keys().then(names => {
+                for (let name of names) {
+                    if (name !== 'cc-offline-v93') caches.delete(name);
+                }
+            });
+        }
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Carnet Crédit — Nouvelle Interface UI Moderne</title>
+    <!-- Google Fonts: Montserrat & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #0D3B37;
+            --primary-teal: #1B5B57;
+            --primary-medium: #2C7873;
+            --primary-light: #529B95;
+            --primary-soft: #D3EAE6;
+            --primary-bg-top: #D4ECE8;
+            --primary-bg-mid: #E8F5F3;
+            --primary-bg-bottom: #F6FBFA;
+            
+            --accent-emerald: #00B67A;
+            --accent-gold: #D4AF37;
+            --accent-orange: #E65100;
+            --accent-red: #E53935;
+            
+            --text-main: #0B2926;
+            --text-secondary: #4A6E6B;
+            --text-muted: #82A29F;
+            --text-light: #FFFFFF;
+            
+            --card-bg: #FFFFFF;
+            --card-border: #D8ECE9;
+            --card-shadow: 0 10px 28px rgba(15, 60, 56, 0.06);
+            --card-shadow-hover: 0 14px 34px rgba(15, 60, 56, 0.12);
+            
+            --keypad-bg: #74A7A2;
+            --keypad-btn: #5A8F8A;
+            --keypad-btn-active: #477772;
+            
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 22px;
+            --radius-full: 9999px;
+            
+            --font-main: 'Plus Jakarta Sans', 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: var(--font-main);
+        }
+
+        body {
+            background: #E2ECEB;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px 10px 80px 10px;
+            color: var(--text-main);
+        }
+
+        /* Top Navigation Header for presentation */
+        .showcase-header {
+            width: 100%;
+            max-width: 1200px;
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            padding: 18px 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 30px rgba(13, 59, 55, 0.08);
+            border: 1px solid var(--card-border);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .showcase-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .showcase-logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary-teal), var(--primary-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 14px rgba(27, 91, 87, 0.3);
+        }
+
+        .showcase-title h1 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary-dark);
+            letter-spacing: -0.3px;
+        }
+
+        .showcase-title p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Screen Switcher Pills */
+        .screen-switcher {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            max-width: 100%;
+        }
+
+        .switch-btn {
+            background: #F0F7F6;
+            color: var(--text-secondary);
+            border: 1px solid var(--card-border);
+            padding: 8px 14px;
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .switch-btn:hover {
+            background: var(--primary-soft);
+            color: var(--primary-dark);
+        }
+
+        .switch-btn.active {
+            background: var(--primary-teal);
+            color: #FFFFFF;
+            border-color: var(--primary-teal);
+            box-shadow: 0 4px 12px rgba(27, 91, 87, 0.25);
+        }
+
+        /* View Mode Controls */
+        .view-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .view-btn {
+            background: #F0F7F6;
+            border: 1px solid var(--card-border);
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary-teal);
+            cursor: pointer;
+        }
+
+        .view-btn.active {
+            background: var(--primary-dark);
+            color: #FFFFFF;
+        }
+
+        /* Smartphone Container */
+        .device-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 412px;
+            transition: max-width 0.3s ease;
+        }
+
+        .device-wrapper.fullwidth {
+            max-width: 860px;
+        }
+
+        .device-frame {
+            background: #FFFFFF;
+            border-radius: 44px;
+            padding: 12px;
+            box-shadow: 0 25px 60px rgba(13, 59, 55, 0.18), 0 0 0 10px #0A2623;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .device-wrapper.fullwidth .device-frame {
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(13, 59, 55, 0.12), 0 0 0 4px #0A2623;
+            padding: 8px;
+        }
+
+        /* Smartphone Screen Display */
+        .app-screen {
+            background: linear-gradient(180deg, var(--primary-bg-top) 0%, var(--primary-bg-mid) 40%, var(--primary-bg-bottom) 100%);
+            border-radius: 36px;
+            min-height: 780px;
+            max-height: 840px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            scrollbar-width: none;
+        }
+
+        .app-screen::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* SCREEN VIEWS */
+        .screen-view {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            animation: fadeIn 0.25s ease-out forwards;
+            padding: 10px 22px 90px 22px;
+        }
+
+        .screen-view.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* SHARED COMPONENTS */
+        /* Geometric Prism Logo SVG */
+        .prism-logo-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0 16px 0;
+        }
+
+        .prism-logo-icon {
+            width: 72px;
+            height: 72px;
+            filter: drop-shadow(0 10px 18px rgba(27, 91, 87, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .prism-logo-icon:hover {
+            transform: scale(1.05);
+        }
+
+        /* Titles & Subtitles */
+        .app-title-h1 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary-dark);
+            text-align: center;
+            letter-spacing: -0.4px;
+            margin-bottom: 6px;
+        }
+
+        .app-title-p {
+            font-size: 13.5px;
+            color: var(--text-secondary);
+            text-align: center;
+            line-height: 1.45;
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+
+        /* Inputs */
+        .input-group {
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .input-field {
+            width: 100%;
+            height: 52px;
+            background: #FFFFFF;
+            border: 1.5px solid var(--card-border);
+            border-radius: var(--radius-md);
+            padding: 0 16px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-main);
+            outline: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(13, 59, 55, 0.03);
+        }
+
+        .input-field:focus {
+            border-color: var(--primary-teal);
+            box-shadow: 0 0 0 3px rgba(27, 91, 87, 0.15);
+            background: #FFFFFF;
+        }
+
+        .input-field::placeholder {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            width: 100%;
+            height: 54px;
+            background: var(--primary-teal);
+            color: #FFFFFF;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(27, 91, 87, 0.28);
+            transition: all 0.2s ease;
+            margin-top: 8px;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 24px rgba(27, 91, 87, 0.35);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        .btn-secondary {
+            width: 100%;
+            height: 50px;
+            background: #FFFFFF;
+            color: var(--primary-teal);
+            border: 1.5px solid var(--card-border);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-soft);
+        }
+
+        /* Social / Alternative Auth */
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            margin: 22px 0 18px 0;
+            gap: 12px;
+        }
+
+        .auth-divider-line {
+            flex: 1;
+            height: 1px;
+            background: var(--card-border);
+        }
+
+        .auth-divider-text {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .social-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .social-circle-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 1.5px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(13, 59, 55, 0.04);
+            transition: all 0.2s;
+        }
+
+        .social-circle-btn:hover {
+            border-color: var(--primary-teal);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(27, 91, 87, 0.15);
+        }
+
+        /* ---------------------------------------------------- */
+        /* 1. SCREEN: SPLASH                                    */
+        /* ---------------------------------------------------- */
+        #screen-splash {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        .splash-glow {
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(0, 182, 122, 0.25) 0%, rgba(27, 91, 87, 0.05) 60%, transparent 70%);
+            border-radius: 50%;
+            top: 25%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            animation: pulseGlow 4s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+            100% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+        }
+
+        .splash-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: var(--radius-lg);
+            padding: 30px 24px;
+            box-shadow: var(--card-shadow);
+            width: 100%;
+            max-width: 330px;
+            z-index: 2;
+        }
+
+        .splash-badge {
+            display: inline-block;
+            background: var(--primary-soft);
+            color: var(--primary-dark);
+            padding: 6px 14px;
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(27, 91, 87, 0.15);
+        }
+
+        /* ---------------------------------------------------- */
+        /* 2. SCREEN: PIN & KEYPAD                              */
+        /* ---------------------------------------------------- */
+        .pin-dots-container {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin: 28px 0 20px 0;
+        }
+
+        .pin-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: transparent;
+            border: 2px solid var(--primary-medium);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .pin-dot.filled {
+            background: var(--primary-teal);
+            transform: scale(1.15);
+            box-shadow: 0 0 10px rgba(27, 91, 87, 0.4);
+        }
+
+        /* Custom In-App Numeric Keypad */
+        .keypad-container {
+            margin-top: auto;
+            background: var(--keypad-bg);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(13, 59, 55, 0.15);
+        }
+
+        .keypad-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .keypad-key {
+            height: 52px;
+            background: var(--keypad-btn);
+            border: none;
+            border-radius: var(--radius-md);
+            color: #FFFFFF;
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
+            transition: all 0.1s ease;
+        }
+
+        .keypad-key:active {
+            background: var(--keypad-btn-active);
+            transform: scale(0.96);
+        }
+
+        .keypad-key.empty {
+            background: transparent;
+            box-shadow: none;
+            cursor: default;
+        }
+
+        .keypad-key.action-key {
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        /* ---------------------------------------------------- */
+        /* 3. SCREEN: AGREEMENT / CGU                           */
+        /* ---------------------------------------------------- */
+        .agreement-card {
+            background: #FFFFFF;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+            max-height: 380px;
+            overflow-y: auto;
+        }
+
+        .agreement-clause {
+            margin-bottom: 16px;
+        }
+
+        .agreement-clause h4 {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 4px;
+        }
+
+        .agreement-clause p {
+            font-size: 12.5px;
+            color: var(--text-secondary);
+            line-height: 1.45;
+        }
+
+        /* ---------------------------------------------------- */
+        /* 4. SCREEN: NOTIFICATIONS & PERMISSIONS (BOTTOM SHEET)*/
+        /* ---------------------------------------------------- */
+        .permission-sheet {
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 20px 40px rgba(13, 59, 55, 0.15);
+            margin-top: auto;
+            text-align: center;
+        }
+
+        .permission-icon-circle {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-soft);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px auto;
+            color: var(--primary-teal);
+        }
+
+        .switch-toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #F4FAF9;
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            margin: 18px 0;
+            border: 1px solid var(--card-border);
+        }
+
+        .switch-toggle-row span {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        /* iOS style toggle */
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 28px;
+            display: inline-block;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #CBD5E1;
+            transition: .3s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--accent-emerald);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(22px);
+        }
+
+        /* ---------------------------------------------------- */
+        /* 5. SCREEN: DASHBOARD / HOMEPAGE                      */
+        /* ---------------------------------------------------- */
+        .dash-topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .shop-identity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .shop-avatar {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary-teal), var(--primary-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            font-weight: 800;
+            font-size: 16px;
+            border: 2px solid #FFFFFF;
+            box-shadow: 0 4px 10px rgba(13, 59, 55, 0.15);
+        }
+
+        .shop-info h2 {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--primary-dark);
+            line-height: 1.2;
+        }
+
+        .shop-info p {
+            font-size: 11.5px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .dash-notif-btn {
+            width: 40px;
+            height: 40px;
+            background: #FFFFFF;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-teal);
+            position: relative;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(13, 59, 55, 0.05);
+        }
+
+        .dash-notif-badge {
+            position: absolute;
+            top: 7px;
+            right: 7px;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-red);
+            border-radius: 50%;
+            border: 1.5px solid #FFFFFF;
+        }
+
+        /* Search Bar & Filter */
+        .dash-search-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .search-input-wrap {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .dash-search-input {
+            width: 100%;
+            height: 46px;
+            background: #FFFFFF;
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-full);
+            padding: 0 16px 0 40px;
+            font-size: 13.5px;
+            font-weight: 500;
+            color: var(--text-main);
+            outline: none;
+            box-shadow: 0 2px 8px rgba(13, 59, 55, 0.03);
+        }
+
+        .dash-filter-btn {
+            width: 46px;
+            height: 46px;
+            background: var(--primary-teal);
+            border: none;
+            border-radius: var(--radius-full);
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(27, 91, 87, 0.2);
+        }
+
+        /* Filter Chips */
+        .filter-chips {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 14px;
+            scrollbar-width: none;
+        }
+
+        .chip {
+            background: #FFFFFF;
+            border: 1px solid var(--card-border);
+            padding: 6px 12px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chip.active {
+            background: var(--primary-teal);
+            color: #FFFFFF;
+            border-color: var(--primary-teal);
+        }
+
+        /* KPI Balance Card */
+        .kpi-card {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-teal) 100%);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            color: #FFFFFF;
+            margin-bottom: 18px;
+            box-shadow: 0 12px 28px rgba(13, 59, 55, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card-glow {
+            position: absolute;
+            right: -30px;
+            top: -30px;
+            width: 140px;
+            height: 140px;
+            background: radial-gradient(circle, rgba(0, 182, 122, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .kpi-label {
+            font-size: 11.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--primary-soft);
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .kpi-amount {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 14px;
+        }
+
+        .kpi-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .kpi-stat-item p {
+            font-size: 11px;
+            color: var(--primary-soft);
+            font-weight: 500;
+        }
+
+        .kpi-stat-item h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        /* Action Buttons Row */
+        .action-quick-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .action-quick-btn {
+            background: #FFFFFF;
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(13, 59, 55, 0.04);
+            transition: all 0.2s;
+        }
+
+        .action-quick-btn:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary-teal);
+            box-shadow: 0 6px 16px rgba(13, 59, 55, 0.08);
+        }
+
+        .action-btn-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .action-quick-btn.credit .action-btn-icon { background: var(--accent-orange); }
+        .action-quick-btn.payment .action-btn-icon { background: var(--accent-emerald); }
+
+        .action-btn-text h4 {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .action-btn-text p {
+            font-size: 10.5px;
+            color: var(--text-secondary);
+        }
+
+        /* Clients Section */
+        .section-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .section-header-row h3 {
+            font-size: 14.5px;
+            font-weight: 800;
+            color: var(--primary-dark);
+        }
+
+        .section-header-row a {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary-teal);
+            text-decoration: none;
+        }
+
+        /* Client Card Item */
+        .client-card {
+            background: #FFFFFF;
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 10px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .client-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--card-shadow-hover);
+            border-color: var(--primary-light);
+        }
+
+        .client-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .client-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .client-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--primary-soft);
+            color: var(--primary-dark);
+            font-weight: 800;
+            font-size: 13.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .client-name h4 {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .client-name p {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .client-debt-amt {
+            text-align: right;
+        }
+
+        .client-debt-amt h4 {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--accent-red);
+        }
+
+        .client-debt-amt p {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .client-card-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 8px;
+            border-top: 1px dashed #E2F0ED;
+            margin-top: 6px;
+        }
+
+        .client-goods {
+            font-size: 11.5px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            max-width: 65%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .client-tag {
+            font-size: 10.5px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: var(--radius-full);
+        }
+
+        .client-tag.urgent {
+            background: #FEE2E2;
+            color: #DC2626;
+        }
+
+        .client-tag.warning {
+            background: #FEF3C7;
+            color: #D97706;
+        }
+
+        .client-tag.good {
+            background: #DCFCE7;
+            color: #16A34A;
+        }
+
+        /* ---------------------------------------------------- */
+        /* BOTTOM NAVIGATION BAR (FIXED DOCKED)                 */
+        /* ---------------------------------------------------- */
+        .bottom-nav-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 72px;
+            background: #FFFFFF;
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 10px;
+            box-shadow: 0 -4px 16px rgba(13, 59, 55, 0.05);
+            z-index: 20;
+            border-radius: 0 0 36px 36px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+        }
+
+        .nav-item.active {
+            color: var(--primary-teal);
+        }
+
+        .nav-item.active svg {
+            stroke: var(--primary-teal);
+            transform: translateY(-2px);
+        }
+
+        /* ---------------------------------------------------- */
+        /* MODAL / NEW TRANSACTION BOTTOM DRAWER                */
+        /* ---------------------------------------------------- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 38, 35, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-card {
+            background: #FFFFFF;
+            width: 100%;
+            max-width: 440px;
+            border-radius: 28px 28px 0 0;
+            padding: 24px;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        @keyframes spinUpdate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .modal-handle {
+            width: 40px;
+            height: 5px;
+            background: #CBD5E1;
+            border-radius: 4px;
+            margin: 0 auto 16px auto;
+        }
+
+        .modal-tabs {
+            display: flex;
+            background: #F1F8F7;
+            padding: 4px;
+            border-radius: var(--radius-md);
+            margin-bottom: 18px;
+        }
+
+        .modal-tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-tab-btn.active {
+            background: #FFFFFF;
+            color: var(--primary-dark);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        /* Responsive helper for tablets/desktop */
+        @media (min-width: 900px) {
+            .app-screen {
+                max-height: 860px;
+            }
+        }
+    
+        @media (max-width: 600px) {
+            body {
+                padding: 0 !important;
+                background: #D4ECE8 !important;
+            }
+            .showcase-header {
+                display: none !important;
+            }
+            .device-wrapper {
+                max-width: 100% !important;
+                width: 100% !important;
+                height: 100vh !important;
+            }
+            .device-frame {
+                border-radius: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                height: 100vh !important;
+            }
+            .app-screen {
+                border-radius: 0 !important;
+                min-height: 100vh !important;
+                max-height: 100vh !important;
+            }
+            .bottom-nav-bar {
+                border-radius: 0 !important;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Showcase Top Header & Screen Switcher -->
+    <header class="showcase-header">
+        <div class="showcase-brand">
+            <div class="showcase-logo-icon">
+                <!-- Prism SVG -->
+                <svg width="24" height="24" viewBox="0 0 40 40" fill="none">
+                    <polygon points="20,4 36,32 4,32" stroke="#FFFFFF" stroke-width="3.5" fill="none" stroke-linejoin="round"/>
+                    <polygon points="20,12 30,30 10,30" fill="rgba(0, 182, 122, 0.8)"/>
+                </svg>
+            </div>
+            <div class="showcase-title">
+                <h1>CARNET CRÉDIT — UI KIT PRO</h1>
+                <p>Nouveau Design Moderne & Minimaliste (Inspiré de votre maquette)</p>
+            </div>
+        </div>
+
+        <div class="screen-switcher">
+            <button class="switch-btn active" onclick="switchScreen('screen-guide', this)">1. Guide</button>
+            <button class="switch-btn" onclick="switchScreen('screen-login', this)">2. Connexion</button>
+            <button class="switch-btn" onclick="switchScreen('screen-pin', this)">3. Code PIN</button>
+            <button class="switch-btn" onclick="switchScreen('screen-register', this)">4. Inscription</button>
+            <button class="switch-btn" onclick="switchScreen('screen-agreement', this)">5. Accord CGU</button>
+            <button class="switch-btn" onclick="switchScreen('screen-permissions', this)">6. Alertes</button>
+            <button class="switch-btn" onclick="switchScreen('screen-dashboard', this)">7. Dashboard</button>
+            <button class="switch-btn" onclick="switchScreen('screen-client-detail', this)">8. Fiche Client</button>
+        </div>
+
+        <div class="view-controls">
+            <button class="view-btn" onclick="checkUpdatesByPhone()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align: -1px; margin-right: 4px;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Vérifier Mises à Jour
+            </button>
+            <button class="view-btn" onclick="openNewModal('credit')">Nouveau Crédit</button>
+            <button class="view-btn active" id="toggle-frame-btn" onclick="toggleFullView()">Vue Mobile</button>
+        </div>
+    </header>
+
+    <!-- Main Smartphone Wrapper -->
+    <main class="device-wrapper" id="device-wrapper">
+        <div class="device-frame">
+            <div class="app-screen">
+                
+                <!-- ============================================== -->
+                <!-- 1. SCREEN: GUIDE PRATIQUE & EXPLICATIONS       -->
+                <!-- ============================================== -->
+                <section class="screen-view active" id="screen-guide">
+                    <div class="prism-logo-wrap" style="margin-top: 5px; margin-bottom: 10px;">
+                        <!-- Geometric Prism SVG Vector -->
+                        <svg class="prism-logo-icon" style="width: 58px; height: 58px;" viewBox="0 0 100 100" fill="none">
+                            <defs>
+                                <linearGradient id="prismGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#00B67A" />
+                                    <stop offset="100%" stop-color="#1B5B57" />
+                                </linearGradient>
+                                <linearGradient id="prismGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#529B95" />
+                                    <stop offset="100%" stop-color="#0D3B37" />
+                                </linearGradient>
+                            </defs>
+                            <polygon points="50,10 90,80 10,80" stroke="url(#prismGrad1)" stroke-width="6" fill="none" stroke-linejoin="round"/>
+                            <polygon points="50,28 78,74 22,74" fill="url(#prismGrad2)" opacity="0.85"/>
+                            <polygon points="50,42 66,70 34,70" fill="#00B67A"/>
+                        </svg>
+                    </div>
+
+                    <span class="splash-badge" style="margin: 0 auto 10px auto; display: table;">GUIDE OFFICIEL CARNET CRÉDIT</span>
+                    <h1 class="app-title-h1" style="font-size: 21px; margin-bottom: 4px;">À quoi sert l'application ?</h1>
+                    <p class="app-title-p" style="margin-bottom: 16px;">La solution moderne et 100% sécurisée pour gérer les dettes, encaissements et clients de votre boutique au Cameroun.</p>
+
+                    <!-- Guide Step 1 -->
+                    <div style="background: #FFFFFF; border-radius: var(--radius-md); padding: 14px 16px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); margin-bottom: 10px;">
+                        <h3 style="font-size: 13.5px; font-weight: 800; color: var(--primary-dark); margin-bottom: 4px;">1. Fini le vieux cahier papier</h3>
+                        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45;">Zéro page perdue, tachée ou déchirée. Chaque vente à terme est enregistrée et conservée en toute sécurité.</p>
+                    </div>
+
+                    <!-- Guide Step 2 -->
+                    <div style="background: #FFFFFF; border-radius: var(--radius-md); padding: 14px 16px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); margin-bottom: 10px;">
+                        <h3 style="font-size: 13.5px; font-weight: 800; color: var(--primary-dark); margin-bottom: 4px;">2. Saisie en 10 secondes chrono</h3>
+                        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45;">Tapez le nom, le montant et les articles (<i>Riz, Ciment, Huile...</i>). Calcul automatique instantané des totaux.</p>
+                    </div>
+
+                    <!-- Guide Step 3 -->
+                    <div style="background: #FFFFFF; border-radius: var(--radius-md); padding: 14px 16px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); margin-bottom: 10px;">
+                        <h3 style="font-size: 13.5px; font-weight: 800; color: var(--primary-dark); margin-bottom: 4px;">3. Reçus & Rappels WhatsApp certifiés</h3>
+                        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45;">Envoyez un reçu digital infalsifiable et des rappels de remboursement courtois directement sur WhatsApp sans litige.</p>
+                    </div>
+
+                    <!-- Guide Step 4 -->
+                    <div style="background: #FFFFFF; border-radius: var(--radius-md); padding: 14px 16px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); margin-bottom: 16px;">
+                        <h3 style="font-size: 13.5px; font-weight: 800; color: var(--primary-dark); margin-bottom: 4px;">4. 100% Fonctionnel Hors-Ligne</h3>
+                        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45;">Même sans Internet au marché de Mokolo, Yaoundé, Bertoua ou Douala, tout fonctionne parfaitement.</p>
+                    </div>
+
+                    <button class="btn-primary" onclick="switchScreen('screen-register')">
+                        <span>Créer mon compte commerçant</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+
+                    <button class="btn-secondary" style="margin-top: 8px;" onclick="switchScreen('screen-login')">
+                        J'ai déjà un compte (Connexion)
+                    </button>
+                </section>
+
+                <!-- ============================================== -->
+                <!-- 2. SCREEN: LOG IN / SIGN UP                    -->
+                <!-- ============================================== -->
+                <section class="screen-view" id="screen-login">
+                    <div class="prism-logo-wrap" style="margin-top: 10px;">
+                        <svg class="prism-logo-icon" style="width: 54px; height: 54px;" viewBox="0 0 100 100" fill="none">
+                            <polygon points="50,10 90,80 10,80" stroke="#1B5B57" stroke-width="6" fill="none" stroke-linejoin="round"/>
+                            <polygon points="50,28 78,74 22,74" fill="#2C7873" opacity="0.8"/>
+                            <polygon points="50,42 66,70 34,70" fill="#00B67A"/>
+                        </svg>
+                    </div>
+
+                    <h1 class="app-title-h1">Connexion ou Inscription</h1>
+                    <p class="app-title-p">Entrez votre numéro de téléphone pour accéder à votre carnet commerçant.</p>
+
+                    <div class="input-group">
+                        <label class="input-label">Numéro de Téléphone (MoMo / OM)</label>
+                        <input type="tel" class="input-field" id="login-phone" placeholder="ex: 653 59 63 05" value="653596305">
+                    </div>
+
+                    <button class="btn-primary" onclick="switchScreen('screen-pin', document.querySelectorAll('.switch-btn')[2])">
+                        <span>Continuer</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+
+                    <div class="auth-divider">
+                        <div class="auth-divider-line"></div>
+                        <span class="auth-divider-text">Ou connexion rapide</span>
+                        <div class="auth-divider-line"></div>
+                    </div>
+
+                    <div class="social-row">
+                        <div class="social-circle-btn" title="Empreinte / Biométrie" onclick="simulateBiometric()">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B5B57" stroke-width="2"><path d="M2 12C2 6.5 6.5 2 12 2a10 10 0 0 1 8 4"></path><path d="M5 19.5C5.5 18 6 15 6 12c0-.7.1-1.4.3-2"></path><path d="M12 10a2 2 0 0 0-2 2c0 4 1 7 2 9"></path><path d="M15 12a3 3 0 0 0-3-3"></path><path d="M19 12c0 2-.5 4-1 6"></path></svg>
+                        </div>
+                        <div class="social-circle-btn" title="Code PIN" onclick="switchScreen('screen-pin', document.querySelectorAll('.switch-btn')[2])">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B5B57" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        </div>
+                    </div>
+
+                    <button class="btn-secondary" onclick="switchScreen('screen-register', document.querySelectorAll('.switch-btn')[3])">
+                        Nouveau commerçant ? Créer un compte
+                    </button>
+                </section>
+
+                <!-- ============================================== -->
+                <!-- 3. SCREEN: CONFIRM VIA PIN (KEYPAD)            -->
+                <!-- ============================================== -->
+                <section class="screen-view" id="screen-pin">
+                    <div class="prism-logo-wrap" style="margin-top: 5px;">
+                        <svg class="prism-logo-icon" style="width: 48px; height: 48px;" viewBox="0 0 100 100" fill="none">
+                            <polygon points="50,10 90,80 10,80" stroke="#1B5B57" stroke-width="6" fill="none" stroke-linejoin="round"/>
+                            <polygon points="50,28 78,74 22,74" fill="#2C7873" opacity="0.8"/>
+                        </svg>
+                    </div>
+
+                    <h1 class="app-title-h1">Confirmez avec votre PIN</h1>
+                    <p class="app-title-p">Entrez votre code secret à 4 chiffres pour déverrouiller votre boutique.</p>
+
+                    <!-- PIN Indicator Dots -->
+                    <div class="pin-dots-container">
+                        <div class="pin-dot" id="dot-1"></div>
+                        <div class="pin-dot" id="dot-2"></div>
+                        <div class="pin-dot" id="dot-3"></div>
+                        <div class="pin-dot" id="dot-4"></div>
+                    </div>
+
+                    <div style="text-align: center; margin-bottom: 14px;">
+                        <a href="javascript:void(0)" onclick="openForgotPinModal()" style="font-size: 12.5px; font-weight: 700; color: var(--primary-teal); text-decoration: none; padding: 6px 12px; border-radius: var(--radius-full); background: rgba(27, 91, 87, 0.08); display: inline-flex; align-items: center; gap: 6px;">
+                            <span>Code PIN oublié ? Récupérer par SMS / WhatsApp</span>
+                        </a>
+                    </div>
+
+                    <!-- Custom Interactive Keypad -->
+                    <div class="keypad-container">
+                        <div class="keypad-grid">
+                            <button class="keypad-key" onclick="pressPin('1')">1</button>
+                            <button class="keypad-key" onclick="pressPin('2')">2</button>
+                            <button class="keypad-key" onclick="pressPin('3')">3</button>
+                            <button class="keypad-key" onclick="pressPin('4')">4</button>
+                            <button class="keypad-key" onclick="pressPin('5')">5</button>
+                            <button class="keypad-key" onclick="pressPin('6')">6</button>
+                            <button class="keypad-key" onclick="pressPin('7')">7</button>
+                            <button class="keypad-key" onclick="pressPin('8')">8</button>
+                            <button class="keypad-key" onclick="pressPin('9')">9</button>
+                            <button class="keypad-key action-key" onclick="simulateBiometric()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12C2 6.5 6.5 2 12 2a10 10 0 0 1 8 4"></path><path d="M12 10a2 2 0 0 0-2 2c0 4 1 7 2 9"></path></svg>
+                            </button>
+                            <button class="keypad-key" onclick="pressPin('0')">0</button>
+                            <button class="keypad-key action-key" onclick="pressPin('back')">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path><line x1="18" y1="9" x2="12" y2="15"></line><line x1="12" y1="9" x2="18" y2="15"></line></svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================== -->
+                <!-- 4. SCREEN: ACCOUNT CREATION                    -->
+                <!-- ============================================== -->
+                <section class="screen-view" id="screen-register">
+                    <span class="splash-badge" style="margin: 5px auto 10px auto; display: table;">ÉTAPE 1 / 3 : INFORMATIONS BOUTIQUE</span>
+                    <h1 class="app-title-h1">Création de compte</h1>
+                    <p class="app-title-p">Renseignez vos coordonnées de commerçant pour initialiser votre carnet.</p>
+
+                    <div class="input-group">
+                        <label class="input-label">Nom & Prénom du commerçant</label>
+                        <input type="text" class="input-field" placeholder="ex: Miguel Mouafon" value="Miguel Mouafon">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Nom de la Boutique / Commerce</label>
+                        <input type="text" class="input-field" placeholder="ex: Alimentation Générale Yaoundé" value="Boutique Le Progrès">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Numéro WhatsApp / MoMo</label>
+                        <input type="tel" class="input-field" placeholder="ex: 653 59 63 05" value="653596305">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Ville & Marché</label>
+                        <input type="text" class="input-field" placeholder="ex: Marché Mokolo, Yaoundé" value="Yaoundé - Mokolo">
+                    </div>
+
+                    <div style="display: flex; align-items: flex-start; gap: 8px; margin: 12px 0 16px 0;">
+                        <input type="checkbox" id="cgu-check" checked style="accent-color: var(--primary-teal); margin-top: 3px;">
+                        <label for="cgu-check" style="font-size: 11.5px; color: var(--text-secondary); line-height: 1.4;">
+                            J'accepte les <a href="#" onclick="switchScreen('screen-agreement', document.querySelectorAll('.switch-btn')[4])" style="color: var(--primary-teal); font-weight: 700;">Conditions Générales</a> et la politique de confidentialité locale.
+                        </label>
+                    </div>
+
+                    <button class="btn-primary" onclick="proceedFromRegistration()">
+                        <span>Créer mon carnet digital</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                </section>
+
+                <!-- ============================================== -->
+                <!-- 5. SCREEN: AGREEMENT / CGU                     -->
+                <!-- ============================================== -->
+                <section class="screen-view" id="screen-agreement">
+                    <span class="splash-badge" style="margin: 5px auto 10px auto; display: table; background: #FEF3C7; color: #D97706; border-color: #FDE68A;">ÉTAPE 2 / 3 : ACCORD DES CONDITIONS (CGU)</span>
+                    <h1 class="app-title-h1">Conditions & Sécurité</h1>
+                    <p class="app-title-p">Veuillez valider les conditions d'utilisation et de protection des dettes clients.</p>
+
+                    <div class="agreement-card">
+                        <div class="agreement-clause">
+                            <h4>1. Confidentialité Totale</h4>
+                            <p>Toutes les dettes, crédits et listes de clients de votre commerce restent strictement confidentiels et protégés.</p>
+                        </div>
+                        <div class="agreement-clause">
+                            <h4>2. Fonctionnement Hors-Ligne</h4>
+                            <p>Vous pouvez enregistrer vos transactions même sans connexion Internet. Les données se synchronisent automatiquement dès le retour du réseau.</p>
+                        </div>
+                        <div class="agreement-clause">
+                            <h4>3. Rappels WhatsApp Certifiés</h4>
+                            <p>Les reçus générés incluent les détails complets de la dette avec signature numérique infalsifiable.</p>
+                        </div>
+                        <div class="agreement-clause">
+                            <h4>4. Sauvegarde Automatique</h4>
+                            <p>En cas de changement de téléphone, retrouvez l'intégralité de votre carnet grâce à votre numéro de téléphone vérifié.</p>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" onclick="proceedFromAgreement()">
+                        <span>J'accepte les CGU et je continue</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                </section>
+
+                <!-- ============================================== -->
+                <!-- 6. SCREEN: PERMISSIONS & NOTIFICATIONS         -->
+                <!-- ============================================== -->
+                <section class="screen-view" id="screen-permissions" style="justify-content: flex-end;">
+                    <span class="splash-badge" style="margin: 0 auto 10px auto; display: table;">ÉTAPE 3 / 3 : CONFIGURATION DES RAPPELS</span>
+                    <div class="prism-logo-wrap">
+                        <svg class="prism-logo-icon" style="width: 58px; height: 58px;" viewBox="0 0 100 100" fill="none">
+                            <polygon points="50,10 90,80 10,80" stroke="#1B5B57" stroke-width="6" fill="none" stroke-linejoin="round"/>
+                            <polygon points="50,28 78,74 22,74" fill="#2C7873" opacity="0.8"/>
+                        </svg>
+                    </div>
+
+                    <div class="permission-sheet">
+                        <div class="permission-icon-circle">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                        </div>
+                        <h2 style="font-size: 18px; font-weight: 800; color: var(--primary-dark); margin-bottom: 6px;">Activer les alertes</h2>
+                        <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.45;">Recevez des rappels automatiques dès qu'une dette client arrive à échéance.</p>
+
+                        <div class="switch-toggle-row">
+                            <span>Rappels quotidiens à 08h00</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <button class="btn-primary" onclick="proceedFromPermissions()">
+                            Activer & Accéder au Carnet
+                        </button>
+                        <button class="btn-secondary" style="border: none; margin-top: 4px;" onclick="proceedFromPermissions()">
+                            Plus tard
+                        </button>
+                    </div>
+                </section>
+
+                <!-- ============================================== -->
+                <!-- 7. SCREEN: DASHBOARD / HOMEPAGE                -->
+                <!-- ============================================== -->
+                <section class="screen-view" id="screen-dashboard">
+                    <!-- Top Bar -->
+                    <div class="dash-topbar">
+                        <div class="shop-identity">
+                            <div class="shop-avatar">BP</div>
+                            <div class="shop-info">
+                                <h2>Boutique Le Progrès</h2>
+                                <p>Yaoundé • Mokolo</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <button onclick="checkUpdatesByPhone()" style="background: rgba(0, 182, 122, 0.12); border: 1px solid var(--accent-emerald); border-radius: var(--radius-full); padding: 6px 12px; font-size: 11px; font-weight: 700; color: var(--primary-dark); cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                <span style="width: 7px; height: 7px; border-radius: 50%; background: var(--accent-emerald); display: inline-block;"></span>
+                                <span>Mise à jour</span>
+                            </button>
+                            <div class="dash-notif-btn" onclick="openNewModal('credit')">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                                <div class="dash-notif-badge"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search Bar -->
+                    <div class="dash-search-row">
+                        <div class="search-input-wrap">
+                            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            <input type="text" class="dash-search-input" placeholder="Rechercher un client ou article...">
+                        </div>
+                        <button class="dash-filter-btn" title="Filtrer">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                        </button>
+                    </div>
+
+                    <!-- Filter Chips -->
+                    <div class="filter-chips">
+                        <div class="chip active">Tous les clients (14)</div>
+                        <div class="chip">En retard (3)</div>
+                        <div class="chip">En cours (9)</div>
+                        <div class="chip">Soldés (2)</div>
+                    </div>
+
+                    <!-- KPI Balance Card -->
+                    <div class="kpi-card">
+                        <div class="kpi-card-glow"></div>
+                        <div class="kpi-label">TOTAL DETTES À RECOUVRER</div>
+                        <div class="kpi-amount">745 000 <span style="font-size: 16px; font-weight: 600;">FCFA</span></div>
+
+                        <div class="kpi-stats-grid">
+                            <div class="kpi-stat-item">
+                                <p>Encaissé ce mois</p>
+                                <h3>310 000 FCFA</h3>
+                            </div>
+                            <div class="kpi-stat-item">
+                                <p>Taux de recouvrement</p>
+                                <h3>82.4%</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Helpful Guide Banner -->
+                    <div onclick="switchScreen('screen-guide', document.querySelectorAll('.switch-btn')[1])" style="background: rgba(0, 182, 122, 0.08); border: 1px dashed var(--accent-emerald); border-radius: var(--radius-md); padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; cursor: pointer;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary-teal)" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                            <span style="font-size: 12px; font-weight: 700; color: var(--primary-dark);">Comment fonctionne votre carnet ?</span>
+                        </div>
+                        <span style="font-size: 11px; font-weight: 700; color: var(--primary-teal);">Voir le Guide ›</span>
+                    </div>
+
+                    <!-- Quick Actions Row -->
+                    <div class="action-quick-row">
+                        <div class="action-quick-btn credit" onclick="openNewModal('credit')">
+                            <div class="action-btn-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></div>
+                            <div class="action-btn-text">
+                                <h4>Nouveau Crédit</h4>
+                                <p>Enregistrer achat</p>
+                            </div>
+                        </div>
+                        <div class="action-quick-btn payment" onclick="openNewModal('payment')">
+                            <div class="action-btn-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+                            <div class="action-btn-text">
+                                <h4>Remboursement</h4>
+                                <p>Encaisser versement</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Clients List Header -->
+                    <div class="section-header-row">
+                        <h3>Comptes Clients Récents</h3>
+                        <a href="#">Voir tout (14)</a>
+                    </div>
+
+                    <!-- Client Cards List -->
+                    <div class="client-card" onclick="switchScreen('screen-client-detail', document.querySelectorAll('.switch-btn')[7])">
+                        <div class="client-card-top">
+                            <div class="client-user">
+                                <div class="client-avatar" style="background: #FEE2E2; color: #DC2626;">MC</div>
+                                <div class="client-name">
+                                    <h4>Mama Chantal</h4>
+                                    <p>694 22 18 90 • Yaoundé</p>
+                                </div>
+                            </div>
+                            <div class="client-debt-amt">
+                                <h4>45 000 F</h4>
+                                <p>Reste dû</p>
+                            </div>
+                        </div>
+                        <div class="client-card-bottom">
+                            <span class="client-goods">Sac de riz 50kg, Huile Diamaor 5L</span>
+                            <span class="client-tag urgent">Retard 12j</span>
+                        </div>
+                    </div>
+
+                    <div class="client-card" onclick="switchScreen('screen-client-detail', document.querySelectorAll('.switch-btn')[7])">
+                        <div class="client-card-top">
+                            <div class="client-user">
+                                <div class="client-avatar" style="background: #FEF3C7; color: #D97706;">PR</div>
+                                <div class="client-name">
+                                    <h4>Pa'a Roger</h4>
+                                    <p>675 44 33 21 • Bertoua</p>
+                                </div>
+                            </div>
+                            <div class="client-debt-amt">
+                                <h4>120 000 F</h4>
+                                <p>Reste dû</p>
+                            </div>
+                        </div>
+                        <div class="client-card-bottom">
+                            <span class="client-goods">Ciment 15 sacs, Fer à béton</span>
+                            <span class="client-tag warning">Échéance dans 4j</span>
+                        </div>
+                    </div>
+
+                    <div class="client-card" onclick="switchScreen('screen-client-detail', document.querySelectorAll('.switch-btn')[7])">
+                        <div class="client-card-top">
+                            <div class="client-user">
+                                <div class="client-avatar" style="background: #DCFCE7; color: #16A34A;">AI</div>
+                                <div class="client-name">
+                                    <h4>Alhaji Ibrahim</h4>
+                                    <p>656 99 53 69 • Yaoundé</p>
+                                </div>
+                            </div>
+                            <div class="client-debt-amt">
+                                <h4 style="color: #16A34A;">0 FCFA</h4>
+                                <p>Soldé</p>
+                            </div>
+                        </div>
+                        <div class="client-card-bottom">
+                            <span class="client-goods">Cartons Savon & Farine</span>
+                            <span class="client-tag good">Intégralement payé</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================== -->
+                <!-- 8. SCREEN: CLIENT DETAIL & LEDGER              -->
+                <!-- ============================================== -->
+                <section class="screen-view" id="screen-client-detail">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <button onclick="switchScreen('screen-dashboard', document.querySelectorAll('.switch-btn')[6])" style="width: 36px; height: 36px; border-radius: 50%; background: #FFFFFF; border: 1px solid var(--card-border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--primary-teal);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        </button>
+                        <h2 style="font-size: 16px; font-weight: 800; color: var(--primary-dark);">Fiche & Historique Client</h2>
+                    </div>
+
+                    <div style="background: #FFFFFF; border-radius: var(--radius-lg); padding: 18px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow); margin-bottom: 16px; text-align: center;">
+                        <div style="width: 54px; height: 54px; border-radius: 50%; background: #FEE2E2; color: #DC2626; font-size: 18px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px auto;">MC</div>
+                        <h3 style="font-size: 16px; font-weight: 800; color: var(--primary-dark);">Mama Chantal</h3>
+                        <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">+237 694 22 18 90 • Yaoundé (Mokolo)</p>
+
+                        <div style="background: #FFF5F5; border-radius: var(--radius-md); padding: 12px; border: 1px solid #FED7D7; margin-bottom: 14px;">
+                            <p style="font-size: 11px; font-weight: 700; color: #DC2626; text-transform: uppercase;">Solde Restant Dû</p>
+                            <h2 style="font-size: 24px; font-weight: 800; color: #DC2626;">45 000 FCFA</h2>
+                        </div>
+
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn-primary" style="height: 44px; font-size: 13px;" onclick="sendWhatsAppReminder('Mama Chantal', '45000')">
+                                Rappel WhatsApp
+                            </button>
+                            <button class="btn-secondary" style="height: 44px; font-size: 13px; margin-top: 8px;" onclick="openNewModal('payment')">
+                                Encaisser
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="section-header-row">
+                        <h3>Historique des Achats & Versements</h3>
+                    </div>
+
+                    <div style="background: #FFFFFF; border-radius: var(--radius-md); padding: 12px 14px; border: 1px solid var(--card-border); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h4 style="font-size: 13px; font-weight: 700; color: var(--primary-dark);">Achat à Crédit</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Sac de riz 50kg + Huile • 14 Septembre</p>
+                        </div>
+                        <span style="font-size: 14px; font-weight: 800; color: #DC2626;">+ 65 000 F</span>
+                    </div>
+
+                    <div style="background: #FFFFFF; border-radius: var(--radius-md); padding: 12px 14px; border: 1px solid var(--card-border); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h4 style="font-size: 13px; font-weight: 700; color: var(--accent-emerald);">Versement Reçu (MoMo)</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Reçu N° #CC-8942 • 20 Septembre</p>
+                        </div>
+                        <span style="font-size: 14px; font-weight: 800; color: var(--accent-emerald);">- 20 000 F</span>
+                    </div>
+                </section>
+
+                <!-- Bottom Docked Navigation Bar (Visible on dashboard & main screens) -->
+                <nav class="bottom-nav-bar" id="bottom-nav">
+                    <div class="nav-item active" onclick="switchScreen('screen-dashboard', document.querySelectorAll('.switch-btn')[6])">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        <span>Accueil</span>
+                    </div>
+                    <div class="nav-item" onclick="switchScreen('screen-client-detail', document.querySelectorAll('.switch-btn')[7])">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        <span>Clients</span>
+                    </div>
+                    <div class="nav-item" onclick="openNewModal('credit')">
+                        <div style="width: 40px; height: 40px; background: var(--primary-teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #FFFFFF; box-shadow: 0 4px 12px rgba(27, 91, 87, 0.3); margin-top: -14px;">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        </div>
+                        <span>Ajouter</span>
+                    </div>
+                    <div class="nav-item" onclick="switchScreen('screen-agreement', document.querySelectorAll('.switch-btn')[4])">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                        <span>Bilan</span>
+                    </div>
+                    <div class="nav-item" onclick="switchScreen('screen-register', document.querySelectorAll('.switch-btn')[3])">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                        <span>Réglages</span>
+                    </div>
+                </nav>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- ============================================== -->
+    <!-- MODAL: VÉRIFICATEUR DE MISES À JOUR PAR TÉLÉPHONE -->
+    <!-- ============================================== -->
+    <div class="modal-overlay" id="update-modal" onclick="closeUpdateOnBg(event)">
+        <div class="modal-card">
+            <div class="modal-handle"></div>
+
+            <div style="text-align: center; margin-bottom: 16px;">
+                <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--primary-soft); color: var(--primary-teal); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px auto;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                </div>
+                <h2 style="font-size: 18px; font-weight: 800; color: var(--primary-dark); margin-bottom: 4px;">Vérificateur de Mises à Jour</h2>
+                <p style="font-size: 12px; color: var(--text-secondary);">Vérification de licence et détection instantanée des dernières améliorations par numéro de téléphone.</p>
+            </div>
+
+            <!-- Phone Verification Form -->
+            <div class="input-group">
+                <label class="input-label">Numéro de Téléphone Commerçant (MoMo / OM)</label>
+                <input type="tel" class="input-field" id="update-phone-input" value="653596305" placeholder="ex: 653 59 63 05">
+            </div>
+
+            <div id="update-scan-state" style="display: none; text-align: center; padding: 16px 0;">
+                <div style="width: 32px; height: 32px; border: 3px solid var(--primary-soft); border-top-color: var(--primary-teal); border-radius: 50%; animation: spinUpdate 0.8s linear infinite; margin: 0 auto 10px auto;"></div>
+                <p style="font-size: 12.5px; font-weight: 600; color: var(--primary-dark);">Interrogation du serveur pour le compte <span id="scan-phone-display">+237 653 59 63 05</span>...</p>
+            </div>
+
+            <!-- Result Box: Update Available -->
+            <div id="update-result-box" style="display: none;">
+                <div style="background: #ECFDF5; border: 1.5px solid #6EE7B7; border-radius: var(--radius-md); padding: 14px; margin-bottom: 14px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                        <span style="font-size: 11px; font-weight: 800; color: #065F46; text-transform: uppercase; background: #D1FAE5; padding: 3px 8px; border-radius: var(--radius-full);">Nouvelle Version Disponible</span>
+                        <span style="font-size: 12px; font-weight: 800; color: var(--primary-teal);">v1.1.0</span>
+                    </div>
+                    <p style="font-size: 12px; color: #065F46; font-weight: 600; margin-bottom: 10px;">Votre compte est éligible à la dernière version optimisée de Carnet Crédit.</p>
+
+                    <div style="background: #FFFFFF; border-radius: var(--radius-sm); padding: 10px; border: 1px solid #D1FAE5;">
+                        <p style="font-size: 11.5px; font-weight: 700; color: var(--primary-dark); margin-bottom: 4px;">Nouveautés de cette mise à jour :</p>
+                        <ul style="font-size: 11px; color: var(--text-secondary); margin-left: 16px; line-height: 1.5;">
+                            <li>Interface UI épurée et moderne sans émojis</li>
+                            <li>Récupération de Code PIN sécurisée par SMS / WhatsApp</li>
+                            <li>Vérificateur de mise à jour instantané par numéro de téléphone</li>
+                            <li>Fonctionnement 100% hors-ligne et calcul automatique</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="applyUpdateNow()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <span>Installer la Mise à Jour Immédiatement</span>
+                </button>
+
+                <a href="https://mouafonmiguel-coder.github.io/CarnetCreditDigital.apk" class="btn-secondary" style="text-decoration: none; margin-top: 8px;">
+                    Télécharger le Fichier APK Android
+                </a>
+            </div>
+
+            <!-- Initial Action Button -->
+            <div id="update-action-btn">
+                <button class="btn-primary" onclick="runUpdateCheck()">
+                    <span>Vérifier les Mises à Jour</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+            </div>
+
+            <button class="btn-secondary" style="border: none; margin-top: 8px;" onclick="closeUpdateModal()">
+                Fermer
+            </button>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODAL: RÉCUPÉRATION DU CODE PIN PAR SMS / WHATSAPP -->
+    <!-- ============================================== -->
+    <div class="modal-overlay" id="forgot-pin-modal" onclick="closeForgotPinOnBg(event)">
+        <div class="modal-card">
+            <div class="modal-handle"></div>
+
+            <div style="text-align: center; margin-bottom: 16px;">
+                <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--primary-soft); color: var(--primary-teal); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px auto; font-size: 22px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+                <h2 style="font-size: 18px; font-weight: 800; color: var(--primary-dark); margin-bottom: 4px;">Récupération du Code PIN</h2>
+                <p style="font-size: 12px; color: var(--text-secondary);">Recevez un code de sécurité par SMS ou WhatsApp sur votre numéro officiel pour redéfinir votre PIN.</p>
+            </div>
+
+            <!-- Step 1: Request SMS -->
+            <div id="forgot-step-1">
+                <div class="input-group">
+                    <label class="input-label">Votre Numéro de Téléphone (MoMo / OM)</label>
+                    <input type="tel" class="input-field" id="forgot-phone-input" value="653596305" placeholder="ex: 653 59 63 05">
+                </div>
+
+                <button class="btn-primary" onclick="sendOtpSms()">
+                    <span>Envoyer le code par SMS & WhatsApp</span>
+                </button>
+            </div>
+
+            <!-- Step 2: Enter OTP & New PIN -->
+            <div id="forgot-step-2" style="display: none;">
+                <div style="background: #DCFCE7; border: 1px solid #86EFAC; border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 14px; font-size: 12px; color: #166534; font-weight: 600; text-align: center;">
+                    Code de sécurité envoyé par SMS au <span id="display-otp-phone">+237 653 59 63 05</span>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Code SMS reçu (4 chiffres)</label>
+                    <input type="number" class="input-field" id="otp-code-input" placeholder="ex: 8492" value="8492">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Nouveau Code PIN à 4 chiffres</label>
+                    <input type="password" maxlength="4" class="input-field" id="new-pin-input" placeholder="ex: 1234" value="1234">
+                </div>
+
+                <button class="btn-primary" onclick="verifyOtpAndSetNewPin()">
+                    <span>Enregistrer & Déverrouiller</span>
+                </button>
+            </div>
+
+            <button class="btn-secondary" style="border: none; margin-top: 8px;" onclick="closeForgotPinModal()">
+                Annuler
+            </button>
+        </div>
+    </div>
+    <div class="modal-overlay" id="trans-modal" onclick="closeModalOnBg(event)">
+        <div class="modal-card">
+            <div class="modal-handle"></div>
+            
+            <div class="modal-tabs">
+                <button class="modal-tab-btn active" id="modal-tab-credit" onclick="setModalType('credit')">Nouveau Crédit</button>
+                <button class="modal-tab-btn" id="modal-tab-payment" onclick="setModalType('payment')">Remboursement</button>
+            </div>
+
+            <h2 id="modal-title" style="font-size: 18px; font-weight: 800; color: var(--primary-dark); margin-bottom: 4px;">Enregistrer un Crédit Client</h2>
+            <p id="modal-desc" style="font-size: 12px; color: var(--text-secondary); margin-bottom: 16px;">Ajoutez un nouvel achat à terme pour un client de votre boutique.</p>
+
+            <div class="input-group">
+                <label class="input-label">Nom du Client</label>
+                <input type="text" class="input-field" id="modal-client-name" placeholder="ex: Mama Chantal ou nouveau nom">
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">Numéro de Téléphone (WhatsApp)</label>
+                <input type="tel" class="input-field" id="modal-client-phone" placeholder="ex: 694 22 18 90">
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">Montant (FCFA)</label>
+                <input type="number" class="input-field" id="modal-amount" placeholder="ex: 45000">
+            </div>
+
+            <div class="input-group" id="group-goods">
+                <label class="input-label">Détails des Articles / Marchandises</label>
+                <input type="text" class="input-field" id="modal-goods" placeholder="ex: 1 Sac de riz 50kg, 2 cartons de savon">
+            </div>
+
+            <button class="btn-primary" onclick="submitModalTransaction()">
+                <span>Confirmer & Générer Reçu</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+            <button class="btn-secondary" style="border: none;" onclick="closeModal()">
+                Annuler
+            </button>
+        </div>
+    </div>
+
+    <!-- Live Clock Script & App Logic -->
+    <script>
+        // Screen Switching
+        function switchScreen(screenId, btnElement) {
+            document.querySelectorAll('.screen-view').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById(screenId);
+            if (target) {
+                target.classList.add('active');
+                target.scrollTop = 0;
+            }
+
+            if (btnElement) {
+                document.querySelectorAll('.switch-btn').forEach(b => b.classList.remove('active'));
+                btnElement.classList.add('active');
+            } else {
+                // Find switch btn corresponding to screenId
+                const map = {
+                    'screen-guide': 0,
+                    'screen-login': 1,
+                    'screen-pin': 2,
+                    'screen-register': 3,
+                    'screen-agreement': 4,
+                    'screen-permissions': 5,
+                    'screen-dashboard': 6,
+                    'screen-client-detail': 7
+                };
+                if (map[screenId] !== undefined) {
+                    const btns = document.querySelectorAll('.switch-btn');
+                    btns.forEach(b => b.classList.remove('active'));
+                    if (btns[map[screenId]]) btns[map[screenId]].classList.add('active');
+                }
+            }
+
+            // Hide bottom nav on onboarding/auth screens
+            const bNav = document.getElementById('bottom-nav');
+            if (bNav) {
+                if (['screen-guide', 'screen-login', 'screen-pin', 'screen-register', 'screen-agreement', 'screen-permissions'].includes(screenId)) {
+                    bNav.style.display = 'none';
+                } else {
+                    bNav.style.display = 'flex';
+                }
+            }
+        }
+
+        // Automatic Sequential Onboarding Flow
+        function proceedFromRegistration() {
+            // Automatically transitions to CGU / Agreement screen
+            switchScreen('screen-agreement');
+        }
+
+        function proceedFromAgreement() {
+            // Automatically transitions to Notifications / Permissions screen
+            switchScreen('screen-permissions');
+        }
+
+        function proceedFromPermissions() {
+            // Automatically transitions to Dashboard with success toast
+            switchScreen('screen-dashboard');
+            setTimeout(() => {
+                alert('Félicitations ! Votre compte commerçant et vos CGU ont été validés avec succès.\nBienvenue sur votre tableau de bord Carnet Crédit !');
+            }, 300);
+        }
+
+        // Toggle Full View vs Phone Mockup
+        function toggleFullView() {
+            const wrapper = document.getElementById('device-wrapper');
+            const btn = document.getElementById('toggle-frame-btn');
+            if (wrapper.classList.contains('fullwidth')) {
+                wrapper.classList.remove('fullwidth');
+                btn.textContent = 'Vue Mobile';
+            } else {
+                wrapper.classList.add('fullwidth');
+                btn.textContent = 'Vue Élargie';
+            }
+        }
+
+        // Interactive PIN Keypad Logic
+        let pinCode = '';
+        function pressPin(val) {
+            if (val === 'back') {
+                if (pinCode.length > 0) pinCode = pinCode.slice(0, -1);
+            } else if (pinCode.length < 4) {
+                pinCode += val;
+            }
+
+            // Update dot visual
+            for (let i = 1; i <= 4; i++) {
+                const dot = document.getElementById('dot-' + i);
+                if (dot) {
+                    if (i <= pinCode.length) dot.classList.add('filled');
+                    else dot.classList.remove('filled');
+                }
+            }
+
+            // Auto-advance when 4 digits reached
+            if (pinCode.length === 4) {
+                setTimeout(() => {
+                    alert('Code PIN validé avec succès ! Bienvenue dans votre Carnet Crédit.');
+                    pinCode = '';
+                    for (let i = 1; i <= 4; i++) {
+                        const d = document.getElementById('dot-' + i);
+                        if (d) d.classList.remove('filled');
+                    }
+                    switchScreen('screen-dashboard', document.querySelectorAll('.switch-btn')[6]);
+                }, 300);
+            }
+        }
+
+        // Forgot PIN & SMS Recovery Functions
+        function openForgotPinModal() {
+            const modal = document.getElementById('forgot-pin-modal');
+            if (modal) {
+                document.getElementById('forgot-step-1').style.display = 'block';
+                document.getElementById('forgot-step-2').style.display = 'none';
+                modal.classList.add('active');
+            }
+        }
+
+        function closeForgotPinModal() {
+            const modal = document.getElementById('forgot-pin-modal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function closeForgotPinOnBg(e) {
+            if (e.target.id === 'forgot-pin-modal') closeForgotPinModal();
+        }
+
+        function sendOtpSms() {
+            const phone = document.getElementById('forgot-phone-input').value || '653596305';
+            document.getElementById('display-otp-phone').textContent = '+237 ' + phone;
+            document.getElementById('forgot-step-1').style.display = 'none';
+            document.getElementById('forgot-step-2').style.display = 'block';
+        }
+
+        function verifyOtpAndSetNewPin() {
+            const newPin = document.getElementById('new-pin-input').value || '1234';
+            closeForgotPinModal();
+            alert(`Votre nouveau code PIN (${newPin}) a été mis à jour avec succès !\nVotre boutique est maintenant déverrouillée.`);
+            switchScreen('screen-dashboard');
+        }
+
+        // In-App Update Checker Functions
+        function checkUpdatesByPhone() {
+            const modal = document.getElementById('update-modal');
+            if (modal) {
+                document.getElementById('update-scan-state').style.display = 'none';
+                document.getElementById('update-result-box').style.display = 'none';
+                document.getElementById('update-action-btn').style.display = 'block';
+                modal.classList.add('active');
+            }
+        }
+
+        function closeUpdateModal() {
+            const modal = document.getElementById('update-modal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function closeUpdateOnBg(e) {
+            if (e.target.id === 'update-modal') closeUpdateModal();
+        }
+
+        function runUpdateCheck() {
+            const phone = document.getElementById('update-phone-input').value || '653596305';
+            document.getElementById('scan-phone-display').textContent = '+237 ' + phone;
+            document.getElementById('update-action-btn').style.display = 'none';
+            document.getElementById('update-scan-state').style.display = 'block';
+
+            setTimeout(() => {
+                document.getElementById('update-scan-state').style.display = 'none';
+                document.getElementById('update-result-box').style.display = 'block';
+            }, 1000);
+        }
+
+        function applyUpdateNow() {
+            closeUpdateModal();
+            alert('Mise à jour v1.1.0 installée avec succès !\nToutes vos données et dettes ont été synchronisées.');
+            location.reload();
+        }
+
+        // Modal Logic
+        let currentModalType = 'credit';
+        function openNewModal(type) {
+            currentModalType = type;
+            const modal = document.getElementById('trans-modal');
+            if (modal) modal.classList.add('active');
+            setModalType(type);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('trans-modal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function closeModalOnBg(e) {
+            if (e.target.id === 'trans-modal') closeModal();
+        }
+
+        function setModalType(type) {
+            currentModalType = type;
+            const tabCredit = document.getElementById('modal-tab-credit');
+            const tabPayment = document.getElementById('modal-tab-payment');
+            const title = document.getElementById('modal-title');
+            const desc = document.getElementById('modal-desc');
+            const groupGoods = document.getElementById('group-goods');
+
+            if (type === 'credit') {
+                tabCredit.classList.add('active');
+                tabPayment.classList.remove('active');
+                title.textContent = 'Enregistrer un Crédit Client';
+                desc.textContent = 'Ajoutez un nouvel achat à terme pour un client de votre boutique.';
+                groupGoods.style.display = 'block';
+            } else {
+                tabPayment.classList.add('active');
+                tabCredit.classList.remove('active');
+                title.textContent = 'Enregistrer un Remboursement';
+                desc.textContent = 'Enregistrez un versement en espèces ou Mobile Money reçu d\'un client.';
+                groupGoods.style.display = 'none';
+            }
+        }
+
+        function submitModalTransaction() {
+            const name = document.getElementById('modal-client-name').value || 'Client';
+            const amount = document.getElementById('modal-amount').value || '0';
+            
+            if (currentModalType === 'credit') {
+                alert(`Crédit de ${amount} FCFA enregistré avec succès pour ${name} !\nUn reçu WhatsApp a été généré.`);
+            } else {
+                alert(`Remboursement de ${amount} FCFA validé pour ${name} !\nLe solde a été mis à jour.`);
+            }
+            closeModal();
+            switchScreen('screen-dashboard', document.querySelectorAll('.switch-btn')[6]);
+        }
+
+        function sendWhatsAppReminder(name, amount) {
+            const text = encodeURIComponent(`Bonjour ${name}, petit rappel de votre solde restant de ${amount} FCFA auprès de la Boutique Le Progrès. Merci pour votre fidélité !`);
+            window.open(`https://wa.me/237694221890?text=${text}`, '_blank');
+        }
+    </script>
+</body>
+</html>
