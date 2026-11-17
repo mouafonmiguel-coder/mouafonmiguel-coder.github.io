@@ -1227,6 +1227,36 @@
                 max-height: 860px;
             }
         }
+    
+        @media (max-width: 600px) {
+            body {
+                padding: 0 !important;
+                background: #D4ECE8 !important;
+            }
+            .showcase-header {
+                display: none !important;
+            }
+            .device-wrapper {
+                max-width: 100% !important;
+                width: 100% !important;
+                height: 100vh !important;
+            }
+            .device-frame {
+                border-radius: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                height: 100vh !important;
+            }
+            .app-screen {
+                border-radius: 0 !important;
+                min-height: 100vh !important;
+                max-height: 100vh !important;
+            }
+            .bottom-nav-bar {
+                border-radius: 0 !important;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -2216,5 +2246,23 @@
             window.open(`https://wa.me/237694221890?text=${text}`, '_blank');
         }
     </script>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("./sw.js?v=90").then(reg => {
+                    reg.onupdatefound = () => {
+                        const installingWorker = reg.installing;
+                        installingWorker.onstatechange = () => {
+                            if (installingWorker.state === "installed" && navigator.serviceWorker.controller) {
+                                window.location.reload();
+                            }
+                        };
+                    };
+                }).catch(err => console.log("SW reg error:", err));
+            });
+        }
+    </script>
 </body>
+
 </html>
