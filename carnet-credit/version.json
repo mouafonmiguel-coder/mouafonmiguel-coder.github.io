@@ -1,10 +1,10 @@
 {
-  "version": 91,
-  "build": 2026111402,
-  "updated_at": "2026-11-14T12:30:00Z",
+  "version": 92,
+  "build": 2026111403,
+  "updated_at": "2026-11-14T12:45:00Z",
   "features": [
-    "Suppression totale de la fausse barre d heure 13:49, encoche et icones wifi/batterie",
-    "Rendu plein ecran natif parfait pour tous les smartphones",
-    "Cache v91 purge"
+    "Suppression totale des carres d icones colorees du guide",
+    "Titres numerotes ultra-propres et epures",
+    "Cache v92 purge"
   ]
 }
