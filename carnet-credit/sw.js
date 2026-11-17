@@ -1,5 +1,5 @@
-// Service Worker Carnet Credit v92 - Purged Guide square icon boxes
-const CACHE_NAME = "cc-offline-v92";
+// Service Worker Carnet Credit v93 - Complete Cache Nuke
+const CACHE_NAME = "cc-offline-v93";
 const CORE_ASSETS = [
   "./",
   "./index.html",
