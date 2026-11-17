@@ -1,9 +1,12 @@
 {
-  "version": 89,
-  "updated_at": "2026-11-16T09:30:00Z",
+  "version": 90,
+  "build": 2026111401,
+  "updated_at": "2026-11-14T12:00:00Z",
   "features": [
-    "Suppression du bandeau texte superpose - Mode Hors-Ligne 100% automatique et invisible",
-    "Affichage propre et sans encombrement de l en-tete (Reglages, Quitter, EN)",
-    "Fonctionnement hors connexion 0ms en arriere-plan sans message genant"
+    "Nouvelle interface utilisateur moderne inspiree du design Figma/Dribbble",
+    "Suppression totale de 100% des emojis et remplacement par des icones vectorielles SVG",
+    "Integration du Guide pratique officiel en page d entree",
+    "Recuperation de Code PIN securisee par SMS et WhatsApp",
+    "Verificateur de mise a jour par numero de telephone commercant"
   ]
 }
