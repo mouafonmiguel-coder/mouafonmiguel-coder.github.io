@@ -1,5 +1,5 @@
-// Service Worker Carnet Credit v100 - Official Ledger Book Logo
-const CACHE_NAME = "cc-offline-v100";
+// Service Worker Carnet Credit v101 - Restored Original Official Logo
+const CACHE_NAME = "cc-offline-v101";
 const CORE_ASSETS = [
   "./",
   "./index.html",
