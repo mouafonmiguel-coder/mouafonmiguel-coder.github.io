@@ -1,6 +1,6 @@
 {
-  "version": 115,
-  "timestamp": 1791880000,
+  "version": 116,
+  "timestamp": 1791881000,
   "app": "Carnet Credit",
-  "description": "Mise a jour majeure: UI Mobile propre, suppression totale des barres superposees, boutons 100% degages"
+  "description": "Barre de recherche ultra-rapide pour retrouver n'importe quel client, pret, numero ou article"
 }
