@@ -26,17 +26,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <script>
-        // Nettoyage silencieux des anciens caches et anciens SW
-        try {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(regs => {
-                    for (let r of regs) r.unregister();
-                });
-            }
-            if ('caches' in window) {
-                caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))));
-            }
-        } catch(e) {}
+        // Enregistrement PWA Service Worker pour le fonctionnement 100% Hors-Ligne (Offline)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            });
+        }
     </script>
     <style>
         :root {
