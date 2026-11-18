@@ -2840,10 +2840,82 @@
             document.getElementById("set-plan-status").textContent = plan;
         }
 
+        
+        // PWA Native Mobile Installation Manager
+        let deferredPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const banner = document.getElementById('pwa-install-banner');
+            if (banner) banner.style.display = 'flex';
+        });
+
+        window.addEventListener('appinstalled', () => {
+            deferredPrompt = null;
+            const banner = document.getElementById('pwa-install-banner');
+            if (banner) banner.style.display = 'none';
+            showToast('Application Carnet Crédit installée avec succès sur votre téléphone !', 'success');
+        });
+
+        function installMobileApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        showToast('Installation en cours...', 'info');
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                // Open guide modal
+                document.getElementById('install-guide-modal').classList.add('active');
+            }
+        }
+
+        function closeInstallGuideModal() {
+            document.getElementById('install-guide-modal').classList.remove('active');
+        }
+
         // Init
         window.addEventListener("DOMContentLoaded", () => {
             loadDB();
         });
     </script>
+    <!-- MODALE GUIDE INSTALLATION APPLICATION MOBILE -->
+    <div class="modal-overlay" id="install-guide-modal" onclick="if(event.target.id==='install-guide-modal') closeInstallGuideModal()">
+        <div class="modal-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div class="card-title" style="margin-bottom:0; font-size:16px;">📲 Installer Carnet Crédit</div>
+                <button class="header-icon-btn" onclick="closeInstallGuideModal()" style="width:32px; height:32px;">✕</button>
+            </div>
+            
+            <p style="font-size:12.5px; color:var(--text-secondary); margin-bottom:14px; line-height:1.4;">
+                Vous pouvez installer l'application directement sur l'écran d'accueil de votre téléphone pour l'utiliser en plein écran et 100% hors-ligne comme une application native.
+            </p>
+
+            <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+                <div style="background:#F0FDFA; border:1px solid #CCFBF1; border-radius:10px; padding:12px;">
+                    <div style="font-weight:800; font-size:13px; color:#0F766E; margin-bottom:4px;">📱 Sur Android (Google Chrome) :</div>
+                    <div style="font-size:12px; color:var(--text-main); line-height:1.4;">
+                        1. Appuyez sur les <strong>3 petits points (⋮)</strong> en haut à droite du navigateur.<br>
+                        2. Sélectionnez <strong>« Installer l'application »</strong> ou <strong>« Ajouter à l'écran d'accueil »</strong>.
+                    </div>
+                </div>
+
+                <div style="background:#FFF7ED; border:1px solid #FFEDD5; border-radius:10px; padding:12px;">
+                    <div style="font-weight:800; font-size:13px; color:#C2410C; margin-bottom:4px;">🍏 Sur iPhone (Safari) :</div>
+                    <div style="font-size:12px; color:var(--text-main); line-height:1.4;">
+                        1. Appuyez sur le bouton <strong>Partager (⎋)</strong> en bas de Safari.<br>
+                        2. Faites défiler et appuyez sur <strong>« Sur l'écran d'accueil » (➕)</strong>.
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="closeInstallGuideModal()" style="font-weight:800;">
+                J'ai compris
+            </button>
+        </div>
+    </div>
+
 </body>
 </html>
