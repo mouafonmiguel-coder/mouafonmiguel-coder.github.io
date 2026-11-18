@@ -986,7 +986,7 @@
                     <div class="step-number">4</div>
                     <div>
                         <div class="step-title">100% Fonctionnel Hors-Ligne</div>
-                        <div class="step-desc">Même sans connexion Internet, dans votre boutique ou au marché, tout fonctionne parfaitement.</div>
+                        <div class="step-desc">Même sans connexion Internet, dans votre entreprise ou sur le terrain, tout fonctionne parfaitement.</div>
                     </div>
                 </div>
             </div>
@@ -1002,7 +1002,7 @@
             </div>
         </div>
 
-        <!-- SCREEN 2: INSCRIPTION (CRÉATION DE COMPTE BOUTIQUE) -->
+        <!-- SCREEN 2: INSCRIPTION (CRÉATION DE COMPTE ENTREPRISE) -->
         <div class="app-screen" id="screen-register">
             <div class="app-header">
                 <button class="header-icon-btn" onclick="switchScreen('screen-guide')">
@@ -1016,17 +1016,17 @@
             </div>
 
             <div class="card">
-                <div class="card-title" style="margin-bottom:6px;">Créer votre Carnet Boutique</div>
+                <div class="card-title" style="margin-bottom:6px;">Créer votre Carnet Entreprise</div>
                 <div class="card-subtitle" style="margin-bottom:14px;">Remplissez ces informations pour sécuriser votre registre digital.</div>
 
                 <div class="form-group">
-                    <label class="form-label">Nom du Commerçant / Gérant</label>
-                    <input type="text" id="reg-merchant-name" class="form-control" placeholder="Ex: Mouafon Miguel, Maman Sophie...">
+                    <label class="form-label">Nom du Gérant / Responsable</label>
+                    <input type="text" id="reg-merchant-name" class="form-control" placeholder="Ex: Mouafon Miguel, Jean Paul...">
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Nom de la Boutique / Commerce</label>
-                    <input type="text" id="reg-shop-name" class="form-control" placeholder="Ex: Alimentation Générale Le Progrès">
+                    <label class="form-label">Nom d'Entreprise / Établissement</label>
+                    <input type="text" id="reg-shop-name" class="form-control" placeholder="Ex: ETS Le Progrès, Société Kamga, Cabinet...">
                 </div>
 
                 <div class="form-group">
@@ -1099,7 +1099,7 @@
             </div>
 
             <div style="text-align:center; font-size:13px; color:var(--text-secondary); margin-top:8px;">
-                Nouveau commerçant ? <a href="javascript:void(0)" onclick="switchScreen('screen-register')" style="color:var(--primary-dark); font-weight:800;">Créer un Compte</a>
+                Nouveau sur Carnet Crédit ? <a href="javascript:void(0)" onclick="switchScreen('screen-register')" style="color:var(--primary-dark); font-weight:800;">Créer un Compte</a>
             </div>
         </div>
 
@@ -1711,7 +1711,7 @@
             <!-- PROFIL MARCHAND DYNAMIQUE AVEC BOUTON MODIFIER -->
             <div class="card">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                    <div class="card-title" style="margin-bottom:0;">Profil du Commerçant</div>
+                    <div class="card-title" style="margin-bottom:0;">Profil de l'Entreprise</div>
                     <button class="btn btn-secondary btn-sm" onclick="openEditProfileModal()" style="width:auto; padding:4px 10px; font-size:11.5px; font-weight:700; color:var(--primary-teal); border-color:var(--primary-light);">
                         ✏️ Modifier
                     </button>
@@ -1723,7 +1723,7 @@
                         <strong id="set-merchant-name" style="color:var(--primary-dark);">--</strong>
                     </div>
                     <div style="display:flex; justify-content:space-between; border-bottom:1px solid #E2ECEB; padding-bottom:6px;">
-                        <span style="color:var(--text-secondary);">Boutique :</span>
+                        <span style="color:var(--text-secondary);">Entreprise :</span>
                         <strong id="set-shop-name" style="color:var(--primary-dark);">--</strong>
                     </div>
                     <div style="display:flex; justify-content:space-between; border-bottom:1px solid #E2ECEB; padding-bottom:6px;">
@@ -1838,10 +1838,10 @@
             <button class="modal-close-btn" onclick="closeCguModal()">✕</button>
             <div class="card-title" style="margin-bottom:10px;">Conditions Générales (CGU)</div>
             <div style="font-size:12px; line-height:1.55; color:var(--text-secondary); display:flex; flex-direction:column; gap:8px;">
-                <p><strong>1. Objet du Service :</strong> Carnet Crédit est une application numérique d'aide à la gestion des créances et des ventes à terme pour les commerçants indépendants et boutiques.</p>
+                <p><strong>1. Objet du Service :</strong> Carnet Crédit est une application numérique d'aide à la gestion des créances et des ventes à terme pour les entreprises, commerçants et professionnels indépendants.</p>
                 <p><strong>2. Confidentialité des Données :</strong> Toutes les données de vos clients et les montants enregistrés sont stockés localement sur votre téléphone en mode sécurisé et restent votre propriété exclusive.</p>
                 <p><strong>3. Règle Zéro Espèces & Abonnements :</strong> Conformément aux normes en vigueur, tous les règlements d'abonnement s'effectuent par paiement digital sécurisé via notre partenaire Fapshi (Orange Money, MTN Mobile Money).</p>
-                <p><strong>4. Responsabilité :</strong> Le commerçant demeure responsable de l'exactitude des informations saisies pour chaque client.</p>
+                <p><strong>4. Responsabilité :</strong> L'utilisateur ou l'entreprise demeure responsable de l'exactitude des informations saisies pour chaque client.</p>
             </div>
             <button class="btn btn-primary" onclick="closeCguModal()" style="margin-top:14px;">J'ai compris</button>
         </div>
@@ -1947,13 +1947,13 @@
 
     <!-- MODAL 4: CONFIRMATION NATIVE APP (REMPLACE CONFIRM()) -->
         <!-- MODALE DE SESSION (VERROUILLER OU SE DÉCONNECTER) -->
-        <!-- MODALE DE MODIFICATION DU PROFIL MARCHAND (TÉLÉPHONE, NOM, BOUTIQUE) -->
+        <!-- MODALE DE MODIFICATION DU PROFIL DE L'ENTREPRISE -->
     <div class="modal-overlay" id="edit-profile-modal" onclick="if(event.target.id==='edit-profile-modal') closeEditProfileModal()">
         <div class="modal-card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                 <div>
                     <div class="card-title" style="margin-bottom:2px; font-size:16px;">Modifier vos Coordonnées</div>
-                    <div class="card-subtitle" style="font-size:11.5px;">Mettez à jour le numéro et les détails de votre boutique.</div>
+                    <div class="card-subtitle" style="font-size:11.5px;">Mettez à jour le numéro et les détails de votre entreprise.</div>
                 </div>
                 <button class="header-icon-btn" onclick="closeEditProfileModal()" style="width:32px; height:32px;">✕</button>
             </div>
@@ -1965,13 +1965,13 @@
                 </div>
 
                 <div class="form-group" style="margin-bottom:0;">
-                    <label class="form-label">Nom du Commerçant / Gérant</label>
+                    <label class="form-label">Nom du Gérant / Responsable</label>
                     <input type="text" id="edit-merchant-name" class="form-control" placeholder="Ex: Mouafon Miguel">
                 </div>
 
                 <div class="form-group" style="margin-bottom:0;">
-                    <label class="form-label">Nom de la Boutique / Établissement</label>
-                    <input type="text" id="edit-shop-name" class="form-control" placeholder="Ex: Alimentation Centrale">
+                    <label class="form-label">Nom d'Entreprise / Établissement</label>
+                    <input type="text" id="edit-shop-name" class="form-control" placeholder="Ex: ETS Miguel, Société Centrale...">
                 </div>
 
                 <div class="form-group" style="margin-bottom:0;">
@@ -1993,7 +1993,7 @@
             <div style="width:48px; height:48px; border-radius:50%; background:#F0FDFA; display:flex; align-items:center; justify-content:center; margin:0 auto 10px auto; border:1.5px solid #14b8a6;">
                 <svg viewBox="0 0 24 24" style="width:24px; height:24px; fill:#0d9488;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
             </div>
-            <div class="card-title" id="session-modal-title" style="margin-bottom:2px; font-size:16px;">Compte Boutique</div>
+            <div class="card-title" id="session-modal-title" style="margin-bottom:2px; font-size:16px;">Compte Entreprise</div>
             <div class="card-subtitle" id="session-modal-desc" style="font-size:12px; margin-bottom:14px;">Choisissez l'action souhaitée :</div>
 
             <div style="display:flex; flex-direction:column; gap:8px;">
@@ -2238,7 +2238,7 @@
             }
 
             if (!name) name = "Commerçant";
-            if (!shop) shop = "Ma Boutique";
+            if (!shop) shop = "Mon Entreprise";
             if (!loc) loc = "Cameroun";
             if (!pin || pin.length < 4) pin = "1234";
 
@@ -2285,7 +2285,7 @@
             db.auth.phone = phone;
             db.auth.pin = pin;
             if (!db.auth.merchantName) db.auth.merchantName = "Commerçant";
-            if (!db.auth.shopName) db.auth.shopName = "Ma Boutique";
+            if (!db.auth.shopName) db.auth.shopName = "Mon Entreprise";
             if (!db.auth.location) db.auth.location = "Cameroun";
             if (!db.auth.plan) db.auth.plan = "free_trial";
             if (!db.auth.planExpiry) db.auth.planExpiry = "30 jours d'essai";
