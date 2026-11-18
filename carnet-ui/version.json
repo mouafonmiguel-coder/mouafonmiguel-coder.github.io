@@ -1,6 +1,6 @@
 {
-  "version": 117,
-  "timestamp": 1791881800,
+  "version": 118,
+  "timestamp": 1791882200,
   "app": "Carnet Credit",
-  "description": "Portail obligatoire d'inscription/connexion securise + Integration Paiements Fapshi 1m/6m/12m + Recherche clients instantanee"
+  "description": "Suppression de la fausse barre d'heure 08:19 / faux telephone et affichage application plein ecran natif"
 }
