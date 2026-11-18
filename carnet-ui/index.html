@@ -21,21 +21,76 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <script>
-        // Force unregister stale SW and purge all caches immediately
+        const APP_BUILD_VERSION = 115;
+        let isPerformingUpdate = false;
+
+        // DÉTECTEUR ET VÉRIFICATEUR DE MISES À JOUR AUTOMATIQUE EN DIRECT
+        async function checkServerVersion() {
+            if (isPerformingUpdate) return;
+            try {
+                const res = await fetch('version.json?t=' + Date.now(), { cache: 'no-store' });
+                if (res.ok) {
+                    const data = await res.json();
+                    const remoteVer = parseInt(data.version, 10);
+                    const localVer = parseInt(localStorage.getItem('carnet_app_version') || '0', 10);
+                    
+                    if (remoteVer > APP_BUILD_VERSION || (localVer !== 0 && remoteVer > localVer)) {
+                        isPerformingUpdate = true;
+                        localStorage.setItem('carnet_app_version', remoteVer);
+                        
+                        const banner = document.getElementById('auto-refresh-banner');
+                        if (banner) banner.style.display = 'flex';
+
+                        // Vider complètement tous les caches du navigateur et du service worker
+                        if ('caches' in window) {
+                            const keys = await caches.keys();
+                            await Promise.all(keys.map(k => caches.delete(k)));
+                        }
+
+                        if ('serviceWorker' in navigator) {
+                            const regs = await navigator.serviceWorker.getRegistrations();
+                            for (let r of regs) {
+                                await r.unregister();
+                            }
+                        }
+
+                        // Rafraîchissement automatique instantané
+                        setTimeout(() => {
+                            window.location.reload(true);
+                        }, 600);
+                    } else {
+                        localStorage.setItem('carnet_app_version', APP_BUILD_VERSION);
+                    }
+                }
+            } catch(e) {}
+        }
+
+        function forceManualRefresh() {
+            if ('caches' in window) {
+                caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k)))).finally(() => {
+                    window.location.reload(true);
+                });
+            } else {
+                window.location.reload(true);
+            }
+        }
+
+        // Exécution immédiate du vérificateur
+        checkServerVersion();
+        setInterval(checkServerVersion, 10000);
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') checkServerVersion();
+        });
+        window.addEventListener('focus', checkServerVersion);
+
+        // Service Worker Registration
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(regs => {
-                for (let reg of regs) {
-                    reg.update();
-                }
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(() => {});
             });
         }
-        if ('caches' in window) {
-            caches.keys().then(names => {
-                for (let name of names) {
-                    if (name !== 'carnet-credit-pwa-v107') caches.delete(name);
-                }
-            });
-        }
+        
+        // Clean demo data flag
         try {
             if (localStorage.getItem('carnet_has_demo') === 'true' || !localStorage.getItem('carnet_db_clean_v1')) {
                 localStorage.removeItem('carnet_demo_data');
@@ -101,6 +156,24 @@
             justify-content: flex-start;
             padding: 20px 10px 80px 10px;
             color: var(--text-main);
+        }
+
+        /* AUTO-REFRESH DETECTOR BANNER */
+        #auto-refresh-banner {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(90deg, #0D3B37, #1B5B57);
+            color: #FFFFFF;
+            padding: 10px 16px;
+            font-size: 12.5px;
+            font-weight: 700;
+            z-index: 999999;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            align-items: center;
+            justify-content: space-between;
         }
 
         /* Top Navigation Header for presentation */
@@ -1284,6 +1357,18 @@
 </head>
 <body>
 
+    <!-- AUTO-REFRESH DETECTOR BANNER -->
+    <div id="auto-refresh-banner">
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 1s linear infinite;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
+            <span>Mise à jour v115 détectée ! Rafraîchissement automatique...</span>
+        </div>
+        <button onclick="forceManualRefresh()" style="background: #FFFFFF; color: #0D3B37; border: none; border-radius: 6px; padding: 4px 10px; font-weight: 800; font-size: 11px; cursor: pointer;">
+            Actualiser direct
+        </button>
+    </div>
+
     <!-- Showcase Top Header & Screen Switcher -->
     <header class="showcase-header">
         <div class="showcase-brand">
@@ -1807,8 +1892,8 @@
             <div style="background: #F4FAF9; border-radius: var(--radius-md); padding: 12px 14px; border: 1px solid var(--card-border); margin-bottom: 16px;">
                 <p style="font-size: 11.5px; font-weight: 700; color: var(--primary-dark); margin-bottom: 6px;">Améliorations de cette mise à jour :</p>
                 <ul style="font-size: 11.5px; color: var(--text-secondary); margin-left: 16px; line-height: 1.55;">
+                    <li>Vérificateur de mise à jour 100% automatique</li>
                     <li>Bouton vert « Créer mon compte » 100% visible et dégagé</li>
-                    <li>Barre de menu masquée sur l'écran d'accueil</li>
                     <li>Base de données propre et synchronisation temps réel</li>
                 </ul>
             </div>
@@ -2273,7 +2358,7 @@
 
             if (screenId === 'screen-dashboard') {
                 renderDashboard();
-                triggerAutoUpdateCheck();
+                checkServerVersion();
             } else if (screenId === 'screen-client-detail') {
                 if (!currentSelectedClientId && db.clients.length > 0) {
                     currentSelectedClientId = db.clients[0].id;
@@ -2399,36 +2484,6 @@
             closeForgotPinModal();
             alert(`Votre nouveau code PIN a été mis à jour avec succès !\nVotre carnet est déverrouillé.`);
             switchScreen('screen-dashboard');
-        }
-
-        // Automatic Background Update Checker
-        let updateChecked = false;
-        function showAutoUpdateModal() {
-            const modal = document.getElementById('auto-update-modal');
-            if (modal) modal.classList.add('active');
-        }
-
-        function closeAutoUpdateModal() {
-            const modal = document.getElementById('auto-update-modal');
-            if (modal) modal.classList.remove('active');
-        }
-
-        function closeAutoUpdateOnBg(e) {
-            if (e.target.id === 'auto-update-modal') closeAutoUpdateModal();
-        }
-
-        function installAutoUpdate() {
-            closeAutoUpdateModal();
-            alert('Mise à jour v1.1.0 appliquée avec succès !\nToutes vos données, dettes et clients sont synchronisés.');
-            window.location.reload();
-        }
-
-        function triggerAutoUpdateCheck() {
-            if (updateChecked) return;
-            updateChecked = true;
-            setTimeout(() => {
-                showAutoUpdateModal();
-            }, 2500);
         }
 
         // Modal Logic
