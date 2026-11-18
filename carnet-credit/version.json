@@ -1,6 +1,6 @@
 {
-  "version": 120,
-  "timestamp": 1791883200,
+  "version": 121,
+  "timestamp": 1791883800,
   "app": "Carnet Credit",
-  "description": "Correctif complet du verificateur de mise a jour : rechargement propre sans boucle, purge du cache CDN/PWA et banniere fluide"
+  "description": "Purge nucleaire du cache Service Worker PWA, bypass total du cache memoire et chargement direct de l'UI moderne"
 }
