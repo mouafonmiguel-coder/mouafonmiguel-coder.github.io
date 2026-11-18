@@ -1,6 +1,6 @@
 {
-  "version": 121,
-  "timestamp": 1791883800,
+  "version": 122,
+  "timestamp": 1791884200,
   "app": "Carnet Credit",
-  "description": "Purge nucleaire du cache Service Worker PWA, bypass total du cache memoire et chargement direct de l'UI moderne"
+  "description": "Banniere automatique masquee une fois a jour, suppression totale du cache disque 10min de Chrome et redirection dynamique"
 }
