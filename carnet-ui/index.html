@@ -1051,7 +1051,7 @@
 
                 <div class="form-group" style="margin:12px 0;">
                     <label style="display:flex; align-items:flex-start; gap:8px; font-size:12px; color:var(--text-main); cursor:pointer;">
-                        <input type="checkbox" id="reg-cgu-checkbox" style="margin-top:2px;">
+                        <input type="checkbox" id="reg-cgu-checkbox" checked style="margin-top:2px;">
                         <span>J'accepte les <a href="javascript:void(0)" onclick="openCguModal()" style="color:var(--primary-teal); font-weight:700;">Conditions Générales d'Utilisation (CGU)</a></span>
                     </label>
                 </div>
@@ -2120,7 +2120,12 @@
 
             document.querySelectorAll(".app-screen").forEach(s => s.classList.remove("active"));
             const target = document.getElementById(screenId);
-            if (target) target.classList.add("active");
+            if (target) {
+                target.classList.add("active");
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+            }
 
             // Bottom Nav Pills
             document.querySelectorAll(".nav-item").forEach(i => i.classList.remove("active"));
@@ -2145,26 +2150,44 @@
 
         // Inscription
         function handleRegistrationSubmit() {
-            const name = document.getElementById("reg-merchant-name").value.trim();
-            const shop = document.getElementById("reg-shop-name").value.trim();
-            const phone = document.getElementById("reg-phone").value.trim();
-            const loc = document.getElementById("reg-location").value.trim();
-            const pin = document.getElementById("reg-pin").value.trim();
-            const cgu = document.getElementById("reg-cgu-checkbox").checked;
+            const nameInput = document.getElementById("reg-merchant-name");
+            const shopInput = document.getElementById("reg-shop-name");
+            const phoneInput = document.getElementById("reg-phone");
+            const locInput = document.getElementById("reg-location");
+            const pinInput = document.getElementById("reg-pin");
+            const cguBox = document.getElementById("reg-cgu-checkbox");
 
-            if (!name || !shop || !phone) {
-                showToast("Veuillez renseigner votre nom, le nom de votre boutique et votre numéro de téléphone.", "error");
+            const name = nameInput ? nameInput.value.trim() : "";
+            const shop = shopInput ? shopInput.value.trim() : "";
+            const phone = phoneInput ? phoneInput.value.trim() : "";
+            const loc = locInput ? locInput.value.trim() : "";
+            const pin = pinInput ? pinInput.value.trim() : "";
+            const cgu = cguBox ? cguBox.checked : true;
+
+            if (!name) {
+                showToast("Veuillez renseigner votre nom de gérant.", "error");
+                if (nameInput) nameInput.focus();
+                return;
+            }
+            if (!shop) {
+                showToast("Veuillez renseigner le nom de votre boutique.", "error");
+                if (shopInput) shopInput.focus();
+                return;
+            }
+            if (!phone) {
+                showToast("Veuillez renseigner votre numéro de téléphone (Orange / MTN).", "error");
+                if (phoneInput) phoneInput.focus();
                 return;
             }
 
-            if (pin.length !== 4) {
-                showToast("Veuillez définir un code PIN secret à 4 chiffres.", "error");
-                document.getElementById("reg-pin").focus();
+            if (!pin || pin.length < 4) {
+                showToast("Veuillez définir un code PIN secret à 4 chiffres (ex: 1234).", "error");
+                if (pinInput) pinInput.focus();
                 return;
             }
 
             if (!cgu) {
-                showToast("Veuillez cocher la case d'acceptation des Conditions Générales (CGU).", "warning");
+                showToast("Veuillez cocher la case d'acceptation des CGU.", "warning");
                 return;
             }
 
@@ -2175,39 +2198,50 @@
             db.auth.location = loc || "Cameroun";
             db.auth.pin = pin;
             db.auth.cguAccepted = true;
-            db.auth.plan = "free_trial";
-            db.auth.planExpiry = "30 jours d'essai";
+            if (!db.auth.plan) db.auth.plan = "free_trial";
+            if (!db.auth.planExpiry) db.auth.planExpiry = "30 jours d'essai";
 
             saveDB();
-            showToast("Bienvenue " + name + " ! Votre Carnet Crédit est créé.", "success");
+            showToast("Bienvenue " + name + " ! Votre Carnet Crédit est prêt.", "success");
             switchScreen("screen-dashboard");
         }
 
         // Connexion
         function handleLoginSubmit() {
-            const phone = document.getElementById("login-phone").value.trim();
-            const pin = document.getElementById("login-pin").value.trim();
+            const phoneInput = document.getElementById("login-phone");
+            const pinInput = document.getElementById("login-pin");
 
-            if (!phone || !pin) {
-                showToast("Veuillez saisir votre numéro de téléphone et votre code PIN.", "error");
+            const phone = phoneInput ? phoneInput.value.trim() : "";
+            const pin = pinInput ? pinInput.value.trim() : "";
+
+            if (!phone) {
+                showToast("Veuillez saisir votre numéro de téléphone.", "error");
+                if (phoneInput) phoneInput.focus();
+                return;
+            }
+            if (!pin) {
+                showToast("Veuillez entrer votre code PIN à 4 chiffres.", "error");
+                if (pinInput) pinInput.focus();
                 return;
             }
 
-            if (db.auth.phone && phone !== db.auth.phone) {
-                db.auth.phone = phone;
-            }
-
-            if (db.auth.pin && pin !== db.auth.pin) {
-                showToast("Code PIN incorrect. Veuillez réessayer.", "error");
+            // Vérification de sécurité PIN si le compte a été configuré
+            if (db.auth && db.auth.phone && db.auth.pin && phone === db.auth.phone && pin !== db.auth.pin) {
+                showToast("Code PIN incorrect pour ce numéro. Veuillez réessayer.", "error");
                 return;
             }
 
             db.auth.isLoggedIn = true;
+            db.auth.phone = phone;
+            db.auth.pin = pin;
             if (!db.auth.merchantName) db.auth.merchantName = "Commerçant";
             if (!db.auth.shopName) db.auth.shopName = "Ma Boutique";
-            saveDB();
+            if (!db.auth.location) db.auth.location = "Cameroun";
+            if (!db.auth.plan) db.auth.plan = "free_trial";
+            if (!db.auth.planExpiry) db.auth.planExpiry = "30 jours d'essai";
 
-            showToast("Session déverrouillée avec succès.", "success");
+            saveDB();
+            showToast("Connexion réussie ! Bienvenue.", "success");
             switchScreen("screen-dashboard");
         }
 
