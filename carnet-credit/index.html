@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Carnet Crédit</title>
     
+    <!-- Meta Anti-Cache Stale Prevention -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <!-- PWA & Mobile Web App Meta Tags -->
     <meta name="theme-color" content="#0D3B37">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,10 +26,43 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <script>
-        const APP_BUILD_VERSION = 121;
+        const APP_BUILD_VERSION = 122;
         let isUpdateInProgress = false;
 
-        // VÉRIFICATEUR ULTIME DE MISES À JOUR AVEC PURGE FORCÉE
+        // GESTIONNAIRES UNIVERSELS D'ACTUALISATION FORCÉE
+        window.forceManualRefresh = window.forceNuclearUpdate = window.performAppUpdate = async function() {
+            if (isUpdateInProgress) return;
+            isUpdateInProgress = true;
+
+            const banner = document.getElementById('auto-refresh-banner');
+            if (banner) {
+                banner.style.display = 'flex';
+                const span = banner.querySelector('span');
+                if (span) span.textContent = 'Actualisation en cours...';
+            }
+
+            try {
+                if ('serviceWorker' in navigator) {
+                    const regs = await navigator.serviceWorker.getRegistrations();
+                    for (let r of regs) {
+                        await r.unregister();
+                    }
+                }
+
+                if ('caches' in window) {
+                    const keys = await caches.keys();
+                    await Promise.all(keys.map(k => caches.delete(k)));
+                }
+            } catch(e) {}
+
+            // Redirection absolue avec paramètre de contournement du cache navigateur
+            setTimeout(() => {
+                const cleanOrigin = window.location.origin + window.location.pathname;
+                window.location.replace(cleanOrigin + '?t=' + Date.now());
+            }, 250);
+        };
+
+        // VÉRIFICATEUR DE VERSION SERVEUR
         async function checkServerVersion() {
             if (isUpdateInProgress) return;
             try {
@@ -48,45 +86,14 @@
             } catch(e) {}
         }
 
-        async function forceNuclearUpdate() {
-            if (isUpdateInProgress) return;
-            isUpdateInProgress = true;
-
-            const banner = document.getElementById('auto-refresh-banner');
-            if (banner) {
-                banner.style.display = 'flex';
-                banner.querySelector('span').textContent = 'Actualisation forcée en cours...';
-            }
-
-            try {
-                if ('serviceWorker' in navigator) {
-                    const regs = await navigator.serviceWorker.getRegistrations();
-                    for (let r of regs) {
-                        await r.unregister();
-                    }
-                }
-
-                if ('caches' in window) {
-                    const keys = await caches.keys();
-                    await Promise.all(keys.map(k => caches.delete(k)));
-                }
-            } catch(e) {}
-
-            // Redirection absolue avec cache-buster pour détruire tout vieux cache mémoire/disque
-            setTimeout(() => {
-                const target = window.location.origin + window.location.pathname + '?v=' + Date.now();
-                window.location.href = target;
-            }, 300);
-        }
-
-        // Nettoyer l'URL si elle contient ?v= après un chargement réussi
-        if (window.location.search.includes('v=')) {
+        // Nettoyage de l'URL si elle contient ?t= ou ?v=
+        if (window.location.search.includes('t=') || window.location.search.includes('v=')) {
             try {
                 window.history.replaceState({}, '', window.location.pathname);
             } catch(e) {}
         }
 
-        // Vérification au chargement et périodique
+        // Exécution de la vérification
         checkServerVersion();
         setInterval(checkServerVersion, 30000);
         document.addEventListener('visibilitychange', () => {
@@ -1066,7 +1073,7 @@
     <!-- AUTO-REFRESH DETECTOR BANNER -->
     <div id="auto-refresh-banner">
         <span>Une mise à jour <strong id="update-version-label">récente</strong> est disponible</span>
-        <button onclick="forceNuclearUpdate()" style="background:#D4AF37; color:#0D3B37; border:none; padding:5px 12px; border-radius:6px; font-weight:800; cursor:pointer;">Mettre à jour maintenant</button>
+        <button onclick="forceManualRefresh()" style="background:#D4AF37; color:#0D3B37; border:none; padding:5px 12px; border-radius:6px; font-weight:800; cursor:pointer;">Mettre à jour maintenant</button>
     </div>
 
     <!-- MAIN NATIVE APP CONTAINER -->
@@ -1632,7 +1639,7 @@
 
         function loadDB() {
             try {
-                const saved = localStorage.getItem('carnet_credit_db_v121');
+                const saved = localStorage.getItem('carnet_credit_db_v122');
                 if (saved) {
                     db = JSON.parse(saved);
                 }
@@ -1643,7 +1650,7 @@
 
         function saveDB() {
             try {
-                localStorage.setItem('carnet_credit_db_v121', JSON.stringify(db));
+                localStorage.setItem('carnet_credit_db_v122', JSON.stringify(db));
             } catch(e) {}
             updateAuthStateUI();
         }
