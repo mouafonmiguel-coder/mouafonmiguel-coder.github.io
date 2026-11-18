@@ -1,5 +1,5 @@
-// CARNET CREDIT — SERVICE WORKER PRO v121 (PURGE TOTAL DES ANCIENS CACHES)
-const CACHE_NAME = 'carnet-credit-v121';
+// CARNET CREDIT — SERVICE WORKER PRO v122
+const CACHE_NAME = 'carnet-credit-v122';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
@@ -14,7 +14,15 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Tout appel réseau est dirigé en direct sur le serveur (Network First)
+  // Navigation et HTML : TOUJOURS en direct sur le réseau (Network Only avec fallback hors-ligne)
+  if (event.request.mode === 'navigate' || event.request.url.includes('index.html') || event.request.url.includes('version.json')) {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-cache' }).catch(() => caches.match('./index.html'))
+    );
+    return;
+  }
+
+  // Autres ressources : Network First
   event.respondWith(
     fetch(event.request).catch(() => caches.match(event.request))
   );
