@@ -374,6 +374,15 @@
             background: #A16207;
         }
 
+        .btn-danger {
+            background: #DC2626;
+            color: #FFFFFF;
+        }
+
+        .btn-danger:hover {
+            background: #B91C1C;
+        }
+
         .btn-sm {
             padding: 8px 12px;
             font-size: 12px;
@@ -465,6 +474,11 @@
         .form-control:focus {
             border-color: var(--primary-light);
             box-shadow: 0 0 0 3px rgba(82, 155, 149, 0.2);
+        }
+
+        .form-control.input-error {
+            border-color: var(--accent-red) !important;
+            background: #FFF5F5;
         }
 
         /* Keypad UI for PIN */
@@ -838,9 +852,78 @@
             line-height: 1.4;
             color: var(--text-secondary);
         }
+
+        /* Native App In-App Toast Notification (Zero browser alerts!) */
+        .app-toast {
+            position: fixed;
+            top: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 420px;
+            background: var(--primary-dark);
+            color: #FFFFFF;
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
+            box-shadow: 0 12px 32px rgba(13, 59, 55, 0.35);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            pointer-events: none;
+            border-left: 5px solid var(--primary-light);
+        }
+
+        .app-toast.visible {
+            top: 18px;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .app-toast.toast-error {
+            background: #B91C1C;
+            border-left-color: #F87171;
+        }
+
+        .app-toast.toast-warning {
+            background: #D97706;
+            border-left-color: #FBBF24;
+        }
+
+        .app-toast.toast-success {
+            background: #047857;
+            border-left-color: #34D399;
+        }
+
+        .toast-msg {
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .toast-close-btn {
+            background: transparent;
+            border: none;
+            color: #FFFFFF;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            padding: 2px 6px;
+            opacity: 0.85;
+        }
     </style>
 </head>
 <body>
+
+    <!-- IN-APP TOAST NOTIFICATION (REMPLACE TOUS LES ALERTS DU NAVIGATEUR) -->
+    <div id="app-toast" class="app-toast" onclick="hideToast()">
+        <svg id="toast-icon-svg" viewBox="0 0 24 24" style="width:20px; height:20px; fill:currentColor; flex-shrink:0;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+        <span class="toast-msg" id="toast-text">Notification</span>
+        <button class="toast-close-btn" onclick="event.stopPropagation(); hideToast();">✕</button>
+    </div>
 
     <!-- MAIN NATIVE APP CONTAINER (ZÉRO VÉRIFICATEUR / ZÉRO BANNIÈRE) -->
     <div class="app-container" id="app-container">
@@ -1080,7 +1163,7 @@
                         <div style="font-size:11px; color:var(--text-secondary);" id="dash-merchant-sub">Gérant : Mouafon Miguel</div>
                     </div>
                 </div>
-                <button class="header-icon-btn" onclick="logoutMerchant()" title="Verrouiller la session">
+                <button class="header-icon-btn" onclick="askLogoutMerchant()" title="Verrouiller la session">
                     <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:currentColor;"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
                 </button>
             </div>
@@ -1132,7 +1215,7 @@
                 <div class="app-header-brand">
                     <span class="app-header-title" id="detail-client-name">Détail Client</span>
                 </div>
-                <button class="header-icon-btn" onclick="deleteCurrentClient()" title="Supprimer client">
+                <button class="header-icon-btn" onclick="askDeleteCurrentClient()" title="Supprimer client">
                     <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:#E53935;"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
                 </button>
             </div>
@@ -1346,7 +1429,7 @@
                     <button class="btn btn-secondary btn-sm" onclick="openForgotPinModal()">Modifier mon Code PIN secret</button>
                     <a href="https://fapshi.com/login" target="_blank" class="btn btn-secondary btn-sm" style="text-align:center;">Accéder à mon Dashboard Fapshi ↗</a>
                     <button class="btn btn-secondary btn-sm" onclick="openCguModal()">Lire les Conditions Générales (CGU)</button>
-                    <button class="btn btn-secondary btn-sm" onclick="logoutMerchant()" style="color:#E53935; border-color:#FECACA;">
+                    <button class="btn btn-secondary btn-sm" onclick="askLogoutMerchant()" style="color:#E53935; border-color:#FECACA;">
                         Verrouiller & Quitter la Session
                     </button>
                 </div>
@@ -1449,8 +1532,75 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT APPLICATION CORE (ZÉRO VÉRIFICATEUR, ZÉRO BANNIÈRE, RECHERCHE RAPIDE, PERSISTANCE LOCALE) -->
+    <!-- MODAL 4: CONFIRMATION NATIVE APP (REMPLACE CONFIRM()) -->
+    <div class="modal-overlay" id="confirm-modal" onclick="if(event.target.id==='confirm-modal') closeConfirmModal()">
+        <div class="modal-card" style="text-align:center;">
+            <div class="card-title" id="confirm-modal-title" style="margin-bottom:8px;">Confirmation</div>
+            <div class="card-subtitle" id="confirm-modal-desc" style="margin-bottom:16px; font-size:13px; color:var(--text-main);">Voulez-vous confirmer cette action ?</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <button class="btn btn-secondary btn-sm" onclick="closeConfirmModal()">Annuler</button>
+                <button class="btn btn-danger btn-sm" id="confirm-modal-action-btn">Confirmer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APPLICATION CORE (ZÉRO BROWSER ALERT / ZÉRO BANNIÈRE / TOAST NATIF APP) -->
     <script>
+        // In-App Toast & Alert Overrides
+        let toastTimeout = null;
+
+        function showToast(message, type = "info") {
+            const toast = document.getElementById("app-toast");
+            const text = document.getElementById("toast-text");
+            if (!toast || !text) return;
+
+            toast.className = "app-toast";
+            if (type === "error") toast.classList.add("toast-error");
+            else if (type === "warning") toast.classList.add("toast-warning");
+            else if (type === "success") toast.classList.add("toast-success");
+
+            text.textContent = message;
+            toast.classList.add("visible");
+
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                hideToast();
+            }, 3500);
+        }
+
+        function hideToast() {
+            const toast = document.getElementById("app-toast");
+            if (toast) toast.classList.remove("visible");
+        }
+
+        // Override native window.alert so browser popups with domain name never appear
+        window.alert = function(msg) {
+            showToast(msg, "warning");
+        };
+
+        // Custom Confirmation Modal
+        let confirmCallback = null;
+        function showConfirmDialog(title, message, btnText, isDanger, onConfirm) {
+            document.getElementById("confirm-modal-title").textContent = title;
+            document.getElementById("confirm-modal-desc").textContent = message;
+            const actionBtn = document.getElementById("confirm-modal-action-btn");
+            actionBtn.textContent = btnText || "Confirmer";
+            actionBtn.className = isDanger ? "btn btn-danger btn-sm" : "btn btn-primary btn-sm";
+
+            confirmCallback = onConfirm;
+            actionBtn.onclick = function() {
+                closeConfirmModal();
+                if (typeof confirmCallback === "function") confirmCallback();
+            };
+
+            document.getElementById("confirm-modal").classList.add("active");
+        }
+
+        function closeConfirmModal() {
+            document.getElementById("confirm-modal").classList.remove("active");
+            confirmCallback = null;
+        }
+
         // Database State
         let db = {
             auth: {
@@ -1545,17 +1695,18 @@
             const cgu = document.getElementById("reg-cgu-checkbox").checked;
 
             if (!name || !shop || !phone) {
-                alert("Veuillez renseigner votre nom, le nom de votre boutique et votre numéro de téléphone.");
+                showToast("Veuillez renseigner votre nom, le nom de votre boutique et votre numéro de téléphone.", "error");
                 return;
             }
 
             if (pin.length !== 4) {
-                alert("Veuillez définir un code PIN à 4 chiffres pour sécuriser votre carnet.");
+                showToast("Veuillez définir un code PIN secret à 4 chiffres.", "error");
+                document.getElementById("reg-pin").focus();
                 return;
             }
 
             if (!cgu) {
-                alert("Veuillez cocher la case d'acceptation des Conditions Générales d'Utilisation (CGU).");
+                showToast("Veuillez cocher la case d'acceptation des Conditions Générales (CGU).", "warning");
                 return;
             }
 
@@ -1570,7 +1721,7 @@
             db.auth.planExpiry = "30 jours d'essai";
 
             saveDB();
-            alert("Félicitations " + name + " ! Votre Carnet Crédit a été créé avec succès.");
+            showToast("Bienvenue " + name + " ! Votre Carnet Crédit est créé.", "success");
             switchScreen("screen-dashboard");
         }
 
@@ -1580,7 +1731,7 @@
             const pin = document.getElementById("login-pin").value.trim();
 
             if (!phone || !pin) {
-                alert("Veuillez saisir votre numéro de téléphone et votre code PIN.");
+                showToast("Veuillez saisir votre numéro de téléphone et votre code PIN.", "error");
                 return;
             }
 
@@ -1589,7 +1740,7 @@
             }
 
             if (db.auth.pin && pin !== db.auth.pin) {
-                alert("Code PIN incorrect. Veuillez réessayer ou cliquer sur 'Code PIN oublié'.");
+                showToast("Code PIN incorrect. Veuillez réessayer.", "error");
                 return;
             }
 
@@ -1598,16 +1749,24 @@
             if (!db.auth.shopName) db.auth.shopName = "Ma Boutique";
             saveDB();
 
+            showToast("Session déverrouillée avec succès.", "success");
             switchScreen("screen-dashboard");
         }
 
-        // Déconnexion
-        function logoutMerchant() {
-            if (confirm("Voulez-vous verrouiller et quitter votre session Carnet Crédit ?")) {
-                db.auth.isLoggedIn = false;
-                saveDB();
-                switchScreen("screen-guide");
-            }
+        // Déconnexion avec boîte modale native
+        function askLogoutMerchant() {
+            showConfirmDialog(
+                "Verrouiller la session",
+                "Voulez-vous verrouiller l'accès à votre Carnet Crédit ?",
+                "Verrouiller",
+                false,
+                function() {
+                    db.auth.isLoggedIn = false;
+                    saveDB();
+                    showToast("Session verrouillée.", "info");
+                    switchScreen("screen-guide");
+                }
+            );
         }
 
         // Keypad PIN
@@ -1634,9 +1793,10 @@
                         saveDB();
                         enteredPin = "";
                         resetPinDots();
+                        showToast("Code PIN accepté.", "success");
                         switchScreen("screen-dashboard");
                     } else {
-                        alert("Code PIN incorrect !");
+                        showToast("Code PIN incorrect !", "error");
                         enteredPin = "";
                         resetPinDots();
                     }
@@ -1807,13 +1967,20 @@
             list.innerHTML = html;
         }
 
-        function deleteCurrentClient() {
-            if (confirm("Voulez-vous vraiment supprimer ce client et tout son historique ?")) {
-                db.clients = db.clients.filter(c => c.id !== currentSelectedClientId);
-                db.transactions = db.transactions.filter(t => t.clientId !== currentSelectedClientId);
-                saveDB();
-                switchScreen("screen-dashboard");
-            }
+        function askDeleteCurrentClient() {
+            showConfirmDialog(
+                "Supprimer ce Client",
+                "Voulez-vous vraiment supprimer définitivement ce client et son historique ?",
+                "Supprimer",
+                true,
+                function() {
+                    db.clients = db.clients.filter(c => c.id !== currentSelectedClientId);
+                    db.transactions = db.transactions.filter(t => t.clientId !== currentSelectedClientId);
+                    saveDB();
+                    showToast("Client supprimé avec succès.", "info");
+                    switchScreen("screen-dashboard");
+                }
+            );
         }
 
         function sendWhatsappReceipt() {
@@ -1829,16 +1996,16 @@
             window.open(url, "_blank");
         }
 
-        // Copy Number Helper
+        // Copy Number Helper avec Toast personnalisé
         function copyNumber(num, msg) {
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(num).then(() => {
-                    alert(msg || "Numéro copié : " + num);
+                    showToast(msg || "Numéro copié : " + num, "success");
                 }).catch(() => {
-                    prompt("Copiez le numéro :", num);
+                    showToast("Numéro : " + num, "info");
                 });
             } else {
-                prompt("Copiez le numéro :", num);
+                showToast("Numéro : " + num, "info");
             }
         }
 
@@ -1897,11 +2064,11 @@
             const goods = document.getElementById("modal-goods").value.trim();
 
             if (!name) {
-                alert("Veuillez renseigner le nom du client.");
+                showToast("Veuillez renseigner le nom du client.", "error");
                 return;
             }
             if (amount <= 0) {
-                alert("Veuillez entrer un montant supérieur à 0.");
+                showToast("Veuillez entrer un montant supérieur à 0.", "error");
                 return;
             }
 
@@ -1941,6 +2108,7 @@
 
             saveDB();
             closeModal();
+            showToast("Opération enregistrée avec succès !", "success");
             viewClientDetail(client.id);
         }
 
@@ -1965,13 +2133,13 @@
         function handlePinReset() {
             const phone = document.getElementById("forgot-phone").value.trim();
             if (!phone) {
-                alert("Veuillez entrer votre numéro de téléphone.");
+                showToast("Veuillez entrer votre numéro de téléphone.", "error");
                 return;
             }
             db.auth.pin = "1234";
             saveDB();
             closeForgotPinModal();
-            alert("Votre code PIN a été réinitialisé à '1234'.\nConnectez-vous maintenant.");
+            showToast("Votre code PIN a été réinitialisé à '1234'. Connectez-vous.", "success");
             switchScreen("screen-login");
         }
 
@@ -1982,12 +2150,12 @@
                 db.auth.plan = "fapshi_active";
                 db.auth.planExpiry = "Actif (Renouvelé)";
                 saveDB();
-                alert("Code validé avec succès ! Votre abonnement Carnet Crédit est maintenant 100% actif.");
+                showToast("Code validé avec succès ! Votre abonnement Carnet Crédit est actif.", "success");
                 document.getElementById("activation-code-input").value = "";
                 document.getElementById("pay-status-title").textContent = "Abonnement Fapshi Actif";
                 document.getElementById("pay-status-desc").textContent = "Votre compte est certifié et protégé avec toutes les options.";
             } else {
-                alert("Veuillez entrer un code d'activation valide à 6 chiffres.");
+                showToast("Veuillez entrer un code d'activation valide à 6 chiffres.", "error");
             }
         }
 
