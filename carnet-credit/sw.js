@@ -1,17 +1,18 @@
-const CACHE_NAME = 'carnet-credit-pwa-v107';
+const CACHE_NAME = 'carnet-credit-pwa-v120';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './hero-carnet.jpg'
 ];
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
+      return cache.addAll(ASSETS_TO_CACHE).catch(() => {});
     })
   );
 });
@@ -31,15 +32,23 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  // Toujours passer version.json en direct sans cache
+  if (event.request.url.includes('version.json')) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
+  // Network-First avec fallback vers le cache pour garantir les dernières mises à jour
   event.respondWith(
     fetch(event.request)
       .then((networkResponse) => {
-        return caches.open(CACHE_NAME).then((cache) => {
-          if (event.request.method === 'GET' && networkResponse.status === 200) {
-            cache.put(event.request, networkResponse.clone());
-          }
-          return networkResponse;
-        });
+        if (event.request.method === 'GET' && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+        return networkResponse;
       })
       .catch(() => {
         return caches.match(event.request).then((cachedResponse) => {
