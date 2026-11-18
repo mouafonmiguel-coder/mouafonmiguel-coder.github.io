@@ -21,65 +21,74 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <script>
-        const APP_BUILD_VERSION = 119;
-        let isPerformingUpdate = false;
+        const APP_BUILD_VERSION = 120;
+        let isUpdateInProgress = false;
 
-        // DÉTECTEUR ET VÉRIFICATEUR DE MISES À JOUR AUTOMATIQUE EN DIRECT
+        // VÉRIFICATEUR DE MISES À JOUR SÉCURISÉ & INTELLIGENT SANS BOUCLE
         async function checkServerVersion() {
-            if (isPerformingUpdate) return;
+            if (isUpdateInProgress) return;
             try {
                 const res = await fetch('version.json?t=' + Date.now(), { cache: 'no-store' });
                 if (res.ok) {
                     const data = await res.json();
                     const remoteVer = parseInt(data.version, 10);
-                    const localVer = parseInt(localStorage.getItem('carnet_app_version') || '0', 10);
                     
-                    if (remoteVer > APP_BUILD_VERSION || (localVer !== 0 && remoteVer > localVer)) {
-                        isPerformingUpdate = true;
-                        localStorage.setItem('carnet_app_version', remoteVer);
-                        
+                    if (remoteVer > APP_BUILD_VERSION) {
                         const banner = document.getElementById('auto-refresh-banner');
-                        if (banner) banner.style.display = 'flex';
-
-                        if ('caches' in window) {
-                            const keys = await caches.keys();
-                            await Promise.all(keys.map(k => caches.delete(k)));
+                        if (banner) {
+                            banner.style.display = 'flex';
+                            const lbl = document.getElementById('update-version-label');
+                            if (lbl) lbl.textContent = 'v' + remoteVer;
                         }
 
-                        if ('serviceWorker' in navigator) {
-                            const regs = await navigator.serviceWorker.getRegistrations();
-                            for (let r of regs) {
-                                await r.unregister();
-                            }
+                        // Protection anti-boucle : rechargement automatique sécurisé
+                        const lastReload = parseInt(sessionStorage.getItem('last_auto_upd_time') || '0', 10);
+                        const now = Date.now();
+                        if (now - lastReload > 25000) {
+                            sessionStorage.setItem('last_auto_upd_time', now);
+                            performAppUpdate();
                         }
-
-                        setTimeout(() => {
-                            window.location.reload(true);
-                        }, 600);
-                    } else {
-                        localStorage.setItem('carnet_app_version', APP_BUILD_VERSION);
                     }
                 }
             } catch(e) {}
         }
 
-        function forceManualRefresh() {
-            if ('caches' in window) {
-                caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k)))).finally(() => {
-                    window.location.reload(true);
-                });
-            } else {
-                window.location.reload(true);
-            }
+        async function performAppUpdate() {
+            if (isUpdateInProgress) return;
+            isUpdateInProgress = true;
+
+            const banner = document.getElementById('auto-refresh-banner');
+            if (banner) banner.style.display = 'flex';
+
+            try {
+                if ('caches' in window) {
+                    const keys = await caches.keys();
+                    await Promise.all(keys.map(k => caches.delete(k)));
+                }
+
+                if ('serviceWorker' in navigator) {
+                    const regs = await navigator.serviceWorker.getRegistrations();
+                    for (let r of regs) {
+                        await r.unregister();
+                    }
+                }
+            } catch(e) {}
+
+            setTimeout(() => {
+                const cleanUrl = window.location.pathname.split('?')[0] + '?upd=' + Date.now();
+                window.location.replace(cleanUrl);
+            }, 400);
         }
 
+        // Détection périodique fluide
         checkServerVersion();
-        setInterval(checkServerVersion, 10000);
+        setInterval(checkServerVersion, 20000);
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'visible') checkServerVersion();
         });
         window.addEventListener('focus', checkServerVersion);
 
+        // Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').catch(() => {});
@@ -1048,10 +1057,10 @@
 </head>
 <body>
 
-    <!-- AUTO-UPDATE DETECTOR BANNER -->
+    <!-- AUTO-REFRESH DETECTOR BANNER -->
     <div id="auto-refresh-banner">
-        <span>Mise à jour v119 détectée... Actualisation automatique instantanée</span>
-        <button onclick="forceManualRefresh()" style="background:#D4AF37; color:#0D3B37; border:none; padding:4px 8px; border-radius:4px; font-weight:800; cursor:pointer;">Actualiser</button>
+        <span>Une mise à jour <strong id="update-version-label">récente</strong> est disponible</span>
+        <button onclick="performAppUpdate()" style="background:#D4AF37; color:#0D3B37; border:none; padding:5px 12px; border-radius:6px; font-weight:800; cursor:pointer;">Mettre à jour maintenant</button>
     </div>
 
     <!-- MAIN NATIVE APP CONTAINER -->
@@ -1617,7 +1626,7 @@
 
         function loadDB() {
             try {
-                const saved = localStorage.getItem('carnet_credit_db_v119');
+                const saved = localStorage.getItem('carnet_credit_db_v120');
                 if (saved) {
                     db = JSON.parse(saved);
                 }
@@ -1628,7 +1637,7 @@
 
         function saveDB() {
             try {
-                localStorage.setItem('carnet_credit_db_v119', JSON.stringify(db));
+                localStorage.setItem('carnet_credit_db_v120', JSON.stringify(db));
             } catch(e) {}
             updateAuthStateUI();
         }
