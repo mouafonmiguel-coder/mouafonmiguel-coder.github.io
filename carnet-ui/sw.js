@@ -1,17 +1,21 @@
-// Service Worker v130 - Instant Fast-Load & 100% Offline PWA
-const CACHE_NAME = 'carnet-credit-v130';
+// Service Worker v132 - Robust Offline PWA with Non-blocking Asset Cache
+const CACHE_NAME = 'carnet-credit-v132';
 const ASSETS_TO_CACHE = [
-  './',
   './index.html',
   './manifest.json',
   './icon-192.png',
+  './icon-512.png',
   './hero-carnet.jpg'
 ];
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS_TO_CACHE).catch(() => {}))
+    caches.open(CACHE_NAME).then((cache) => {
+      return Promise.allSettled(
+        ASSETS_TO_CACHE.map((url) => cache.add(url).catch(() => {}))
+      );
+    })
   );
 });
 
@@ -29,7 +33,7 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fast Response: Return cached version immediately (< 10ms) + background refresh
+// Fast Stale-while-revalidate fetch strategy
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
