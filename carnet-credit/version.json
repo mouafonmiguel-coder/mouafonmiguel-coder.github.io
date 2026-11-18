@@ -1,9 +1,6 @@
 {
-  "version": 101,
-  "build": 2026111411,
-  "updated_at": "2026-11-14T16:30:00Z",
-  "features": [
-    "Restauration du logo original officiel de Carnet Credit",
-    "Integration parfaite en haute definition sur tous les ecrans"
-  ]
+  "version": 115,
+  "timestamp": 1791880000,
+  "app": "Carnet Credit",
+  "description": "Mise a jour majeure: UI Mobile propre, suppression totale des barres superposees, boutons 100% degages"
 }
