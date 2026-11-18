@@ -356,8 +356,26 @@
             box-shadow: 0 4px 14px rgba(0, 182, 122, 0.3);
         }
 
+        .btn-orange {
+            background: #EA580C;
+            color: #FFFFFF;
+        }
+
+        .btn-orange:hover {
+            background: #C2410C;
+        }
+
+        .btn-momo {
+            background: #CA8A04;
+            color: #FFFFFF;
+        }
+
+        .btn-momo:hover {
+            background: #A16207;
+        }
+
         .btn-sm {
-            padding: 8px 14px;
+            padding: 8px 12px;
             font-size: 12px;
             border-radius: var(--radius-sm);
         }
@@ -1145,7 +1163,7 @@
             </div>
         </div>
 
-        <!-- SCREEN 7: ABONNEMENT & TARIFS FAPSHI (ACCESSIBLE SEULEMENT CONNECTÉ) -->
+        <!-- SCREEN 7: ABONNEMENT & TARIFS FAPSHI (AVEC USSD DIRECT #150# ET MTN MOMO) -->
         <div class="app-screen" id="screen-payment">
             <div class="app-header">
                 <button class="header-icon-btn" onclick="switchScreen('screen-dashboard')">
@@ -1170,7 +1188,7 @@
 
             <!-- OFFRES FAPSHI CERTIFIÉES -->
             <div style="font-size:13px; font-weight:800; color:var(--primary-dark); margin:8px 0 6px 2px;">
-                Tarifs Officiels & Renouvellement
+                Tarifs Officiels & Renouvellement Fapshi
             </div>
 
             <div style="display:flex; flex-direction:column; gap:8px;">
@@ -1214,22 +1232,67 @@
                 </div>
             </div>
 
-            <!-- COMPTES DIRECTS MOBILE MONEY -->
+            <!-- COMPTES DIRECTS MOBILE MONEY & USSD DIRECT -->
             <div class="card" style="margin-top:12px;">
-                <div class="card-title" style="font-size:13px; margin-bottom:6px;">Paiement Direct Mobile Money Cameroun</div>
-                <div style="font-size:11.5px; color:var(--text-secondary); margin-bottom:10px;">
-                    En cas de paiement direct, envoyez votre transaction à l'un de nos numéros officiels :
+                <div class="card-title" style="font-size:13.5px; margin-bottom:4px;">Paiement Rapide par Code USSD & Mobile Money</div>
+                <div style="font-size:11.5px; color:var(--text-secondary); margin-bottom:12px;">
+                    Cliquez directement pour composer le code USSD sur votre téléphone ou copier le numéro certifié :
                 </div>
-                <div style="display:flex; flex-direction:column; gap:6px; font-size:12.5px; font-weight:700;">
-                    <div style="display:flex; justify-content:space-between; background:#FFF7ED; padding:8px; border-radius:8px; color:#C2410C;">
-                        <span>Orange Money</span>
-                        <span>692 16 82 64</span>
+                
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <!-- ORANGE MONEY BOX -->
+                    <div style="background:#FFF7ED; border:1px solid #FFEDD5; border-radius:var(--radius-md); padding:12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <div>
+                                <span style="font-size:13px; font-weight:800; color:#C2410C;">Orange Money</span>
+                                <div style="font-size:12px; font-weight:700; color:#9A3412;">692 16 82 64</div>
+                            </div>
+                            <button class="btn btn-sm btn-secondary" onclick="copyNumber('692168264', 'Numéro Orange Money 692 16 82 64 copié !')" style="width:auto; padding:5px 10px; font-size:11px;">
+                                Copier Numéro
+                            </button>
+                        </div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                            <a href="tel:%23150%23" class="btn btn-orange btn-sm" style="font-size:11.5px;">
+                                Composer #150#
+                            </a>
+                            <a href="tel:%23150*1*1*692168264*500%23" class="btn btn-secondary btn-sm" style="font-size:11.5px; border-color:#FED7AA; color:#C2410C;">
+                                Payer 500 F direct
+                            </a>
+                        </div>
                     </div>
-                    <div style="display:flex; justify-content:space-between; background:#FEFCE8; padding:8px; border-radius:8px; color:#A16207;">
-                        <span>MTN Mobile Money</span>
-                        <span>653 59 63 05</span>
+
+                    <!-- MTN MOMO BOX -->
+                    <div style="background:#FEFCE8; border:1px solid #FEF08A; border-radius:var(--radius-md); padding:12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <div>
+                                <span style="font-size:13px; font-weight:800; color:#A16207;">MTN Mobile Money</span>
+                                <div style="font-size:12px; font-weight:700; color:#854D0E;">653 59 63 05</div>
+                            </div>
+                            <button class="btn btn-sm btn-secondary" onclick="copyNumber('653596305', 'Numéro MTN MoMo 653 59 63 05 copié !')" style="width:auto; padding:5px 10px; font-size:11px;">
+                                Copier Numéro
+                            </button>
+                        </div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                            <a href="tel:*126%23" class="btn btn-momo btn-sm" style="font-size:11.5px;">
+                                Composer *126#
+                            </a>
+                            <a href="tel:*126*1*1*653596305*500%23" class="btn btn-secondary btn-sm" style="font-size:11.5px; border-color:#FDE047; color:#A16207;">
+                                Payer 500 F direct
+                            </a>
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- ESPACE GÉRANT FAPSHI (SUIVI DES ENCAISSEMENTS) -->
+            <div class="card" style="background:#F8FAFC; border:1.5px solid #E2E8F0;">
+                <div class="card-title" style="font-size:13.5px; color:#1E293B; margin-bottom:4px;">Espace Marchand Fapshi (Gérant)</div>
+                <div style="font-size:11.5px; color:#64748B; margin-bottom:10px;">
+                    Consultez vos encaissements, solde de vos ventes et retraits sur votre tableau de bord Fapshi officiel :
+                </div>
+                <a href="https://fapshi.com/login" target="_blank" class="btn btn-secondary btn-sm" style="color:var(--primary-dark); font-weight:800; border-color:#CBD5E1;">
+                    Ouvrir mon Dashboard Fapshi &rarr;
+                </a>
             </div>
 
             <!-- VALIDATION CODE D'ACTIVATION -->
@@ -1281,6 +1344,7 @@
                 <div class="card-title" style="margin-bottom:8px;">Sécurité & Données</div>
                 <div style="display:flex; flex-direction:column; gap:8px;">
                     <button class="btn btn-secondary btn-sm" onclick="openForgotPinModal()">Modifier mon Code PIN secret</button>
+                    <a href="https://fapshi.com/login" target="_blank" class="btn btn-secondary btn-sm" style="text-align:center;">Accéder à mon Dashboard Fapshi ↗</a>
                     <button class="btn btn-secondary btn-sm" onclick="openCguModal()">Lire les Conditions Générales (CGU)</button>
                     <button class="btn btn-secondary btn-sm" onclick="logoutMerchant()" style="color:#E53935; border-color:#FECACA;">
                         Verrouiller & Quitter la Session
@@ -1763,6 +1827,19 @@
             const phone = (client.phone || "").replace(/\D/g, "");
             const url = `https://wa.me/237${phone}?text=${encodeURIComponent(msg)}`;
             window.open(url, "_blank");
+        }
+
+        // Copy Number Helper
+        function copyNumber(num, msg) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(num).then(() => {
+                    alert(msg || "Numéro copié : " + num);
+                }).catch(() => {
+                    prompt("Copiez le numéro :", num);
+                });
+            } else {
+                prompt("Copiez le numéro :", num);
+            }
         }
 
         // Modal Operations
