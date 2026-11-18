@@ -1,24 +1,40 @@
 {
+  "id": "carnet-credit-pwa-app",
   "name": "Carnet Crédit",
   "short_name": "CarnetCrédit",
-  "description": "Application mobile officielle de gestion de crédits et dettes clients pour commerçants",
+  "description": "Application officielle de gestion de crédits et dettes clients pour commerçants",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait",
   "background_color": "#D4ECE8",
   "theme_color": "#0D3B37",
+  "categories": ["business", "finance", "productivity"],
   "icons": [
     {
       "src": "./icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "./icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
