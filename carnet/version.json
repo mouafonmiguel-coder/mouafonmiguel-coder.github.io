@@ -1,6 +1,6 @@
 {
-  "version": 116,
-  "timestamp": 1791881000,
+  "version": 117,
+  "timestamp": 1791881800,
   "app": "Carnet Credit",
-  "description": "Barre de recherche ultra-rapide pour retrouver n'importe quel client, pret, numero ou article"
+  "description": "Portail obligatoire d'inscription/connexion securise + Integration Paiements Fapshi 1m/6m/12m + Recherche clients instantanee"
 }
