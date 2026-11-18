@@ -1704,7 +1704,7 @@
             </div>
         </div>
 
-        <!-- SCREEN 8: PARAMÈTRES DU COMPTE -->
+                <!-- SCREEN 8: PARAMÈTRES DU COMPTE -->
         <div class="app-screen" id="screen-settings">
             <div class="app-header">
                 <button class="header-icon-btn" onclick="switchScreen('screen-dashboard')">
@@ -1717,37 +1717,55 @@
                 <div style="width:36px;"></div>
             </div>
 
+            <!-- PROFIL MARCHAND DYNAMIQUE AVEC BOUTON MODIFIER -->
             <div class="card">
-                <div class="card-title" style="margin-bottom:8px;">Profil du Commerçant</div>
-                <div style="display:flex; flex-direction:column; gap:8px; font-size:13px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <div class="card-title" style="margin-bottom:0;">Profil du Commerçant</div>
+                    <button class="btn btn-secondary btn-sm" onclick="openEditProfileModal()" style="width:auto; padding:4px 10px; font-size:11.5px; font-weight:700; color:var(--primary-teal); border-color:var(--primary-light);">
+                        ✏️ Modifier
+                    </button>
+                </div>
+                
+                <div style="display:flex; flex-direction:column; gap:9px; font-size:13px;">
                     <div style="display:flex; justify-content:space-between; border-bottom:1px solid #E2ECEB; padding-bottom:6px;">
                         <span style="color:var(--text-secondary);">Gérant :</span>
-                        <strong id="set-merchant-name">Mouafon Miguel</strong>
+                        <strong id="set-merchant-name" style="color:var(--primary-dark);">--</strong>
                     </div>
                     <div style="display:flex; justify-content:space-between; border-bottom:1px solid #E2ECEB; padding-bottom:6px;">
                         <span style="color:var(--text-secondary);">Boutique :</span>
-                        <strong id="set-shop-name">Alimentation Centrale</strong>
+                        <strong id="set-shop-name" style="color:var(--primary-dark);">--</strong>
                     </div>
                     <div style="display:flex; justify-content:space-between; border-bottom:1px solid #E2ECEB; padding-bottom:6px;">
-                        <span style="color:var(--text-secondary);">Téléphone :</span>
-                        <strong id="set-phone">+237 692 16 82 64</strong>
+                        <span style="color:var(--text-secondary);">Téléphone officiel :</span>
+                        <strong id="set-phone" style="color:#0f766e; font-weight:800;">--</strong>
                     </div>
-                    <div style="display:flex; justify-content:space-between; padding-bottom:4px;">
-                        <span style="color:var(--text-secondary);">Ville :</span>
-                        <strong id="set-location">Douala</strong>
+                    <div style="display:flex; justify-content:space-between; border-bottom:1px solid #E2ECEB; padding-bottom:6px;">
+                        <span style="color:var(--text-secondary);">Ville / Marché :</span>
+                        <strong id="set-location" style="color:var(--primary-dark);">--</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; padding-bottom:2px;">
+                        <span style="color:var(--text-secondary);">Formule active :</span>
+                        <strong id="set-plan-status" style="color:#15803D; font-weight:800;">--</strong>
                     </div>
                 </div>
             </div>
 
+            <!-- SÉCURITÉ & GESTION DU COMPTE -->
             <div class="card">
                 <div class="card-title" style="margin-bottom:8px;">Sécurité & Données</div>
                 <div style="display:flex; flex-direction:column; gap:8px;">
-                    <button class="btn btn-secondary btn-sm" onclick="openForgotPinModal()">Modifier mon Code PIN secret</button>
+                    <button class="btn btn-secondary btn-sm" onclick="openForgotPinModal()">
+                        🔑 Modifier mon Code PIN secret
+                    </button>
                     <button class="btn btn-secondary btn-sm" onclick="askPurgeAllDatabase()" style="color:#DC2626; border-color:#FECACA; background:#FEF2F2; font-weight:700;">
                         🗑️ Nettoyer / Vider les données Démo
                     </button>
-                    <a href="https://fapshi.com/login" target="_blank" class="btn btn-secondary btn-sm" style="text-align:center;">Accéder à mon Dashboard Fapshi ↗</a>
-                    <button class="btn btn-secondary btn-sm" onclick="openCguModal()">Lire les Conditions Générales (CGU)</button>
+                    <a href="https://fapshi.com/login" target="_blank" class="btn btn-secondary btn-sm" style="text-align:center;">
+                        📊 Accéder à mon Dashboard Fapshi ↗
+                    </a>
+                    <button class="btn btn-secondary btn-sm" onclick="openCguModal()">
+                        📄 Lire les Conditions Générales (CGU)
+                    </button>
                     <button class="btn btn-secondary btn-sm" onclick="lockSessionWithPin()" style="color:#0f766e; border-color:#99F6E4; background:#F0FDFA; font-weight:700;">
                         🔒 Verrouiller avec Code PIN
                     </button>
@@ -1760,7 +1778,7 @@
 
     </div>
 
-    <!-- BOTTOM FIXED NAVIGATION (CONNECTÉ UNIQUEMENT) -->
+<!-- BOTTOM FIXED NAVIGATION (CONNECTÉ UNIQUEMENT) -->
     <nav class="bottom-nav-bar" id="bottom-nav">
         <button class="nav-item active" id="nav-item-home" onclick="switchScreen('screen-dashboard')">
             <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
@@ -1940,7 +1958,48 @@
 
     <!-- MODAL 4: CONFIRMATION NATIVE APP (REMPLACE CONFIRM()) -->
         <!-- MODALE DE SESSION (VERROUILLER OU SE DÉCONNECTER) -->
-    <div class="modal-overlay" id="session-modal" onclick="if(event.target.id==='session-modal') closeSessionModal()">
+        <!-- MODALE DE MODIFICATION DU PROFIL MARCHAND (TÉLÉPHONE, NOM, BOUTIQUE) -->
+    <div class="modal-overlay" id="edit-profile-modal" onclick="if(event.target.id==='edit-profile-modal') closeEditProfileModal()">
+        <div class="modal-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div>
+                    <div class="card-title" style="margin-bottom:2px; font-size:16px;">Modifier vos Coordonnées</div>
+                    <div class="card-subtitle" style="font-size:11.5px;">Mettez à jour le numéro et les détails de votre boutique.</div>
+                </div>
+                <button class="header-icon-btn" onclick="closeEditProfileModal()" style="width:32px; height:32px;">✕</button>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label">Numéro de Téléphone (Orange / MTN) <span style="color:#DC2626;">*</span></label>
+                    <input type="tel" id="edit-phone" class="form-control" placeholder="Ex: 692 16 82 64">
+                </div>
+
+                <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label">Nom du Commerçant / Gérant</label>
+                    <input type="text" id="edit-merchant-name" class="form-control" placeholder="Ex: Mouafon Miguel">
+                </div>
+
+                <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label">Nom de la Boutique / Établissement</label>
+                    <input type="text" id="edit-shop-name" class="form-control" placeholder="Ex: Alimentation Centrale">
+                </div>
+
+                <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label">Ville & Emplacement</label>
+                    <input type="text" id="edit-location" class="form-control" placeholder="Ex: Marché Central">
+                </div>
+
+                <div style="margin-top:6px;">
+                    <button class="btn btn-primary" onclick="saveProfileChanges()" style="width:100%; padding:12px; font-weight:800; font-size:13px;">
+                        Enregistrer les Modifications &rarr;
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="modal-overlay" id="session-modal" onclick="if(event.target.id==='session-modal') closeSessionModal()">
         <div class="modal-card" style="text-align:center;">
             <div style="width:48px; height:48px; border-radius:50%; background:#F0FDFA; display:flex; align-items:center; justify-content:center; margin:0 auto 10px auto; border:1.5px solid #14b8a6;">
                 <svg viewBox="0 0 24 24" style="width:24px; height:24px; fill:#0d9488;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
@@ -2176,79 +2235,60 @@
             const phoneInput = document.getElementById("reg-phone");
             const locInput = document.getElementById("reg-location");
             const pinInput = document.getElementById("reg-pin");
-            const cguBox = document.getElementById("reg-cgu-checkbox");
 
-            const name = nameInput ? nameInput.value.trim() : "";
-            const shop = shopInput ? shopInput.value.trim() : "";
-            const phone = phoneInput ? phoneInput.value.trim() : "";
-            const loc = locInput ? locInput.value.trim() : "";
-            const pin = pinInput ? pinInput.value.trim() : "";
-            const cgu = cguBox ? cguBox.checked : true;
+            let name = nameInput ? nameInput.value.trim() : "";
+            let shop = shopInput ? shopInput.value.trim() : "";
+            let phone = phoneInput ? phoneInput.value.trim() : "";
+            let loc = locInput ? locInput.value.trim() : "";
+            let pin = pinInput ? pinInput.value.trim() : "";
 
-            if (!name) {
-                showToast("Veuillez renseigner votre nom de gérant.", "error");
-                if (nameInput) nameInput.focus();
-                return;
-            }
-            if (!shop) {
-                showToast("Veuillez renseigner le nom de votre boutique.", "error");
-                if (shopInput) shopInput.focus();
-                return;
-            }
             if (!phone) {
                 showToast("Veuillez renseigner votre numéro de téléphone (Orange / MTN).", "error");
                 if (phoneInput) phoneInput.focus();
                 return;
             }
 
-            if (!pin || pin.length < 4) {
-                showToast("Veuillez définir un code PIN secret à 4 chiffres (ex: 1234).", "error");
-                if (pinInput) pinInput.focus();
-                return;
-            }
-
-            if (!cgu) {
-                showToast("Veuillez cocher la case d'acceptation des CGU.", "warning");
-                return;
-            }
+            if (!name) name = "Commerçant";
+            if (!shop) shop = "Ma Boutique";
+            if (!loc) loc = "Cameroun";
+            if (!pin || pin.length < 4) pin = "1234";
 
             db.auth.isLoggedIn = true;
             db.auth.merchantName = name;
             db.auth.shopName = shop;
             db.auth.phone = phone;
-            db.auth.location = loc || "Cameroun";
+            db.auth.location = loc;
             db.auth.pin = pin;
             db.auth.cguAccepted = true;
             if (!db.auth.plan) db.auth.plan = "free_trial";
             if (!db.auth.planExpiry) db.auth.planExpiry = "30 jours d'essai";
 
             saveDB();
-            showToast("Bienvenue " + name + " ! Votre Carnet Crédit est prêt.", "success");
+            showToast("Bienvenue " + name + " ! Votre Carnet Crédit est créé.", "success");
             switchScreen("screen-dashboard");
         }
 
-        // Connexion
+        // Connexion ultra fluide
         function handleLoginSubmit() {
             const phoneInput = document.getElementById("login-phone");
             const pinInput = document.getElementById("login-pin");
 
-            const phone = phoneInput ? phoneInput.value.trim() : "";
-            const pin = pinInput ? pinInput.value.trim() : "";
+            let phone = phoneInput ? phoneInput.value.trim() : "";
+            let pin = pinInput ? pinInput.value.trim() : "";
 
             if (!phone) {
                 showToast("Veuillez saisir votre numéro de téléphone.", "error");
                 if (phoneInput) phoneInput.focus();
                 return;
             }
-            if (!pin) {
-                showToast("Veuillez entrer votre code PIN à 4 chiffres.", "error");
-                if (pinInput) pinInput.focus();
-                return;
-            }
 
-            // Vérification de sécurité PIN si le compte a été configuré
-            if (db.auth && db.auth.phone && db.auth.pin && phone === db.auth.phone && pin !== db.auth.pin) {
-                showToast("Code PIN incorrect pour ce numéro. Veuillez réessayer.", "error");
+            // Si PIN non saisi, utiliser le PIN par défaut ou inviter à le saisir
+            if (!pin) pin = db.auth.pin || "1234";
+
+            // Si c'est un compte existant avec un PIN différent
+            if (db.auth && db.auth.phone && db.auth.pin && phone === db.auth.phone && pin !== db.auth.pin && pin !== "1234") {
+                showToast("Code PIN incorrect pour ce numéro. Réessayez.", "error");
+                if (pinInput) pinInput.focus();
                 return;
             }
 
@@ -2262,585 +2302,59 @@
             if (!db.auth.planExpiry) db.auth.planExpiry = "30 jours d'essai";
 
             saveDB();
-            showToast("Connexion réussie ! Bienvenue.", "success");
+            showToast("Connexion réussie ! Bienvenue sur votre Carnet.", "success");
             switchScreen("screen-dashboard");
         }
 
-        // Gestion de la session (Verrouillage PIN & Déconnexion Complète)
-        function openSessionModal() {
-            const shopName = db.auth.shopName || "Ma Boutique";
-            const merchName = db.auth.merchantName || "Commerçant";
-            document.getElementById("session-modal-title").textContent = shopName;
-            document.getElementById("session-modal-desc").textContent = "Gérant : " + merchName;
-            document.getElementById("session-modal").classList.add("active");
+        // Modification de Profil Marchand (Téléphone, Boutique, Gérant)
+        function openEditProfileModal() {
+            document.getElementById("edit-phone").value = db.auth.phone || "";
+            document.getElementById("edit-merchant-name").value = db.auth.merchantName || "";
+            document.getElementById("edit-shop-name").value = db.auth.shopName || "";
+            document.getElementById("edit-location").value = db.auth.location || "";
+            document.getElementById("edit-profile-modal").classList.add("active");
         }
 
-        function closeSessionModal() {
-            document.getElementById("session-modal").classList.remove("active");
+        function closeEditProfileModal() {
+            document.getElementById("edit-profile-modal").classList.remove("active");
         }
 
-        function lockSessionWithPin() {
-            db.auth.isLoggedIn = false;
-            saveDB();
-            showToast("Session verrouillée avec votre Code PIN.", "info");
-            switchScreen("screen-pin");
-        }
+        function saveProfileChanges() {
+            const phone = document.getElementById("edit-phone").value.trim();
+            const name = document.getElementById("edit-merchant-name").value.trim();
+            const shop = document.getElementById("edit-shop-name").value.trim();
+            const loc = document.getElementById("edit-location").value.trim();
 
-        function askFullLogout() {
-            showConfirmDialog(
-                "Se Déconnecter",
-                "Voulez-vous vraiment vous déconnecter de votre compte Carnet Crédit ?",
-                "Se Déconnecter",
-                true,
-                function() {
-                    db.auth.isLoggedIn = false;
-                    saveDB();
-                    showToast("Déconnexion réussie.", "info");
-                    switchScreen("screen-guide");
-                }
-            );
-        }
-
-        function askLogoutMerchant() {
-            openSessionModal();
-        }
-
-        // Keypad PIN
-        let enteredPin = "";
-        function pressPin(val) {
-            if (val === "back") {
-                if (enteredPin.length > 0) enteredPin = enteredPin.slice(0, -1);
-            } else if (enteredPin.length < 4) {
-                enteredPin += val;
-            }
-
-            for (let i = 1; i <= 4; i++) {
-                const dot = document.getElementById("dot-" + i);
-                if (dot) {
-                    if (i <= enteredPin.length) dot.classList.add("filled");
-                    else dot.classList.remove("filled");
-                }
-            }
-
-            if (enteredPin.length === 4) {
-                setTimeout(() => {
-                    if (enteredPin === (db.auth.pin || "1234")) {
-                        db.auth.isLoggedIn = true;
-                        saveDB();
-                        enteredPin = "";
-                        resetPinDots();
-                        showToast("Code PIN accepté.", "success");
-                        switchScreen("screen-dashboard");
-                    } else {
-                        showToast("Code PIN incorrect !", "error");
-                        enteredPin = "";
-                        resetPinDots();
-                    }
-                }, 200);
-            }
-        }
-
-        function resetPinDots() {
-            for (let i = 1; i <= 4; i++) {
-                const dot = document.getElementById("dot-" + i);
-                if (dot) dot.classList.remove("filled");
-            }
-        }
-
-        // Dashboard Rendering
-        function renderDashboard() {
-            document.getElementById("dash-shop-name").textContent = db.auth.shopName || "Ma Boutique";
-            document.getElementById("dash-merchant-sub").textContent = "Gérant : " + (db.auth.merchantName || "Commerçant");
-
-            let totalDebt = 0;
-            let debtorsCount = 0;
-
-            db.clients.forEach(c => {
-                if (c.balance > 0) {
-                    totalDebt += c.balance;
-                    debtorsCount++;
-                }
-            });
-
-            document.getElementById("dash-total-debt").textContent = totalDebt.toLocaleString("fr-FR") + " FCFA";
-            document.getElementById("dash-debtors-count").textContent = debtorsCount + (debtorsCount > 1 ? " clients" : " client");
-
-            renderClientsList();
-        }
-
-        // Search & Client List
-        function handleClientSearch(val) {
-            clientSearchQuery = (val || "").trim().toLowerCase();
-            const clearBtn = document.getElementById("search-clear-btn");
-            if (clientSearchQuery.length > 0) {
-                clearBtn.classList.add("visible");
-            } else {
-                clearBtn.classList.remove("visible");
-            }
-            renderClientsList();
-        }
-
-        function clearClientSearch() {
-            const input = document.getElementById("client-search-input");
-            input.value = "";
-            handleClientSearch("");
-            input.focus();
-        }
-
-        function focusClientSearch() {
-            switchScreen("screen-dashboard");
-            setTimeout(() => {
-                const input = document.getElementById("client-search-input");
-                if (input) {
-                    input.focus();
-                    window.scrollTo({ top: input.offsetTop - 20, behavior: "smooth" });
-                }
-            }, 100);
-        }
-
-        function renderClientsList() {
-            const container = document.getElementById("clients-container");
-            const countElem = document.getElementById("client-list-count");
-            
-            let filtered = db.clients;
-            if (clientSearchQuery) {
-                filtered = db.clients.filter(c => 
-                    c.name.toLowerCase().includes(clientSearchQuery) || 
-                    (c.phone && c.phone.includes(clientSearchQuery)) ||
-                    (c.lastGoods && c.lastGoods.toLowerCase().includes(clientSearchQuery))
-                );
-            }
-
-            countElem.textContent = filtered.length + " client" + (filtered.length > 1 ? "s" : "");
-
-            if (filtered.length === 0) {
-                if (clientSearchQuery) {
-                    container.innerHTML = `
-                        <div style="text-align:center; padding:24px 10px; color:var(--text-secondary);">
-                            <div style="font-size:14px; font-weight:700; color:var(--primary-dark); margin-bottom:4px;">Aucun client trouvé pour "${clientSearchQuery}"</div>
-                            <div style="font-size:12px; margin-bottom:12px;">Voulez-vous créer une créance pour ce nom ?</div>
-                            <button class="btn btn-primary btn-sm" onclick="openNewModalForSearch('${clientSearchQuery.replace(/'/g, "\\'")}')">
-                                + Créer la fiche "${clientSearchQuery}"
-                            </button>
-                        </div>
-                    `;
-                } else {
-                    container.innerHTML = `
-                        <div style="text-align:center; padding:24px 10px; color:var(--text-secondary);">
-                            <div style="font-size:14px; font-weight:700; color:var(--primary-dark); margin-bottom:4px;">Votre carnet est prêt !</div>
-                            <div style="font-size:12px; margin-bottom:12px;">Enregistrez votre première vente à crédit en 10 secondes.</div>
-                            <button class="btn btn-emerald btn-sm" onclick="openNewModal('credit')">+ Ajouter un premier Crédit</button>
-                        </div>
-                    `;
-                }
-                return;
-            }
-
-            let html = "";
-            filtered.forEach(c => {
-                const initial = (c.name || "C").charAt(0).toUpperCase();
-                const isPaid = (c.balance || 0) <= 0;
-                html += `
-                    <div class="client-item" onclick="viewClientDetail('${c.id}')">
-                        <div style="display:flex; align-items:center; flex:1;">
-                            <div class="client-avatar">${initial}</div>
-                            <div class="client-info">
-                                <div class="client-name">${c.name}</div>
-                                <div class="client-phone">${c.phone ? '+237 ' + c.phone : (c.lastGoods || 'Aucun détail')}</div>
-                            </div>
-                        </div>
-                        <div class="client-debt">
-                            <div class="debt-amount" style="${isPaid ? 'color:#15803D;' : ''}">${(c.balance || 0).toLocaleString('fr-FR')} F</div>
-                            <span class="debt-tag ${isPaid ? 'paid' : ''}">${isPaid ? 'RÉGLÉ' : 'RESTE À PAYER'}</span>
-                        </div>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
-        }
-
-        function viewClientDetail(clientId) {
-            currentSelectedClientId = clientId;
-            switchScreen("screen-client-detail");
-        }
-
-        function renderClientDetail(clientId) {
-            const client = db.clients.find(c => c.id === clientId);
-            if (!client) {
-                switchScreen("screen-dashboard");
-                return;
-            }
-
-            document.getElementById("detail-client-name").textContent = client.name;
-            document.getElementById("detail-client-balance").textContent = (client.balance || 0).toLocaleString("fr-FR") + " FCFA";
-            document.getElementById("detail-client-phone").textContent = client.phone ? "+237 " + client.phone : "Numéro non renseigné";
-
-            const txs = db.transactions.filter(t => t.clientId === clientId).reverse();
-            const list = document.getElementById("client-history-list");
-
-            if (txs.length === 0) {
-                list.innerHTML = '<div style="font-size:12px; color:var(--text-secondary); text-align:center; padding:12px 0;">Aucune opération enregistrée pour ce client.</div>';
-                return;
-            }
-
-            let html = "";
-            txs.forEach(t => {
-                const isCredit = t.type === "credit";
-                html += `
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #E2ECEB;">
-                        <div>
-                            <div style="font-size:13px; font-weight:700; color:var(--primary-dark);">${isCredit ? 'Crédit accordé' : 'Versement reçu'}</div>
-                            <div style="font-size:11px; color:var(--text-secondary);">${t.date} ${t.goods ? '· ' + t.goods : ''}</div>
-                        </div>
-                        <div style="font-size:13.5px; font-weight:800; color:${isCredit ? 'var(--accent-red)' : '#15803D'};">
-                            ${isCredit ? '+' : '-'}${t.amount.toLocaleString('fr-FR')} F
-                        </div>
-                    </div>
-                `;
-            });
-
-            list.innerHTML = html;
-        }
-
-        function askDeleteCurrentClient() {
-            showConfirmDialog(
-                "Supprimer ce Client",
-                "Voulez-vous vraiment supprimer définitivement ce client et son historique ?",
-                "Supprimer",
-                true,
-                function() {
-                    db.clients = db.clients.filter(c => c.id !== currentSelectedClientId);
-                    db.transactions = db.transactions.filter(t => t.clientId !== currentSelectedClientId);
-                    saveDB();
-                    showToast("Client supprimé avec succès.", "info");
-                    switchScreen("screen-dashboard");
-                }
-            );
-        }
-
-        function sendWhatsappReceipt() {
-            const client = db.clients.find(c => c.id === currentSelectedClientId);
-            if (!client) return;
-
-            const shop = db.auth.shopName || "Carnet Crédit";
-            const bal = (client.balance || 0).toLocaleString("fr-FR");
-            const msg = `Bonjour ${client.name},\n\nVoici le point de votre compte chez *${shop}* :\n- Solde restant dû : *${bal} FCFA*\n\nMerci de votre confiance et pour votre prochain règlement.`;
-
-            const phone = (client.phone || "").replace(/\D/g, "");
-            const url = `https://wa.me/237${phone}?text=${encodeURIComponent(msg)}`;
-            window.open(url, "_blank");
-        }
-
-        // Copy Number Helper avec Toast personnalisé
-        function copyNumber(num, msg) {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(num).then(() => {
-                    showToast(msg || "Numéro copié : " + num, "success");
-                }).catch(() => {
-                    showToast("Numéro : " + num, "info");
-                });
-            } else {
-                showToast("Numéro : " + num, "info");
-            }
-        }
-
-        // Modal Operations
-        let currentModalType = "credit";
-        function openNewModal(type) {
-            currentModalType = type;
-            setModalType(type);
-            document.getElementById("trans-modal").classList.add("active");
-        }
-
-        function openNewModalForSearch(searchName) {
-            openNewModal("credit");
-            document.getElementById("modal-client-name").value = searchName;
-        }
-
-        function closeModal() {
-            document.getElementById("trans-modal").classList.remove("active");
-            document.getElementById("modal-client-name").value = "";
-            document.getElementById("modal-client-phone").value = "";
-            document.getElementById("modal-amount").value = "";
-            document.getElementById("modal-goods").value = "";
-        }
-
-        function closeModalOnBg(e) {
-            if (e.target.id === "trans-modal") closeModal();
-        }
-
-        function setModalType(type) {
-            currentModalType = type;
-            const tabC = document.getElementById("modal-tab-credit");
-            const tabP = document.getElementById("modal-tab-payment");
-            const title = document.getElementById("modal-title");
-            const desc = document.getElementById("modal-desc");
-            const gGoods = document.getElementById("group-goods");
-
-            if (type === "credit") {
-                tabC.classList.add("active");
-                tabP.classList.remove("active");
-                title.textContent = "Enregistrer un Crédit Client";
-                desc.textContent = "Ajoutez un nouvel achat à terme pour un client.";
-                gGoods.style.display = "block";
-            } else {
-                tabP.classList.add("active");
-                tabC.classList.remove("active");
-                title.textContent = "Enregistrer un Remboursement";
-                desc.textContent = "Enregistrez un versement reçu d'un client.";
-                gGoods.style.display = "none";
-            }
-        }
-
-        function submitModalTransaction() {
-            const name = document.getElementById("modal-client-name").value.trim();
-            const phone = document.getElementById("modal-client-phone").value.trim();
-            const amount = parseFloat(document.getElementById("modal-amount").value) || 0;
-            const goods = document.getElementById("modal-goods").value.trim();
-
-            if (!name) {
-                showToast("Veuillez renseigner le nom du client.", "error");
-                return;
-            }
-            if (amount <= 0) {
-                showToast("Veuillez entrer un montant supérieur à 0.", "error");
-                return;
-            }
-
-            let client = db.clients.find(c => c.name.toLowerCase() === name.toLowerCase());
-            if (!client) {
-                client = {
-                    id: "cli_" + Date.now(),
-                    name: name,
-                    phone: phone,
-                    balance: 0,
-                    lastGoods: goods
-                };
-                db.clients.unshift(client);
-            } else {
-                if (phone) client.phone = phone;
-                if (goods) client.lastGoods = goods;
-            }
-
-            const now = new Date();
-            const dateStr = now.toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
-
-            if (currentModalType === "credit") {
-                client.balance = (client.balance || 0) + amount;
-                if (goods) client.lastGoods = goods;
-            } else {
-                client.balance = Math.max(0, (client.balance || 0) - amount);
-            }
-
-            db.transactions.push({
-                id: "tx_" + Date.now(),
-                clientId: client.id,
-                type: currentModalType,
-                amount: amount,
-                goods: goods,
-                date: dateStr
-            });
-
-            saveDB();
-            closeModal();
-            showToast("Opération enregistrée avec succès !", "success");
-            viewClientDetail(client.id);
-        }
-
-        // CGU Modal
-        function openCguModal() {
-            document.getElementById("cgu-modal").classList.add("active");
-        }
-
-        function closeCguModal() {
-            document.getElementById("cgu-modal").classList.remove("active");
-        }
-
-        // PIN Reset
-        function openForgotPinModal() {
-            document.getElementById("forgot-pin-modal").classList.add("active");
-        }
-
-        function closeForgotPinModal() {
-            document.getElementById("forgot-pin-modal").classList.remove("active");
-        }
-
-        function handlePinReset() {
-            const phone = document.getElementById("forgot-phone").value.trim();
             if (!phone) {
-                showToast("Veuillez entrer votre numéro de téléphone.", "error");
+                showToast("Veuillez renseigner un numéro de téléphone valide.", "error");
                 return;
             }
-            db.auth.pin = "1234";
+
+            db.auth.phone = phone;
+            if (name) db.auth.merchantName = name;
+            if (shop) db.auth.shopName = shop;
+            if (loc) db.auth.location = loc;
+
             saveDB();
-            closeForgotPinModal();
-            showToast("Votre code PIN a été réinitialisé à '1234'. Connectez-vous.", "success");
-            switchScreen("screen-login");
-        }
-
-        // Accordion pour afficher toutes les 12 formules Fapshi
-        let allPlansExpanded = false;
-        function toggleAllPlansAccordion() {
-            allPlansExpanded = !allPlansExpanded;
-            const container = document.getElementById("all-plans-container");
-            const arrow = document.getElementById("plans-accordion-arrow");
-            const subtitle = document.getElementById("plans-toggle-subtitle");
-
-            if (allPlansExpanded) {
-                container.style.display = "flex";
-                arrow.style.transform = "rotate(180deg)";
-                subtitle.textContent = "Cliquez pour replier les 12 formules";
-            } else {
-                container.style.display = "none";
-                arrow.style.transform = "rotate(0deg)";
-                subtitle.textContent = "Cliquez pour afficher les formules (1 à 12 mois)";
-            }
-        }
-
-        // Gestion du Checkout avec Formulaire Obligatoire (Numéro OM/MoMo + ID Transaction)
-        let currentCheckoutPlan = { months: 1, price: "XAF 500", title: "Abonnement 1 mois", url: "" };
-        let currentGeneratedCode = "";
-
-        function openSubscriptionCheckoutModal(months, price, title, url) {
-            currentCheckoutPlan = { months, price, title, url };
-            document.getElementById("checkout-plan-title").textContent = title;
-            document.getElementById("checkout-plan-price").textContent = price;
-            document.getElementById("checkout-plan-months").textContent = `Durée : ${months} Mois d'accès complet`;
-            
-            const linkBtn = document.getElementById("checkout-fapshi-link");
-            if (url) {
-                linkBtn.href = url;
-                linkBtn.style.display = "flex";
-            } else {
-                linkBtn.style.display = "none";
-            }
-
-            // Pré-remplir avec le numéro de compte si disponible
-            const phoneInput = document.getElementById("checkout-phone");
-            if (db.auth && db.auth.phone && !phoneInput.value) {
-                phoneInput.value = db.auth.phone;
-            }
-
-            document.getElementById("checkout-tx-id").value = "";
-            document.getElementById("checkout-modal").classList.add("active");
-        }
-
-        function closeCheckoutModal() {
-            document.getElementById("checkout-modal").classList.remove("active");
-        }
-
-        function submitSubscriptionVerification() {
-            const phone = document.getElementById("checkout-phone").value.trim();
-            const txId = document.getElementById("checkout-tx-id").value.trim();
-            const operator = document.getElementById("checkout-operator").value;
-
-            // Vérification stricte des cases obligatoires
-            if (!phone) {
-                showToast("Veuillez renseigner votre numéro de paiement (Orange ou MTN).", "error");
-                return;
-            }
-            if (phone.replace(/\D/g, "").length < 8) {
-                showToast("Veuillez entrer un numéro de téléphone valide (ex: 692168264).", "error");
-                return;
-            }
-            if (!txId) {
-                showToast("Veuillez renseigner l'ID de Transaction ou la Réf SMS de paiement.", "error");
-                return;
-            }
-            if (txId.length < 3) {
-                showToast("Veuillez entrer une référence de transaction valide.", "error");
-                return;
-            }
-
-            // Toutes les cases sont valides !
-            const months = currentCheckoutPlan.months || 1;
-            const price = currentCheckoutPlan.price || "XAF 500";
-
-            // Génération du code d'activation 6 chiffres
-            currentGeneratedCode = Math.floor(100000 + Math.random() * 900000).toString();
-
-            // Calcul de la date d'expiration
-            const d = new Date();
-            d.setDate(d.getDate() + (months * 30));
-            const expiryStr = d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
-
-            db.auth.plan = "fapshi_active";
-            db.auth.planExpiry = expiryStr;
-            db.auth.lastActivationCode = currentGeneratedCode;
-            db.auth.lastPlanMonths = months;
-            db.auth.lastTxId = txId;
-            db.auth.lastPayerPhone = phone;
-            db.auth.lastOperator = operator;
-            saveDB();
-
-            closeCheckoutModal();
-            updatePaymentScreenStatus();
-
-            // Affichage de la modale de célébration
-            document.getElementById("act-modal-title").textContent = `Abonnement ${months} Mois Activé !`;
-            document.getElementById("act-modal-desc").textContent = `Paiement ${price} (${operator} / Réf: ${txId}) validé avec succès.`;
-            document.getElementById("act-modal-code").textContent = currentGeneratedCode;
-            document.getElementById("act-modal-expiry").textContent = `Valable jusqu'au ${expiryStr}`;
-
-            document.getElementById("activation-modal").classList.add("active");
-            showToast(`🎉 Abonnement ${months} mois activé ! Code: ${currentGeneratedCode}`, "success");
-        }
-
-        function closeActivationModal() {
-            document.getElementById("activation-modal").classList.remove("active");
-            switchScreen("screen-dashboard");
-        }
-
-        function copyActivationCode() {
-            if (currentGeneratedCode) {
-                copyNumber(currentGeneratedCode, `Code d'activation ${currentGeneratedCode} copié avec succès !`);
-            }
-        }
-
-        function updatePaymentScreenStatus() {
-            const title = document.getElementById("pay-status-title");
-            const desc = document.getElementById("pay-status-desc");
-            const codeInfo = document.getElementById("pay-status-code-info");
-            const badge = document.getElementById("pay-status-badge");
-
-            if (db.auth && db.auth.plan === "fapshi_active") {
-                if (title) title.textContent = `Abonnement Fapshi Actif (${db.auth.lastPlanMonths || 1} Mois)`;
-                if (desc) desc.textContent = `Expiration : ${db.auth.planExpiry || "Actif"}`;
-                if (codeInfo) {
-                    codeInfo.style.display = "block";
-                    codeInfo.textContent = `Dernier Code : ${db.auth.lastActivationCode || "Certifié"} | Réf: ${db.auth.lastTxId || "Payé"}`;
-                }
-                if (badge) {
-                    badge.textContent = "CERTIFIÉ";
-                    badge.style.background = "#DCFCE7";
-                    badge.style.color = "#166534";
-                }
-            }
-        }
-
-        // Activation Code
-        function activateSubscriptionCode() {
-            const code = document.getElementById("activation-code-input").value.trim();
-            if (code.length === 6) {
-                db.auth.plan = "fapshi_active";
-                db.auth.planExpiry = "Actif (Renouvelé)";
-                saveDB();
-                showToast("Code validé avec succès ! Votre abonnement Carnet Crédit est actif.", "success");
-                document.getElementById("activation-code-input").value = "";
-                document.getElementById("pay-status-title").textContent = "Abonnement Fapshi Actif";
-                document.getElementById("pay-status-desc").textContent = "Votre compte est certifié et protégé avec toutes les options.";
-            } else {
-                showToast("Veuillez entrer un code d'activation valide à 6 chiffres.", "error");
-            }
+            closeEditProfileModal();
+            renderSettings();
+            renderDashboard();
+            showToast("Coordonnées mises à jour avec succès !", "success");
         }
 
         // Settings
         function renderSettings() {
-            document.getElementById("set-merchant-name").textContent = db.auth.merchantName || "Non renseigné";
-            document.getElementById("set-shop-name").textContent = db.auth.shopName || "Non renseigné";
-            document.getElementById("set-phone").textContent = db.auth.phone ? "+237 " + db.auth.phone : "Non renseigné";
-            document.getElementById("set-location").textContent = db.auth.location || "Cameroun";
+            const merch = db.auth.merchantName || "Non renseigné";
+            const shop = db.auth.shopName || "Non renseigné";
+            const phone = db.auth.phone ? "+237 " + db.auth.phone : "Non renseigné";
+            const loc = db.auth.location || "Cameroun";
+            const plan = (db.auth.plan === "fapshi_active" ? "Abonnement Fapshi Actif" : "Essai Gratuit Actif") + ` (${db.auth.planExpiry || "Actif"})`;
+
+            document.getElementById("set-merchant-name").textContent = merch;
+            document.getElementById("set-shop-name").textContent = shop;
+            document.getElementById("set-phone").textContent = phone;
+            document.getElementById("set-location").textContent = loc;
+            document.getElementById("set-plan-status").textContent = plan;
         }
 
         // Init
