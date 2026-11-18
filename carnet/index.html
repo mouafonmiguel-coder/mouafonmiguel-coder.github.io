@@ -1702,6 +1702,9 @@
                 <div class="card-title" style="margin-bottom:8px;">Sécurité & Données</div>
                 <div style="display:flex; flex-direction:column; gap:8px;">
                     <button class="btn btn-secondary btn-sm" onclick="openForgotPinModal()">Modifier mon Code PIN secret</button>
+                    <button class="btn btn-secondary btn-sm" onclick="askPurgeAllDatabase()" style="color:#DC2626; border-color:#FECACA; background:#FEF2F2; font-weight:700;">
+                        🗑️ Nettoyer / Vider les données Démo
+                    </button>
                     <a href="https://fapshi.com/login" target="_blank" class="btn btn-secondary btn-sm" style="text-align:center;">Accéder à mon Dashboard Fapshi ↗</a>
                     <button class="btn btn-secondary btn-sm" onclick="openCguModal()">Lire les Conditions Générales (CGU)</button>
                     <button class="btn btn-secondary btn-sm" onclick="askLogoutMerchant()" style="color:#E53935; border-color:#FECACA;">
@@ -1898,9 +1901,34 @@
 
         function loadDB() {
             try {
-                const saved = localStorage.getItem("carnet_credit_db_v123");
+                // Nettoyage automatique de toutes les anciennes clés démo / test
+                const legacyKeys = [
+                    "carnet_credit_db", "carnet_db", "demo_db", "carnet_credit_db_v1",
+                    "carnet_credit_db_v2", "carnet_credit_db_v123", "carnet_demo_clients",
+                    "carnet_credit_mock", "ke_demo_orders", "tamanoa_demo"
+                ];
+                legacyKeys.forEach(k => {
+                    try { localStorage.removeItem(k); } catch(e){}
+                });
+
+                const saved = localStorage.getItem("carnet_credit_db_v125");
                 if (saved) {
                     db = JSON.parse(saved);
+                    // Suppression stricte de tout client ou transaction démo résiduelle
+                    if (db.clients && Array.isArray(db.clients)) {
+                        db.clients = db.clients.filter(c => 
+                            c && c.name && 
+                            !c.id.toString().includes("demo") && 
+                            !c.name.toLowerCase().includes("demo") && 
+                            !c.name.toLowerCase().includes("jean ngono") && 
+                            !c.name.toLowerCase().includes("marcel mbengono")
+                        );
+                    }
+                    if (db.transactions && Array.isArray(db.transactions)) {
+                        db.transactions = db.transactions.filter(t => 
+                            t && !t.id.toString().includes("demo")
+                        );
+                    }
                 }
             } catch(e) {}
 
@@ -1914,9 +1942,31 @@
 
         function saveDB() {
             try {
-                localStorage.setItem("carnet_credit_db_v123", JSON.stringify(db));
+                localStorage.setItem("carnet_credit_db_v125", JSON.stringify(db));
             } catch(e) {}
             updateAuthStateUI();
+        }
+
+        function askPurgeAllDatabase() {
+            showConfirmDialog(
+                "Nettoyer la Base de Données",
+                "Voulez-vous supprimer toutes les données de test/démo et réinitialiser votre carnet à 0 ?",
+                "Oui, Nettoyer",
+                true,
+                function() {
+                    db.clients = [];
+                    db.transactions = [];
+                    const keysToPurge = [
+                        "carnet_credit_db", "carnet_db", "demo_db", "carnet_credit_db_v1",
+                        "carnet_credit_db_v2", "carnet_credit_db_v123", "carnet_demo_clients",
+                        "carnet_credit_mock"
+                    ];
+                    keysToPurge.forEach(k => { try { localStorage.removeItem(k); } catch(e){} });
+                    saveDB();
+                    showToast("Base de données 100% nettoyée et remise à zéro !", "success");
+                    renderDashboard();
+                }
+            );
         }
 
         function updateAuthStateUI() {
