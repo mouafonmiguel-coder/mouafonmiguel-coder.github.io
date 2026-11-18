@@ -1,6 +1,6 @@
 {
-  "version": 119,
-  "timestamp": 1791882800,
+  "version": 120,
+  "timestamp": 1791883200,
   "app": "Carnet Credit",
-  "description": "Nouvelle Landing Page moderne avec image hero immersive pour commercants camerounais, passerelle Fapshi et recherche rapide"
+  "description": "Correctif complet du verificateur de mise a jour : rechargement propre sans boucle, purge du cache CDN/PWA et banniere fluide"
 }
