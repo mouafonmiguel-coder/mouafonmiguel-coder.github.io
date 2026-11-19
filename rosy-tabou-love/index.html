@@ -2143,9 +2143,9 @@
 
         // Share or Copy Link (Native Share Sheet + Clipboard Fallback)
         function shareOrCopyLink() {
-            const currentUrl = window.location.href.includes('github.io')
-                ? 'https://rosy-tabou-love.pages.dev/'
-                : window.location.href;
+            const currentUrl = window.location.href.startsWith('http')
+                ? window.location.href.split('?')[0].split('#')[0]
+                : 'https://rosy-tabou-love.mouafonornel.workers.dev/';
             const shareTitle = "🌸 28 Ans de Rosy Tabou Love — Livre d'Or Digital 🎂";
             const shareText = "« 28 ans, une histoire, mille raisons de rendre grâce à Dieu. » Rejoignez-moi pour découvrir mes photos souvenirs et laissez-moi un mot doux dans mon Livre d'Or officiel :\n\n" + currentUrl;
 
@@ -2355,6 +2355,15 @@
             fetchCloudMessages();
             // Polling automatique pour actualiser les nouveaux messages toutes les 15 secondes
             setInterval(fetchCloudMessages, 15000);
+
+            // Update live share URL text
+            try {
+                const displayEl = document.getElementById("share-url-display");
+                if (displayEl && window.location.href.startsWith("http")) {
+                    const cleanUrl = window.location.origin + window.location.pathname;
+                    displayEl.textContent = cleanUrl.replace(/\/$/, "");
+                }
+            } catch (e) {}
         });
     </script>
 </body>
