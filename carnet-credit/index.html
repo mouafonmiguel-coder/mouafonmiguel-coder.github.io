@@ -445,6 +445,37 @@
         }
 
         /* Keypad UI for PIN */
+        /* PIN Eye Toggle Styling */
+        .input-eye-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .input-eye-wrapper input {
+            padding-right: 44px;
+        }
+        .btn-eye-toggle {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        .btn-eye-toggle:hover {
+            color: var(--primary-dark);
+            background: rgba(13, 59, 55, 0.08);
+        }
         .keypad-container {
             background: var(--keypad-bg);
             border-radius: var(--radius-lg);
@@ -1035,11 +1066,16 @@
                 <div class="card-subtitle" style="margin-top:4px;">Tapez votre code secret pour accéder au carnet</div>
 
                 <div class="keypad-container">
-                    <div class="keypad-dots">
-                        <div class="pin-dot" id="dot-1"></div>
-                        <div class="pin-dot" id="dot-2"></div>
-                        <div class="pin-dot" id="dot-3"></div>
-                        <div class="pin-dot" id="dot-4"></div>
+                    <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:18px;">
+                        <div class="keypad-dots" style="margin-bottom:0;">
+                            <div class="pin-dot" id="dot-1"></div>
+                            <div class="pin-dot" id="dot-2"></div>
+                            <div class="pin-dot" id="dot-3"></div>
+                            <div class="pin-dot" id="dot-4"></div>
+                        </div>
+                        <button type="button" id="pin-toggle-eye-btn" onclick="togglePinKeypadVisibility()" style="background:#E2ECEB; border:none; border-radius:50%; width:34px; height:34px; display:flex; align-items:center; justify-content:center; color:var(--primary-dark); cursor:pointer; transition:all 0.2s ease;" title="Afficher/Masquer le code PIN">
+                            <svg viewBox="0 0 24 24" style="width:19px; height:19px; fill:currentColor;"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                        </button>
                     </div>
 
                     <div class="keypad-grid">
@@ -2350,14 +2386,22 @@
 
         function handlePinReset() {
             const phone = document.getElementById("forgot-phone").value.trim();
+            const newPin = (document.getElementById("forgot-new-pin").value || "").trim();
+
             if (!phone) {
                 showToast("Veuillez entrer votre numéro de téléphone.", "error");
                 return;
             }
-            db.auth.pin = "1234";
+            if (newPin && newPin.length !== 4) {
+                showToast("Le code PIN doit comporter exactement 4 chiffres.", "error");
+                return;
+            }
+
+            const finalPin = newPin || "1234";
+            db.auth.pin = finalPin;
             saveDB();
             closeForgotPinModal();
-            showToast("Votre code PIN a été réinitialisé à '1234'. Connectez-vous.", "success");
+            showToast("Code PIN enregistré avec succès !", "success");
             switchScreen("screen-login");
         }
 
