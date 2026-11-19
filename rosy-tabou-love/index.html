@@ -9,8 +9,9 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="🌸 Rosy Tabou Love — 28 Ans de Grâce & d'Éclat ✨">
     <meta property="og:description" content="« Je me célèbre. 28 ans, une histoire, mille raisons de rendre grâce à Dieu. » Découvrez mes photos souvenirs et laissez-moi un vœu dans mon Livre d'Or officiel.">
-    <meta property="og:image" content="https://mouafonmiguel-coder.github.io/rosy-tabou-love/photos/photo6.jpg">
-    <meta property="og:image:secure_url" content="https://mouafonmiguel-coder.github.io/rosy-tabou-love/photos/photo6.jpg">
+    <meta property="og:url" content="https://rosy-tabou-love.pages.dev/">
+    <meta property="og:image" content="https://rosy-tabou-love.pages.dev/photos/photo6.jpg">
+    <meta property="og:image:secure_url" content="https://rosy-tabou-love.pages.dev/photos/photo6.jpg">
     <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="808">
     <meta property="og:image:height" content="1080">
@@ -2190,14 +2191,9 @@
             return "https://rosy-tabou-love.pages.dev";
         }
 
-        function getShareText() {
-            const url = getOfficialShareUrl();
-            return "🌸 *Livre d'Or Officiel — 28 Ans de Rosy Tabou Love* ✨\n\n« Je me célèbre. 28 ans, une histoire, mille raisons de rendre grâce à Dieu. »\n\nDécouvrez mes photos souvenirs et laissez-moi une bénédiction ou un mot doux ici :\n👉 " + url;
-        }
-
         function shareWhatsAppDirect() {
-            const text = getShareText();
-            const waUrl = "https://api.whatsapp.com/send?text=" + encodeURIComponent(text);
+            const url = getOfficialShareUrl();
+            const waUrl = "https://api.whatsapp.com/send?text=" + encodeURIComponent(url);
             window.open(waUrl, "_blank");
         }
 
@@ -2228,11 +2224,10 @@
 
         // Share or Copy Link (Native Share Sheet + Clipboard Fallback)
         function shareOrCopyLink() {
+            const url = getOfficialShareUrl();
             if (navigator.share) {
                 navigator.share({
-                    title: "🌸 Rosy Tabou Love — 28 ans | Livre d'Or",
-                    text: "« Je me célèbre. 28 ans, une histoire, mille raisons de rendre grâce à Dieu. » Laissez un mot à Rosy :",
-                    url: getOfficialShareUrl()
+                    url: url
                 }).catch(() => {
                     shareWhatsAppDirect();
                 });
