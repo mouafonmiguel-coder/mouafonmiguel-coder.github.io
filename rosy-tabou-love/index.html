@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Rosy Tabou Love — 28 Ans de Grâce & d'Élégance (Livre d'Or)</title>
+    <title>Rosy Tabou Love — 28 Ans de Grâce &amp; d'Élégance (Livre d'Or)</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,8 +14,8 @@
         :root {
             /* Palette Or Rose & Perle Nacre (Rose Gold Luxury) */
             --bg-dark: #120A14;
-            --bg-card: rgba(30, 18, 34, 0.75);
-            --bg-card-hover: rgba(42, 26, 48, 0.9);
+            --bg-card: rgba(30, 18, 34, 0.85);
+            --bg-card-hover: rgba(44, 26, 50, 0.95);
             --rosegold-primary: #E8A598;
             --rosegold-light: #FDE2DF;
             --rosegold-deep: #C76A7B;
@@ -29,9 +29,9 @@
             --border-glow: rgba(232, 165, 152, 0.5);
             --radius-sm: 10px;
             --radius-md: 18px;
-            --radius-lg: 26px;
+            --radius-lg: 24px;
             --radius-full: 9999px;
-            --shadow-rosegold: 0 10px 36px rgba(232, 165, 152, 0.18);
+            --shadow-rosegold: 0 10px 32px rgba(232, 165, 152, 0.18);
         }
 
         * {
@@ -46,39 +46,46 @@
             color: var(--text-main);
             font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
             min-height: 100vh;
+            margin: 0;
+            padding: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             background-image: 
-                radial-gradient(circle at 50% 0%, rgba(232, 165, 152, 0.18) 0%, transparent 60%),
-                radial-gradient(circle at 100% 40%, rgba(199, 106, 123, 0.12) 0%, transparent 45%),
-                radial-gradient(circle at 0% 80%, rgba(232, 165, 152, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 50% 0%, rgba(232, 165, 152, 0.2) 0%, transparent 65%),
+                radial-gradient(circle at 100% 40%, rgba(199, 106, 123, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 0% 80%, rgba(232, 165, 152, 0.12) 0%, transparent 50%);
             background-attachment: fixed;
             line-height: 1.6;
+            overflow-x: hidden;
+            width: 100%;
         }
 
         .main-container {
             width: 100%;
-            max-width: 680px;
-            padding: 20px 16px 80px 16px;
+            max-width: 540px;
+            padding: 16px 14px 60px 14px;
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 20px;
+            box-sizing: border-box;
         }
 
-        /* Top Music Bar in Rose Gold */
+        /* Top Music Bar */
         .music-bar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: rgba(28, 16, 32, 0.85);
+            background: rgba(28, 16, 32, 0.9);
             backdrop-filter: blur(16px);
             border: 1px solid var(--border-rosegold);
             border-radius: var(--radius-full);
             padding: 8px 16px;
             box-shadow: var(--shadow-rosegold);
             position: sticky;
-            top: 12px;
+            top: 10px;
             z-index: 100;
+            width: 100%;
         }
 
         .music-info {
@@ -140,16 +147,17 @@
             box-shadow: 0 0 16px rgba(232, 165, 152, 0.5);
         }
 
-        /* Hero Celebration Card in Rose Gold & Pearl */
+        /* Hero Celebration Card */
         .hero-card {
-            background: linear-gradient(180deg, rgba(38, 20, 42, 0.9) 0%, rgba(24, 13, 28, 0.95) 100%);
+            background: linear-gradient(180deg, rgba(38, 20, 42, 0.92) 0%, rgba(24, 13, 28, 0.98) 100%);
             border: 1.5px solid var(--border-rosegold);
             border-radius: var(--radius-lg);
-            padding: 34px 24px;
+            padding: 30px 20px;
             text-align: center;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 18px 45px rgba(0,0,0,0.6);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+            width: 100%;
         }
 
         .hero-card::before {
@@ -158,7 +166,7 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 150px;
+            width: 140px;
             height: 3px;
             background: var(--rosegold-gradient);
             border-radius: var(--radius-full);
@@ -166,76 +174,80 @@
 
         .hero-tag {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             text-transform: uppercase;
             color: var(--rosegold-light);
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             display: inline-block;
         }
 
         .hero-title {
             font-family: 'Playfair Display', serif;
-            font-size: 29px;
+            font-size: 27px;
             font-weight: 800;
             line-height: 1.25;
             color: #FFFFFF;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .hero-title span {
             background: var(--rosegold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            display: block;
+            font-size: 19px;
+            margin-top: 4px;
+            font-style: italic;
         }
 
         .hero-quote {
-            font-size: 14px;
+            font-size: 13.5px;
             font-style: italic;
             color: var(--text-muted);
-            margin-bottom: 22px;
-            max-width: 520px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.65;
+            margin-bottom: 18px;
+            line-height: 1.6;
         }
 
         .hero-signature {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             color: var(--rosegold-primary);
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
         }
 
-        /* Photo Gallery Section */
+        /* Section Header */
         .section-header {
             text-align: center;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
+            width: 100%;
         }
 
         .section-badge {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 13px;
+            font-size: 12.5px;
             color: var(--rosegold-primary);
-            letter-spacing: 3px;
+            letter-spacing: 2.5px;
             text-transform: uppercase;
             font-weight: 700;
         }
 
         .section-title {
             font-family: 'Playfair Display', serif;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 800;
             color: #FFFFFF;
             margin-top: 2px;
         }
 
+        /* Photo Gallery Grid */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 10px;
+            width: 100%;
         }
 
         .gallery-item {
@@ -251,13 +263,18 @@
 
         .gallery-item:first-child {
             grid-column: span 2;
-            aspect-ratio: 16 / 10;
+            aspect-ratio: 16 / 11;
+        }
+
+        .gallery-item:last-child {
+            grid-column: span 2;
+            aspect-ratio: 16 / 9;
         }
 
         .gallery-item:hover {
-            transform: translateY(-4px);
+            transform: translateY(-3px);
             border-color: var(--rosegold-primary);
-            box-shadow: 0 10px 28px rgba(232, 165, 152, 0.25);
+            box-shadow: 0 8px 24px rgba(232, 165, 152, 0.25);
         }
 
         .gallery-item img {
@@ -269,7 +286,7 @@
         }
 
         .gallery-item:hover img {
-            transform: scale(1.04);
+            transform: scale(1.03);
         }
 
         .gallery-overlay {
@@ -278,32 +295,34 @@
             left: 0;
             right: 0;
             background: linear-gradient(to top, rgba(18, 10, 20, 0.92) 0%, transparent 100%);
-            padding: 12px;
-            font-size: 11.5px;
+            padding: 10px 12px;
+            font-size: 11px;
             color: var(--rosegold-light);
             font-weight: 600;
         }
 
-        /* Guestbook Form Card in Frosted Rose Glass */
+        /* Guestbook Form Card */
         .guestbook-form-card {
             background: var(--bg-card);
             backdrop-filter: blur(14px);
             border: 1.5px solid var(--border-rosegold);
             border-radius: var(--radius-lg);
-            padding: 24px 20px;
+            padding: 22px 18px;
             box-shadow: var(--shadow-rosegold);
+            width: 100%;
         }
 
         .form-group {
-            margin-bottom: 14px;
+            margin-bottom: 12px;
+            width: 100%;
         }
 
         .form-label {
             display: block;
-            font-size: 12.5px;
+            font-size: 12px;
             font-weight: 700;
             color: var(--rosegold-light);
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
 
         .form-control {
@@ -317,6 +336,7 @@
             font-family: inherit;
             outline: none;
             transition: all 0.2s ease;
+            box-sizing: border-box;
         }
 
         .form-control:focus {
@@ -327,7 +347,7 @@
 
         textarea.form-control {
             resize: vertical;
-            min-height: 105px;
+            min-height: 100px;
         }
 
         .btn-submit {
@@ -336,28 +356,30 @@
             border: none;
             border-radius: var(--radius-md);
             padding: 14px;
-            font-size: 14px;
+            font-size: 13.5px;
             font-weight: 800;
             color: #2D0F18;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 6px 22px rgba(232, 165, 152, 0.3);
+            box-shadow: 0 6px 20px rgba(232, 165, 152, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            box-sizing: border-box;
         }
 
         .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(232, 165, 152, 0.45);
+            box-shadow: 0 8px 26px rgba(232, 165, 152, 0.45);
         }
 
         /* Messages Wall */
         .messages-list {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
+            width: 100%;
         }
 
         .message-card {
@@ -365,13 +387,15 @@
             backdrop-filter: blur(12px);
             border: 1px solid var(--border-rosegold);
             border-radius: var(--radius-md);
-            padding: 18px;
+            padding: 16px;
             transition: all 0.2s ease;
             animation: fadeIn 0.3s ease-out;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
+            from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -384,7 +408,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .msg-author-wrap {
@@ -394,20 +418,21 @@
         }
 
         .msg-avatar {
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             background: var(--rosegold-gradient);
             color: #2D0F18;
             font-weight: 900;
-            font-size: 14px;
+            font-size: 13px;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .msg-author {
-            font-size: 14px;
+            font-size: 13.5px;
             font-weight: 800;
             color: #FFFFFF;
         }
@@ -418,19 +443,19 @@
         }
 
         .msg-content {
-            font-size: 13.5px;
+            font-size: 13px;
             color: #F0E6EE;
-            line-height: 1.55;
+            line-height: 1.5;
             white-space: pre-wrap;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .msg-footer {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-end;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding-top: 10px;
+            padding-top: 8px;
         }
 
         .like-btn {
@@ -438,7 +463,7 @@
             border: 1px solid rgba(232, 165, 152, 0.25);
             border-radius: var(--radius-full);
             padding: 4px 12px;
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 700;
             color: var(--rosegold-light);
             cursor: pointer;
@@ -458,9 +483,11 @@
             background: linear-gradient(135deg, rgba(232, 165, 152, 0.12) 0%, rgba(30, 18, 34, 0.95) 100%);
             border: 1.5px solid var(--border-rosegold);
             border-radius: var(--radius-lg);
-            padding: 22px;
+            padding: 20px 16px;
             text-align: center;
             box-shadow: var(--shadow-rosegold);
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .btn-whatsapp {
@@ -468,16 +495,20 @@
             color: #FFFFFF;
             border: none;
             border-radius: var(--radius-md);
-            padding: 12px 20px;
-            font-size: 14px;
+            padding: 12px 18px;
+            font-size: 13.5px;
             font-weight: 800;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
             text-decoration: none;
             box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
             transition: all 0.2s ease;
+            width: 100%;
+            max-width: 320px;
+            box-sizing: border-box;
         }
 
         .btn-whatsapp:hover {
@@ -498,7 +529,7 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
-            padding: 20px;
+            padding: 16px;
         }
 
         .lightbox-modal.active {
@@ -515,15 +546,15 @@
 
         .lightbox-close {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.15);
+            top: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.2);
             border: none;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             color: #FFFFFF;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -558,7 +589,7 @@
         <div class="hero-card">
             <div class="hero-tag">✦ 28 ANS · 30 NOVEMBRE 2026 · ♡ MY SPECIAL DAY ♡ ✦</div>
             <h1 class="hero-title" id="celebration-title">
-                ROSY TABOU LOVE<br>
+                ROSY TABOU LOVE
                 <span>28 ans, une histoire, une grâce...</span>
             </h1>
             <p class="hero-quote" id="celebration-quote">
@@ -572,16 +603,16 @@
 
         <!-- ALBUM SOUVENIR PHOTOS -->
         <div>
-                        <div class="section-header">
+            <div class="section-header">
                 <div class="section-badge">Album Souvenir</div>
                 <h2 class="section-title">28 Ans d'Élégance &amp; de Rayonnement</h2>
             </div>
 
             <div class="gallery-grid" id="gallery-container">
                 <!-- Photo 1 : Célébration 28 ans avec ballons dorés -->
-                <div class="gallery-item" onclick="openLightbox('./photos/photo6.jpg')" style="grid-column: span 2; aspect-ratio: 16/11;">
+                <div class="gallery-item" onclick="openLightbox('./photos/photo6.jpg')">
                     <img src="./photos/photo6.jpg" alt="Rosy Tabou Love - 28 ans" style="object-position: center 20%;">
-                    <div class="gallery-overlay">✨ 28 Ans de Bonheur, de Force &amp; de Grâce ✦</div>
+                    <div class="gallery-overlay">✨ 28 Ans de Bonheur &amp; de Grâce ✦</div>
                 </div>
                 <!-- Photo 2 : Grand Portrait Lumineux Blanc & Chanel -->
                 <div class="gallery-item" onclick="openLightbox('./photos/photo5.jpg')">
@@ -604,23 +635,19 @@
                     <div class="gallery-overlay">💚 Douceur &amp; Sourire</div>
                 </div>
                 <!-- Photo 6 : Gâteau d'anniversaire Happy Birthday -->
-                <div class="gallery-item" onclick="openLightbox('./photos/cake.jpg')" style="grid-column: span 2; aspect-ratio: 16/9;">
+                <div class="gallery-item" onclick="openLightbox('./photos/cake.jpg')">
                     <img src="./photos/cake.jpg" alt="Happy Birthday 28 Ans Cake" style="object-position: center 40%;">
                     <div class="gallery-overlay">🎂 Happy Birthday 28 Ans · 30 Novembre 2026</div>
                 </div>
             </div>
-        </div>
-        </div>
-        </div>
-        </div>
         </div>
 
         <!-- FORMULAIRE LIVRE D'OR -->
         <div class="guestbook-form-card">
             <div class="section-header" style="margin-bottom:14px;">
                 <div class="section-badge">Livre d'or</div>
-                <h2 class="section-title" style="font-size:20px;">Laissez votre Vœu &amp; Message</h2>
-                <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+                <h2 class="section-title" style="font-size:19px;">Laissez votre Vœu &amp; Message</h2>
+                <p style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">
                     Quelques mots de vous deviendront un précieux souvenir gravé pour toujours.
                 </p>
             </div>
@@ -628,7 +655,7 @@
             <form id="guestbook-form" onsubmit="handleMessageSubmit(event)">
                 <div class="form-group">
                     <label class="form-label">Votre Nom / Prénom <span style="color:var(--rosegold-primary);">*</span></label>
-                    <input type="text" id="sender-name" class="form-control" placeholder="Ex: Maman, Théa, Frère Kamga, Ami..." required>
+                    <input type="text" id="sender-name" class="form-control" placeholder="Ex: Maman, Théa, Kamga, Ami(e)..." required>
                 </div>
 
                 <div class="form-group">
@@ -644,25 +671,25 @@
 
         <!-- MUR DES MESSAGES -->
         <div>
-            <div class="section-header" style="text-align:left; display:flex; justify-content:space-between; align-items:flex-end;">
+            <div class="section-header" style="text-align:left; display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:12px;">
                 <div>
                     <div class="section-badge">Témoignages</div>
-                    <h2 class="section-title" style="font-size:20px;">Messages Reçus (<span id="msg-count">0</span>)</h2>
+                    <h2 class="section-title" style="font-size:19px;">Messages Reçus (<span id="msg-count">0</span>)</h2>
                 </div>
             </div>
 
             <div class="messages-list" id="messages-container">
-                <!-- Messages injectés en JavaScript -->
+                <!-- Messages injectés en temps réel depuis le Cloud -->
             </div>
         </div>
 
         <!-- PARTAGER SUR WHATSAPP -->
         <div class="share-card">
-            <h3 style="font-size:16px; font-weight:800; color:#FFFFFF; margin-bottom:6px;">Partager ce Livre d'Or à la Famille &amp; Amis</h3>
-            <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:14px;">
+            <h3 style="font-size:15px; font-weight:800; color:#FFFFFF; margin-bottom:6px;">Partager ce Livre d'Or aux Proches</h3>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:14px;">
                 Invitez vos proches à déposer leurs vœux et souvenirs sur cette page spéciale.
             </p>
-            <a href="https://wa.me/?text=Rejoignez-moi%20pour%20c%C3%A9l%C3%A9brer%20mes%2028%20ans%20et%20laisser%20un%20message%20d'amour%20sur%20le%20Livre%20d'Or%20de%20Rosy%20Tabou%20Love%20!" target="_blank" class="btn-whatsapp">
+            <a href="https://wa.me/?text=Rejoignez-moi%20pour%20c%C3%A9l%C3%A9brer%20mes%2028%20ans%20et%20laisser%20un%20message%20d'amour%20sur%20le%20Livre%20d'Or%20de%20Rosy%20Tabou%20Love%20!%20%F0%9F%8E%82%20https://mouafonmiguel-coder.github.io/rosy-tabou-love/" target="_blank" class="btn-whatsapp">
                 💬 Partager sur WhatsApp
             </a>
         </div>
@@ -675,7 +702,7 @@
         <img src="" id="lightbox-img" class="lightbox-img" alt="Vue agrandie" onclick="event.stopPropagation()">
     </div>
 
-        <script>
+    <script>
         // Audio Player
         const audio = document.getElementById("bg-audio");
         const eq = document.getElementById("audio-eq");
