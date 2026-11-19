@@ -2171,33 +2171,14 @@
         const CLOUD_DB_URL = "https://kvdb.io/P3tNgFR7SBnBPpV7rxQZzS/rosy_messages";
         let currentMessages = [];
 
-        const DEFAULT_MESSAGES = [
-            {
-                id: "1",
-                name: "Théa",
-                message: "Un jour nouveau, un an nouveau, une nouvelle grâce... Le Dieu créateur reste ton souffle. Que l'Éternel affermisse tes pas. Joyeux 28e anniversaire à notre sublime Rosy Tabou Love ! Que le Seigneur t'accorde une santé de fer, de multiples bénédictions et une vie remplie de paix, d'amour et d'élévation. ❤️🙏🏽",
-                date: "30 Novembre 2026",
-                likes: 14,
-                photos: [],
-                video: null
-            },
-            {
-                id: "2",
-                name: "Famille & Proches",
-                message: "28 ans, une histoire, mille raisons de rendre grâce à Dieu ! Que cette nouvelle bougie t'ouvre les portes d'un succès éclatant. Reste toujours cette femme exceptionnelle et lumineuse ! 🌸✨",
-                date: "30 Novembre 2026",
-                likes: 9,
-                photos: [],
-                video: null
-            }
-        ];
+        const DEFAULT_MESSAGES = [];
 
         async function fetchCloudMessages() {
             try {
                 const res = await fetch(CLOUD_DB_URL);
                 if (res.ok) {
                     const data = await res.json();
-                    if (Array.isArray(data) && data.length > 0) {
+                    if (Array.isArray(data)) {
                         currentMessages = data;
                         localStorage.setItem("rosy_cloud_msgs_cache", JSON.stringify(data));
                         renderMessages();
@@ -2209,7 +2190,7 @@
             }
 
             const cached = localStorage.getItem("rosy_cloud_msgs_cache");
-            currentMessages = cached ? JSON.parse(cached) : DEFAULT_MESSAGES;
+            currentMessages = cached ? JSON.parse(cached) : [];
             renderMessages();
         }
 
@@ -2230,9 +2211,16 @@
 
         function renderMessages() {
             const container = document.getElementById("messages-container");
+            if (!container) return;
 
             if (currentMessages.length === 0) {
-                container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:13px;">Soyez le premier à laisser un message à Rosy ! 🌸</div>`;
+                container.innerHTML = `
+                    <div style="text-align:center; padding:32px 20px; background:var(--bg-card); border:1px solid var(--border-rosegold); border-radius:var(--radius-md); color:var(--text-muted); font-size:13.5px; line-height:1.6;">
+                        <span style="font-size:26px; display:block; margin-bottom:10px;">💌</span>
+                        Aucun message publié pour le moment.<br>
+                        <span style="color:var(--rosegold-light); font-weight:700;">Soyez le premier à laisser un vœu ou une bénédiction à Rosy ! ✨</span>
+                    </div>
+                `;
                 return;
             }
 
