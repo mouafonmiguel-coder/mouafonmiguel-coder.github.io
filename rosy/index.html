@@ -2168,10 +2168,20 @@
         }
 
         // Real-Time Cloud Database Synchronization (KVDB Global Cloud Storage)
-        const CLOUD_DB_URL = "https://kvdb.io/P3tNgFR7SBnBPpV7rxQZzS/rosy_messages";
+        const CLOUD_DB_URL = "https://kvdb.io/P3tNgFR7SBnBPpV7rxQZzS/rosy_tabou_guestbook_live";
+        const CACHE_KEY = "rosy_live_guestbook_cache_v3";
         let currentMessages = [];
 
-        const DEFAULT_MESSAGES = [];
+        // Purge old demo cache
+        try {
+            localStorage.removeItem("rosy_cloud_msgs_cache");
+            localStorage.removeItem("rosy_messages");
+        } catch (e) {}
+
+        function cleanMessagesArray(arr) {
+            if (!Array.isArray(arr)) return [];
+            return arr.filter(m => m && m.id !== "1" && m.id !== "2" && m.name !== "Théa" && m.name !== "Famille & Proches");
+        }
 
         async function fetchCloudMessages() {
             try {
@@ -2179,8 +2189,8 @@
                 if (res.ok) {
                     const data = await res.json();
                     if (Array.isArray(data)) {
-                        currentMessages = data;
-                        localStorage.setItem("rosy_cloud_msgs_cache", JSON.stringify(data));
+                        currentMessages = cleanMessagesArray(data);
+                        localStorage.setItem(CACHE_KEY, JSON.stringify(currentMessages));
                         renderMessages();
                         return;
                     }
@@ -2189,20 +2199,26 @@
                 console.log("Utilisation du cache local:", err);
             }
 
-            const cached = localStorage.getItem("rosy_cloud_msgs_cache");
-            currentMessages = cached ? JSON.parse(cached) : [];
+            try {
+                const cached = localStorage.getItem(CACHE_KEY);
+                currentMessages = cached ? cleanMessagesArray(JSON.parse(cached)) : [];
+            } catch (e) {
+                currentMessages = [];
+            }
             renderMessages();
         }
 
         async function saveCloudMessages(msgs) {
-            currentMessages = msgs;
-            localStorage.setItem("rosy_cloud_msgs_cache", JSON.stringify(msgs));
+            currentMessages = cleanMessagesArray(msgs);
+            try {
+                localStorage.setItem(CACHE_KEY, JSON.stringify(currentMessages));
+            } catch (e) {}
             renderMessages();
             try {
                 await fetch(CLOUD_DB_URL, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(msgs)
+                    body: JSON.stringify(currentMessages)
                 });
             } catch (err) {
                 console.log("Erreur de sauvegarde cloud:", err);
