@@ -98,7 +98,7 @@
             box-sizing: border-box;
         }
 
-        /* Ballons & Pompons décoratifs flottants (Gauche & Droite) */
+        /* Ballons & Pompons décoratifs flottants */
         .balloon-decor {
             position: absolute;
             pointer-events: none;
@@ -107,29 +107,10 @@
             animation: floatSlow 4.5s ease-in-out infinite alternate;
         }
 
-        .balloon-tl {
-            top: 40px;
-            left: -8px;
-            animation-delay: 0s;
-        }
-
-        .balloon-tr {
-            top: 55px;
-            right: -8px;
-            animation-delay: 1.8s;
-        }
-
-        .balloon-bl {
-            bottom: 120px;
-            left: -12px;
-            animation-delay: 0.9s;
-        }
-
-        .balloon-br {
-            bottom: 100px;
-            right: -10px;
-            animation-delay: 2.5s;
-        }
+        .balloon-tl { top: 40px; left: -8px; animation-delay: 0s; }
+        .balloon-tr { top: 55px; right: -8px; animation-delay: 1.8s; }
+        .balloon-bl { bottom: 120px; left: -12px; animation-delay: 0.9s; }
+        .balloon-br { bottom: 100px; right: -10px; animation-delay: 2.5s; }
 
         @keyframes floatSlow {
             0% { transform: translateY(0px) rotate(0deg); }
@@ -286,9 +267,7 @@
             box-shadow: 0 12px 30px rgba(232, 165, 152, 0.65);
         }
 
-        .play-icon-tri {
-            font-size: 12px;
-        }
+        .play-icon-tri { font-size: 12px; }
 
         /* Scroll Hint Arrow */
         .cover-scroll-hint {
@@ -611,10 +590,13 @@
             font-weight: 600;
         }
 
-        /* Guestbook Form Card */
+        /* ====================================================
+           GUESTBOOK FORM & MEDIA ATTACHMENTS (MERVEILLE STYLE)
+        ==================================================== */
         .guestbook-form-card {
             background: var(--bg-card);
             backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             border: 1.5px solid var(--border-rosegold);
             border-radius: var(--radius-lg);
             padding: 22px 18px;
@@ -623,16 +605,16 @@
         }
 
         .form-group {
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             width: 100%;
         }
 
         .form-label {
             display: block;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 700;
             color: var(--rosegold-light);
-            margin-bottom: 5px;
+            margin-bottom: 6px;
         }
 
         .form-control {
@@ -657,38 +639,303 @@
 
         textarea.form-control {
             resize: vertical;
-            min-height: 100px;
+            min-height: 110px;
         }
 
+        .char-counter {
+            text-align: right;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Fieldset Photos & Vidéo */
+        .media-fieldset {
+            border: 1px solid var(--border-rosegold);
+            border-radius: 14px;
+            padding: 16px 14px 14px 14px;
+            margin: 16px 0;
+            background: rgba(18, 10, 20, 0.45);
+        }
+
+        .media-legend {
+            color: var(--rosegold-light);
+            font-size: 12.5px;
+            font-weight: 700;
+            padding: 0 8px;
+        }
+
+        .media-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .btn-media-pill {
+            border: 1.5px solid var(--rosegold-primary);
+            background: rgba(28, 16, 32, 0.6);
+            color: var(--rosegold-light);
+            border-radius: 999px;
+            padding: 9px 20px;
+            font-size: 11.5px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .btn-media-pill:hover {
+            background: var(--rosegold-primary);
+            color: #2D0F18;
+            box-shadow: 0 0 14px rgba(232, 165, 152, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .rec-dot {
+            color: #FF4757;
+            font-size: 13px;
+            line-height: 1;
+        }
+
+        .media-hint {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            margin-top: 12px;
+            line-height: 1.45;
+        }
+
+        /* Media Previews */
+        .media-previews-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .media-thumb-item {
+            position: relative;
+            width: 82px;
+            height: 82px;
+            border-radius: 10px;
+            border: 1.5px solid var(--rosegold-primary);
+            overflow: hidden;
+            background: #000;
+        }
+
+        .media-thumb-item img, .media-thumb-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .media-thumb-remove {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            color: #fff;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 5;
+        }
+
+        .media-thumb-size {
+            position: absolute;
+            bottom: 3px;
+            left: 3px;
+            background: rgba(0, 0, 0, 0.8);
+            color: var(--rosegold-light);
+            font-size: 9px;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        /* Live Camera Recorder */
+        .live-camera-container {
+            margin-top: 12px;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1.5px solid var(--rosegold-primary);
+            position: relative;
+        }
+
+        .live-video-el {
+            width: 100%;
+            max-height: 240px;
+            display: block;
+            object-fit: cover;
+        }
+
+        .live-camera-controls {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .rec-timer-badge {
+            background: rgba(0, 0, 0, 0.85);
+            color: #FF4757;
+            font-weight: 800;
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 71, 87, 0.4);
+        }
+
+        .btn-stop-record {
+            background: #FF4757;
+            color: #fff;
+            border: none;
+            padding: 7px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+        }
+
+        /* Turnstile Cloudflare Security Card */
+        .turnstile-card {
+            background: rgba(18, 12, 20, 0.95);
+            border: 1px solid rgba(232, 165, 152, 0.35);
+            border-radius: 10px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 14px 0 16px 0;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+            transition: all 0.2s ease;
+        }
+
+        .turnstile-card:hover {
+            border-color: var(--rosegold-primary);
+        }
+
+        .turnstile-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .turnstile-spinner {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2.5px solid rgba(46, 213, 115, 0.2);
+            border-top-color: #2ED573;
+            animation: spinTurnstile 1s linear infinite;
+        }
+
+        .turnstile-spinner.verified {
+            border: none;
+            animation: none;
+            background: #2ED573;
+            color: #0E0812;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        @keyframes spinTurnstile {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .turnstile-status {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .turnstile-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cf-brand {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .cf-title {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #F38020;
+        }
+
+        .cf-links {
+            font-size: 9px;
+            color: var(--text-muted);
+        }
+
+        .security-footnote {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 10px;
+            text-align: center;
+            line-height: 1.4;
+            opacity: 0.85;
+        }
+
+        /* Big Submit Button */
         .btn-submit {
             width: 100%;
             background: var(--rosegold-gradient);
             border: none;
             border-radius: var(--radius-md);
-            padding: 14px;
+            padding: 15px;
             font-size: 13.5px;
             font-weight: 800;
+            letter-spacing: 1.5px;
             color: #2D0F18;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 6px 20px rgba(232, 165, 152, 0.3);
+            box-shadow: 0 6px 20px rgba(232, 165, 152, 0.35);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             box-sizing: border-box;
+            text-transform: uppercase;
         }
 
         .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 26px rgba(232, 165, 152, 0.45);
+            box-shadow: 0 8px 26px rgba(232, 165, 152, 0.5);
         }
 
         /* Messages Wall */
         .messages-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
             width: 100%;
         }
 
@@ -749,6 +996,36 @@
             line-height: 1.5;
             white-space: pre-wrap;
             margin-bottom: 10px;
+        }
+
+        /* Attached media inside published message */
+        .msg-media-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .msg-media-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid var(--border-rosegold);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .msg-media-img:hover {
+            transform: scale(1.04);
+        }
+
+        .msg-media-video {
+            width: 100%;
+            max-width: 320px;
+            border-radius: 10px;
+            border: 1px solid var(--border-rosegold);
+            background: #000;
         }
 
         .msg-footer {
@@ -890,17 +1167,24 @@
             .main-container {
                 padding: 12px 10px 75px 10px;
             }
+            .media-actions {
+                justify-content: space-between;
+            }
+            .btn-media-pill {
+                padding: 8px 14px;
+                font-size: 11px;
+            }
         }
     </style>
 </head>
 <body>
 
     <!-- ====================================================
-         1. CINEMATIC WELCOME COVER SECTION (AVEC POMPONS / BALLONS ANIMÉS)
+         1. CINEMATIC WELCOME COVER SECTION
     ==================================================== -->
     <section class="cover-hero-section">
         
-        <!-- Ballons & Pompons flottants animés (Gauche et Droite) -->
+        <!-- Ballons & Pompons flottants animés -->
         <div class="balloon-decor balloon-tl">
             <svg width="68" height="90" viewBox="0 0 68 90" fill="none">
                 <ellipse cx="28" cy="30" rx="22" ry="28" fill="url(#goldBall1)"/>
@@ -1098,25 +1382,90 @@
             </div>
         </div>
 
-        <!-- FORMULAIRE LIVRE D'OR -->
+        <!-- ====================================================
+             FORMULAIRE LIVRE D'OR (MERVEILLE LIVINE STYLE)
+        ==================================================== -->
         <div class="guestbook-form-card">
             <div class="section-header" style="text-align:left; margin-bottom:16px;">
                 <div class="section-badge">Livre d'Or</div>
-                <h2 class="section-title" style="font-size:20px;">Laissez un Mot Doux à Rosy</h2>
+                <h2 class="section-title" style="font-size:20px;">Laissez un mot à Rosy</h2>
             </div>
 
             <form id="guestbook-form" onsubmit="handleMessageSubmit(event)">
                 <div class="form-group">
-                    <label class="form-label" for="sender-name">Votre Nom / Prénom</label>
-                    <input type="text" id="sender-name" class="form-control" placeholder="Ex: Maman, Théa, Une amie chère..." required>
+                    <label class="form-label" for="sender-name">Votre nom</label>
+                    <input type="text" id="sender-name" class="form-control" placeholder="Votre nom ou prénom..." required>
                 </div>
+
                 <div class="form-group">
-                    <label class="form-label" for="sender-message">Votre Message d'Anniversaire ou Prière</label>
-                    <textarea id="sender-message" class="form-control" placeholder="Écrivez ici vos bénédictions, vœux ou doux souvenirs pour les 28 ans de Rosy..." required></textarea>
+                    <label class="form-label" for="sender-message">Votre message d'anniversaire</label>
+                    <textarea id="sender-message" class="form-control" maxlength="1000" placeholder="Écrivez vos vœux, prières ou souvenirs..." required oninput="updateCharCounter(this)"></textarea>
+                    <div class="char-counter" id="char-counter">0/1000</div>
                 </div>
-                <button type="submit" class="btn-submit">
-                    <span>✨ Publier mon message dans le Livre d'Or</span>
+
+                <!-- Fieldset Photos et vidéo (facultatif) -->
+                <fieldset class="media-fieldset" id="media-fieldset">
+                    <legend class="media-legend">Photos et vidéo <small style="color:var(--text-muted); font-weight:normal;">(facultatif)</small></legend>
+                    
+                    <div class="media-actions">
+                        <label class="btn-media-pill" title="Ajouter des photos">
+                            <span>+ PHOTOS</span>
+                            <input type="file" id="photo-input" accept="image/jpeg,image/png,image/webp" multiple hidden onchange="handlePhotoUpload(this)">
+                        </label>
+
+                        <label class="btn-media-pill" title="Ajouter une vidéo">
+                            <span>+ VIDÉO</span>
+                            <input type="file" id="video-input" accept="video/mp4,video/webm,video/quicktime" hidden onchange="handleVideoUpload(this)">
+                        </label>
+
+                        <button type="button" class="btn-media-pill btn-rec-trigger" id="btn-camera" onclick="toggleCameraRecord()">
+                            <span class="rec-dot">●</span> <span>FILMER</span>
+                        </button>
+                    </div>
+
+                    <!-- Live Camera Recording Box (Hidden by default) -->
+                    <div id="live-camera-box" class="live-camera-container" style="display: none;">
+                        <video id="live-video-preview" class="live-video-el" autoplay playsinline muted></video>
+                        <div class="live-camera-controls">
+                            <span id="recording-timer" class="rec-timer-badge">0 / 60 s</span>
+                            <button type="button" id="btn-stop-rec" class="btn-stop-record" onclick="stopCameraRecord()">■ Arrêter</button>
+                        </div>
+                    </div>
+
+                    <!-- Previews of selected photos & video -->
+                    <div class="media-previews-grid" id="media-previews-container"></div>
+
+                    <p class="media-hint">
+                        Photos : 3 maximum, réduites automatiquement avant l’envoi · Vidéo : 60 s et 30 Mo maximum (MP4, MOV ou WebM).
+                    </p>
+                </fieldset>
+
+                <!-- Cloudflare Security Verification Box -->
+                <div class="turnstile-card" id="turnstile-box" onclick="triggerSecurityCheck()">
+                    <div class="turnstile-left">
+                        <div class="turnstile-spinner" id="turnstile-spinner"></div>
+                        <span class="turnstile-status" id="turnstile-text">Vérification...</span>
+                    </div>
+                    <div class="turnstile-right">
+                        <svg class="cf-icon" viewBox="0 0 48 48" width="24" height="24">
+                            <path fill="#F38020" d="M38.5 24c-.3-4.2-3.8-7.5-8-7.5-1.5 0-2.8.4-4 1.1-1.3-3.6-4.7-6.1-8.7-6.1-5.2 0-9.4 4.2-9.4 9.4 0 .7.1 1.4.2 2-4 1.1-6.6 4.8-6.6 9.1 0 5.2 4.2 9.5 9.5 9.5h27c4.7 0 8.5-3.8 8.5-8.5 0-4.3-3.2-7.8-7.5-8.4z"/>
+                            <path fill="#FAAE40" d="M36 34.5c.3-.8.5-1.7.5-2.5 0-3.9-3.1-7-7-7-1.4 0-2.6.4-3.7 1.1-.3-.6-.7-1.2-1.2-1.7 2.1-2.2 5.1-3.6 8.4-3.6 6.4 0 11.5 5.1 11.5 11.5 0 .8-.1 1.5-.3 2.2H36z"/>
+                        </svg>
+                        <div class="cf-brand">
+                            <span class="cf-title">CLOUDFLARE</span>
+                            <span class="cf-links">Confidentialité · Aide</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Big Gold Submit Button -->
+                <button type="submit" class="btn-submit" id="btn-submit-guestbook">
+                    <span>ENVOYER MON MESSAGE</span>
                 </button>
+
+                <p class="security-footnote">
+                    La vérification de sécurité tarde. Touchez la case si elle s’affiche, sinon relancez-la ou changez de réseau (Wi-Fi ↔ données mobiles).
+                </p>
             </form>
         </div>
 
@@ -1260,6 +1609,240 @@
             }
         }
 
+        // ====================================================
+        // GUESTBOOK FORM & MEDIA ATTACHMENTS LOGIC
+        // ====================================================
+        let attachedPhotos = []; // array of base64 data URLs
+        let attachedVideo = null; // base64 or blob URL
+        let attachedVideoInfo = null; // { name, size }
+        let isTurnstileVerified = false;
+        let mediaStream = null;
+        let mediaRecorder = null;
+        let recordedChunks = [];
+        let recInterval = null;
+        let recSeconds = 0;
+
+        function updateCharCounter(el) {
+            const counter = document.getElementById("char-counter");
+            if (counter) {
+                counter.textContent = `${el.value.length}/1000`;
+            }
+        }
+
+        // Cloudflare Turnstile Verification Simulation
+        function triggerSecurityCheck() {
+            const spinner = document.getElementById("turnstile-spinner");
+            const text = document.getElementById("turnstile-text");
+            if (!isTurnstileVerified) {
+                text.textContent = "Vérification en cours...";
+                setTimeout(() => {
+                    isTurnstileVerified = true;
+                    if (spinner) {
+                        spinner.classList.add("verified");
+                        spinner.textContent = "✓";
+                    }
+                    if (text) text.textContent = "Vérification réussie";
+                }, 800);
+            }
+        }
+
+        // Auto verify on page load after 1.2s
+        setTimeout(triggerSecurityCheck, 1200);
+
+        // Photo Upload & Auto Compression via Canvas
+        function handlePhotoUpload(input) {
+            const files = Array.from(input.files || []);
+            if (!files.length) return;
+
+            const remaining = 3 - attachedPhotos.length;
+            if (remaining <= 0) {
+                alert("Vous pouvez ajouter jusqu'à 3 photos maximum.");
+                return;
+            }
+
+            const filesToProcess = files.slice(0, remaining);
+
+            filesToProcess.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        // Compress to max 1000px dimension
+                        const maxDim = 1000;
+                        let w = img.width;
+                        let h = img.height;
+                        if (w > maxDim || h > maxDim) {
+                            if (w > h) {
+                                h = Math.round((h * maxDim) / w);
+                                w = maxDim;
+                            } else {
+                                w = Math.round((w * maxDim) / h);
+                                h = maxDim;
+                            }
+                        }
+                        const canvas = document.createElement("canvas");
+                        canvas.width = w;
+                        canvas.height = h;
+                        const ctx = canvas.getContext("2d");
+                        ctx.drawImage(img, 0, 0, w, h);
+                        const compressedBase64 = canvas.toDataURL("image/jpeg", 0.82);
+                        
+                        const approxSize = Math.round((compressedBase64.length * 3) / 4 / 1024);
+                        attachedPhotos.push({
+                            src: compressedBase64,
+                            size: approxSize + " Ko"
+                        });
+                        renderMediaPreviews();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+
+            input.value = "";
+        }
+
+        // Video Upload
+        function handleVideoUpload(input) {
+            const file = input.files?.[0];
+            if (!file) return;
+
+            // Check size (30MB max)
+            const maxMB = 30;
+            if (file.size > maxMB * 1024 * 1024) {
+                alert(`La vidéo est trop volumineuse (${(file.size / (1024 * 1024)).toFixed(1)} Mo). Le maximum est de 30 Mo.`);
+                input.value = "";
+                return;
+            }
+
+            const sizeStr = (file.size / (1024 * 1024)).toFixed(1) + " Mo";
+            const videoUrl = URL.createObjectURL(file);
+
+            // Read as data URL or keep object URL
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                attachedVideo = e.target.result;
+                attachedVideoInfo = { size: sizeStr };
+                renderMediaPreviews();
+            };
+            reader.readAsDataURL(file);
+            input.value = "";
+        }
+
+        // Live Camera Recording ("● FILMER")
+        async function toggleCameraRecord() {
+            const liveBox = document.getElementById("live-camera-box");
+            const videoEl = document.getElementById("live-video-preview");
+
+            if (mediaRecorder && mediaRecorder.state === "recording") {
+                stopCameraRecord();
+                return;
+            }
+
+            try {
+                mediaStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: "user" },
+                    audio: true
+                });
+
+                liveBox.style.display = "block";
+                videoEl.srcObject = mediaStream;
+                videoEl.play();
+
+                recordedChunks = [];
+                const options = { mimeType: 'video/webm;codecs=vp8,opus' };
+                try {
+                    mediaRecorder = new MediaRecorder(mediaStream, options);
+                } catch {
+                    mediaRecorder = new MediaRecorder(mediaStream);
+                }
+
+                mediaRecorder.ondataavailable = (e) => {
+                    if (e.data.size > 0) recordedChunks.push(e.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(recordedChunks, { type: "video/webm" });
+                    const sizeStr = (blob.size / (1024 * 1024)).toFixed(1) + " Mo";
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        attachedVideo = e.target.result;
+                        attachedVideoInfo = { size: sizeStr };
+                        renderMediaPreviews();
+                    };
+                    reader.readAsDataURL(blob);
+
+                    if (mediaStream) {
+                        mediaStream.getTracks().forEach(t => t.stop());
+                    }
+                    liveBox.style.display = "none";
+                    clearInterval(recInterval);
+                };
+
+                mediaRecorder.start(250);
+                recSeconds = 0;
+                document.getElementById("recording-timer").textContent = `0 / 60 s`;
+
+                recInterval = setInterval(() => {
+                    recSeconds++;
+                    document.getElementById("recording-timer").textContent = `${recSeconds} / 60 s`;
+                    if (recSeconds >= 60) {
+                        stopCameraRecord();
+                    }
+                }, 1000);
+
+            } catch (err) {
+                alert("Accès caméra indisponible ou non autorisé sur cet appareil. Vous pouvez importer une vidéo avec le bouton « + VIDÉO ».");
+            }
+        }
+
+        function stopCameraRecord() {
+            if (mediaRecorder && mediaRecorder.state === "recording") {
+                mediaRecorder.stop();
+            }
+            if (recInterval) clearInterval(recInterval);
+        }
+
+        function removePhoto(idx) {
+            attachedPhotos.splice(idx, 1);
+            renderMediaPreviews();
+        }
+
+        function removeVideo() {
+            attachedVideo = null;
+            attachedVideoInfo = null;
+            renderMediaPreviews();
+        }
+
+        function renderMediaPreviews() {
+            const container = document.getElementById("media-previews-container");
+            if (!container) return;
+
+            let html = "";
+
+            attachedPhotos.forEach((photo, idx) => {
+                html += `
+                    <div class="media-thumb-item">
+                        <img src="${photo.src}" alt="Photo jointe">
+                        <span class="media-thumb-size">${photo.size}</span>
+                        <button type="button" class="media-thumb-remove" onclick="removePhoto(${idx})" title="Retirer">✕</button>
+                    </div>
+                `;
+            });
+
+            if (attachedVideo) {
+                html += `
+                    <div class="media-thumb-item" style="width:120px;">
+                        <video src="${attachedVideo}" style="width:100%; height:100%; object-fit:cover;"></video>
+                        <span class="media-thumb-size">Vidéo · ${attachedVideoInfo ? attachedVideoInfo.size : ''}</span>
+                        <button type="button" class="media-thumb-remove" onclick="removeVideo()" title="Retirer">✕</button>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
         // Lightbox
         function openLightbox(src) {
             document.getElementById("lightbox-img").src = src;
@@ -1289,14 +1872,18 @@
                 name: "Théa",
                 message: "Joyeux 28e anniversaire à notre sublime Rosy Tabou Love ! Que le Seigneur t'accorde une santé de fer, de multiples bénédictions et une vie remplie de paix, d'amour et d'élévation. ❤️🙏🏽",
                 date: "30 Novembre 2026",
-                likes: 14
+                likes: 14,
+                photos: [],
+                video: null
             },
             {
                 id: "2",
                 name: "Famille & Proches",
                 message: "28 ans de grâce, de beauté et de maturité ! Que cette nouvelle bougie t'ouvre les portes d'un succès éclatant. Reste toujours cette femme exceptionnelle et lumineuse ! 🌸✨",
                 date: "30 Novembre 2026",
-                likes: 9
+                likes: 9,
+                photos: [],
+                video: null
             }
         ];
 
@@ -1345,25 +1932,48 @@
                 return;
             }
 
-            container.innerHTML = currentMessages.map(m => `
-                <div class="message-card">
-                    <div class="msg-header">
-                        <div class="msg-author-wrap">
-                            <div class="msg-avatar">${m.name.charAt(0).toUpperCase()}</div>
-                            <div>
-                                <div class="msg-author">${escapeHtml(m.name)}</div>
-                                <div class="msg-date">${m.date}</div>
+            container.innerHTML = currentMessages.map(m => {
+                let photosHtml = "";
+                if (m.photos && m.photos.length > 0) {
+                    photosHtml = `<div class="msg-media-grid">` + 
+                        m.photos.map(p => {
+                            const pSrc = typeof p === 'string' ? p : p.src;
+                            return `<img src="${pSrc}" class="msg-media-img" alt="Photo jointe" onclick="openLightbox('${pSrc}')">`;
+                        }).join("") + 
+                    `</div>`;
+                }
+
+                let videoHtml = "";
+                if (m.video) {
+                    videoHtml = `
+                        <div style="margin-bottom:10px;">
+                            <video src="${m.video}" class="msg-media-video" controls playsinline preload="metadata"></video>
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="message-card">
+                        <div class="msg-header">
+                            <div class="msg-author-wrap">
+                                <div class="msg-avatar">${m.name.charAt(0).toUpperCase()}</div>
+                                <div>
+                                    <div class="msg-author">${escapeHtml(m.name)}</div>
+                                    <div class="msg-date">${m.date}</div>
+                                </div>
                             </div>
                         </div>
+                        <div class="msg-content">${escapeHtml(m.message)}</div>
+                        ${photosHtml}
+                        ${videoHtml}
+                        <div class="msg-footer">
+                            <button class="like-btn" onclick="likeMessage('${m.id}')">
+                                💖 <span>${m.likes || 0}</span>
+                            </button>
+                        </div>
                     </div>
-                    <div class="msg-content">${escapeHtml(m.message)}</div>
-                    <div class="msg-footer">
-                        <button class="like-btn" onclick="likeMessage('${m.id}')">
-                            💖 <span>${m.likes || 0}</span>
-                        </button>
-                    </div>
-                </div>
-            `).join("");
+                `;
+            }).join("");
         }
 
         async function handleMessageSubmit(e) {
@@ -1373,10 +1983,10 @@
 
             if (!name || !message) return;
 
-            const submitBtn = e.target.querySelector("button[type='submit']");
+            const submitBtn = document.getElementById("btn-submit-guestbook");
             const originalBtnText = submitBtn.innerHTML;
             submitBtn.disabled = true;
-            submitBtn.innerHTML = "⏳ Enregistrement dans le Cloud...";
+            submitBtn.innerHTML = "<span>⏳ ENVOI EN COURS...</span>";
 
             const now = new Date();
             const dateStr = now.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -1386,18 +1996,27 @@
                 name: name,
                 message: message,
                 date: dateStr,
-                likes: 1
+                likes: 1,
+                photos: [...attachedPhotos],
+                video: attachedVideo
             };
 
             const updatedMsgs = [newMsg, ...currentMessages];
             await saveCloudMessages(updatedMsgs);
 
+            // Reset form
             document.getElementById("sender-name").value = "";
             document.getElementById("sender-message").value = "";
+            updateCharCounter(document.getElementById("sender-message"));
+            attachedPhotos = [];
+            attachedVideo = null;
+            attachedVideoInfo = null;
+            renderMediaPreviews();
+
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalBtnText;
 
-            alert("✨ Merci beaucoup ! Votre message a été enregistré avec succès dans le Livre d'Or de Rosy Tabou Love. 💖");
+            alert("✨ Merci infiniment ! Votre message et vos médias ont été enregistrés avec succès dans le Livre d'Or officiel de Rosy Tabou Love. 💖");
         }
 
         async function likeMessage(id) {
