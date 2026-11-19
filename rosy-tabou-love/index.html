@@ -711,9 +711,9 @@
             <p style="font-size:12px; color:var(--text-muted); margin-bottom:14px;">
                 Invitez vos proches à déposer leurs vœux et souvenirs sur cette page spéciale.
             </p>
-            <a href="https://wa.me/?text=Rejoignez-moi%20pour%20c%C3%A9l%C3%A9brer%20mes%2028%20ans%20et%20laisser%20un%20message%20d'amour%20sur%20le%20Livre%20d'Or%20de%20Rosy%20Tabou%20Love%20!%20%F0%9F%8E%82%20https://mouafonmiguel-coder.github.io/rosy-tabou-love/" target="_blank" class="btn-whatsapp">
+            <button onclick="shareOnWhatsApp()" class="btn-whatsapp">
                 💬 Partager sur WhatsApp
-            </a>
+            </button>
         </div>
 
     </div>
@@ -759,6 +759,21 @@
 
         function closeLightbox() {
             document.getElementById("lightbox").classList.remove("active");
+        }
+
+        
+        function shareOnWhatsApp() {
+            const currentUrl = window.location.href.includes('github.io')
+                ? 'https://rosy-tabou-love.pages.dev/'
+                : window.location.href;
+            const text = encodeURIComponent("🌸🎂 28 ANS DE ROSY TABOU LOVE — LIVRE D'OR DIGITAL 🎂🌸
+
+« 28 ans, une histoire, une grâce... Aujourd'hui, je célèbre la vie, le chemin parcouru et la femme que je deviens grâce à Dieu. »
+
+Rejoignez-moi pour découvrir mes photos souvenirs et laissez-moi un mot doux, une prière ou un souvenir dans mon Livre d'Or officiel :
+
+👉 " + currentUrl);
+            window.open("https://wa.me/?text=" + text, "_blank");
         }
 
         // Real-Time Cloud Database Synchronization (KVDB Global Cloud Storage)
