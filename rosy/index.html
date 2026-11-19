@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Rosy Tabou Love — 28 Ans de Grâce &amp; d'Élégance (Livre d'Or)</title>
+    <title>Rosy Tabou Love — 28 Ans · Je me célèbre (Livre d'Or)</title>
 
     <!-- Open Graph / WhatsApp / Facebook Rich Preview Meta Tags -->
     <meta name="description" content="Livre d'or digital officiel pour les 28 ans de Rosy Tabou Love — Une femme, une histoire, une grâce... Laissez votre message et vos vœux !">
     <meta name="author" content="Rosy Tabou Love">
-    <meta name="theme-color" content="#120A14">
+    <meta name="theme-color" content="#0F0914">
     
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Rosy Tabou Love — Livre d'Or">
@@ -19,7 +19,7 @@
     <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="808">
     <meta property="og:image:height" content="1080">
-    <meta property="og:url" content="https://mouafonmiguel-coder.github.io/rosy-tabou-love/">
+    <meta property="og:url" content="https://rosy-tabou-love.pages.dev/">
 
     <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
@@ -30,30 +30,32 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            /* Palette Or Rose & Perle Nacre (Rose Gold Luxury) */
-            --bg-dark: #120A14;
-            --bg-card: rgba(30, 18, 34, 0.85);
-            --bg-card-hover: rgba(44, 26, 50, 0.95);
+            /* Palette Or Rose, Champagne & Perle Nacre */
+            --bg-dark: #0D0812;
+            --bg-card: rgba(28, 16, 32, 0.85);
+            --bg-card-hover: rgba(42, 24, 48, 0.95);
             --rosegold-primary: #E8A598;
             --rosegold-light: #FDE2DF;
             --rosegold-deep: #C76A7B;
+            --gold-champagne: #F3E5AB;
             --pearl-white: #FFF8F6;
             --rosegold-gradient: linear-gradient(135deg, #FFF0EE 0%, #E8A598 50%, #B8596C 100%);
+            --gold-gradient: linear-gradient(135deg, #FFF4D0 0%, #E5C158 50%, #B8860B 100%);
             --rosegold-glow: rgba(232, 165, 152, 0.25);
             --text-main: #FFFFFF;
             --text-muted: #BBA9B8;
             --text-pearl: #F7E7E9;
             --border-rosegold: rgba(232, 165, 152, 0.28);
-            --border-glow: rgba(232, 165, 152, 0.5);
+            --border-gold: rgba(229, 193, 88, 0.35);
             --radius-sm: 10px;
             --radius-md: 18px;
             --radius-lg: 24px;
             --radius-full: 9999px;
-            --shadow-rosegold: 0 10px 32px rgba(232, 165, 152, 0.18);
+            --shadow-rosegold: 0 10px 36px rgba(232, 165, 152, 0.18);
         }
 
         * {
@@ -74,26 +76,284 @@
             flex-direction: column;
             align-items: center;
             background-image: 
-                radial-gradient(circle at 50% 0%, rgba(232, 165, 152, 0.2) 0%, transparent 65%),
-                radial-gradient(circle at 100% 40%, rgba(199, 106, 123, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 0% 80%, rgba(232, 165, 152, 0.12) 0%, transparent 50%);
+                radial-gradient(circle at 50% 0%, rgba(232, 165, 152, 0.18) 0%, transparent 65%),
+                radial-gradient(circle at 100% 40%, rgba(199, 106, 123, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 0% 80%, rgba(229, 193, 88, 0.1) 0%, transparent 50%);
             background-attachment: fixed;
             line-height: 1.6;
             overflow-x: hidden;
             width: 100%;
         }
 
+        /* ----------------------------------------------------
+           1. CINEMATIC WELCOME COVER SECTION
+        ---------------------------------------------------- */
+        .cover-hero-section {
+            width: 100%;
+            max-width: 540px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 30px 16px 20px 16px;
+            position: relative;
+            text-align: center;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        /* Animated Floating Balloons & Pompons */
+        .balloon-decor {
+            position: absolute;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .balloon-tl {
+            top: 20px;
+            left: 8px;
+            animation: floatSlow 4s infinite ease-in-out alternate;
+        }
+
+        .balloon-tr {
+            top: 15px;
+            right: 8px;
+            animation: floatSlow 4.8s infinite ease-in-out alternate-reverse;
+        }
+
+        .balloon-bl {
+            bottom: 30px;
+            left: 10px;
+            animation: floatSlow 5.2s infinite ease-in-out alternate;
+        }
+
+        .balloon-br {
+            bottom: 40px;
+            right: 12px;
+            animation: floatSlow 4.5s infinite ease-in-out alternate-reverse;
+        }
+
+        @keyframes floatSlow {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(3deg); }
+            100% { transform: translateY(-4px) rotate(-2deg); }
+        }
+
+        /* Top Tagline */
+        .cover-top-tag {
+            font-family: 'Cinzel', serif;
+            font-size: 11.5px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold-champagne);
+            margin-bottom: 16px;
+            opacity: 0.95;
+            text-shadow: 0 0 10px rgba(229, 193, 88, 0.4);
+        }
+
+        /* Royal Golden Arch Frame with Photo */
+        .arch-container {
+            position: relative;
+            width: 250px;
+            margin: 0 auto;
+        }
+
+        .arch-frame {
+            width: 250px;
+            height: 330px;
+            border-radius: 130px 130px 16px 16px;
+            overflow: hidden;
+            border: 2px solid var(--rosegold-primary);
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 0 24px rgba(232, 165, 152, 0.35);
+            background: #1C1020;
+            position: relative;
+        }
+
+        .arch-frame::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 130px 130px 16px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            pointer-events: none;
+        }
+
+        .arch-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 20%;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .arch-frame:hover .arch-img {
+            transform: scale(1.04);
+        }
+
+        /* Overlapping Age Badge (28 ANS) */
+        .cover-age-badge {
+            position: absolute;
+            bottom: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: #0D0812;
+            border: 2px solid var(--rosegold-primary);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8), 0 0 16px rgba(232, 165, 152, 0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+        }
+
+        .badge-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            font-weight: 900;
+            line-height: 1;
+            color: var(--rosegold-light);
+            text-shadow: 0 0 8px rgba(232, 165, 152, 0.5);
+        }
+
+        .badge-txt {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            color: var(--rosegold-primary);
+            margin-top: 1px;
+        }
+
+        /* Typography */
+        .cover-text-wrap {
+            margin-top: 36px;
+            margin-bottom: 20px;
+        }
+
+        .cover-name-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 34px;
+            font-weight: 800;
+            line-height: 1.15;
+            color: var(--pearl-white);
+            letter-spacing: -0.5px;
+        }
+
+        .cover-name-title span {
+            background: var(--rosegold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+        }
+
+        .cover-cursive-tag {
+            font-family: 'Alex Brush', cursive;
+            font-size: 42px;
+            color: var(--rosegold-light);
+            line-height: 1.1;
+            margin-top: 4px;
+            text-shadow: 0 0 12px rgba(232, 165, 152, 0.4);
+        }
+
+        /* Button "ENTRER ET ECOUTER" */
+        .btn-enter-listen {
+            background: rgba(28, 16, 32, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1.5px solid var(--rosegold-primary);
+            border-radius: var(--radius-full);
+            padding: 14px 28px;
+            font-family: 'Cinzel', serif;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 2.5px;
+            color: var(--rosegold-light);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(232, 165, 152, 0.25);
+            margin-bottom: 12px;
+        }
+
+        .btn-enter-listen:hover {
+            transform: translateY(-2px) scale(1.02);
+            background: var(--rosegold-gradient);
+            color: #2D0F18;
+            box-shadow: 0 10px 30px rgba(232, 165, 152, 0.5);
+        }
+
+        .btn-enter-listen .play-icon-tri {
+            font-size: 11px;
+            color: inherit;
+        }
+
+        /* Scroll Hint Arrow */
+        .cover-scroll-hint {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            color: var(--rosegold-primary);
+            font-size: 18px;
+            cursor: pointer;
+            animation: bounceDown 1.8s infinite;
+            padding-bottom: 10px;
+        }
+
+        @keyframes bounceDown {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(6px); }
+            60% { transform: translateY(3px); }
+        }
+
+        /* Floating Audio Trigger Bottom Right */
+        .floating-audio-fab {
+            position: fixed;
+            bottom: 18px;
+            right: 18px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(28, 16, 32, 0.9);
+            border: 1.5px solid var(--rosegold-primary);
+            color: var(--rosegold-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 14px rgba(232, 165, 152, 0.3);
+            cursor: pointer;
+            z-index: 99;
+            transition: all 0.2s ease;
+        }
+
+        .floating-audio-fab:hover {
+            transform: scale(1.08);
+            background: var(--rosegold-gradient);
+            color: #2D0F18;
+        }
+
+        /* ----------------------------------------------------
+           2. MAIN CONTENT SECTIONS
+        ---------------------------------------------------- */
         .main-container {
             width: 100%;
             max-width: 540px;
-            padding: 16px 14px 60px 14px;
+            padding: 16px 14px 70px 14px;
             display: flex;
             flex-direction: column;
             gap: 20px;
             box-sizing: border-box;
         }
 
-        /* Top Music Bar */
+        /* Sticky Music Bar */
         .music-bar {
             display: flex;
             align-items: center;
@@ -591,9 +851,135 @@
         <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=piano-moment-9835.mp3" type="audio/mp3">
     </audio>
 
-    <div class="main-container">
+    <!-- FLOATING AUDIO CONTROL BUTTON (BOTTOM RIGHT) -->
+    <div class="floating-audio-fab" onclick="toggleAudio()" id="floating-audio-fab" title="Musique d'ambiance">
+        ▶
+    </div>
+
+    <!-- ====================================================
+         1. CINEMATIC WELCOME COVER SECTION (AVEC POMPONS / BALLONS ANIMÉS)
+    ==================================================== -->
+    <section class="cover-hero-section">
         
-        <!-- BARRE AUDIO D'AMBIANCE -->
+        <!-- Ballons & Pompons flottants animés (Gauche et Droite) -->
+        <div class="balloon-decor balloon-tl">
+            <svg width="68" height="90" viewBox="0 0 68 90" fill="none">
+                <ellipse cx="28" cy="30" rx="22" ry="28" fill="url(#goldBall1)"/>
+                <ellipse cx="44" cy="40" rx="18" ry="24" fill="url(#pearlBall1)"/>
+                <path d="M28 58 Q26 72 32 86" stroke="rgba(232, 165, 152, 0.4)" stroke-width="1.2" fill="none"/>
+                <path d="M44 64 Q46 76 42 88" stroke="rgba(255, 255, 255, 0.3)" stroke-width="1.2" fill="none"/>
+                <defs>
+                    <linearGradient id="goldBall1" x1="10" y1="10" x2="45" y2="55" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#FFF5D6"/>
+                        <stop offset="0.5" stop-color="#E8A598"/>
+                        <stop offset="1" stop-color="#A84C5E"/>
+                    </linearGradient>
+                    <linearGradient id="pearlBall1" x1="30" y1="20" x2="58" y2="60" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#FFFFFF"/>
+                        <stop offset="0.6" stop-color="#FDE2DF"/>
+                        <stop offset="1" stop-color="#D499A6"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <div class="balloon-decor balloon-tr">
+            <svg width="68" height="90" viewBox="0 0 68 90" fill="none">
+                <ellipse cx="40" cy="30" rx="22" ry="28" fill="url(#pearlBall2)"/>
+                <ellipse cx="24" cy="42" rx="18" ry="24" fill="url(#goldBall2)"/>
+                <path d="M40 58 Q42 72 36 86" stroke="rgba(255, 255, 255, 0.3)" stroke-width="1.2" fill="none"/>
+                <path d="M24 66 Q22 78 26 88" stroke="rgba(232, 165, 152, 0.4)" stroke-width="1.2" fill="none"/>
+                <defs>
+                    <linearGradient id="pearlBall2" x1="22" y1="10" x2="55" y2="55" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#FFFFFF"/>
+                        <stop offset="0.5" stop-color="#FFF0EE"/>
+                        <stop offset="1" stop-color="#E8A598"/>
+                    </linearGradient>
+                    <linearGradient id="goldBall2" x1="10" y1="25" x2="38" y2="62" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#FFF4D0"/>
+                        <stop offset="0.5" stop-color="#E5C158"/>
+                        <stop offset="1" stop-color="#996515"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <div class="balloon-decor balloon-bl">
+            <svg width="60" height="80" viewBox="0 0 60 80" fill="none">
+                <circle cx="28" cy="28" r="22" fill="url(#goldBall3)"/>
+                <path d="M28 50 Q26 64 30 76" stroke="rgba(232, 165, 152, 0.35)" stroke-width="1.2" fill="none"/>
+                <defs>
+                    <linearGradient id="goldBall3" x1="12" y1="12" x2="44" y2="46" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#FFF0EE"/>
+                        <stop offset="0.5" stop-color="#E8A598"/>
+                        <stop offset="1" stop-color="#994D5E"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <div class="balloon-decor balloon-br">
+            <svg width="60" height="80" viewBox="0 0 60 80" fill="none">
+                <circle cx="30" cy="28" r="22" fill="url(#pearlBall4)"/>
+                <path d="M30 50 Q32 64 28 76" stroke="rgba(255, 255, 255, 0.3)" stroke-width="1.2" fill="none"/>
+                <defs>
+                    <linearGradient id="pearlBall4" x1="15" y1="10" x2="45" y2="46" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#FFFFFF"/>
+                        <stop offset="0.6" stop-color="#FDE2DF"/>
+                        <stop offset="1" stop-color="#C76A7B"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Top Tagline -->
+        <div class="cover-top-tag">
+            ✦ LIVRE D'OR · 30 NOVEMBRE 2026 ✦
+        </div>
+
+        <!-- Royal Golden Arch Frame with Photo & Badge -->
+        <div class="arch-container">
+            <div class="arch-frame" onclick="openLightbox('./photos/photo6.jpg')">
+                <img src="./photos/photo6.jpg" alt="Rosy Tabou Love 28 ans" class="arch-img">
+            </div>
+            <!-- Overlapping Age Badge -->
+            <div class="cover-age-badge">
+                <span class="badge-num">28</span>
+                <span class="badge-txt">ANS</span>
+            </div>
+        </div>
+
+        <!-- Names & Cursive Tagline -->
+        <div class="cover-text-wrap">
+            <h1 class="cover-name-title">
+                Rosy
+                <span>Tabou Love</span>
+            </h1>
+            <div class="cover-cursive-tag">
+                Je me célèbre
+            </div>
+        </div>
+
+        <!-- Button "ENTRER ET ECOUTER" -->
+        <div>
+            <button class="btn-enter-listen" onclick="enterAndPlayMusic()">
+                <span class="play-icon-tri">▶</span> ENTRER ET ÉCOUTER
+            </button>
+        </div>
+
+        <!-- Scroll Hint Arrow -->
+        <div class="cover-scroll-hint" onclick="scrollToContent()">
+            <span>↓</span>
+        </div>
+
+    </section>
+
+    <!-- ====================================================
+         2. MAIN CELEBRATION CONTENT & GUESTBOOK
+    ==================================================== -->
+    <div class="main-container" id="celebration-content">
+        
+        <!-- BARRE AUDIO D'AMBIANCE STICKY -->
         <div class="music-bar">
             <div class="music-info">
                 <div class="music-eq paused" id="audio-eq">
@@ -730,24 +1116,42 @@
         const eq = document.getElementById("audio-eq");
         const btnIcon = document.getElementById("audio-btn-icon");
         const btnText = document.getElementById("audio-btn-text");
+        const fab = document.getElementById("floating-audio-fab");
         let isPlaying = false;
 
         function toggleAudio() {
             if (isPlaying) {
                 audio.pause();
                 eq.classList.add("paused");
-                btnIcon.textContent = "▶";
-                btnText.textContent = "Écouter";
+                if (btnIcon) btnIcon.textContent = "▶";
+                if (btnText) btnText.textContent = "Écouter";
+                if (fab) fab.textContent = "▶";
                 isPlaying = false;
             } else {
                 audio.play().then(() => {
                     eq.classList.remove("paused");
-                    btnIcon.textContent = "❚❚";
-                    btnText.textContent = "Pause";
+                    if (btnIcon) btnIcon.textContent = "❚❚";
+                    if (btnText) btnText.textContent = "Pause";
+                    if (fab) fab.textContent = "❚❚";
                     isPlaying = true;
                 }).catch(() => {
                     alert("Appuyez à nouveau pour lancer la musique d'ambiance.");
                 });
+            }
+        }
+
+        // Enter and Play Music Smooth Scroll
+        function enterAndPlayMusic() {
+            if (!isPlaying) {
+                toggleAudio();
+            }
+            scrollToContent();
+        }
+
+        function scrollToContent() {
+            const content = document.getElementById("celebration-content");
+            if (content) {
+                content.scrollIntoView({ behavior: "smooth" });
             }
         }
 
@@ -761,18 +1165,12 @@
             document.getElementById("lightbox").classList.remove("active");
         }
 
-        
+        // Dynamic WhatsApp Share
         function shareOnWhatsApp() {
             const currentUrl = window.location.href.includes('github.io')
                 ? 'https://rosy-tabou-love.pages.dev/'
                 : window.location.href;
-            const text = encodeURIComponent("🌸🎂 28 ANS DE ROSY TABOU LOVE — LIVRE D'OR DIGITAL 🎂🌸
-
-« 28 ans, une histoire, une grâce... Aujourd'hui, je célèbre la vie, le chemin parcouru et la femme que je deviens grâce à Dieu. »
-
-Rejoignez-moi pour découvrir mes photos souvenirs et laissez-moi un mot doux, une prière ou un souvenir dans mon Livre d'Or officiel :
-
-👉 " + currentUrl);
+            const text = encodeURIComponent("🌸🎂 28 ANS DE ROSY TABOU LOVE — LIVRE D'OR DIGITAL 🎂🌸\n\n« 28 ans, une histoire, une grâce... Aujourd'hui, je célèbre la vie, le chemin parcouru et la femme que je deviens grâce à Dieu. »\n\nRejoignez-moi pour découvrir mes photos souvenirs et laissez-moi un mot doux, une prière ou un souvenir dans mon Livre d'Or officiel :\n\n👉 " + currentUrl);
             window.open("https://wa.me/?text=" + text, "_blank");
         }
 
