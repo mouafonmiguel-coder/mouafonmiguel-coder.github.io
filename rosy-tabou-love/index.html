@@ -26,7 +26,9 @@
     <!-- Fonts Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preload" as="image" href="./photos/photo6.jpg" fetchpriority="high">
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"></noscript>
 
     <style>
         :root {
@@ -1412,7 +1414,7 @@
         <!-- Royal Golden Arch Frame with Photo & Badge -->
         <div class="arch-container">
             <div class="arch-frame" onclick="openLightbox('./photos/photo6.jpg')">
-                <img src="./photos/photo6.jpg" alt="Rosy Tabou Love 28 ans" class="arch-img">
+                <img src="./photos/photo6.jpg" alt="Rosy Tabou Love 28 ans" class="arch-img" fetchpriority="high" decoding="async">
             </div>
             <!-- Overlapping Age Badge -->
             <div class="cover-age-badge">
@@ -1462,8 +1464,10 @@
             </div>
             <div class="music-video-wrap">
                 <iframe id="youtube-player"
-                        src="https://www.youtube-nocookie.com/embed/Q4vjJd-LaNo?enablejsapi=1&rel=0&playsinline=1"
+                        src="about:blank"
+                        data-src="https://www.youtube-nocookie.com/embed/Q4vjJd-LaNo?enablejsapi=1&autoplay=1&rel=0&playsinline=1"
                         title="Mon Dieu, Tu es grand, Tu es beau - Patrick Richard"
+                        loading="lazy"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen>
                 </iframe>
@@ -1500,32 +1504,32 @@
             <div class="gallery-grid" id="gallery-container">
                 <!-- Photo 1 : Célébration 28 ans avec ballons dorés -->
                 <div class="gallery-item" onclick="openLightbox('./photos/photo6.jpg')">
-                    <img src="./photos/photo6.jpg" alt="Rosy Tabou Love - 28 ans" style="object-position: center top;">
+                    <img src="./photos/photo6.jpg" alt="Rosy Tabou Love - 28 ans" loading="lazy" decoding="async" style="object-position: center top;">
                     <div class="gallery-overlay">✨ 28 Ans de Bonheur &amp; de Grâce ✦</div>
                 </div>
                 <!-- Photo 2 : Grand Portrait Lumineux Blanc & Chanel -->
                 <div class="gallery-item" onclick="openLightbox('./photos/photo5.jpg')">
-                    <img src="./photos/photo5.jpg" alt="Rosy Tabou Love - Portrait Lumineux" style="object-position: center 25%;">
+                    <img src="./photos/photo5.jpg" alt="Rosy Tabou Love - Portrait Lumineux" loading="lazy" decoding="async" style="object-position: center 25%;">
                     <div class="gallery-overlay">🤍 Regard &amp; Élégance Pure</div>
                 </div>
                 <!-- Photo 3 : Robe Noire Chic & Classe -->
                 <div class="gallery-item" onclick="openLightbox('./photos/photo1.jpg')">
-                    <img src="./photos/photo1.jpg" alt="Rosy Tabou Love - Robe Noire" style="object-position: center 15%;">
+                    <img src="./photos/photo1.jpg" alt="Rosy Tabou Love - Robe Noire" loading="lazy" decoding="async" style="object-position: center 15%;">
                     <div class="gallery-overlay">🖤 Féminité &amp; Charme</div>
                 </div>
                 <!-- Photo 4 : Robe Royale Bleue aux Motifs -->
                 <div class="gallery-item" onclick="openLightbox('./photos/photo4.jpg')">
-                    <img src="./photos/photo4.jpg" alt="Rosy Tabou Love - Robe Royale" style="object-position: center 25%;">
+                    <img src="./photos/photo4.jpg" alt="Rosy Tabou Love - Robe Royale" loading="lazy" decoding="async" style="object-position: center 25%;">
                     <div class="gallery-overlay">👑 Splendeur Royale</div>
                 </div>
                 <!-- Photo 5 : Style Rayonnant Vert & Blanc -->
                 <div class="gallery-item" onclick="openLightbox('./photos/photo3.jpg')">
-                    <img src="./photos/photo3.jpg" alt="Rosy Tabou Love - Pose Stylée" style="object-position: center 25%;">
+                    <img src="./photos/photo3.jpg" alt="Rosy Tabou Love - Pose Stylée" loading="lazy" decoding="async" style="object-position: center 25%;">
                     <div class="gallery-overlay">🌿 Douceur &amp; Authenticité</div>
                 </div>
                 <!-- Photo 6 : Gâteau Joyeux Anniversaire 28 Ans -->
                 <div class="gallery-item" onclick="openLightbox('./photos/cake.jpg')">
-                    <img src="./photos/cake.jpg" alt="Happy Birthday 28 Ans Cake" style="object-position: center 40%;">
+                    <img src="./photos/cake.jpg" alt="Happy Birthday 28 Ans Cake" loading="lazy" decoding="async" style="object-position: center 40%;">
                     <div class="gallery-overlay">🎂 Joyeux 28e Anniversaire !</div>
                 </div>
             </div>
@@ -1791,8 +1795,9 @@
             const iframe = document.getElementById("youtube-player");
             if (!iframe) return;
 
-            if (!isPlayerStarted) {
-                iframe.src = "https://www.youtube-nocookie.com/embed/Q4vjJd-LaNo?enablejsapi=1&autoplay=1&rel=0&playsinline=1";
+            if (!isPlayerStarted || !iframe.src || iframe.src === "about:blank" || iframe.src.includes("about:blank")) {
+                const targetSrc = iframe.getAttribute("data-src") || "https://www.youtube-nocookie.com/embed/Q4vjJd-LaNo?enablejsapi=1&autoplay=1&rel=0&playsinline=1";
+                iframe.src = targetSrc;
                 isPlayerStarted = true;
             } else {
                 postYoutubeMessage("playVideo");
@@ -2185,18 +2190,21 @@
 
         async function fetchCloudMessages() {
             try {
-                const res = await fetch(CLOUD_DB_URL);
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 2500);
+                const res = await fetch(CLOUD_DB_URL, { signal: controller.signal });
+                clearTimeout(timeoutId);
                 if (res.ok) {
                     const data = await res.json();
                     if (Array.isArray(data)) {
                         currentMessages = cleanMessagesArray(data);
-                        localStorage.setItem(CACHE_KEY, JSON.stringify(currentMessages));
+                        try { localStorage.setItem(CACHE_KEY, JSON.stringify(currentMessages)); } catch(e){}
                         renderMessages();
                         return;
                     }
                 }
             } catch (err) {
-                console.log("Utilisation du cache local:", err);
+                // Silently fallback to cached or clean state
             }
 
             try {
