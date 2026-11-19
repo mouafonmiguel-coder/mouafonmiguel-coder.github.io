@@ -675,7 +675,7 @@
         <img src="" id="lightbox-img" class="lightbox-img" alt="Vue agrandie" onclick="event.stopPropagation()">
     </div>
 
-    <script>
+        <script>
         // Audio Player
         const audio = document.getElementById("bg-audio");
         const eq = document.getElementById("audio-eq");
@@ -697,7 +697,7 @@
                     btnText.textContent = "Pause";
                     isPlaying = true;
                 }).catch(() => {
-                    alert("Appuyez à nouveau pour autoriser la musique.");
+                    alert("Appuyez à nouveau pour lancer la musique d'ambiance.");
                 });
             }
         }
@@ -712,39 +712,73 @@
             document.getElementById("lightbox").classList.remove("active");
         }
 
-        // Guestbook Messages DB (LocalStorage)
+        // Real-Time Cloud Database Synchronization (KVDB Global Cloud Storage)
+        const CLOUD_DB_URL = "https://kvdb.io/P3tNgFR7SBnBPpV7rxQZzS/rosy_messages";
+        let currentMessages = [];
+
         const DEFAULT_MESSAGES = [
             {
                 id: "1",
                 name: "Théa",
-                message: "Joyeux 28e anniversaire à notre sublime Rosy Tabou Love ! Que le Seigneur t'accorde une santé de fer, de multiples bénédictions et une vie remplie de paix, d'amour et d'élévation. ❤️🙏🏽 Nous t'aimons très fort ! 💖🙏🏽",
-                date: "Aujourd'hui",
-                likes: 12
+                message: "Joyeux 28e anniversaire à notre sublime Rosy Tabou Love ! Que le Seigneur t'accorde une santé de fer, de multiples bénédictions et une vie remplie de paix, d'amour et d'élévation. ❤️🙏🏽",
+                date: "30 Novembre 2026",
+                likes: 14
             },
             {
                 id: "2",
                 name: "Famille & Proches",
-                message: "Une nouvelle année pour célébrer la vie, ton parcours inspirant, ta douceur et ta foi inébranlable. Reste toujours cette femme lumineuse et rayonnante ! 🌸✨",
-                date: "Aujourd'hui",
-                likes: 8
+                message: "28 ans de grâce, de beauté et de maturité ! Que cette nouvelle bougie t'ouvre les portes d'un succès éclatant. Reste toujours cette femme exceptionnelle et lumineuse ! 🌸✨",
+                date: "30 Novembre 2026",
+                likes: 9
             }
         ];
 
-        function loadMessages() {
-            const saved = localStorage.getItem("celebration_guestbook_msgs_rosegold");
-            return saved ? JSON.parse(saved) : DEFAULT_MESSAGES;
+        async function fetchCloudMessages() {
+            try {
+                const res = await fetch(CLOUD_DB_URL);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Array.isArray(data) && data.length > 0) {
+                        currentMessages = data;
+                        localStorage.setItem("rosy_cloud_msgs_cache", JSON.stringify(data));
+                        renderMessages();
+                        return;
+                    }
+                }
+            } catch (err) {
+                console.log("Utilisation du cache local:", err);
+            }
+
+            const cached = localStorage.getItem("rosy_cloud_msgs_cache");
+            currentMessages = cached ? JSON.parse(cached) : DEFAULT_MESSAGES;
+            renderMessages();
         }
 
-        function saveMessages(msgs) {
-            localStorage.setItem("celebration_guestbook_msgs_rosegold", JSON.stringify(msgs));
+        async function saveCloudMessages(msgs) {
+            currentMessages = msgs;
+            localStorage.setItem("rosy_cloud_msgs_cache", JSON.stringify(msgs));
+            renderMessages();
+            try {
+                await fetch(CLOUD_DB_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(msgs)
+                });
+            } catch (err) {
+                console.log("Erreur de sauvegarde cloud:", err);
+            }
         }
 
         function renderMessages() {
-            const msgs = loadMessages();
             const container = document.getElementById("messages-container");
-            document.getElementById("msg-count").textContent = msgs.length;
+            document.getElementById("msg-count").textContent = currentMessages.length;
 
-            container.innerHTML = msgs.map(m => `
+            if (currentMessages.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:13px;">Soyez le premier à laisser un message à Rosy ! 🌸</div>`;
+                return;
+            }
+
+            container.innerHTML = currentMessages.map(m => `
                 <div class="message-card">
                     <div class="msg-header">
                         <div class="msg-author-wrap">
@@ -765,39 +799,48 @@
             `).join("");
         }
 
-        function handleMessageSubmit(e) {
+        async function handleMessageSubmit(e) {
             e.preventDefault();
             const name = document.getElementById("sender-name").value.trim();
             const message = document.getElementById("sender-message").value.trim();
 
             if (!name || !message) return;
 
-            const msgs = loadMessages();
+            const submitBtn = e.target.querySelector("button[type='submit']");
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = "⏳ Enregistrement dans le Cloud...";
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+
             const newMsg = {
                 id: Date.now().toString(),
                 name: name,
                 message: message,
-                date: "À l'instant",
+                date: dateStr,
                 likes: 1
             };
 
-            msgs.unshift(newMsg);
-            saveMessages(msgs);
-            renderMessages();
+            const updatedMsgs = [newMsg, ...currentMessages];
+            await saveCloudMessages(updatedMsgs);
 
             document.getElementById("sender-name").value = "";
             document.getElementById("sender-message").value = "";
-            alert("Merci ! Votre message a été publié dans le Livre d'Or avec succès. 💖");
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+
+            alert("✨ Merci beaucoup ! Votre message a été enregistré avec succès dans le Livre d'Or de Rosy Tabou Love. 💖");
         }
 
-        function likeMessage(id) {
-            const msgs = loadMessages();
-            const m = msgs.find(item => item.id === id);
-            if (m) {
-                m.likes = (m.likes || 0) + 1;
-                saveMessages(msgs);
-                renderMessages();
-            }
+        async function likeMessage(id) {
+            const updated = currentMessages.map(m => {
+                if (m.id === id) {
+                    return { ...m, likes: (m.likes || 0) + 1 };
+                }
+                return m;
+            });
+            await saveCloudMessages(updated);
         }
 
         function escapeHtml(text) {
@@ -807,7 +850,9 @@
         }
 
         window.addEventListener("DOMContentLoaded", () => {
-            renderMessages();
+            fetchCloudMessages();
+            // Polling automatique pour actualiser les nouveaux messages toutes les 15 secondes
+            setInterval(fetchCloudMessages, 15000);
         });
     </script>
 </body>
