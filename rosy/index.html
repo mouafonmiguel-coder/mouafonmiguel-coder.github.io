@@ -26,7 +26,7 @@
     <!-- Fonts Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -38,9 +38,9 @@
             --rosegold-light: #FDE2DF;
             --rosegold-deep: #C76A7B;
             --gold-champagne: #F3E5AB;
+            --gold-grad: linear-gradient(135deg, #FFF4D0 0%, #E5C158 50%, #B8860B 100%);
             --pearl-white: #FFF8F6;
             --rosegold-gradient: linear-gradient(135deg, #FFF0EE 0%, #E8A598 50%, #B8596C 100%);
-            --gold-gradient: linear-gradient(135deg, #FFF4D0 0%, #E5C158 50%, #B8860B 100%);
             --rosegold-glow: rgba(232, 165, 152, 0.25);
             --text-main: #FFFFFF;
             --text-muted: #BBA9B8;
@@ -81,7 +81,7 @@
         }
 
         /* ----------------------------------------------------
-           1. HERO COVER CINEMATIQUE (MERVEILLE STYLE EN OR ROSE)
+           1. HERO COVER CINEMATIQUE
         ---------------------------------------------------- */
         .cover-hero-section {
             width: 100%;
@@ -98,7 +98,7 @@
             box-sizing: border-box;
         }
 
-        /* Ballons & Pompons décoratifs flottants */
+        /* Ballons décoratifs flottants */
         .balloon-decor {
             position: absolute;
             pointer-events: none;
@@ -644,7 +644,7 @@
 
         .char-counter {
             text-align: right;
-            font-size: 11px;
+            font-size: 11.5px;
             color: var(--text-muted);
             margin-top: 4px;
         }
@@ -814,17 +814,18 @@
             box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
         }
 
-        /* Turnstile Cloudflare Security Card */
+        /* ====================================================
+           CLOUDFLARE TURNSTILE VERIFICATION CARD
+        ==================================================== */
         .turnstile-card {
             background: rgba(18, 12, 20, 0.95);
-            border: 1px solid rgba(232, 165, 152, 0.35);
+            border: 1px solid rgba(232, 165, 152, 0.4);
             border-radius: 10px;
             padding: 12px 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin: 14px 0 16px 0;
-            cursor: pointer;
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
             transition: all 0.2s ease;
         }
@@ -839,36 +840,58 @@
             gap: 12px;
         }
 
-        .turnstile-spinner {
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            border: 2.5px solid rgba(46, 213, 115, 0.2);
-            border-top-color: #2ED573;
-            animation: spinTurnstile 1s linear infinite;
+        /* Dots Spinner SVG */
+        .turnstile-dots-spinner {
+            width: 26px;
+            height: 26px;
+            animation: spinDots 1.2s steps(8, end) infinite;
         }
 
-        .turnstile-spinner.verified {
-            border: none;
-            animation: none;
-            background: #2ED573;
-            color: #0E0812;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: 900;
-        }
-
-        @keyframes spinTurnstile {
+        @keyframes spinDots {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        .turnstile-status {
+        .turnstile-check-badge {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #2ED573;
+            color: #0E0812;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 900;
+        }
+
+        .turnstile-status-wrap {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .turnstile-status-title {
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        .turnstile-status-sub {
+            font-size: 10.5px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .turnstile-status-sub a {
+            color: var(--text-muted);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .turnstile-status-sub a:hover {
+            color: var(--rosegold-light);
         }
 
         .turnstile-right {
@@ -893,15 +916,6 @@
         .cf-links {
             font-size: 9px;
             color: var(--text-muted);
-        }
-
-        .security-footnote {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 10px;
-            text-align: center;
-            line-height: 1.4;
-            opacity: 0.85;
         }
 
         /* Big Submit Button */
@@ -931,7 +945,68 @@
             box-shadow: 0 8px 26px rgba(232, 165, 152, 0.5);
         }
 
-        /* Messages Wall */
+        /* Verification Notices & Retry Button */
+        .verification-notice {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            margin-top: 12px;
+            text-align: left;
+            line-height: 1.45;
+        }
+
+        .btn-retry-verification {
+            width: 100%;
+            max-width: 100%;
+            margin: 12px 0 10px 0;
+            border: 1.5px solid var(--rosegold-primary);
+            background: transparent;
+            color: var(--rosegold-light);
+            border-radius: 999px;
+            padding: 12px 20px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            display: block;
+        }
+
+        .btn-retry-verification:hover {
+            background: rgba(232, 165, 152, 0.15);
+            border-color: var(--rosegold-light);
+            box-shadow: 0 0 16px rgba(232, 165, 152, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .guestbook-policy-hint {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 10px;
+            text-align: left;
+            line-height: 1.45;
+            opacity: 0.9;
+        }
+
+        /* ====================================================
+           WALL SECTION - MESSAGES DE VŒUX (MERVEILLE STYLE)
+        ==================================================== */
+        .wall-section {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .wall-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+            text-align: left;
+        }
+
         .messages-list {
             display: flex;
             flex-direction: column;
@@ -943,7 +1018,7 @@
             background: var(--bg-card);
             border: 1px solid var(--border-rosegold);
             border-radius: var(--radius-md);
-            padding: 16px;
+            padding: 18px 16px;
             transition: all 0.2s ease;
         }
 
@@ -991,11 +1066,11 @@
         }
 
         .msg-content {
-            font-size: 13px;
+            font-size: 13.5px;
             color: var(--text-pearl);
-            line-height: 1.5;
+            line-height: 1.55;
             white-space: pre-wrap;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         /* Attached media inside published message */
@@ -1003,7 +1078,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .msg-media-img {
@@ -1441,10 +1516,25 @@
                 </fieldset>
 
                 <!-- Cloudflare Security Verification Box -->
-                <div class="turnstile-card" id="turnstile-box" onclick="triggerSecurityCheck()">
+                <div class="turnstile-card" id="turnstile-box">
                     <div class="turnstile-left">
-                        <div class="turnstile-spinner" id="turnstile-spinner"></div>
-                        <span class="turnstile-status" id="turnstile-text">Vérification...</span>
+                        <!-- Dots Spinner -->
+                        <svg class="turnstile-dots-spinner" id="turnstile-spinner" viewBox="0 0 28 28">
+                            <circle cx="14" cy="3" r="2" fill="#2ED573" opacity="1"/>
+                            <circle cx="21.8" cy="6.2" r="2" fill="#2ED573" opacity="0.875"/>
+                            <circle cx="25" cy="14" r="2" fill="#2ED573" opacity="0.75"/>
+                            <circle cx="21.8" cy="21.8" r="2" fill="#2ED573" opacity="0.625"/>
+                            <circle cx="14" cy="25" r="2" fill="#2ED573" opacity="0.5"/>
+                            <circle cx="6.2" cy="21.8" r="2" fill="#2ED573" opacity="0.375"/>
+                            <circle cx="3" cy="14" r="2" fill="#2ED573" opacity="0.25"/>
+                            <circle cx="6.2" cy="6.2" r="2" fill="#2ED573" opacity="0.125"/>
+                        </svg>
+                        <div class="turnstile-check-badge" id="turnstile-check">✓</div>
+
+                        <div class="turnstile-status-wrap">
+                            <span class="turnstile-status-title" id="turnstile-text">Vérification...</span>
+                            <span class="turnstile-status-sub" id="turnstile-sub">Bloqué ? <a onclick="restartVerification()">Résolution de problèmes</a></span>
+                        </div>
                     </div>
                     <div class="turnstile-right">
                         <svg class="cf-icon" viewBox="0 0 48 48" width="24" height="24">
@@ -1463,20 +1553,27 @@
                     <span>ENVOYER MON MESSAGE</span>
                 </button>
 
-                <p class="security-footnote">
-                    La vérification de sécurité tarde. Touchez la case si elle s’affiche, sinon relancez-la ou changez de réseau (Wi-Fi ↔ données mobiles).
+                <!-- Verification Notice -->
+                <p class="verification-notice" id="verification-notice">
+                    La vérification de sécurité n’a pas pu se charger. Désactivez votre bloqueur de publicités pour ce site, ou réessayez plus tard.
+                </p>
+
+                <!-- Button "RELANCER LA VÉRIFICATION" -->
+                <button type="button" class="btn-retry-verification" onclick="restartVerification()">
+                    RELANCER LA VÉRIFICATION
+                </button>
+
+                <p class="guestbook-policy-hint">
+                    Les messages sont relus avant publication. Les liens ne sont pas acceptés.
                 </p>
             </form>
         </div>
 
-        <!-- MUR DES MESSAGES EN TEMPS RÉEL -->
-        <div>
-            <div class="section-header" style="text-align:left; display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:12px;">
-                <div>
-                    <div class="section-badge">Témoignages</div>
-                    <h2 class="section-title" style="font-size:19px;">Messages Reçus (<span id="msg-count">0</span>)</h2>
-                </div>
-            </div>
+        <!-- ====================================================
+             WALL SECTION - MESSAGES DE VŒUX (MERVEILLE LIVINE STYLE)
+        ==================================================== -->
+        <div class="wall-section" id="messages-wall">
+            <h3 class="wall-title">Messages de vœux</h3>
 
             <div class="messages-list" id="messages-container">
                 <!-- Messages injectés en temps réel depuis le Cloud -->
@@ -1632,22 +1729,50 @@
         // Cloudflare Turnstile Verification Simulation
         function triggerSecurityCheck() {
             const spinner = document.getElementById("turnstile-spinner");
+            const check = document.getElementById("turnstile-check");
             const text = document.getElementById("turnstile-text");
+            const sub = document.getElementById("turnstile-sub");
+            const notice = document.getElementById("verification-notice");
+
             if (!isTurnstileVerified) {
-                text.textContent = "Vérification en cours...";
+                if (spinner) spinner.style.display = "block";
+                if (check) check.style.display = "none";
+                if (text) text.textContent = "Vérification...";
+                if (sub) sub.innerHTML = `Bloqué ? <a onclick="restartVerification()">Résolution de problèmes</a>`;
+                if (notice) notice.textContent = "La vérification de sécurité tarde. Touchez la case si elle s’affiche, sinon relancez-la ou changez de réseau (Wi-Fi ↔ données mobiles).";
+
                 setTimeout(() => {
                     isTurnstileVerified = true;
-                    if (spinner) {
-                        spinner.classList.add("verified");
-                        spinner.textContent = "✓";
-                    }
+                    if (spinner) spinner.style.display = "none";
+                    if (check) check.style.display = "flex";
                     if (text) text.textContent = "Vérification réussie";
-                }, 800);
+                    if (sub) sub.innerHTML = `Sécurisé par Cloudflare`;
+                    if (notice) notice.textContent = "✓ Vérification de sécurité réussie (le bouton d'envoi est actif).";
+                }, 1200);
             }
         }
 
-        // Auto verify on page load after 1.2s
-        setTimeout(triggerSecurityCheck, 1200);
+        function restartVerification() {
+            isTurnstileVerified = false;
+            const spinner = document.getElementById("turnstile-spinner");
+            const check = document.getElementById("turnstile-check");
+            const text = document.getElementById("turnstile-text");
+            const sub = document.getElementById("turnstile-sub");
+            const notice = document.getElementById("verification-notice");
+
+            if (spinner) spinner.style.display = "block";
+            if (check) check.style.display = "none";
+            if (text) text.textContent = "Vérification...";
+            if (sub) sub.innerHTML = `Bloqué ? <a onclick="restartVerification()">Résolution de problèmes</a>`;
+            if (notice) notice.textContent = "La vérification de sécurité n’a pas pu se charger. Désactivez votre bloqueur de publicités pour ce site, ou réessayez plus tard.";
+
+            setTimeout(() => {
+                triggerSecurityCheck();
+            }, 600);
+        }
+
+        // Auto verify on page load
+        setTimeout(triggerSecurityCheck, 1400);
 
         // Photo Upload & Auto Compression via Canvas
         function handlePhotoUpload(input) {
@@ -1667,7 +1792,6 @@
                 reader.onload = (e) => {
                     const img = new Image();
                     img.onload = () => {
-                        // Compress to max 1000px dimension
                         const maxDim = 1000;
                         let w = img.width;
                         let h = img.height;
@@ -1707,7 +1831,6 @@
             const file = input.files?.[0];
             if (!file) return;
 
-            // Check size (30MB max)
             const maxMB = 30;
             if (file.size > maxMB * 1024 * 1024) {
                 alert(`La vidéo est trop volumineuse (${(file.size / (1024 * 1024)).toFixed(1)} Mo). Le maximum est de 30 Mo.`);
@@ -1716,9 +1839,6 @@
             }
 
             const sizeStr = (file.size / (1024 * 1024)).toFixed(1) + " Mo";
-            const videoUrl = URL.createObjectURL(file);
-
-            // Read as data URL or keep object URL
             const reader = new FileReader();
             reader.onload = (e) => {
                 attachedVideo = e.target.result;
@@ -1870,7 +1990,7 @@
             {
                 id: "1",
                 name: "Théa",
-                message: "Joyeux 28e anniversaire à notre sublime Rosy Tabou Love ! Que le Seigneur t'accorde une santé de fer, de multiples bénédictions et une vie remplie de paix, d'amour et d'élévation. ❤️🙏🏽",
+                message: "Un jour nouveau, un an nouveau, une nouvelle grâce... Le Dieu créateur reste ton souffle. Que l'Éternel affermisse tes pas. Joyeux 28e anniversaire à notre sublime Rosy Tabou Love ! Que le Seigneur t'accorde une santé de fer, de multiples bénédictions et une vie remplie de paix, d'amour et d'élévation. ❤️🙏🏽",
                 date: "30 Novembre 2026",
                 likes: 14,
                 photos: [],
@@ -1879,7 +1999,7 @@
             {
                 id: "2",
                 name: "Famille & Proches",
-                message: "28 ans de grâce, de beauté et de maturité ! Que cette nouvelle bougie t'ouvre les portes d'un succès éclatant. Reste toujours cette femme exceptionnelle et lumineuse ! 🌸✨",
+                message: "28 ans, une histoire, mille raisons de rendre grâce à Dieu ! Que cette nouvelle bougie t'ouvre les portes d'un succès éclatant. Reste toujours cette femme exceptionnelle et lumineuse ! 🌸✨",
                 date: "30 Novembre 2026",
                 likes: 9,
                 photos: [],
@@ -1925,7 +2045,6 @@
 
         function renderMessages() {
             const container = document.getElementById("messages-container");
-            document.getElementById("msg-count").textContent = currentMessages.length;
 
             if (currentMessages.length === 0) {
                 container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:13px;">Soyez le premier à laisser un message à Rosy ! 🌸</div>`;
@@ -1953,7 +2072,7 @@
                 }
 
                 return `
-                    <div class="message-card">
+                    <article class="message-card">
                         <div class="msg-header">
                             <div class="msg-author-wrap">
                                 <div class="msg-avatar">${m.name.charAt(0).toUpperCase()}</div>
@@ -1963,7 +2082,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="msg-content">${escapeHtml(m.message)}</div>
+                        <p class="msg-content">${escapeHtml(m.message)}</p>
                         ${photosHtml}
                         ${videoHtml}
                         <div class="msg-footer">
@@ -1971,7 +2090,7 @@
                                 💖 <span>${m.likes || 0}</span>
                             </button>
                         </div>
-                    </div>
+                    </article>
                 `;
             }).join("");
         }
