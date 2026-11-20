@@ -3,31 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Rosy Tabou Love — 28 ans | Je me célèbre</title>
+    <title>Rosy Tabou Love — Je me célèbre</title>
+    <meta name="description" content="Livre d'or électronique pour les 28 ans de Rosy Tabou Love — Je me célèbre.">
 
-    <!-- Open Graph / WhatsApp Rich Preview Meta Tags -->
+    <!-- Open Graph / WhatsApp Preview Meta Tags -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="🌸 Rosy Tabou Love — 28 Ans de Grâce & d'Éclat ✨">
-    <meta property="og:description" content="« Je me célèbre. 28 ans, une histoire, mille raisons de rendre grâce à Dieu. » Découvrez mes photos souvenirs et laissez-moi un vœu dans mon Livre d'Or officiel.">
+    <meta property="og:title" content="Rosy Tabou Love — Je me célèbre">
+    <meta property="og:description" content="Livre d'or électronique pour les 28 ans de Rosy Tabou Love — Je me célèbre.">
     <meta property="og:url" content="https://rosy-tabou-love.pages.dev/">
-    <meta property="og:image" content="https://rosy-tabou-love.pages.dev/photos/photo6.jpg">
-    <meta property="og:image:secure_url" content="https://rosy-tabou-love.pages.dev/photos/photo6.jpg">
-    <meta property="og:image:type" content="image/jpeg">
-    <meta property="og:image:width" content="808">
-    <meta property="og:image:height" content="1080">
-    <meta property="og:site_name" content="Livre d'Or Rosy Tabou Love">
+    <meta property="og:site_name" content="Rosy Tabou Love — Je me célèbre">
     <meta property="og:locale" content="fr_FR">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="🌸 Rosy Tabou Love — 28 Ans de Grâce & d'Éclat ✨">
-    <meta name="twitter:description" content="« Je me célèbre. 28 ans, une histoire, mille raisons de rendre grâce à Dieu. » Découvrez mes photos souvenirs et laissez-moi un vœu.">
-    <meta name="twitter:image" content="https://mouafonmiguel-coder.github.io/rosy-tabou-love/photos/photo6.jpg">
+    <meta name="twitter:title" content="Rosy Tabou Love — Je me célèbre">
+    <meta name="twitter:description" content="Livre d'or électronique pour les 28 ans de Rosy Tabou Love — Je me célèbre.">
 
     <!-- Fonts Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="image" href="./photos/photo6.jpg" fetchpriority="high">
+    <link rel="preload" as="image" href="./photos/photo0.jpg" fetchpriority="high">
     <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"></noscript>
 
@@ -1366,6 +1361,111 @@
                 font-size: 11px;
             }
         }
+    
+        /* Verses / Scripture Cards Section */
+        .verses-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 5px;
+        }
+
+        .verse-card {
+            background: linear-gradient(145deg, rgba(34, 18, 38, 0.94) 0%, rgba(22, 12, 26, 0.98) 100%);
+            border: 1px solid rgba(232, 165, 152, 0.32);
+            border-radius: 20px;
+            padding: 24px 20px 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+            transition: all 0.35s ease;
+        }
+
+        .verse-card:hover {
+            border-color: rgba(232, 165, 152, 0.65);
+            transform: translateY(-2px);
+            box-shadow: 0 14px 34px rgba(0, 0, 0, 0.6), 0 0 16px rgba(232, 165, 152, 0.25);
+        }
+
+        .verse-quote-icon {
+            font-size: 34px;
+            line-height: 1;
+            color: #E5B37B;
+            font-family: 'Playfair Display', Georgia, serif;
+            margin-bottom: 8px;
+            display: block;
+            opacity: 0.95;
+        }
+
+        .verse-text {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 19.5px;
+            font-style: italic;
+            font-weight: 500;
+            line-height: 1.55;
+            color: #FFFFFF;
+            margin-bottom: 14px;
+        }
+
+        .verse-ref {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 12.5px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #E8A598;
+            display: inline-block;
+            background: rgba(232, 165, 152, 0.12);
+            padding: 5px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(232, 165, 152, 0.28);
+        }
+
+    
+        /* Featured New Portraits Section */
+        .featured-portraits-section {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .featured-portraits-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .featured-polaroid-card {
+            background: linear-gradient(180deg, rgba(32, 18, 36, 0.95) 0%, rgba(20, 11, 24, 0.98) 100%);
+            border: 1.5px solid rgba(232, 165, 152, 0.4);
+            border-radius: 20px;
+            padding: 12px;
+            box-shadow: 0 16px 38px rgba(0, 0, 0, 0.65), 0 0 20px rgba(232, 165, 152, 0.2);
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .featured-polaroid-card:hover {
+            transform: translateY(-4px) scale(1.015);
+            border-color: #E8A598;
+            box-shadow: 0 22px 46px rgba(0, 0, 0, 0.8), 0 0 28px rgba(232, 165, 152, 0.35);
+        }
+
+        .featured-polaroid-card img {
+            width: 100%;
+            height: auto;
+            max-height: 520px;
+            border-radius: 14px;
+            display: block;
+            object-fit: cover;
+            object-position: center top;
+        }
+
     </style>
 </head>
 <body>
@@ -1453,8 +1553,8 @@
 
         <!-- Royal Golden Arch Frame with Photo & Badge -->
         <div class="arch-container">
-            <div class="arch-frame" onclick="openLightbox('./photos/photo6.jpg')">
-                <img src="./photos/photo6.jpg" alt="Rosy Tabou Love 28 ans" class="arch-img" fetchpriority="high" decoding="async">
+            <div class="arch-frame" onclick="openLightbox('./photos/photo0.jpg')">
+                <img src="./photos/photo0.jpg" alt="Tabou Rosy - Joyeux Anniversaire" class="arch-img" fetchpriority="high" decoding="async" style="object-position: center top;">
             </div>
             <!-- Overlapping Age Badge -->
             <div class="cover-age-badge">
@@ -1504,68 +1604,176 @@
             </div>
             <div class="music-video-wrap">
                 <iframe id="youtube-player"
-                        src="https://www.youtube.com/embed/Q4vjJd-LaNo?enablejsapi=1&playsinline=1"
-                        title="Mon Dieu, Tu es grand, Tu es beau - Patrick Richard"
+                        src="https://www.youtube.com/embed/qWsdgfZitc0?enablejsapi=1&playsinline=1"
+                        title="Dena Mwana - Saint-Esprit"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowfullscreen>
                 </iframe>
             </div>
             <div class="music-card-footer">
-                ✦ « Mon Dieu, Tu es grand, Tu es beau » — Patrick Richard ✦
+                ✦ « Saint-Esprit » — Dena Mwana · Louange & Adoration Divine ✦
             </div>
         </section>
 
-        <!-- HERO CÉLÉBRATION CARD (ROSY TABOU LOVE - 28 ANS) -->
-        <div class="hero-card">
-            <div class="hero-tag">✦ UN JOUR SPÉCIAL · UNE HISTOIRE PRÉCIEUSE ✦</div>
-            <h1 class="hero-title" id="celebration-title">
-                ROSY TABOU LOVE
-                <span>28 ans, une histoire, mille raisons de rendre grâce à Dieu</span>
+        <!-- HERO CÉLÉBRATION CARD (UN CŒUR PLEIN DE GRATITUDE) -->
+        <div class="hero-card" id="gratitude-card">
+            <div class="hero-tag">✦ 30 NOVEMBRE 2026 · 28 ANS ✦</div>
+            <h1 class="hero-title" id="celebration-title" style="font-family: 'Playfair Display', serif; font-size: 28px; line-height: 1.25; margin-bottom: 12px; color: var(--rosegold-light);">
+                Un cœur plein de gratitude
             </h1>
-            <p class="hero-quote" id="celebration-quote">
-                « Pour le don de la vie, le chemin parcouru et la femme que je deviens avec la grâce de Dieu. 🙏🏽<br><br>
-                Si tu prends quelques instants pour parcourir ces pages, c'est que tu fais partie de ces personnes qui, de près ou de loin, contribuent à écrire une page de mon histoire.<br><br>
-                Laisse-moi un vœu, une prière, un conseil ou un souvenir que nous avons partagé. Quelques mots de toi deviendront un précieux trésor que je prendrai plaisir à relire au fil des années. »
+            <p style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; color: #E8A598; margin-bottom: 22px; font-weight: 600; line-height: 1.4; text-align: center;">
+                Je célèbre ma vie, et je ne la célèbre pas seule.
             </p>
-            <div class="hero-signature" id="celebration-name">
-                🌸 Avec amour et gratitude — Rosy Tabou Love (28 ans)
+            <div class="hero-quote" id="celebration-quote" style="text-align: left; font-size: 15px; line-height: 1.8; color: #F5EBE6;">
+                <p style="margin-bottom: 16px;">
+                    Chaque étape de mon parcours est une grâce : merci au ciel pour chaque souffle, chaque porte ouverte, chaque victoire.
+                </p>
+                <p style="margin-bottom: 16px;">
+                    Merci à mes parents : vous m'avez donné la vie, l'amour et des valeurs qui me tiennent debout aujourd'hui.
+                </p>
+                <p style="margin-bottom: 16px;">
+                    Merci à mon aimable époux, pour tout ce que tu fais pour moi, jusqu'ici et chaque jour.
+                </p>
+                <p style="margin-bottom: 16px;">
+                    Merci à mes enfants, le plus beau cadeau que le Seigneur m'ait fait en ce monde.
+                </p>
+                <p style="margin-bottom: 8px;">
+                    Merci à mes amis et à mes proches pour vos rires, vos prières et votre présence : vous faites de cette fête un vrai bonheur.
+                </p>
+            </div>
+            <div class="hero-signature" id="celebration-name" style="margin-top: 24px; padding-top: 18px; border-top: 1px dashed rgba(232, 165, 152, 0.35); font-family: 'Playfair Display', serif; font-size: 16px; color: var(--gold-champagne); letter-spacing: 1px; text-align: center;">
+                🌹 TABOU ROSY — 30 NOVEMBRE · 28 ANS 🌹
             </div>
         </div>
 
-        <!-- ALBUM SOUVENIR PHOTOS -->
-        <div>
+        <!-- SECTION VERSETS BIBLIQUES & PAROLES DE FOI -->
+        <div class="verses-section">
+            <div class="section-header" style="margin-bottom: 8px;">
+                <div class="section-badge">Paroles de Grâce</div>
+                <h2 class="section-title">Foi, Bénédictions &amp; Reconnaissance</h2>
+            </div>
+
+            <!-- Verset 1 : Psaume 103:2 -->
+            <div class="verse-card">
+                <span class="verse-quote-icon">“</span>
+                <p class="verse-text">
+                    Mon âme, bénis l’Éternel, et n’oublie aucun de ses bienfaits !
+                </p>
+                <span class="verse-ref">PSAUME 103:2</span>
+            </div>
+
+            <!-- Verset 2 : Psaume 139:14 -->
+            <div class="verse-card">
+                <span class="verse-quote-icon">“</span>
+                <p class="verse-text">
+                    Je te loue de ce que je suis une créature si merveilleuse.
+                </p>
+                <span class="verse-ref">PSAUME 139:14</span>
+            </div>
+
+            <!-- Verset 3 : Jérémie 29:11 -->
+            <div class="verse-card">
+                <span class="verse-quote-icon">“</span>
+                <p class="verse-text">
+                    Car je connais les projets que j’ai formés sur vous... projets de paix et non de malheur, afin de vous donner un avenir et de l’espérance.
+                </p>
+                <span class="verse-ref">JÉRÉMIE 29:11</span>
+            </div>
+        </div>
+
+                <!-- ====================================================
+             PORTRAITS D'ÉLÉGANCE (NOUVELLES PHOTOS VEDETTES AU DÉBUT)
+        ==================================================== -->
+        <div class="featured-portraits-section">
+            <div class="section-header">
+                <div class="section-badge">Nos Souvenirs 🌸</div>
+                <h2 class="section-title">Élégance &amp; Style</h2>
+            </div>
+
+            <div class="featured-portraits-grid">
+                <!-- NOUVELLE PHOTO 1 : Rayonnante en rouge -->
+                <div class="featured-polaroid-card" onclick="openLightbox('./photos/photo7.jpg')">
+                    <img src="./photos/photo7.jpg" alt="Rayonnante en rouge" loading="lazy" decoding="async">
+                </div>
+
+                <!-- NOUVELLE PHOTO 2 : Reine en bleu -->
+                <div class="featured-polaroid-card" onclick="openLightbox('./photos/photo8.jpg')">
+                    <img src="./photos/photo8.jpg" alt="Reine en bleu" loading="lazy" decoding="async">
+                </div>
+
+                <!-- NOUVELLE PHOTO 3 : Cerises et bonne humeur -->
+                <div class="featured-polaroid-card" onclick="openLightbox('./photos/photo9.jpg')">
+                    <img src="./photos/photo9.jpg" alt="Cerises et bonne humeur" loading="lazy" decoding="async">
+                </div>
+
+                <!-- NOUVELLE PHOTO 4 : Ballons et pétales (Sourires & Joie de vivre) -->
+                <div class="featured-polaroid-card" onclick="openLightbox('./photos/photo10.jpg')">
+                    <img src="./photos/photo10.jpg" alt="Ballons et pétales" loading="lazy" decoding="async">
+                </div>
+
+                <!-- NOUVELLE PHOTO 5 : Un sourire, une belle journée -->
+                <div class="featured-polaroid-card" onclick="openLightbox('./photos/photo11.jpg')">
+                    <img src="./photos/photo11.jpg" alt="Un sourire, une belle journée" loading="lazy" decoding="async">
+                </div>
+
+                <!-- NOUVELLE PHOTO 6 : Moment détente -->
+                <div class="featured-polaroid-card" onclick="openLightbox('./photos/photo12.jpg')">
+                    <img src="./photos/photo12.jpg" alt="Moment détente" loading="lazy" decoding="async">
+                </div>
+
+                <!-- NOUVELLE PHOTO 7 : Mon parcours - Sur le terrain, toujours positive -->
+                <div class="featured-polaroid-card" onclick="openLightbox('./photos/photo13.jpg')">
+                    <img src="./photos/photo13.jpg" alt="Mon parcours - Sur le terrain, toujours positive" loading="lazy" decoding="async">
+                </div>
+
+                <!-- NOUVELLE PHOTO 8 : Toujours prête à apprendre -->
+                <div class="featured-polaroid-card" onclick="openLightbox('./photos/photo14.jpg')">
+                    <img src="./photos/photo14.jpg" alt="Toujours prête à apprendre" loading="lazy" decoding="async">
+                </div>
+
+                <!-- NOUVELLE PHOTO 9 : Vœu d'Anniversaire & Gâteau à la Bougie -->
+                <div class="featured-polaroid-card" onclick="openLightbox('./photos/photo15.jpg')">
+                    <img src="./photos/photo15.jpg" alt="Vœu d'Anniversaire & Bougie Étincelante" loading="lazy" decoding="async">
+                </div>
+            </div>
+        </div>
+
+        <!-- ====================================================
+             ALBUM SOUVENIR (ANCIENNES PHOTOS CONSERVÉES DANS LA GALERIE)
+        ==================================================== -->
+        <div style="margin-top: 15px;">
             <div class="section-header">
                 <div class="section-badge">Album Souvenir</div>
-                <h2 class="section-title">28 Ans d'Élégance &amp; de Rayonnement</h2>
+                <h2 class="section-title">28 Ans de Rayonnement</h2>
             </div>
 
             <div class="gallery-grid" id="gallery-container">
-                <!-- Photo 1 : Célébration 28 ans avec ballons dorés -->
+                <!-- Ancienne Photo 1 : Célébration 28 ans avec ballons dorés -->
                 <div class="gallery-item" onclick="openLightbox('./photos/photo6.jpg')">
                     <img src="./photos/photo6.jpg" alt="Rosy Tabou Love - 28 ans" loading="lazy" decoding="async" style="object-position: center top;">
                     <div class="gallery-overlay">✨ 28 Ans de Bonheur &amp; de Grâce ✦</div>
                 </div>
-                <!-- Photo 2 : Grand Portrait Lumineux Blanc & Chanel -->
+                <!-- Ancienne Photo 2 : Grand Portrait Lumineux Blanc & Chanel -->
                 <div class="gallery-item" onclick="openLightbox('./photos/photo5.jpg')">
                     <img src="./photos/photo5.jpg" alt="Rosy Tabou Love - Portrait Lumineux" loading="lazy" decoding="async" style="object-position: center 25%;">
                     <div class="gallery-overlay">🤍 Regard &amp; Élégance Pure</div>
                 </div>
-                <!-- Photo 3 : Robe Noire Chic & Classe -->
+                <!-- Ancienne Photo 3 : Robe Noire Chic & Classe -->
                 <div class="gallery-item" onclick="openLightbox('./photos/photo1.jpg')">
                     <img src="./photos/photo1.jpg" alt="Rosy Tabou Love - Robe Noire" loading="lazy" decoding="async" style="object-position: center 15%;">
                     <div class="gallery-overlay">🖤 Féminité &amp; Charme</div>
                 </div>
-                <!-- Photo 4 : Robe Royale Bleue aux Motifs -->
+                <!-- Ancienne Photo 4 : Robe Royale Bleue aux Motifs -->
                 <div class="gallery-item" onclick="openLightbox('./photos/photo4.jpg')">
-                    <img src="./photos/photo4.jpg" alt="Rosy Tabou Love - Robe Royale" loading="lazy" decoding="async" style="object-position: center 25%;">
+                    <img src="./photos/photo4.jpg" alt="Rosy Tabou Love - Robe Royale Bleue" loading="lazy" decoding="async" style="object-position: center 25%;">
                     <div class="gallery-overlay">👑 Splendeur Royale</div>
                 </div>
-                <!-- Photo 5 : Style Rayonnant Vert & Blanc -->
+                <!-- Ancienne Photo 5 : Style Rayonnant Vert & Blanc -->
                 <div class="gallery-item" onclick="openLightbox('./photos/photo3.jpg')">
                     <img src="./photos/photo3.jpg" alt="Rosy Tabou Love - Pose Stylée" loading="lazy" decoding="async" style="object-position: center 25%;">
                     <div class="gallery-overlay">🌿 Douceur &amp; Authenticité</div>
                 </div>
-                <!-- Photo 6 : Gâteau Joyeux Anniversaire 28 Ans -->
+                <!-- Ancienne Photo 6 : Gâteau Joyeux Anniversaire 28 Ans -->
                 <div class="gallery-item" onclick="openLightbox('./photos/cake.jpg')">
                     <img src="./photos/cake.jpg" alt="Happy Birthday 28 Ans Cake" loading="lazy" decoding="async" style="object-position: center 40%;">
                     <div class="gallery-overlay">🎂 Joyeux 28e Anniversaire !</div>
@@ -1837,8 +2045,8 @@
         function playMusic() {
             const iframe = document.getElementById("youtube-player");
             if (iframe) {
-                if (!iframe.src || !iframe.src.includes("Q4vjJd-LaNo") || !isPlayerStarted) {
-                    iframe.src = "https://www.youtube.com/embed/Q4vjJd-LaNo?autoplay=1&enablejsapi=1&playsinline=1";
+                if (!iframe.src || !iframe.src.includes("qWsdgfZitc0") || !isPlayerStarted) {
+                    iframe.src = "https://www.youtube.com/embed/qWsdgfZitc0?autoplay=1&enablejsapi=1&playsinline=1";
                     isPlayerStarted = true;
                 } else {
                     postYoutubeMessage("playVideo");
@@ -2184,11 +2392,7 @@
 
         // Share and Copy Helpers
         function getOfficialShareUrl() {
-            if (window.location.href.startsWith("http")) {
-                const u = window.location.origin + window.location.pathname;
-                return u.replace(/\/$/, "");
-            }
-            return "https://rosy-tabou-love.pages.dev";
+            return "https://rosy-tabou-love.pages.dev/";
         }
 
         function shareWhatsAppDirect() {
@@ -2431,5 +2635,24 @@
             } catch (e) {}
         });
     </script>
+
+<script>
+// File safety fallback: ensures images always display even if uploaded without photos/ folder
+window.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('img').forEach(function(img) {
+    img.addEventListener('error', function() {
+      if (!this.dataset.triedFallback) {
+        this.dataset.triedFallback = 'true';
+        var src = this.getAttribute('src') || '';
+        var filename = src.split('/').pop();
+        if (filename) {
+          this.src = 'https://mouafonmiguel-coder.github.io/rosy/photos/' + filename;
+        }
+      }
+    });
+  });
+});
+</script>
+
 </body>
 </html>
