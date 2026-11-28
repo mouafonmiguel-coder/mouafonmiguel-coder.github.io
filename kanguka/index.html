@@ -1276,7 +1276,7 @@
             <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:18px; margin-bottom:18px;">
                 <h3 style="font-size:1.05rem; color:var(--gold-light); margin-bottom:6px;"><i class="fa-solid fa-hands-praying"></i> Déposer une Intention de Prière</h3>
                 <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">Écrivez votre sujet pour que la communauté prie avec vous.</p>
-                <input type="text" id="prayerAuthorName" placeholder="Votre Nom, Prénom & Ville (ex: Frère Jean - Yaoundé)" style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:10px 14px; border-radius:10px; color:white; font-size:0.85rem; outline:none; margin-bottom:8px;">
+                <input type="text" id="prayerAuthorName" placeholder="Votre Nom" style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:10px 14px; border-radius:10px; color:white; font-size:0.85rem; outline:none; margin-bottom:8px;">
                 <textarea id="prayerInput" placeholder="Écrivez votre requête de prière ici..." style="width:100%; height:80px; background:rgba(0,0,0,0.3); border:1px solid var(--border-light); border-radius:10px; padding:10px; color:white; font-size:0.85rem; outline:none; margin-bottom:10px;"></textarea>
                 <button onclick="submitPrayer()" style="background:var(--gold-gradient); border:none; padding:12px 20px; border-radius:50px; font-weight:800; color:#070d1e; cursor:pointer; width:100%; font-size:0.88rem;">Envoyer ma Prière &rarr;</button>
             </div>
@@ -1332,7 +1332,7 @@
                     </div>
 
                     <div style="margin-bottom:10px;">
-                        <input type="text" id="voiceAuthorName" placeholder="Votre Nom, Prénom & Ville (ex: Sœur Marie - Douala)" style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:10px; border-radius:10px; color:white; font-size:0.85rem; outline:none; margin-bottom:8px;">
+                        <input type="text" id="voiceAuthorName" placeholder="Votre Nom" style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:10px; border-radius:10px; color:white; font-size:0.85rem; outline:none; margin-bottom:8px;">
                         <input type="text" id="voiceTitle" placeholder="Titre de votre miracle (ex: Guérie du diabète)" style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:10px; border-radius:10px; color:white; font-size:0.85rem; outline:none;">
                     </div>
 
@@ -1350,7 +1350,7 @@
             <!-- FORMULAIRE ÉCRIT OPTIONNEL -->
             <div style="background:linear-gradient(135deg, #101c3d 0%, #0b142c 100%); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:18px;">
                 <h4 style="font-size:0.95rem; color:var(--gold-light); margin-bottom:8px;"><i class="fa-solid fa-pen-nib"></i> Écrire Mon Témoignage</h4>
-                <input type="text" id="testiAuthorName" placeholder="Votre Nom, Prénom & Ville (ex: Frère Miguel - Strasbourg)" style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:10px 14px; border-radius:10px; color:white; font-size:0.85rem; outline:none; margin-bottom:8px;">
+                <input type="text" id="testiAuthorName" placeholder="Votre Nom" style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:10px 14px; border-radius:10px; color:white; font-size:0.85rem; outline:none; margin-bottom:8px;">
                 <textarea id="testiInput" placeholder="Racontez ce que Dieu a fait dans votre vie par écrit..." style="width:100%; height:75px; background:rgba(0,0,0,0.3); border:1px solid var(--border-light); border-radius:10px; padding:10px; color:white; font-size:0.85rem; outline:none; margin-bottom:10px;"></textarea>
                 <button onclick="submitTestimony()" style="background:var(--gold-gradient); border:none; padding:12px 20px; border-radius:50px; font-weight:800; font-size:0.88rem; color:#070d1e; cursor:pointer; width:100%;">Publier le Témoignage Écrit &rarr;</button>
             </div>
@@ -1382,10 +1382,10 @@
                     <i class="fa-solid fa-id-badge" style="margin-right:6px;"></i> Mon Identité Spirituelle
                 </h4>
                 <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:10px;">
-                    Enregistrez votre nom ou prénom pour signer vos témoignages et prières.
+                    Enregistrez votre nom pour signer automatiquement vos témoignages et prières.
                 </p>
                 <div style="display:flex; gap:8px;">
-                    <input type="text" id="userSavedNameInput" placeholder="Ex: Frère Miguel, Sœur Marie..." style="flex:1; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:10px 14px; border-radius:10px; color:white; font-size:0.88rem; outline:none;">
+                    <input type="text" id="userSavedNameInput" placeholder="Votre Nom" style="flex:1; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:10px 14px; border-radius:10px; color:white; font-size:0.88rem; outline:none;">
                     <button onclick="saveUserProfileName()" style="background:var(--gold-gradient); border:none; padding:10px 16px; border-radius:10px; font-weight:800; color:#070d1e; cursor:pointer; font-size:0.85rem;">
                         Enregistrer
                     </button>
@@ -2144,7 +2144,7 @@
             const title = document.getElementById('voiceTitle').value.trim() || 'Témoignage de Bénédiction & Guérison';
 
             if (!author) {
-                showCustomAlert("Votre Prénom / Nom", "Veuillez indiquer votre nom ou prénom (ou tapez 'Anonyme') pour votre témoignage vocal.");
+                showCustomAlert("Votre Nom", "Veuillez indiquer votre nom pour votre témoignage vocal.");
                 authorInput.focus();
                 return;
             }
@@ -2178,7 +2178,7 @@
             const txt = input.value.trim();
 
             if (!author) {
-                showCustomAlert("Votre Prénom / Nom", "Veuillez indiquer votre nom ou prénom (ou tapez 'Anonyme') pour votre prière.");
+                showCustomAlert("Votre Nom", "Veuillez indiquer votre nom pour votre prière.");
                 authorInput.focus();
                 return;
             }
@@ -2214,7 +2214,7 @@
             const txt = input.value.trim();
 
             if (!author) {
-                showCustomAlert("Votre Prénom / Nom", "Veuillez indiquer votre prénom ou nom (ou tapez 'Anonyme') avant de publier votre témoignage.");
+                showCustomAlert("Votre Nom", "Veuillez indiquer votre nom avant de publier votre témoignage.");
                 authorInput.focus();
                 return;
             }
@@ -2248,12 +2248,12 @@
             const input = document.getElementById('userSavedNameInput');
             const name = input.value.trim();
             if (!name) {
-                showCustomAlert("Nom requis", "Veuillez entrer votre nom ou prénom.");
+                showCustomAlert("Nom requis", "Veuillez entrer votre nom.");
                 return;
             }
             localStorage.setItem('kanguka_user_name', name);
             syncAuthorInputs(name);
-            showToast(`✅ Identité "${name}" enregistrée avec succès !`);
+            showToast(`✅ Nom "${name}" enregistré avec succès !`);
         }
 
         function syncAuthorInputs(name) {
