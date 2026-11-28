@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#070d1e">
-    <title>KANGUKA — Réveil Spirituel, Live & Témoignages Vocaux</title>
+    <title>KANGUKA — Réveil Spirituel, Live & Témoignages</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -774,13 +774,15 @@
             box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
         }
 
-        /* Testimonies list */
+        /* Testimonies list card with delete button */
         .audio-testi-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 16px;
             padding: 16px;
             margin-bottom: 14px;
+            position: relative;
+            transition: all 0.3s ease;
         }
 
         .prayer-header {
@@ -788,6 +790,26 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 8px;
+        }
+
+        .delete-btn-corner {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+
+        .delete-btn-corner:hover {
+            background: var(--red-live);
+            color: white;
         }
 
         .prayer-btn-amen {
@@ -1101,16 +1123,7 @@
                 <h2><i class="fa-solid fa-heart" style="color:var(--red-live);"></i> Mur d'Intercession</h2>
             </div>
 
-            <div id="prayerWallList">
-                <div class="prayer-card">
-                    <div class="prayer-header">
-                        <strong style="color:var(--gold-light); font-size:0.9rem;">Sœur Blandine (Garoua)</strong>
-                        <span style="font-size:0.75rem; color:var(--text-muted);">Il y a 2h</span>
-                    </div>
-                    <p style="font-size:0.85rem; color:#e2e8f0;">« Je demande la prière pour la guérison complète de ma mère hospitalisée. Que la main de Dieu la touche. »</p>
-                    <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>142 Ont Prié (Amen)</span></button>
-                </div>
-            </div>
+            <div id="prayerWallList"></div>
         </div>
     </main>
 
@@ -1182,59 +1195,12 @@
             </div>
 
             <div class="section-title" style="padding:0; margin-bottom:12px;">
-                <h2><i class="fa-solid fa-star" style="color:var(--gold);"></i> Témoignages & Vocaux de la Communauté</h2>
+                <h2><i class="fa-solid fa-star" style="color:var(--gold);"></i> Mur des Témoignages & Vocaux</h2>
+                <span class="link" onclick="clearAllTestimonies()" style="color:#fca5a5; font-size:0.75rem;"><i class="fa-solid fa-trash"></i> Tout effacer</span>
             </div>
 
             <!-- LISTE DES TÉMOIGNAGES -->
-            <div id="testimoniesWallList">
-                <!-- Témoignage Vocal 1 -->
-                <div class="audio-testi-card">
-                    <div class="prayer-header">
-                        <strong style="color:var(--gold-light); font-size:0.9rem;"><i class="fa-solid fa-microphone" style="color:var(--gold); margin-right:4px;"></i> Sœur Mireille (Douala)</strong>
-                        <span style="font-size:0.75rem; color:var(--text-muted);">Il y a 3h</span>
-                    </div>
-                    <p style="font-size:0.84rem; color:#e2e8f0; margin-bottom:8px;">« Écoutez comment Dieu a guéri mon kyste sans opération après la prière du pasteur en direct ! »</p>
-                    
-                    <div class="audio-player-box">
-                        <button class="audio-play-round" onclick="playVoiceSample(this)"><i class="fa-solid fa-play"></i></button>
-                        <div style="flex:1;">
-                            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">
-                                <span>Témoignage Audio</span>
-                                <span style="color:var(--gold-light); font-weight:700;">00:48</span>
-                            </div>
-                            <div style="height:6px; background:rgba(255,255,255,0.2); border-radius:3px;">
-                                <div style="width:45%; height:100%; background:var(--gold); border-radius:3px;"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>542 Gloire à Dieu</span></button>
-                </div>
-
-                <!-- Témoignage Vocal 2 -->
-                <div class="audio-testi-card">
-                    <div class="prayer-header">
-                        <strong style="color:var(--gold-light); font-size:0.9rem;"><i class="fa-solid fa-microphone" style="color:var(--gold); margin-right:4px;"></i> Frère Daniel (Bafoussam)</strong>
-                        <span style="font-size:0.75rem; color:var(--text-muted);">Hier</span>
-                    </div>
-                    <p style="font-size:0.84rem; color:#e2e8f0; margin-bottom:8px;">« Déblocage miraculeux de mon visa après 2 ans d'attente ! Merci Seigneur ! »</p>
-                    
-                    <div class="audio-player-box">
-                        <button class="audio-play-round" onclick="playVoiceSample(this)"><i class="fa-solid fa-play"></i></button>
-                        <div style="flex:1;">
-                            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">
-                                <span>Témoignage Audio</span>
-                                <span style="color:var(--gold-light); font-weight:700;">01:15</span>
-                            </div>
-                            <div style="height:6px; background:rgba(255,255,255,0.2); border-radius:3px;">
-                                <div style="width:20%; height:100%; background:var(--gold); border-radius:3px;"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>287 Gloire à Dieu</span></button>
-                </div>
-            </div>
+            <div id="testimoniesWallList"></div>
         </div>
     </main>
 
@@ -1256,6 +1222,10 @@
                 <p style="margin-bottom:8px;"><strong>📲 Écoute 100% Hors-Ligne :</strong> Téléchargez l'audio MP3 le matin lorsque vous avez du WiFi/forfait, et écoutez-le toute la journée sans consommer de connexion internet (en voyage, en taxi, au village).</p>
                 <p><strong>💾 Économie de Forfait :</strong> Vos enseignements restent enregistrés sur votre smartphone.</p>
             </div>
+
+            <button onclick="resetDefaultData()" style="width:100%; background:rgba(239, 68, 68, 0.15); border:1px solid var(--red-live); color:#fca5a5; padding:12px; border-radius:12px; font-weight:700; cursor:pointer;">
+                <i class="fa-solid fa-arrow-rotate-left"></i> Réinitialiser les données de démo
+            </button>
         </div>
     </main>
 
@@ -1329,6 +1299,37 @@
             }
         ];
 
+        // DEFAULT DATA WITH PERSISTENCE
+        let TESTIMONIES = JSON.parse(localStorage.getItem('kanguka_testimonies')) || [
+            {
+                id: 'testi-1',
+                type: 'audio',
+                author: 'Sœur Mireille (Douala)',
+                date: 'Il y a 3h',
+                text: '« Écoutez comment Dieu a guéri mon kyste sans opération après la prière du pasteur en direct ! »',
+                duration: '00:48',
+                likes: 542
+            },
+            {
+                id: 'testi-2',
+                type: 'text',
+                author: 'Frère Joseph (Yaoundé)',
+                date: 'Hier',
+                text: '« Gloire à Dieu ! Après 6 mois sans emploi, j\'ai été appelé hier pour un poste de responsable commercial ! Dieu est fidèle ! »',
+                likes: 389
+            }
+        ];
+
+        let PRAYERS = JSON.parse(localStorage.getItem('kanguka_prayers')) || [
+            {
+                id: 'pray-1',
+                author: 'Sœur Blandine (Garoua)',
+                date: 'Il y a 2h',
+                text: '« Je demande la prière pour la guérison complète de ma mère hospitalisée. Que la main de Dieu la touche. »',
+                likes: 142
+            }
+        ];
+
         let currentEpisode = EPISODES[0];
         let isPlaying = false;
         let playInterval = null;
@@ -1336,6 +1337,11 @@
         let totalSeconds = 14 * 60 + 30;
         let speeds = [1.0, 1.25, 1.5, 2.0];
         let speedIdx = 0;
+
+        function saveState() {
+            localStorage.setItem('kanguka_testimonies', JSON.stringify(TESTIMONIES));
+            localStorage.setItem('kanguka_prayers', JSON.stringify(PRAYERS));
+        }
 
         // TAB SWITCHING FUNCTION
         function switchTab(tabId) {
@@ -1349,6 +1355,117 @@
             if (targetNav) targetNav.classList.add('active');
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // RENDER TESTIMONIES WITH DELETE BUTTON
+        function renderTestimonies() {
+            const wall = document.getElementById('testimoniesWallList');
+            if (!wall) return;
+
+            if (TESTIMONIES.length === 0) {
+                wall.innerHTML = `
+                    <div style="text-align:center; padding:30px 20px; color:var(--text-muted); background:var(--bg-card); border-radius:16px; border:1px solid var(--border-light);">
+                        <i class="fa-solid fa-dove" style="font-size:2rem; color:var(--gold); margin-bottom:10px;"></i>
+                        <p>Aucun témoignage pour le moment.</p>
+                        <p style="font-size:0.8rem; margin-top:4px;">Soyez le premier à enregistrer un vocal ou écrire votre miracle !</p>
+                    </div>
+                `;
+                return;
+            }
+
+            wall.innerHTML = TESTIMONIES.map(item => {
+                if (item.type === 'audio') {
+                    return `
+                        <div class="audio-testi-card" id="card-${item.id}">
+                            <div class="prayer-header">
+                                <strong style="color:var(--gold-light); font-size:0.9rem;"><i class="fa-solid fa-microphone" style="color:var(--gold); margin-right:4px;"></i> ${item.author}</strong>
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <span style="font-size:0.75rem; color:var(--text-muted);">${item.date}</span>
+                                    <button class="delete-btn-corner" onclick="deleteTestimony('${item.id}')" title="Supprimer ce témoignage"><i class="fa-solid fa-trash"></i> Supprimer</button>
+                                </div>
+                            </div>
+                            <p style="font-size:0.84rem; color:#e2e8f0; margin-bottom:8px;">${item.text}</p>
+                            
+                            <div class="audio-player-box">
+                                <button class="audio-play-round" onclick="playVoiceSample(this)"><i class="fa-solid fa-play"></i></button>
+                                <div style="flex:1;">
+                                    <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">
+                                        <span>Témoignage Audio</span>
+                                        <span style="color:var(--gold-light); font-weight:700;">${item.duration || '00:30'}</span>
+                                    </div>
+                                    <div style="height:6px; background:rgba(255,255,255,0.2); border-radius:3px;">
+                                        <div style="width:25%; height:100%; background:var(--gold); border-radius:3px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>${item.likes} Gloire à Dieu</span></button>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="audio-testi-card" id="card-${item.id}">
+                            <div class="prayer-header">
+                                <strong style="color:var(--gold-light); font-size:0.9rem;">${item.author}</strong>
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <span style="font-size:0.75rem; color:var(--text-muted);">${item.date}</span>
+                                    <button class="delete-btn-corner" onclick="deleteTestimony('${item.id}')" title="Supprimer ce témoignage"><i class="fa-solid fa-trash"></i> Supprimer</button>
+                                </div>
+                            </div>
+                            <p style="font-size:0.85rem; color:#e2e8f0;">${item.text}</p>
+                            <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>${item.likes} Gloire à Dieu</span></button>
+                        </div>
+                    `;
+                }
+            }).join('');
+        }
+
+        // DELETE FUNCTION
+        function deleteTestimony(id) {
+            TESTIMONIES = TESTIMONIES.filter(t => t.id !== id);
+            saveState();
+            renderTestimonies();
+            showToast("🗑️ Témoignage supprimé avec succès !");
+        }
+
+        function clearAllTestimonies() {
+            if (confirm("Voulez-vous vraiment effacer tous les témoignages de la liste ?")) {
+                TESTIMONIES = [];
+                saveState();
+                renderTestimonies();
+                showToast("🗑️ Tous les témoignages ont été effacés !");
+            }
+        }
+
+        function resetDefaultData() {
+            localStorage.clear();
+            location.reload();
+        }
+
+        // RENDER PRAYERS
+        function renderPrayers() {
+            const wall = document.getElementById('prayerWallList');
+            if (!wall) return;
+            wall.innerHTML = PRAYERS.map(item => `
+                <div class="prayer-card" id="pray-${item.id}">
+                    <div class="prayer-header">
+                        <strong style="color:var(--gold-light); font-size:0.9rem;">${item.author}</strong>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:0.75rem; color:var(--text-muted);">${item.date}</span>
+                            <button class="delete-btn-corner" onclick="deletePrayer('${item.id}')"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <p style="font-size:0.85rem; color:#e2e8f0;">${item.text}</p>
+                    <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>${item.likes} Ont Prié (Amen)</span></button>
+                </div>
+            `).join('');
+        }
+
+        function deletePrayer(id) {
+            PRAYERS = PRAYERS.filter(p => p.id !== id);
+            saveState();
+            renderPrayers();
+            showToast("🗑️ Requête de prière supprimée !");
         }
 
         // RENDER EPISODES
@@ -1459,7 +1576,7 @@
             renderEpisodes(filtered, 'catalogEpisodesList');
         }
 
-        // ================= LIVE STREAMING INTERACTIVITY =================
+        // LIVE STREAMING INTERACTIVITY
         function sendReaction(emoji) {
             showToast(`${emoji} Réaction envoyée en direct au pasteur !`);
         }
@@ -1501,7 +1618,7 @@
             input.value = '';
         }
 
-        // ================= AUDIO RECORDING LOGIC (VOICE NOTES MICRO) =================
+        // AUDIO RECORDING LOGIC (VOICE NOTES MICRO)
         let isRecording = false;
         let recordInterval = null;
         let recordSeconds = 0;
@@ -1589,36 +1706,23 @@
         }
 
         function sendVoiceTestimony() {
-            const wall = document.getElementById('testimoniesWallList');
-            const card = document.createElement('div');
-            card.className = 'audio-testi-card';
             const dur = document.getElementById('previewDuration').innerText || '00:30';
             const author = document.getElementById('voiceAuthorName').value.trim() || 'Fidèle Anonyme';
             const title = document.getElementById('voiceTitle').value.trim() || 'Témoignage de Guérison & Bénédiction';
 
-            card.innerHTML = `
-                <div class="prayer-header">
-                    <strong style="color:var(--gold-light); font-size:0.9rem;"><i class="fa-solid fa-microphone" style="color:var(--gold); margin-right:4px;"></i> ${author}</strong>
-                    <span style="font-size:0.75rem; color:var(--green);">À l'instant</span>
-                </div>
-                <p style="font-size:0.84rem; color:#e2e8f0; margin-bottom:8px;">« ${title} »</p>
-                
-                <div class="audio-player-box">
-                    <button class="audio-play-round" onclick="playVoiceSample(this)"><i class="fa-solid fa-play"></i></button>
-                    <div style="flex:1;">
-                        <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">
-                            <span>Témoignage Audio</span>
-                            <span style="color:var(--gold-light); font-weight:700;">${dur}</span>
-                        </div>
-                        <div style="height:6px; background:rgba(255,255,255,0.2); border-radius:3px;">
-                            <div style="width:10%; height:100%; background:var(--gold); border-radius:3px;"></div>
-                        </div>
-                    </div>
-                </div>
+            const newTesti = {
+                id: 'testi-' + Date.now(),
+                type: 'audio',
+                author: author,
+                date: 'À l\'instant',
+                text: `« ${title} »`,
+                duration: dur,
+                likes: 1
+            };
 
-                <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>1 Gloire à Dieu</span></button>
-            `;
-            wall.prepend(card);
+            TESTIMONIES.unshift(newTesti);
+            saveState();
+            renderTestimonies();
             cancelVoiceRecord();
             showToast("🚀 Votre témoignage vocal a été publié avec succès ! Gloire à Dieu !");
         }
@@ -1634,24 +1738,23 @@
             }
         }
 
-        // ================= PRAYER & TESTIMONY WRITTEN =================
+        // PRAYER & TESTIMONY WRITTEN
         function submitPrayer() {
             const input = document.getElementById('prayerInput');
             const txt = input.value.trim();
             if (!txt) return;
 
-            const wall = document.getElementById('prayerWallList');
-            const card = document.createElement('div');
-            card.className = 'prayer-card';
-            card.innerHTML = `
-                <div class="prayer-header">
-                    <strong style="color:var(--gold-light); font-size:0.9rem;">Moi (Nouveau Sujet)</strong>
-                    <span style="font-size:0.75rem; color:var(--green);">À l'instant</span>
-                </div>
-                <p style="font-size:0.85rem; color:#e2e8f0;">« ${txt} »</p>
-                <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>1 Ont Prié (Amen)</span></button>
-            `;
-            wall.prepend(card);
+            const newPrayer = {
+                id: 'pray-' + Date.now(),
+                author: 'Moi (Nouveau Sujet)',
+                date: 'À l\'instant',
+                text: `« ${txt} »`,
+                likes: 1
+            };
+
+            PRAYERS.unshift(newPrayer);
+            saveState();
+            renderPrayers();
             input.value = '';
             showToast("🙏 Votre intention de prière a été transmise aux intercesseurs !");
         }
@@ -1661,18 +1764,18 @@
             const txt = input.value.trim();
             if (!txt) return;
 
-            const wall = document.getElementById('testimoniesWallList');
-            const card = document.createElement('div');
-            card.className = 'prayer-card';
-            card.innerHTML = `
-                <div class="prayer-header">
-                    <strong style="color:var(--gold-light); font-size:0.9rem;">Moi (Témoignage)</strong>
-                    <span style="font-size:0.75rem; color:var(--gold);">À l'instant</span>
-                </div>
-                <p style="font-size:0.85rem; color:#e2e8f0;">« ${txt} »</p>
-                <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>1 Gloire à Dieu</span></button>
-            `;
-            wall.prepend(card);
+            const newTesti = {
+                id: 'testi-' + Date.now(),
+                type: 'text',
+                author: 'Moi (Témoignage Écrit)',
+                date: 'À l\'instant',
+                text: `« ${txt} »`,
+                likes: 1
+            };
+
+            TESTIMONIES.unshift(newTesti);
+            saveState();
+            renderTestimonies();
             input.value = '';
             showToast("✨ Gloire à Dieu ! Votre témoignage est en ligne !");
         }
@@ -1689,6 +1792,8 @@
         // INITIALIZE
         renderEpisodes(EPISODES, 'homeEpisodesList');
         renderEpisodes(EPISODES, 'catalogEpisodesList');
+        renderTestimonies();
+        renderPrayers();
     </script>
 </body>
 </html>
