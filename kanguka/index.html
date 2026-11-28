@@ -1276,7 +1276,7 @@
             </div>
 
             <!-- Option 2: Lien Externe (Facebook Live / YouTube) -->
-            <div style="background:rgba(255,255,255,0.06); padding:12px; border-radius:12px;">
+            <div style="background:rgba(255,255,255,0.06); padding:12px; border-radius:12px; margin-bottom:12px;">
                 <h5 style="color:var(--blue-accent); font-size:0.84rem; margin-bottom:4px;">
                     <i class="fa-solid fa-link"></i> 2. Ou Diffuser un Lien Facebook / YouTube Live
                 </h5>
@@ -1284,6 +1284,19 @@
                 <button onclick="applyCustomLiveStream()" style="width:100%; background:var(--gold); color:#070d1e; border:none; padding:8px; border-radius:8px; font-weight:800; font-size:0.78rem; cursor:pointer;">
                     Mettre en Ligne ce Flux Vidéo &rarr;
                 </button>
+            </div>
+
+            <!-- Option 3: Fidèles en Prière & Mains Posées en Direct -->
+            <div style="background:rgba(255,255,255,0.06); padding:12px; border-radius:12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <h5 style="color:var(--gold-light); font-size:0.84rem; margin:0;">
+                        <i class="fa-solid fa-hands-praying" style="color:var(--gold);"></i> 3. Fidèles en Prière & Mains Levées
+                    </h5>
+                    <span id="pastorLivePrayerCount" style="font-size:0.75rem; background:var(--gold); color:#070d1e; padding:2px 8px; border-radius:12px; font-weight:800;">0</span>
+                </div>
+                <div id="pastorLivePrayerList" style="max-height:130px; overflow-y:auto; font-size:0.78rem;">
+                    <p style="color:var(--text-muted); font-size:0.75rem;">Les noms des fidèles qui posent la main ou demandent la prière s'afficheront ici en temps réel.</p>
+                </div>
             </div>
         </div>
 
@@ -1574,6 +1587,33 @@
                 <button class="custom-modal-btn btn-confirm" style="width:100%;" onclick="closeCustomModal(false)">D'accord</button>
             `;
             document.getElementById('customModalOverlay').style.display = 'flex';
+        }
+
+        function showCustomPrompt(title, message, onOk) {
+            document.getElementById('customModalTitle').innerText = title;
+            document.getElementById('customModalText').innerHTML = `
+                <p style="margin-bottom:10px;">${message}</p>
+                <input type="text" id="customModalPromptInput" placeholder="Votre Nom" style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:10px 12px; border-radius:8px; color:white; font-size:0.88rem; outline:none;">
+            `;
+            document.getElementById('customModalIcon').innerHTML = '<i class="fa-solid fa-hands-praying" style="color:var(--gold);"></i>';
+            document.getElementById('customModalButtons').innerHTML = `
+                <button class="custom-modal-btn btn-cancel" onclick="closeCustomModal(false)">Annuler</button>
+                <button class="custom-modal-btn btn-confirm" onclick="confirmPromptAction()">Valider</button>
+            `;
+            pendingModalAction = () => {
+                const val = document.getElementById('customModalPromptInput') ? document.getElementById('customModalPromptInput').value : '';
+                if (onOk) onOk(val);
+            };
+            document.getElementById('customModalOverlay').style.display = 'flex';
+            setTimeout(() => {
+                const inp = document.getElementById('customModalPromptInput');
+                if (inp) inp.focus();
+            }, 100);
+        }
+
+        function confirmPromptAction() {
+            if (pendingModalAction) pendingModalAction();
+            closeCustomModal(true);
         }
 
         function confirmCustomModalAction() {
@@ -2093,12 +2133,26 @@
         }
 
         // LIVE STREAMING INTERACTIVITY
-        function sendReaction(emoji) {
-            showToast(`${emoji} Réaction envoyée en direct !`);
+        let LIVE_PRAYER_REQUESTS = JSON.parse(localStorage.getItem('kanguka_live_requests')) || [];
+
+        function sendReaction(label) {
+            showToast(`${label} envoyé en direct !`);
         }
 
         function requestLiveIntercession() {
-            showToast("Vous avez levé la main pour la prière en direct.");
+            let name = localStorage.getItem('kanguka_user_name') || '';
+            if (!name) {
+                showCustomPrompt("Votre Nom pour la Prière", "Entrez votre nom pour que le Pasteur prie pour vous en direct :", (enteredName) => {
+                    if (enteredName && enteredName.trim()) {
+                        localStorage.setItem('kanguka_user_name', enteredName.trim());
+                        syncAuthorInputs(enteredName.trim());
+                        updateProfileAvatarUI();
+                        processLivePrayer(enteredName.trim(), "a levé la main pour la prière en direct.");
+                    }
+                });
+            } else {
+                processLivePrayer(name, "a levé la main pour la prière en direct.");
+            }
         }
 
         function openBlessingModal() {
@@ -2116,8 +2170,65 @@
         }
 
         function receiveHealing(e) {
-            e.stopPropagation();
+            if (e) e.stopPropagation();
+            let name = localStorage.getItem('kanguka_user_name') || '';
+            if (!name) {
+                showCustomPrompt("Votre Nom", "Entrez votre nom pour enregistrer votre prière de foi :", (enteredName) => {
+                    if (enteredName && enteredName.trim()) {
+                        localStorage.setItem('kanguka_user_name', enteredName.trim());
+                        syncAuthorInputs(enteredName.trim());
+                        updateProfileAvatarUI();
+                        processLivePrayer(enteredName.trim(), "a posé la main sur l'écran avec foi pour la guérison.");
+                    }
+                });
+            } else {
+                processLivePrayer(name, "a posé la main sur l'écran avec foi pour la guérison.");
+            }
             showToast("Que la main puissante de Dieu vous touche et vous restaure ! Amen !");
+        }
+
+        function processLivePrayer(author, actionText) {
+            const timeStr = new Intl.DateTimeFormat('fr-FR', { hour: '2-digit', minute: '2-digit' }).format(new Date());
+
+            // Add notification to live chat
+            const chatBox = document.getElementById('liveChatMessages');
+            if (chatBox) {
+                const bubble = document.createElement('div');
+                bubble.className = 'chat-bubble';
+                bubble.style.borderLeft = '3px solid var(--gold)';
+                bubble.innerHTML = `<span class="chat-author" style="color:var(--gold-light); font-weight:800;">${author}</span> ${actionText} <span style="font-size:0.7rem; color:var(--text-muted); margin-left:6px;">${timeStr}</span>`;
+                chatBox.appendChild(bubble);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+
+            // Add to Pastor Live Console
+            const reqItem = { id: Date.now(), name: author, action: actionText, time: timeStr };
+            LIVE_PRAYER_REQUESTS.unshift(reqItem);
+            if (LIVE_PRAYER_REQUESTS.length > 25) LIVE_PRAYER_REQUESTS.pop();
+            localStorage.setItem('kanguka_live_requests', JSON.stringify(LIVE_PRAYER_REQUESTS));
+            renderPastorLiveRequests();
+        }
+
+        function renderPastorLiveRequests() {
+            const listEl = document.getElementById('pastorLivePrayerList');
+            const countEl = document.getElementById('pastorLivePrayerCount');
+            if (countEl) countEl.innerText = LIVE_PRAYER_REQUESTS.length;
+            if (!listEl) return;
+
+            if (LIVE_PRAYER_REQUESTS.length === 0) {
+                listEl.innerHTML = `<p style="color:var(--text-muted); font-size:0.75rem;">Les noms des fidèles qui posent la main ou demandent la prière s'afficheront ici en temps réel.</p>`;
+                return;
+            }
+
+            listEl.innerHTML = LIVE_PRAYER_REQUESTS.map(r => `
+                <div style="background:rgba(0,0,0,0.3); border-left:3px solid var(--gold); padding:6px 10px; border-radius:6px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <strong style="color:var(--gold-light); font-size:0.82rem;">${r.name}</strong>
+                        <span style="color:#cbd5e1; font-size:0.76rem;"> ${r.action}</span>
+                    </div>
+                    <span style="font-size:0.7rem; color:var(--text-muted); margin-left:8px;">${r.time}</span>
+                </div>
+            `).join('');
         }
 
         function sendLiveChatMessage() {
@@ -2569,6 +2680,7 @@
         checkPastorAuth();
         updateProfileAvatarUI();
         updateDailyEpisodeUI();
+        renderPastorLiveRequests();
         updateLiveUI();
     </script>
 
