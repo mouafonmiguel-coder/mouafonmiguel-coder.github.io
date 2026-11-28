@@ -1066,7 +1066,7 @@
     <audio id="realGlobalAudio" preload="auto"></audio>
 
     <!-- TOAST NOTIFICATION -->
-    <div id="appToast" class="toast">✨ Téléchargement démarré pour écoute hors-ligne !</div>
+    <div id="appToast" class="toast">Téléchargement démarré pour écoute hors-ligne !</div>
 
     <!-- CUSTOM SPIRITUAL CONFIRM MODAL (NO BROWSER DOMAIN NAME POPUP) -->
     <div id="customModalOverlay" class="custom-modal-overlay">
@@ -1135,7 +1135,7 @@
                 <!-- Bouton visible pour le pasteur quand connecté -->
                 <div id="pastorHeroPublishPrompt" style="display:none; margin-top:14px; text-align:center;">
                     <button onclick="switchTab('profile')" style="background:var(--gold-gradient); border:none; padding:10px 20px; border-radius:30px; font-weight:800; color:#070d1e; font-size:0.85rem; cursor:pointer;">
-                        👑 Publier l'Émission du Jour (Espace Pasteur)
+                        Publier l'Émission du Jour (Espace Pasteur)
                     </button>
                 </div>
             </div>
@@ -1176,7 +1176,7 @@
     <main id="tab-enseignements" class="tab-view">
         <div style="padding: 18px 18px 10px 18px;">
             <div style="position:relative; margin-bottom:14px;">
-                <input type="text" id="searchInput" oninput="searchEpisodes()" placeholder="🔍 Rechercher un enseignement, un chant..." style="width:100%; background:var(--bg-card); border:1px solid var(--border); padding:12px 18px 12px 42px; border-radius:50px; color:white; font-size:0.9rem; outline:none;">
+                <input type="text" id="searchInput" oninput="searchEpisodes()" placeholder="Rechercher un enseignement, un chant..." style="width:100%; background:var(--bg-card); border:1px solid var(--border); padding:12px 18px 12px 42px; border-radius:50px; color:white; font-size:0.9rem; outline:none;">
                 <i class="fa-solid fa-magnifying-glass" style="position:absolute; left:16px; top:15px; color:var(--text-muted);"></i>
             </div>
         </div>
@@ -1220,10 +1220,10 @@
             </div>
 
             <div class="live-reactions-bar">
-                <button class="reaction-btn" onclick="sendReaction('🙏')">🙏 Amen</button>
-                <button class="reaction-btn" onclick="sendReaction('🔥')">🔥 Feu</button>
-                <button class="reaction-btn" onclick="sendReaction('✨')">✨ Gloire</button>
-                <button class="reaction-btn" onclick="sendReaction('❤️')">❤️ Foi</button>
+                <button class="reaction-btn" onclick="sendReaction('Amen')">Amen</button>
+                <button class="reaction-btn" onclick="sendReaction('Feu')">Feu</button>
+                <button class="reaction-btn" onclick="sendReaction('Gloire')">Gloire</button>
+                <button class="reaction-btn" onclick="sendReaction('Foi')">Foi</button>
             </div>
         </div>
 
@@ -1267,10 +1267,10 @@
                 </p>
                 <div style="display:flex; gap:8px;">
                     <button onclick="startPastorPhoneCamera()" id="btnStartCam" style="flex:1; background:var(--red-live); color:white; border:none; padding:10px; border-radius:8px; font-weight:800; font-size:0.78rem; cursor:pointer;">
-                        🔴 Allumer ma Caméra & Prêcher
+                        Allumer ma Caméra & Prêcher
                     </button>
                     <button onclick="stopPastorPhoneCamera()" id="btnStopCam" style="background:#334155; color:white; border:none; padding:10px 14px; border-radius:8px; font-weight:800; font-size:0.78rem; cursor:pointer; display:none;">
-                        ⏹️ Arrêter
+                        Arrêter
                     </button>
                 </div>
             </div>
@@ -1371,7 +1371,7 @@
 
                     <div style="display:flex; gap:10px;">
                         <button onclick="sendVoiceTestimony()" style="flex:1; background:var(--gold-gradient); border:none; padding:12px; border-radius:50px; font-weight:900; color:#070d1e; cursor:pointer; font-size:0.85rem;">
-                            🚀 Publier Mon Témoignage Audio
+                            Publier Mon Témoignage Audio
                         </button>
                         <button onclick="cancelVoiceRecord()" style="background:rgba(239, 68, 68, 0.2); border:1px solid var(--red-live); color:#fca5a5; padding:12px 16px; border-radius:50px; font-weight:700; cursor:pointer;">
                             <i class="fa-solid fa-trash"></i>
@@ -1418,7 +1418,7 @@
                 <h3 style="font-size:1.25rem; color:white; font-weight:900; margin-bottom:2px;" id="userProfileNameDisplay">Mon Profil Spirituel</h3>
                 <p style="font-size:0.82rem; color:var(--gold-light); font-weight:600;" id="userProfileRole">Espace Fidèle & Disciple</p>
                 <button type="button" onclick="triggerProfilePhotoUpload()" style="margin-top:10px; background:rgba(255,255,255,0.08); border:1px solid var(--border-light); color:#cbd5e1; font-size:0.75rem; padding:6px 14px; border-radius:20px; cursor:pointer;">
-                    📸 Choisir ma Photo de Profil
+                    Choisir ma Photo de Profil
                 </button>
             </div>
 
@@ -1452,13 +1452,13 @@
                     <div id="pastorSelectedFileName" style="display:none; font-size:0.8rem; color:#6ee7b7; margin-bottom:10px; font-weight:700; background:rgba(16,185,129,0.1); padding:8px; border-radius:6px;"></div>
 
                     <button type="button" onclick="publishPastorDailyEpisode()" style="width:100%; background:var(--gold-gradient); color:#070d1e; border:none; padding:12px; border-radius:30px; font-weight:900; font-size:0.88rem; cursor:pointer; box-shadow:0 4px 15px rgba(212,175,55,0.4);">
-                        🚀 Mettre en Ligne l'Émission du Jour
+                        Mettre en Ligne l'Émission du Jour
                     </button>
                 </div>
 
                 <!-- Bouton rapide vers le Live Studio -->
                 <button onclick="switchTab('live')" style="width:100%; background:rgba(239, 68, 68, 0.2); border:1px solid var(--red-live); color:white; padding:12px; border-radius:10px; font-weight:800; font-size:0.82rem; cursor:pointer;">
-                    🔴 Aller au Studio de Direct & Caméra &rarr;
+                    Aller au Studio de Direct & Caméra &rarr;
                 </button>
             </div>
 
@@ -1498,8 +1498,8 @@
                 <h2><i class="fa-solid fa-cloud-arrow-down" style="color:var(--green);"></i> Pourquoi Télécharger ?</h2>
             </div>
             <div style="background:var(--bg-card); border:1px solid var(--border-light); border-radius:16px; padding:16px; margin-bottom:18px; font-size:0.85rem; color:#cbd5e1;">
-                <p style="margin-bottom:8px;"><strong>📲 Écoute 100% Hors-Ligne :</strong> Téléchargez l'audio MP3 le matin lorsque vous avez du WiFi/forfait, et écoutez-le toute la journée sans consommer de connexion internet (en voyage, en taxi, au village).</p>
-                <p><strong>💾 Économie de Forfait :</strong> Vos enseignements restent enregistrés sur votre smartphone.</p>
+                <p style="margin-bottom:8px;"><strong>Écoute 100% Hors-Ligne :</strong> Téléchargez l'audio MP3 le matin lorsque vous avez du WiFi/forfait, et écoutez-le toute la journée sans consommer de connexion internet (en voyage, en taxi, au village).</p>
+                <p><strong>Économie de Forfait :</strong> Vos enseignements restent enregistrés sur votre smartphone.</p>
             </div>
         </div>
     </main>
@@ -1596,7 +1596,7 @@
                 if (adminBox) adminBox.style.display = 'block';
                 if (pastorProfileBox) pastorProfileBox.style.display = 'block';
                 if (pastorLoginSection) pastorLoginSection.style.display = 'none';
-                if (roleText) roleText.innerHTML = '<span style="color:var(--gold-light);">👑 Espace Pasteur (Connecté)</span>';
+                if (roleText) roleText.innerHTML = '<span style="color:var(--gold-light);">Espace Pasteur (Connecté)</span>';
             } else {
                 if (adminBox) adminBox.style.display = 'none';
                 if (pastorProfileBox) pastorProfileBox.style.display = 'none';
@@ -1612,7 +1612,7 @@
                 isPastorLoggedIn = true;
                 localStorage.setItem('kanguka_is_pastor_auth', JSON.stringify(true));
                 checkPastorAuth();
-                showToast("👑 Connexion réussie ! Vous êtes en Mode Pasteur.");
+                showToast("Connexion réussie ! Vous êtes en Mode Pasteur.");
                 switchTab('live');
             } else {
                 showCustomAlert("Accès Refusé", "Code PIN incorrect. Le code par défaut est 7777.");
@@ -1694,7 +1694,7 @@
                 document.getElementById('btnStopCam').style.display = 'block';
 
                 setLiveState(true);
-                showToast("🔴 Votre Caméra est En Direct !");
+                showToast("Votre Caméra est En Direct !");
             } catch (err) {
                 showCustomAlert("Autorisation Caméra", "Veuillez autoriser l'accès à la caméra et au micro sur votre téléphone.");
             }
@@ -1712,14 +1712,14 @@
             document.getElementById('btnStopCam').style.display = 'none';
 
             setLiveState(false);
-            showToast("⏹️ Live caméra arrêté.");
+            showToast("Live caméra arrêté.");
         }
 
         function setLiveState(state) {
             isPastorLive = state;
             localStorage.setItem('kanguka_is_live', JSON.stringify(isPastorLive));
             updateLiveUI();
-            showToast(state ? "🔴 Le Pasteur est maintenant EN DIRECT !" : "⚪ Le direct a été clôturé.");
+            showToast(state ? "Le Pasteur est maintenant EN DIRECT !" : "Le direct a été clôturé.");
         }
 
         function applyCustomLiveStream() {
@@ -1736,7 +1736,7 @@
             liveEmbedUrl = embedUrl;
             localStorage.setItem('kanguka_live_url', liveEmbedUrl);
             setLiveState(true);
-            showToast("✅ Flux vidéo mis en ligne avec succès !");
+            showToast("Flux vidéo mis en ligne avec succès !");
         }
 
         function saveState() {
@@ -1837,7 +1837,7 @@
             TESTIMONIES = TESTIMONIES.filter(t => t.id !== id);
             saveState();
             renderTestimonies();
-            showToast("🗑️ Témoignage supprimé avec succès !");
+            showToast("Témoignage supprimé avec succès.");
         }
 
         function triggerClearAllTestimonies() {
@@ -1848,7 +1848,7 @@
                     TESTIMONIES = [];
                     saveState();
                     renderTestimonies();
-                    showToast("🗑️ Tous les témoignages ont été effacés !");
+                    showToast("Tous les témoignages ont été effacés.");
                 }
             );
         }
@@ -1888,7 +1888,7 @@
             PRAYERS = PRAYERS.filter(p => p.id !== id);
             saveState();
             renderPrayers();
-            showToast("🗑️ Requête de prière supprimée !");
+            showToast("Requête de prière supprimée.");
         }
 
         // RENDER EPISODES
@@ -1932,7 +1932,7 @@
             const icon = document.getElementById('playIcon');
 
             if (!currentEpisode || !currentEpisode.audioUrl) {
-                showToast("📂 Touchez le bouton 'Importer' pour charger un vrai audio MP3.");
+                showToast("Touchez le bouton 'Importer' pour charger un vrai audio MP3.");
                 triggerFileUpload();
                 return;
             }
@@ -1945,12 +1945,12 @@
                 audioElement.play().then(() => {
                     isPlaying = true;
                     icon.className = 'fa-solid fa-pause';
-                    showToast(`▶️ Lecture de "${currentEpisode.title}"...`);
+                    showToast(`Lecture de "${currentEpisode.title}"...`);
                     renderEpisodes(EPISODES, 'homeEpisodesList');
                     renderEpisodes(EPISODES, 'catalogEpisodesList');
                 }).catch(err => {
                     console.log("Audio play err", err);
-                    showToast("🔊 Touchez à nouveau pour autoriser la lecture.");
+                    showToast("Touchez à nouveau pour autoriser la lecture.");
                 });
             } else {
                 audioElement.pause();
@@ -1972,7 +1972,7 @@
             audioElement.play().then(() => {
                 isPlaying = true;
                 document.getElementById('playIcon').className = 'fa-solid fa-pause';
-                showToast(`▶️ Lecture de "${ep.title}"`);
+                showToast(`Lecture de "${ep.title}"`);
             }).catch(e => console.log(e));
 
             switchTab('home');
@@ -1995,7 +1995,7 @@
             }
             renderEpisodes(EPISODES, 'homeEpisodesList');
             renderEpisodes(EPISODES, 'catalogEpisodesList');
-            showToast("🗑️ Fichier audio retiré de la liste !");
+            showToast("Fichier audio retiré de la liste.");
         }
 
         function seekRealAudio(event) {
@@ -2023,12 +2023,12 @@
             if (currentEpisode) {
                 downloadAudio(currentEpisode.title);
             } else {
-                showToast("📂 Aucun audio sélectionné.");
+                showToast("Aucun audio sélectionné.");
             }
         }
 
         function downloadAudio(title) {
-            showToast(`📥 Téléchargement de "${title}" démarré pour écoute hors-ligne !`);
+            showToast(`Téléchargement de "${title}" démarré pour écoute hors-ligne !`);
         }
 
         function shareWa(title) {
@@ -2072,7 +2072,7 @@
             renderEpisodes(EPISODES, 'homeEpisodesList');
             renderEpisodes(EPISODES, 'catalogEpisodesList');
             
-            showToast(`✅ "${newEp.title}" importé et prêt à l'écoute !`);
+            showToast(`"${newEp.title}" importé et prêt à l'écoute !`);
             playEpisode(newEp.id);
         }
 
@@ -2098,7 +2098,7 @@
         }
 
         function requestLiveIntercession() {
-            showToast("✋ Vous avez levé la main pour la prière en direct.");
+            showToast("Vous avez levé la main pour la prière en direct.");
         }
 
         function openBlessingModal() {
@@ -2117,7 +2117,7 @@
 
         function receiveHealing(e) {
             e.stopPropagation();
-            showToast("✨ Que la main puissante de Dieu vous touche et vous restaure ! Amen ! 🙏");
+            showToast("Que la main puissante de Dieu vous touche et vous restaure ! Amen !");
         }
 
         function sendLiveChatMessage() {
@@ -2176,7 +2176,7 @@
                     timer.style.display = 'block';
                     waves.style.display = 'flex';
                     timer.innerText = '00:00';
-                    status.innerText = '🔴 Enregistrement en cours avec votre micro... Parlez clairement';
+                    status.innerText = 'Enregistrement en cours avec votre micro... Parlez clairement';
 
                     recordInterval = setInterval(() => {
                         recordSeconds++;
@@ -2195,7 +2195,7 @@
                 btn.classList.remove('recording');
                 icon.className = 'fa-solid fa-microphone';
                 waves.style.display = 'none';
-                status.innerText = '✨ Enregistrement terminé !';
+                status.innerText = 'Enregistrement terminé.';
 
                 if (mediaRecorder && mediaRecorder.state !== 'inactive') {
                     mediaRecorder.stop();
@@ -2211,7 +2211,7 @@
             const player = document.getElementById('localRecordedAudio');
             if (player) {
                 player.play();
-                showToast("🔊 Lecture de votre enregistrement vocal...");
+                showToast("Lecture de votre enregistrement vocal...");
             }
         }
 
@@ -2252,7 +2252,7 @@
             saveState();
             renderTestimonies();
             cancelVoiceRecord();
-            showToast("🚀 Votre témoignage vocal a été publié avec succès ! Gloire à Dieu !");
+            showToast("Votre témoignage vocal a été publié avec succès ! Gloire à Dieu !");
         }
 
         // PRAYER & TESTIMONY WRITTEN
@@ -2289,7 +2289,7 @@
             saveState();
             renderPrayers();
             input.value = '';
-            showToast("🙏 Votre intention de prière a été envoyée !");
+            showToast("Votre intention de prière a été envoyée.");
         }
 
         function submitTestimony() {
@@ -2326,7 +2326,7 @@
             saveState();
             renderTestimonies();
             input.value = '';
-            showToast("✨ Votre témoignage a été publié avec succès !");
+            showToast("Votre témoignage a été publié avec succès.");
         }
 
         function saveUserProfileName() {
@@ -2339,7 +2339,7 @@
             localStorage.setItem('kanguka_user_name', name);
             syncAuthorInputs(name);
             updateProfileAvatarUI();
-            showToast(`✅ Nom "${name}" enregistré et appliqué au profil et direct !`);
+            showToast(`Nom "${name}" enregistré et appliqué au profil et direct !`);
         }
 
         function syncAuthorInputs(name) {
@@ -2374,7 +2374,7 @@
                     console.log("Storage quota issue", err);
                 }
                 updateProfileAvatarUI();
-                showToast("📸 Photo de profil mise à jour et visible sur le Direct !");
+                showToast("Photo de profil mise à jour et visible sur le Direct !");
             };
             reader.readAsDataURL(file);
         }
@@ -2407,7 +2407,7 @@
             // Update Names in Profile & Live
             if (isPastorLoggedIn) {
                 const pastorName = savedName ? (savedName.toLowerCase().startsWith('pasteur') ? savedName : 'Pasteur ' + savedName) : 'Pasteur Paul';
-                if (nameDisplay) nameDisplay.innerHTML = `<span style="color:var(--gold-light);">👑 ${pastorName}</span>`;
+                if (nameDisplay) nameDisplay.innerHTML = `<span style="color:var(--gold-light);">${pastorName}</span>`;
                 if (roleDisplay) roleDisplay.innerText = "Ministère & Prédication de Réveil";
                 if (livePastorName) livePastorName.innerText = pastorName.toUpperCase();
             } else {
@@ -2441,10 +2441,10 @@
             pastorSelectedAudioName = file.name;
             const nameEl = document.getElementById('pastorSelectedFileName');
             if (nameEl) {
-                nameEl.innerText = '📁 Fichier prêt : ' + file.name;
+                nameEl.innerText = 'Fichier prêt : ' + file.name;
                 nameEl.style.display = 'block';
             }
-            showToast("📁 Audio sélectionné : " + file.name);
+            showToast("Audio sélectionné : " + file.name);
         }
 
         function publishPastorDailyEpisode() {
@@ -2493,7 +2493,7 @@
             if (titleInput) titleInput.value = '';
             if (verseInput) verseInput.value = '';
 
-            showToast("🚀 Émission du Jour publiée avec succès pour tous les fidèles !");
+            showToast("Émission du Jour publiée avec succès pour tous les fidèles !");
             switchTab('home');
         }
 
@@ -2514,7 +2514,7 @@
                     updateDailyEpisodeUI();
                     renderEpisodes(EPISODES, 'homeEpisodesList');
                     renderEpisodes(EPISODES, 'catalogEpisodesList');
-                    showToast("🗑️ Émission du jour retirée.");
+                    showToast("Émission du jour retirée.");
                 }
             );
         }
@@ -2582,7 +2582,7 @@
             Posez votre main sur le cercle doré ci-dessus avec foi pendant que le Pasteur prie pour vous en ce moment précis.
         </p>
         <button onclick="closeBlessingModalDirect()" style="background: rgba(255,255,255,0.15); border: 1px solid var(--border-light); color: white; padding: 10px 24px; border-radius: 50px; font-weight: 700; cursor: pointer;">
-            Fermer & Garder ma Bénédiction 🙏
+            Fermer & Garder ma Bénédiction
         </button>
     </div>
 </body>
