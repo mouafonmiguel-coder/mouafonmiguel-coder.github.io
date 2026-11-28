@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#070d1e">
-    <title>KANGUKA — Réveil Spirituel & Live Direct</title>
+    <title>KANGUKA — Réveil Spirituel, Live & Témoignages Vocaux</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -508,7 +508,6 @@
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
         }
 
-        /* LIVE FLOATING REACTIONS */
         .live-reactions-bar {
             display: flex;
             justify-content: center;
@@ -536,7 +535,6 @@
             transform: scale(1.3);
         }
 
-        /* LIVE PRAYER ACTIONS (PASTOR DIRECT INTERCESSION) */
         .live-actions-card {
             background: linear-gradient(135deg, #13234d 0%, #09122a 100%);
             border: 1px solid var(--gold);
@@ -645,93 +643,124 @@
             font-weight: bold;
         }
 
-        /* ================= VOICE NOTE RECORDER (TÉMOIGNAGES AUDIO) ================= */
-        .voice-record-box {
-            background: linear-gradient(135deg, #10214a 0%, #070f24 100%);
-            border: 1.5px solid var(--gold);
-            border-radius: 18px;
-            padding: 18px;
-            margin-bottom: 18px;
+        /* ================= TÉMOIGNAGES VOCAUX / AUDIO AVANCÉS ================= */
+        .voice-section-card {
+            background: linear-gradient(145deg, #12224c 0%, #070f25 100%);
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            padding: 20px 16px;
+            margin-bottom: 20px;
             text-align: center;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+            position: relative;
         }
 
-        .voice-mic-btn {
-            width: 70px;
-            height: 70px;
+        .voice-badge-top {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--gold-gradient);
+            color: #070d1e;
+            font-size: 0.75rem;
+            font-weight: 900;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .voice-mic-main-btn {
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             background: var(--gold-gradient);
-            border: none;
+            border: 4px solid rgba(255, 255, 255, 0.3);
             color: #070d1e;
-            font-size: 1.8rem;
+            font-size: 2rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 12px auto;
+            margin: 14px auto;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.5);
-            transition: all 0.2s;
+            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6);
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .voice-mic-btn.recording {
+        .voice-mic-main-btn.recording {
             background: var(--red-live);
             color: white;
-            animation: pulse-mic 1s infinite;
+            border-color: #fca5a5;
+            animation: pulse-recording 1.2s infinite;
         }
 
-        @keyframes pulse-mic {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { transform: scale(1.1); box-shadow: 0 0 0 16px rgba(239, 68, 68, 0); }
+        @keyframes pulse-recording {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8); }
+            70% { transform: scale(1.15); box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
 
-        .recording-timer {
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: var(--gold-light);
-            margin-bottom: 8px;
+        .rec-timer-badge {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: #fca5a5;
+            margin-bottom: 6px;
             display: none;
+            letter-spacing: 2px;
         }
 
-        .recording-status {
-            font-size: 0.82rem;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-        }
-
-        .voice-preview-card {
-            background: rgba(0,0,0,0.4);
-            border-radius: 12px;
-            padding: 12px;
-            margin-top: 12px;
+        .voice-waves-visualizer {
             display: none;
+            justify-content: center;
             align-items: center;
-            gap: 10px;
-            border: 1px solid var(--border-light);
+            gap: 4px;
+            height: 30px;
+            margin: 10px 0;
         }
 
-        /* TESTIMONY AUDIO CARD IN LIST */
-        .audio-testi-card {
-            background: var(--bg-card);
+        .v-bar {
+            width: 4px;
+            background: var(--red-live);
+            border-radius: 2px;
+            height: 10px;
+            animation: vWave 0.8s infinite ease-in-out;
+        }
+
+        .v-bar:nth-child(2) { height: 24px; animation-delay: 0.15s; }
+        .v-bar:nth-child(3) { height: 16px; animation-delay: 0.3s; }
+        .v-bar:nth-child(4) { height: 28px; animation-delay: 0.1s; }
+        .v-bar:nth-child(5) { height: 18px; animation-delay: 0.25s; }
+        .v-bar:nth-child(6) { height: 26px; animation-delay: 0.4s; }
+        .v-bar:nth-child(7) { height: 12px; animation-delay: 0.2s; }
+
+        @keyframes vWave {
+            0%, 100% { transform: scaleY(0.3); }
+            50% { transform: scaleY(1.2); }
+        }
+
+        /* Post-recording Player & Form */
+        .voice-recorded-preview {
+            background: rgba(0, 0, 0, 0.5);
             border: 1px solid var(--border);
             border-radius: 16px;
             padding: 16px;
-            margin-bottom: 14px;
+            margin-top: 14px;
+            display: none;
+            text-align: left;
         }
 
-        .audio-testi-player {
-            background: rgba(0,0,0,0.3);
+        .audio-player-box {
+            background: rgba(255, 255, 255, 0.06);
             border-radius: 12px;
             padding: 10px 14px;
             display: flex;
             align-items: center;
             gap: 12px;
-            margin: 10px 0;
-            border: 1px solid var(--border-light);
+            margin-bottom: 12px;
         }
 
         .audio-play-round {
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: var(--gold);
             color: #070d1e;
@@ -740,39 +769,13 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 1.1rem;
             flex-shrink: 0;
+            box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
         }
 
-        .audio-wave-bars {
-            flex: 1;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
-
-        .wave-bar {
-            width: 4px;
-            height: 8px;
-            background: var(--gold-light);
-            border-radius: 2px;
-            animation: soundWave 1.2s infinite ease-in-out;
-        }
-
-        .wave-bar:nth-child(2) { height: 16px; animation-delay: 0.2s; }
-        .wave-bar:nth-child(3) { height: 22px; animation-delay: 0.4s; }
-        .wave-bar:nth-child(4) { height: 12px; animation-delay: 0.1s; }
-        .wave-bar:nth-child(5) { height: 18px; animation-delay: 0.3s; }
-        .wave-bar:nth-child(6) { height: 10px; animation-delay: 0.5s; }
-
-        @keyframes soundWave {
-            0%, 100% { transform: scaleY(0.4); }
-            50% { transform: scaleY(1); }
-        }
-
-        /* PRAYER WALL */
-        .prayer-card {
+        /* Testimonies list */
+        .audio-testi-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 16px;
@@ -1025,9 +1028,8 @@
         <div class="episodes-grid" id="catalogEpisodesList"></div>
     </main>
 
-    <!-- ================= TAB 3: LIVE DIRECT (PRIÈRE EN DIRECT DU PASTEUR) ================= -->
+    <!-- ================= TAB 3: LIVE DIRECT (PRIÈRE DU PASTEUR EN DIRECT) ================= -->
     <main id="tab-live" class="tab-view">
-        <!-- LIVE STREAM SCREEN -->
         <div class="live-stream-box">
             <div class="live-video-screen">
                 <div class="live-badge-overlay"><div class="live-dot"></div> EN DIRECT AVEC LE PASTEUR</div>
@@ -1041,7 +1043,6 @@
                 </div>
             </div>
 
-            <!-- REACTIONS INTERACTIVES -->
             <div class="live-reactions-bar">
                 <button class="reaction-btn" onclick="sendReaction('🙏')">🙏 Amen</button>
                 <button class="reaction-btn" onclick="sendReaction('🔥')">🔥 Feu</button>
@@ -1050,7 +1051,6 @@
             </div>
         </div>
 
-        <!-- ACTIONS DE PRIÈRE EN DIRECT AVEC LE PASTEUR -->
         <div class="live-actions-card">
             <h3 style="font-size:0.95rem; color:var(--gold-light); display:flex; align-items:center; gap:8px;">
                 <i class="fa-solid fa-hands-praying"></i> PRIÈRE DU PASTEUR EN CE MOMENT
@@ -1068,7 +1068,6 @@
             </div>
         </div>
 
-        <!-- LIVE PRAYER CHAT -->
         <div class="live-chat-card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                 <h3 style="font-size:0.95rem; color:var(--gold-light);"><i class="fa-solid fa-comments"></i> Chat & Prières en Direct</h3>
@@ -1115,33 +1114,63 @@
         </div>
     </main>
 
-    <!-- ================= TAB 5: TÉMOIGNAGES (AVEC ENREGISTREUR VOCAL MICRO) ================= -->
+    <!-- ================= TAB 5: TÉMOIGNAGES (STUDIO D'ENREGISTREMENT AUDIO & VOCAL) ================= -->
     <main id="tab-temoignages" class="tab-view">
         <div style="padding: 18px 18px 10px 18px;">
             
-            <!-- ENREGISTREUR AUDIO VOCAL POUR TÉMOIGNAGE -->
-            <div class="voice-record-box">
-                <h3 style="font-size:1.1rem; color:var(--gold-light); margin-bottom:4px;">
-                    <i class="fa-solid fa-microphone-lines"></i> Témoignage Vocal (Enregistrement Audio)
-                </h3>
-                <p style="font-size:0.8rem; color:#cbd5e1;">Racontez votre miracle avec votre propre voix comme sur WhatsApp !</p>
-                
-                <button class="voice-mic-btn" id="voiceMicBtn" onclick="toggleVoiceRecord()">
+            <!-- STUDIO VOCAL PRINCIPAL -->
+            <div class="voice-section-card">
+                <div class="voice-badge-top"><i class="fa-solid fa-microphone-lines"></i> Enregistrement Audio Vocal</div>
+                <h3 style="font-size:1.25rem; color:white; font-weight:800; margin-bottom:4px;">Racontez Votre Miracle en Vocal</h3>
+                <p style="font-size:0.84rem; color:#cbd5e1; max-width:320px; margin:0 auto 12px auto;">
+                    Appuyez sur le micro pour enregistrer votre voix comme sur WhatsApp et fortifier les fidèles.
+                </p>
+
+                <!-- BOUTON MICROPHONE -->
+                <button class="voice-mic-main-btn" id="voiceMicBtn" onclick="toggleVoiceRecord()">
                     <i class="fa-solid fa-microphone" id="voiceMicIcon"></i>
                 </button>
-                
-                <div class="recording-timer" id="recordingTimer">00:00</div>
-                <div class="recording-status" id="recordingStatus">Appuyez sur le micro doré pour parler</div>
 
-                <!-- Aperçu audio après enregistrement -->
-                <div class="voice-preview-card" id="voicePreviewBox">
-                    <button class="audio-play-round" onclick="playRecordedVoice()"><i class="fa-solid fa-play" id="previewPlayIcon"></i></button>
-                    <div style="flex:1; text-align:left;">
-                        <strong style="font-size:0.82rem; color:white;">Mon Témoignage Vocal</strong>
-                        <p style="font-size:0.72rem; color:var(--green);" id="previewDuration">Prêt à l'envoi</p>
+                <!-- Chronomètre & Visualiseur d'ondes -->
+                <div class="rec-timer-badge" id="recordingTimer">00:00</div>
+                <div class="voice-waves-visualizer" id="voiceWavesVisualizer">
+                    <div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div>
+                    <div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div>
+                </div>
+
+                <div id="recordingStatus" style="font-size:0.82rem; color:var(--gold-light); font-weight:600;">
+                    Appuyez sur le micro pour commencer à parler
+                </div>
+
+                <!-- CARTE DE RÉÉCOUTE ET ENVOI DU VOCAL -->
+                <div class="voice-recorded-preview" id="voicePreviewBox">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <strong style="color:var(--gold-light); font-size:0.9rem;"><i class="fa-solid fa-circle-check" style="color:var(--green);"></i> Vocal Enregistré avec Succès !</strong>
+                        <span id="previewDuration" style="font-size:0.75rem; color:white; background:rgba(255,255,255,0.1); padding:2px 8px; border-radius:10px;">00:30</span>
                     </div>
-                    <button onclick="sendVoiceTestimony()" style="background:var(--gold); border:none; padding:6px 12px; border-radius:20px; font-weight:800; font-size:0.78rem; color:#070d1e; cursor:pointer;">Envoyer 🚀</button>
-                    <button onclick="cancelVoiceRecord()" style="background:none; border:none; color:var(--red-live); font-size:1rem; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
+
+                    <div class="audio-player-box">
+                        <button class="audio-play-round" onclick="playRecordedVoice()"><i class="fa-solid fa-play" id="previewPlayIcon"></i></button>
+                        <div style="flex:1;">
+                            <div style="height:6px; background:rgba(255,255,255,0.2); border-radius:3px; position:relative;">
+                                <div id="previewProgress" style="width:0%; height:100%; background:var(--gold); border-radius:3px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom:10px;">
+                        <input type="text" id="voiceAuthorName" placeholder="Votre Nom / Prénom et Ville (ex: Sœur Marie - Douala)" style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:10px; border-radius:10px; color:white; font-size:0.85rem; outline:none; margin-bottom:8px;">
+                        <input type="text" id="voiceTitle" placeholder="Titre de votre miracle (ex: Guérie du diabète)" style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:10px; border-radius:10px; color:white; font-size:0.85rem; outline:none;">
+                    </div>
+
+                    <div style="display:flex; gap:10px;">
+                        <button onclick="sendVoiceTestimony()" style="flex:1; background:var(--gold-gradient); border:none; padding:12px; border-radius:50px; font-weight:900; color:#070d1e; cursor:pointer; font-size:0.85rem;">
+                            🚀 Publier Mon Témoignage Audio
+                        </button>
+                        <button onclick="cancelVoiceRecord()" style="background:rgba(239, 68, 68, 0.2); border:1px solid var(--red-live); color:#fca5a5; padding:12px 16px; border-radius:50px; font-weight:700; cursor:pointer;">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -1153,10 +1182,10 @@
             </div>
 
             <div class="section-title" style="padding:0; margin-bottom:12px;">
-                <h2><i class="fa-solid fa-star" style="color:var(--gold);"></i> Mur des Témoignages & Vocaux</h2>
+                <h2><i class="fa-solid fa-star" style="color:var(--gold);"></i> Témoignages & Vocaux de la Communauté</h2>
             </div>
 
-            <!-- LISTE DES TÉMOIGNAGES (VOCAUX & TEXTES) -->
+            <!-- LISTE DES TÉMOIGNAGES -->
             <div id="testimoniesWallList">
                 <!-- Témoignage Vocal 1 -->
                 <div class="audio-testi-card">
@@ -1164,28 +1193,46 @@
                         <strong style="color:var(--gold-light); font-size:0.9rem;"><i class="fa-solid fa-microphone" style="color:var(--gold); margin-right:4px;"></i> Sœur Mireille (Douala)</strong>
                         <span style="font-size:0.75rem; color:var(--text-muted);">Il y a 3h</span>
                     </div>
-                    <p style="font-size:0.84rem; color:#e2e8f0; margin-bottom:4px;">« Écoutez comment Dieu a guéri mon kyste sans opération après la prière du pasteur en direct ! »</p>
+                    <p style="font-size:0.84rem; color:#e2e8f0; margin-bottom:8px;">« Écoutez comment Dieu a guéri mon kyste sans opération après la prière du pasteur en direct ! »</p>
                     
-                    <div class="audio-testi-player">
+                    <div class="audio-player-box">
                         <button class="audio-play-round" onclick="playVoiceSample(this)"><i class="fa-solid fa-play"></i></button>
-                        <div class="audio-wave-bars">
-                            <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-                            <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+                        <div style="flex:1;">
+                            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">
+                                <span>Témoignage Audio</span>
+                                <span style="color:var(--gold-light); font-weight:700;">00:48</span>
+                            </div>
+                            <div style="height:6px; background:rgba(255,255,255,0.2); border-radius:3px;">
+                                <div style="width:45%; height:100%; background:var(--gold); border-radius:3px;"></div>
+                            </div>
                         </div>
-                        <span style="font-size:0.75rem; color:var(--gold-light); font-weight:700;">00:48</span>
                     </div>
 
                     <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>542 Gloire à Dieu</span></button>
                 </div>
 
-                <!-- Témoignage Texte 2 -->
-                <div class="prayer-card">
+                <!-- Témoignage Vocal 2 -->
+                <div class="audio-testi-card">
                     <div class="prayer-header">
-                        <strong style="color:var(--gold-light); font-size:0.9rem;">Frère Joseph (Yaoundé)</strong>
+                        <strong style="color:var(--gold-light); font-size:0.9rem;"><i class="fa-solid fa-microphone" style="color:var(--gold); margin-right:4px;"></i> Frère Daniel (Bafoussam)</strong>
                         <span style="font-size:0.75rem; color:var(--text-muted);">Hier</span>
                     </div>
-                    <p style="font-size:0.85rem; color:#e2e8f0;">« Gloire à Dieu ! Après 6 mois sans emploi, j'ai été appelé hier pour un poste de responsable commercial ! Dieu est fidèle ! »</p>
-                    <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>389 Gloire à Dieu</span></button>
+                    <p style="font-size:0.84rem; color:#e2e8f0; margin-bottom:8px;">« Déblocage miraculeux de mon visa après 2 ans d'attente ! Merci Seigneur ! »</p>
+                    
+                    <div class="audio-player-box">
+                        <button class="audio-play-round" onclick="playVoiceSample(this)"><i class="fa-solid fa-play"></i></button>
+                        <div style="flex:1;">
+                            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">
+                                <span>Témoignage Audio</span>
+                                <span style="color:var(--gold-light); font-weight:700;">01:15</span>
+                            </div>
+                            <div style="height:6px; background:rgba(255,255,255,0.2); border-radius:3px;">
+                                <div style="width:20%; height:100%; background:var(--gold); border-radius:3px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>287 Gloire à Dieu</span></button>
                 </div>
             </div>
         </div>
@@ -1454,7 +1501,7 @@
             input.value = '';
         }
 
-        // ================= AUDIO RECORDING LOGIC (VOICE NOTES) =================
+        // ================= AUDIO RECORDING LOGIC (VOICE NOTES MICRO) =================
         let isRecording = false;
         let recordInterval = null;
         let recordSeconds = 0;
@@ -1465,6 +1512,7 @@
             const btn = document.getElementById('voiceMicBtn');
             const icon = document.getElementById('voiceMicIcon');
             const timer = document.getElementById('recordingTimer');
+            const waves = document.getElementById('voiceWavesVisualizer');
             const status = document.getElementById('recordingStatus');
 
             if (!isRecording) {
@@ -1486,8 +1534,9 @@
                 btn.classList.add('recording');
                 icon.className = 'fa-solid fa-stop';
                 timer.style.display = 'block';
+                waves.style.display = 'flex';
                 timer.innerText = '00:00';
-                status.innerText = '🔴 Enregistrement en cours... Parlez au micro';
+                status.innerText = '🔴 Enregistrement en cours... Parlez clairement';
 
                 recordInterval = setInterval(() => {
                     recordSeconds++;
@@ -1502,47 +1551,69 @@
                 clearInterval(recordInterval);
                 btn.classList.remove('recording');
                 icon.className = 'fa-solid fa-microphone';
+                waves.style.display = 'none';
                 status.innerText = '✨ Enregistrement terminé !';
 
                 if (mediaRecorder && mediaRecorder.state !== 'inactive') {
                     mediaRecorder.stop();
                 }
 
-                document.getElementById('voicePreviewBox').style.display = 'flex';
-                document.getElementById('previewDuration').innerText = `Durée: ${timer.innerText} • Prêt`;
+                document.getElementById('voicePreviewBox').style.display = 'block';
+                document.getElementById('previewDuration').innerText = timer.innerText;
             }
         }
 
         function playRecordedVoice() {
+            const icon = document.getElementById('previewPlayIcon');
+            const bar = document.getElementById('previewProgress');
+            icon.className = 'fa-solid fa-pause';
+            bar.style.width = '0%';
+            
+            let p = 0;
+            const iv = setInterval(() => {
+                p += 5;
+                bar.style.width = p + '%';
+                if (p >= 100) {
+                    clearInterval(iv);
+                    icon.className = 'fa-solid fa-play';
+                }
+            }, 100);
             showToast("🔊 Lecture de votre vocal de témoignage...");
         }
 
         function cancelVoiceRecord() {
             document.getElementById('voicePreviewBox').style.display = 'none';
             document.getElementById('recordingTimer').style.display = 'none';
-            document.getElementById('recordingStatus').innerText = 'Appuyez sur le micro doré pour parler';
+            document.getElementById('voiceWavesVisualizer').style.display = 'none';
+            document.getElementById('recordingStatus').innerText = 'Appuyez sur le micro pour commencer à parler';
         }
 
         function sendVoiceTestimony() {
             const wall = document.getElementById('testimoniesWallList');
             const card = document.createElement('div');
             card.className = 'audio-testi-card';
-            const dur = document.getElementById('recordingTimer').innerText || '00:30';
-            
+            const dur = document.getElementById('previewDuration').innerText || '00:30';
+            const author = document.getElementById('voiceAuthorName').value.trim() || 'Fidèle Anonyme';
+            const title = document.getElementById('voiceTitle').value.trim() || 'Témoignage de Guérison & Bénédiction';
+
             card.innerHTML = `
                 <div class="prayer-header">
-                    <strong style="color:var(--gold-light); font-size:0.9rem;"><i class="fa-solid fa-microphone" style="color:var(--gold); margin-right:4px;"></i> Mon Témoignage Vocal</strong>
+                    <strong style="color:var(--gold-light); font-size:0.9rem;"><i class="fa-solid fa-microphone" style="color:var(--gold); margin-right:4px;"></i> ${author}</strong>
                     <span style="font-size:0.75rem; color:var(--green);">À l'instant</span>
                 </div>
-                <p style="font-size:0.84rem; color:#e2e8f0; margin-bottom:4px;">« Mon message vocal de bénédiction envoyé à la communauté »</p>
+                <p style="font-size:0.84rem; color:#e2e8f0; margin-bottom:8px;">« ${title} »</p>
                 
-                <div class="audio-testi-player">
+                <div class="audio-player-box">
                     <button class="audio-play-round" onclick="playVoiceSample(this)"><i class="fa-solid fa-play"></i></button>
-                    <div class="audio-wave-bars">
-                        <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-                        <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+                    <div style="flex:1;">
+                        <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">
+                            <span>Témoignage Audio</span>
+                            <span style="color:var(--gold-light); font-weight:700;">${dur}</span>
+                        </div>
+                        <div style="height:6px; background:rgba(255,255,255,0.2); border-radius:3px;">
+                            <div style="width:10%; height:100%; background:var(--gold); border-radius:3px;"></div>
+                        </div>
                     </div>
-                    <span style="font-size:0.75rem; color:var(--gold-light); font-weight:700;">${dur}</span>
                 </div>
 
                 <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>1 Gloire à Dieu</span></button>
