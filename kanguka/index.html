@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a192f">
+    <title>KANGUKA STYLE — Réveil Spirituel & Enseignements Quotidiens</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #070d1e;
+            --bg-card: #0f1c3f;
+            --bg-card-hover: #162756;
+            --gold: #d4af37;
+            --gold-light: #f3e5ab;
+            --gold-gradient: linear-gradient(135deg, #d4af37 0%, #fef08a 50%, #b45309 100%);
+            --blue-accent: #38bdf8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(212, 175, 55, 0.2);
+            --border-light: rgba(255, 255, 255, 0.08);
+            --green: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 90px;
+        }
+
+        /* Top Header */
+        .app-header {
+            background: rgba(7, 13, 30, 0.95);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+            padding: 12px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: var(--gold-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #070d1e;
+            font-size: 1.2rem;
+            font-weight: 900;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .logo-text h1 {
+            font-size: 1.15rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text p {
+            font-size: 0.68rem;
+            color: var(--blue-accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--border-light);
+            color: var(--text-main);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .icon-btn:hover {
+            background: var(--gold);
+            color: #000;
+        }
+
+        /* Hero Banner - Today's Message */
+        .hero-banner {
+            padding: 20px 18px;
+            background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.15), transparent 70%),
+                        radial-gradient(circle at bottom left, rgba(212, 175, 55, 0.15), transparent 70%);
+        }
+
+        .hero-card {
+            background: linear-gradient(145deg, #0e1e45 0%, #08122a 100%);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid var(--gold);
+            color: var(--gold-light);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .hero-verse {
+            font-size: 0.88rem;
+            color: var(--blue-accent);
+            font-style: italic;
+            margin-bottom: 18px;
+        }
+
+        /* Player Controls */
+        .player-bar {
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 14px;
+            padding: 14px 18px;
+            border: 1px solid var(--border-light);
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 32%;
+            background: var(--gold-gradient);
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            background: #ffffff;
+            border-radius: 50%;
+            position: absolute;
+            right: -6px;
+            top: -3px;
+            box-shadow: 0 0 8px var(--gold);
+        }
+
+        .time-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .player-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .play-main-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--gold-gradient);
+            border: none;
+            color: #070d1e;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(212, 175, 55, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .play-main-btn:active {
+            transform: scale(0.92);
+        }
+
+        .sub-player-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .sub-player-btn:hover {
+            color: var(--gold);
+        }
+
+        /* Categories Section */
+        .section-title {
+            padding: 0 18px;
+            margin: 22px 0 14px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title h2 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title a {
+            font-size: 0.8rem;
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .cat-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 0 18px 10px 18px;
+            scrollbar-width: none;
+        }
+
+        .cat-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .cat-chip {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 50px;
+            padding: 8px 18px;
+            white-space: nowrap;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cat-chip.active, .cat-chip:hover {
+            background: rgba(212, 175, 55, 0.15);
+            border-color: var(--gold);
+            color: var(--gold-light);
+        }
+
+        /* Episodes List */
+        .episodes-grid {
+            padding: 0 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .episode-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .episode-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border);
+            transform: translateY(-2px);
+        }
+
+        .ep-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .ep-icon-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: var(--blue-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .ep-info h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .ep-info p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .ep-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ep-btn {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--border-light);
+            color: var(--text-muted);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .ep-btn:hover {
+            background: var(--gold);
+            color: #000;
+        }
+
+        /* Testimonials Section */
+        .testi-card {
+            background: linear-gradient(135deg, #101c3d 0%, #0b142c 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px;
+            margin: 0 18px 14px 18px;
+            position: relative;
+        }
+
+        .testi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .testi-author {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--gold-light);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .testi-date {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        .testi-body {
+            font-size: 0.86rem;
+            color: #e2e8f0;
+            font-style: italic;
+            margin-bottom: 12px;
+        }
+
+        .testi-actions {
+            display: flex;
+            gap: 15px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .testi-tag {
+            color: var(--blue-accent);
+            cursor: pointer;
+        }
+
+        /* Bottom Floating Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(7, 13, 30, 0.96);
+            backdrop-filter: blur(14px);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-item i {
+            font-size: 1.25rem;
+        }
+
+        .nav-item.active, .nav-item:hover {
+            color: var(--gold);
+        }
+
+        /* Quick Action Bar */
+        .cta-box {
+            margin: 25px 18px 10px 18px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #0369a1 100%);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .cta-box h3 {
+            font-size: 1.1rem;
+            color: #ffffff;
+            margin-bottom: 6px;
+            font-weight: 800;
+        }
+
+        .cta-box p {
+            font-size: 0.82rem;
+            color: #e0f2fe;
+            margin-bottom: 14px;
+        }
+
+        .cta-btn-wa {
+            background: #25d366;
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.35);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <header class="app-header">
+        <div class="logo-box">
+            <div class="logo-icon"><i class="fa-solid fa-dove"></i></div>
+            <div class="logo-text">
+                <h1>RÉVEIL SPIRITUEL</h1>
+                <p>Kanguka Style • Quotidien</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn" title="Rechercher"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button class="icon-btn" title="Notifications"><i class="fa-solid fa-bell"></i></button>
+            <button class="icon-btn" title="Téléchargements Hors-Ligne"><i class="fa-solid fa-cloud-arrow-down"></i></button>
+        </div>
+    </header>
+
+    <!-- HERO CARD: MESSAGE DU JOUR -->
+    <section class="hero-banner">
+        <div class="hero-card">
+            <div class="hero-badge"><i class="fa-solid fa-fire"></i> Émission du Jour • 13 Septembre 2026</div>
+            <h2 class="hero-title">Le Pouvoir de la Persévérance dans la Prière</h2>
+            <p class="hero-verse">« Demandez, et l'on vous donnera ; cherchez, et vous trouverez ; frappez, et l'on vous ouvrira. » — Matthieu 7:7</p>
+
+            <!-- Embedded Modern Player -->
+            <div class="player-bar">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-dot"></div>
+                    </div>
+                </div>
+                <div class="time-labels">
+                    <span>04:45</span>
+                    <span>14:30</span>
+                </div>
+                <div class="player-actions">
+                    <button class="sub-player-btn" title="Reculer 15s"><i class="fa-solid fa-rotate-left"></i> 15s</button>
+                    <button class="play-main-btn" id="playBtn" onclick="togglePlay()"><i class="fa-solid fa-play" id="playIcon"></i></button>
+                    <button class="sub-player-btn" title="Avancer 15s">15s <i class="fa-solid fa-rotate-right"></i></button>
+                    <button class="sub-player-btn" title="Vitesse">1.0x</button>
+                    <button class="sub-player-btn" title="Télécharger MP3"><i class="fa-solid fa-download"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- THEMATIC CATEGORIES -->
+    <div class="section-title">
+        <h2><i class="fa-solid fa-layer-group" style="color:var(--gold);"></i> Thématiques de Réveil</h2>
+        <a href="#">Tout voir</a>
+    </div>
+
+    <div class="cat-scroll">
+        <div class="cat-chip active"><i class="fa-solid fa-star"></i> Tous les Récents</div>
+        <div class="cat-chip"><i class="fa-solid fa-heart-pulse"></i> Guérison Divine</div>
+        <div class="cat-chip"><i class="fa-solid fa-hands-praying"></i> Prière & Intercession</div>
+        <div class="cat-chip"><i class="fa-solid fa-shield-halved"></i> Délivrance & Victoire</div>
+        <div class="cat-chip"><i class="fa-solid fa-dove"></i> Saint-Esprit</div>
+        <div class="cat-chip"><i class="fa-solid fa-gem"></i> Foi Inébranlable</div>
+    </div>
+
+    <!-- RECENT EPISODES LIST -->
+    <div class="section-title">
+        <h2><i class="fa-solid fa-headphones" style="color:var(--blue-accent);"></i> Dernières Émissions Audio</h2>
+        <a href="#">Archives</a>
+    </div>
+
+    <div class="episodes-grid">
+        <!-- Episode 1 -->
+        <div class="episode-card">
+            <div class="ep-left">
+                <div class="ep-icon-box"><i class="fa-solid fa-play"></i></div>
+                <div class="ep-info">
+                    <h3>Comment Dépasser la Peur et le Doute</h3>
+                    <p>Épisode 842 • 14 min • 12 Septembre 2026</p>
+                </div>
+            </div>
+            <div class="ep-actions">
+                <button class="ep-btn" title="Télécharger"><i class="fa-solid fa-arrow-down"></i></button>
+                <button class="ep-btn" title="Partager WhatsApp"><i class="fa-brands fa-whatsapp"></i></button>
+            </div>
+        </div>
+
+        <!-- Episode 2 -->
+        <div class="episode-card">
+            <div class="ep-left">
+                <div class="ep-icon-box" style="background:rgba(212,175,55,0.1); border-color:var(--gold); color:var(--gold);"><i class="fa-solid fa-play"></i></div>
+                <div class="ep-info">
+                    <h3>La Grâce qui Transforme l'Impossible</h3>
+                    <p>Épisode 841 • 15 min • 11 Septembre 2026</p>
+                </div>
+            </div>
+            <div class="ep-actions">
+                <button class="ep-btn" title="Télécharger"><i class="fa-solid fa-arrow-down"></i></button>
+                <button class="ep-btn" title="Partager WhatsApp"><i class="fa-brands fa-whatsapp"></i></button>
+            </div>
+        </div>
+
+        <!-- Episode 3 -->
+        <div class="episode-card">
+            <div class="ep-left">
+                <div class="ep-icon-box"><i class="fa-solid fa-play"></i></div>
+                <div class="ep-info">
+                    <h3>Prier avec Autorité dans le Nom de Jésus</h3>
+                    <p>Épisode 840 • 16 min • 10 Septembre 2026</p>
+                </div>
+            </div>
+            <div class="ep-actions">
+                <button class="ep-btn" title="Télécharger"><i class="fa-solid fa-arrow-down"></i></button>
+                <button class="ep-btn" title="Partager WhatsApp"><i class="fa-brands fa-whatsapp"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TESTIMONIALS SECTION -->
+    <div class="section-title">
+        <h2><i class="fa-solid fa-certificate" style="color:var(--gold);"></i> Témoignages & Miracles</h2>
+        <a href="#">Déposer le mien</a>
+    </div>
+
+    <div class="testi-card">
+        <div class="testi-header">
+            <div class="testi-author"><i class="fa-solid fa-user-check"></i> Sœur Marie (Douala)</div>
+            <div class="testi-date">Hier à 18:30</div>
+        </div>
+        <p class="testi-body">« Après 3 mois de blocage financier et de découragement, j'ai prié avec l'émission de mardi sur la fidélité de Dieu. Aujourd'hui, mon contrat a été validé ! Gloire à Jésus ! »</p>
+        <div class="testi-actions">
+            <span class="testi-tag"><i class="fa-solid fa-hands-praying"></i> 248 Amen</span>
+            <span class="testi-tag"><i class="fa-solid fa-share-nodes"></i> Partager</span>
+        </div>
+    </div>
+
+    <!-- WHATSAPP BROADCAST CTA -->
+    <div class="cta-box">
+        <h3><i class="fa-brands fa-whatsapp"></i> Rejoindre la Diffusion Quotidienne</h3>
+        <p>Recevez chaque matin l'audio du réveil spirituel directement sur WhatsApp !</p>
+        <a href="#" class="cta-btn-wa"><i class="fa-brands fa-whatsapp"></i> Rejoindre le Groupe WhatsApp</a>
+    </div>
+
+    <!-- FLOATING BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+        <div class="nav-item active">
+            <i class="fa-solid fa-house"></i>
+            <span>Accueil</span>
+        </div>
+        <div class="nav-item">
+            <i class="fa-solid fa-book-bible"></i>
+            <span>Enseignements</span>
+        </div>
+        <div class="nav-item">
+            <i class="fa-solid fa-hands-praying"></i>
+            <span>Prière</span>
+        </div>
+        <div class="nav-item">
+            <i class="fa-solid fa-heart"></i>
+            <span>Témoignages</span>
+        </div>
+        <div class="nav-item">
+            <i class="fa-solid fa-circle-user"></i>
+            <span>Profil</span>
+        </div>
+    </nav>
+
+    <script>
+        let isPlaying = false;
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            const icon = document.getElementById('playIcon');
+            if (isPlaying) {
+                icon.className = 'fa-solid fa-pause';
+            } else {
+                icon.className = 'fa-solid fa-play';
+            }
+        }
+    </script>
+</body>
+</html>
