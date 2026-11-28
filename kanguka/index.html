@@ -462,7 +462,7 @@
             color: #000;
         }
 
-        /* ================= LIVE STREAMING VIEW & PASTOR DETECTION ================= */
+        /* ================= LIVE STREAMING VIEW & NATIVE CAM ================= */
         .live-stream-box {
             margin: 18px;
             background: #000000;
@@ -480,7 +480,7 @@
 
         .live-video-screen {
             width: 100%;
-            min-height: 230px;
+            min-height: 240px;
             background: radial-gradient(circle at center, #1e1b4b 0%, #060919 100%);
             display: flex;
             flex-direction: column;
@@ -488,7 +488,7 @@
             justify-content: center;
             position: relative;
             text-align: center;
-            padding: 20px;
+            padding: 16px;
         }
 
         .live-badge-overlay {
@@ -505,6 +505,7 @@
             align-items: center;
             gap: 6px;
             box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+            z-index: 10;
         }
 
         .live-badge-overlay.offline {
@@ -523,6 +524,7 @@
             padding: 4px 10px;
             border-radius: 6px;
             font-weight: 600;
+            z-index: 10;
         }
 
         .pastor-avatar-live {
@@ -543,10 +545,14 @@
             filter: grayscale(30%);
         }
 
-        @keyframes pulse-gold {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(212, 175, 55, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        /* NATIVE CAMERA FEED */
+        #nativePastorVideo {
+            width: 100%;
+            max-height: 280px;
+            border-radius: 12px;
+            display: none;
+            object-fit: cover;
+            border: 1px solid var(--gold);
         }
 
         .live-reactions-bar {
@@ -623,13 +629,13 @@
             gap: 6px;
         }
 
-        /* PASTOR REGIE / CONTROL PANEL */
+        /* PASTOR REGIE / BROADCAST STUDIO */
         .pastor-admin-box {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid var(--border);
+            background: linear-gradient(135deg, #0f1c3f 0%, #0b152d 100%);
+            border: 1.5px solid var(--gold);
             border-radius: 16px;
             margin: 14px 18px;
-            padding: 14px 16px;
+            padding: 16px;
         }
 
         .pastor-admin-header {
@@ -1106,7 +1112,7 @@
         <div class="episodes-grid" id="catalogEpisodesList"></div>
     </main>
 
-    <!-- ================= TAB 3: LIVE DIRECT (DÉTECTION DU PASTEUR & RÉGIE) ================= -->
+    <!-- ================= TAB 3: LIVE DIRECT (AVEC CAMÉRA DIRECTE 0 ABONNÉ REQUIS) ================= -->
     <main id="tab-live" class="tab-view">
         <!-- LIVE STREAM SCREEN -->
         <div class="live-stream-box" id="mainLiveBox">
@@ -1117,12 +1123,16 @@
                 </div>
                 <div class="live-viewers-count" id="liveViewersCount"><i class="fa-solid fa-users"></i> 2 485 connectés</div>
                 
-                <div class="pastor-avatar-live" id="pastorAvatarLive"></div>
-                <h3 style="font-size: 1.15rem; color: #ffffff; font-weight:800; margin-bottom:2px;" id="livePastorName">PASTEUR CHRIS & L'ÉQUIPE</h3>
-                <p style="font-size: 0.82rem; color: var(--gold-light); font-weight:600;" id="liveThemeText">🔥 Prière Prophétique & Délivrance en Direct</p>
+                <!-- Native Camera Stream for Pastor (0 subscribers required!) -->
+                <video id="nativePastorVideo" autoplay playsinline muted></video>
+
+                <div id="defaultPastorAvatarBox">
+                    <div class="pastor-avatar-live" id="pastorAvatarLive"></div>
+                    <h3 style="font-size: 1.15rem; color: #ffffff; font-weight:800; margin-bottom:2px;" id="livePastorName">PASTEUR CHRIS & L'ÉQUIPE</h3>
+                    <p style="font-size: 0.82rem; color: var(--gold-light); font-weight:600;" id="liveThemeText">🔥 Prière Prophétique & Délivrance en Direct</p>
+                </div>
                 
                 <div id="liveStreamFrameBox" style="display:none; width:100%; margin-top:10px;">
-                    <!-- Embedded YouTube / HLS Live Stream if active -->
                     <iframe id="liveIframe" width="100%" height="200" style="border-radius:12px; border:none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </div>
@@ -1153,29 +1163,49 @@
             </div>
         </div>
 
-        <!-- RÉGIE / CONTRÔLE PASTEUR (POUR TESTER / DÉTECTER LE LIVE) -->
+        <!-- STUDIO DU PASTEUR : DIFFUSER SANS AUCUN ABONNÉ REQUIS -->
         <div class="pastor-admin-box">
             <div class="pastor-admin-header" onclick="togglePastorAdmin()">
-                <strong style="color:var(--gold-light); font-size:0.85rem;"><i class="fa-solid fa-sliders"></i> ⚙️ Régie Pasteur : Comment l'appli sait que le pasteur est en direct ?</strong>
+                <strong style="color:var(--gold-light); font-size:0.88rem;">
+                    <i class="fa-solid fa-video" style="color:var(--red-live); margin-right:6px;"></i> 
+                    Studio Pasteur (0 Abonné Requis) : Lancer le Live
+                </strong>
                 <i class="fa-solid fa-chevron-down" id="adminChevron" style="color:var(--gold);"></i>
             </div>
             
             <div id="pastorAdminForm" style="display:none; margin-top:12px; border-top:1px solid var(--border-light); padding-top:12px;">
-                <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">
-                    Comme pour <strong>Kanguka</strong>, le live s'active automatiquement via le flux YouTube/Facebook ou lorsque le Pasteur active la diffusion :
-                </p>
-                <div style="display:flex; gap:8px; margin-bottom:10px;">
-                    <button onclick="setLiveState(true)" style="flex:1; background:var(--red-live); color:white; border:none; padding:8px; border-radius:8px; font-weight:800; font-size:0.75rem; cursor:pointer;">
-                        🔴 Lancer le Direct Maintenant
-                    </button>
-                    <button onclick="setLiveState(false)" style="flex:1; background:#334155; color:white; border:none; padding:8px; border-radius:8px; font-weight:800; font-size:0.75rem; cursor:pointer;">
-                        ⚪ Couper le Direct (Hors-Ligne)
+                
+                <!-- Option 1: Live Caméra Directe depuis le smartphone -->
+                <div style="background:rgba(255,255,255,0.06); padding:12px; border-radius:12px; margin-bottom:12px;">
+                    <h5 style="color:var(--gold-light); font-size:0.82rem; margin-bottom:4px;">
+                        <i class="fa-solid fa-camera"></i> Option 1 : Démarrer la Caméra du Pasteur (0 Abonné)
+                    </h5>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">
+                        Le pasteur allume sa caméra de téléphone directement dans l'appli sans passer par YouTube !
+                    </p>
+                    <div style="display:flex; gap:8px;">
+                        <button onclick="startPastorPhoneCamera()" id="btnStartCam" style="flex:1; background:var(--red-live); color:white; border:none; padding:10px; border-radius:8px; font-weight:800; font-size:0.78rem; cursor:pointer;">
+                            🔴 Allumer ma Caméra & Prêcher
+                        </button>
+                        <button onclick="stopPastorPhoneCamera()" id="btnStopCam" style="background:#334155; color:white; border:none; padding:10px 14px; border-radius:8px; font-weight:800; font-size:0.78rem; cursor:pointer; display:none;">
+                            ⏹️ Arrêter
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Option 2: Facebook Live / StreamYard / YouTube PC -->
+                <div style="background:rgba(255,255,255,0.06); padding:12px; border-radius:12px;">
+                    <h5 style="color:var(--blue-accent); font-size:0.82rem; margin-bottom:4px;">
+                        <i class="fa-brands fa-facebook"></i> Option 2 : Facebook Live ou Lien Externe
+                    </h5>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">
+                        Sur Facebook Live, 0 abonné est requis ! Collez simplement votre lien ici :
+                    </p>
+                    <input type="text" id="liveStreamUrlInput" placeholder="Coller le lien Facebook Live, StreamYard ou YouTube..." style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:8px 12px; border-radius:8px; color:white; font-size:0.78rem; outline:none; margin-bottom:8px;">
+                    <button onclick="applyCustomLiveStream()" style="width:100%; background:var(--gold); color:#070d1e; border:none; padding:8px; border-radius:8px; font-weight:800; font-size:0.78rem; cursor:pointer;">
+                        Diffuser ce flux aux fidèles &rarr;
                     </button>
                 </div>
-                <input type="text" id="liveStreamUrlInput" placeholder="Coller le lien YouTube Live ou Facebook du Pasteur..." style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:8px 12px; border-radius:8px; color:white; font-size:0.78rem; outline:none; margin-bottom:8px;">
-                <button onclick="applyCustomLiveStream()" style="width:100%; background:var(--gold); color:#070d1e; border:none; padding:8px; border-radius:8px; font-weight:800; font-size:0.78rem; cursor:pointer;">
-                    Mettre à jour le Flux Vidéo du Pasteur &rarr;
-                </button>
             </div>
         </div>
 
@@ -1420,6 +1450,7 @@
         // LIVE STATE CONFIGURATION
         let isPastorLive = JSON.parse(localStorage.getItem('kanguka_is_live')) ?? true;
         let liveEmbedUrl = localStorage.getItem('kanguka_live_url') || '';
+        let cameraStream = null;
 
         function updateLiveUI() {
             const topBadge = document.getElementById('topLiveIndicator');
@@ -1476,6 +1507,43 @@
             }
         }
 
+        // START PASTOR PHONE CAMERA (0 SUBSCRIBERS REQUIRED!)
+        async function startPastorPhoneCamera() {
+            try {
+                cameraStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'user' },
+                    audio: true
+                });
+
+                const videoEl = document.getElementById('nativePastorVideo');
+                videoEl.srcObject = cameraStream;
+                videoEl.style.display = 'block';
+                document.getElementById('defaultPastorAvatarBox').style.display = 'none';
+                document.getElementById('btnStartCam').style.display = 'none';
+                document.getElementById('btnStopCam').style.display = 'block';
+
+                setLiveState(true);
+                showToast("🔴 Votre Caméra est En Direct ! Vous prêchez à vos fidèles !");
+            } catch (err) {
+                alert("Veuillez autoriser l'accès à la caméra et au micro pour démarrer le live.");
+            }
+        }
+
+        function stopPastorPhoneCamera() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(t => t.stop());
+                cameraStream = null;
+            }
+            const videoEl = document.getElementById('nativePastorVideo');
+            videoEl.style.display = 'none';
+            document.getElementById('defaultPastorAvatarBox').style.display = 'block';
+            document.getElementById('btnStartCam').style.display = 'block';
+            document.getElementById('btnStopCam').style.display = 'none';
+
+            setLiveState(false);
+            showToast("⏹️ Live caméra arrêté.");
+        }
+
         function setLiveState(state) {
             isPastorLive = state;
             localStorage.setItem('kanguka_is_live', JSON.stringify(isPastorLive));
@@ -1530,11 +1598,6 @@
                 const durM = Math.floor(audioElement.duration / 60).toString().padStart(2, '0');
                 const durS = Math.floor(audioElement.duration % 60).toString().padStart(2, '0');
                 document.getElementById('totalTimeLabel').innerText = `${durM}:${durS}`;
-            } else {
-                const curM = Math.floor(audioElement.currentTime / 60).toString().padStart(2, '0');
-                const curS = Math.floor(audioElement.currentTime % 60).toString().padStart(2, '0');
-                document.getElementById('currentTimeLabel').innerText = `${curM}:${curS}`;
-                document.getElementById('totalTimeLabel').innerText = "LIVE DIRECT";
             }
         });
 
