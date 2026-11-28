@@ -873,27 +873,29 @@
             backdrop-filter: blur(16px);
             border-top: 1px solid var(--border);
             display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
+            justify-content: space-between;
+            padding: 8px 6px;
             z-index: 1000;
         }
 
         .nav-item {
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             color: var(--text-muted);
             text-decoration: none;
-            font-size: 0.72rem;
+            font-size: 0.65rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
             position: relative;
+            padding: 2px 0;
         }
 
         .nav-item i {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
         }
 
         .nav-item.active {
@@ -1068,6 +1070,7 @@
                 <span id="topLiveText">DIRECT</span>
             </div>
             <button class="icon-btn" onclick="triggerFileUpload()" title="Ajouter mes vrais MP3"><i class="fa-solid fa-file-audio"></i></button>
+            <button class="icon-btn" onclick="switchTab('profile')" title="Mon Profil & Espace Pasteur" style="background:rgba(212,175,55,0.15); border:1px solid var(--gold);"><i class="fa-solid fa-user" style="color:var(--gold-light);"></i></button>
         </div>
     </header>
 
@@ -1437,6 +1440,10 @@
         <div class="nav-item" id="nav-temoignages" onclick="switchTab('temoignages')">
             <i class="fa-solid fa-heart"></i>
             <span>Témoignages</span>
+        </div>
+        <div class="nav-item" id="nav-profile" onclick="switchTab('profile')">
+            <i class="fa-solid fa-user"></i>
+            <span>Profil</span>
         </div>
     </nav>
 
