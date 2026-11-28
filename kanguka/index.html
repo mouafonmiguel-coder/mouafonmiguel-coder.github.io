@@ -1081,20 +1081,6 @@
         </div>
     </div>
 
-    <!-- MODAL POSE DE MAIN / GUÉRISON EN DIRECT (CACHÉE PAR DÉFAUT) -->
-    <div id="modalBlessing" class="modal-blessing" style="display:none;" onclick="closeBlessingModal(event)">
-        <div class="hand-blessing-circle" onclick="receiveHealing(event)">
-            <i class="fa-solid fa-hand-holding-heart"></i>
-        </div>
-        <h2 style="font-size: 1.4rem; color: var(--gold-light); margin-bottom: 8px;">PRIÈRE DE GUÉRISON & DÉLIVRANCE</h2>
-        <p style="font-size: 0.9rem; color: #cbd5e1; max-width: 320px; margin-bottom: 20px;">
-            Posez votre main sur le cercle doré ci-dessus avec foi pendant que le Pasteur prie pour vous en ce moment précis.
-        </p>
-        <button onclick="closeBlessingModalDirect()" style="background: rgba(255,255,255,0.15); border: 1px solid var(--border-light); color: white; padding: 10px 24px; border-radius: 50px; font-weight: 700; cursor: pointer;">
-            Fermer & Garder ma Bénédiction 🙏
-        </button>
-    </div>
-
     <!-- TOP BAR -->
     <header class="app-header">
         <div class="logo-box" onclick="switchTab('home')">
@@ -1122,9 +1108,9 @@
         <!-- HERO CARD: MESSAGE DU JOUR -->
         <section class="hero-banner">
             <div class="hero-card">
-                <div class="hero-badge"><i class="fa-solid fa-dove"></i> Réveil Spirituel • Émission Quotidienne</div>
-                <h2 class="hero-title" id="nowPlayingTitle">Sélectionnez ou Importez un Enseignement MP3</h2>
-                <p class="hero-verse" id="nowPlayingVerse">« Ta parole est une lampe à mes pieds, et une lumière sur mon sentier. » — Psaume 119:105</p>
+                <div class="hero-badge" id="dailyHeroBadge"><i class="fa-solid fa-dove"></i> Émission du Jour en Attente</div>
+                <h2 class="hero-title" id="nowPlayingTitle">En attente de l'Émission du Jour</h2>
+                <p class="hero-verse" id="nowPlayingVerse">« Le Seigneur donne une parole, et les messagères de bonnes nouvelles sont une grande armée. » — Psaume 68:11</p>
 
                 <!-- Embedded Real Audio Player -->
                 <div class="player-bar">
@@ -1142,8 +1128,15 @@
                         <button class="play-main-btn" id="playBtn" onclick="togglePlay()"><i class="fa-solid fa-play" id="playIcon"></i></button>
                         <button class="sub-player-btn" onclick="skipRealAudio(15)" title="Avancer 15s">15s <i class="fa-solid fa-rotate-right"></i></button>
                         <button class="sub-player-btn" id="speedBtn" onclick="toggleSpeed()">1.0x</button>
-                        <button class="sub-player-btn" onclick="triggerFileUpload()" title="Importer un MP3"><i class="fa-solid fa-folder-open"></i></button>
+                        <button class="sub-player-btn" onclick="downloadCurrentAudio()" title="Télécharger MP3 pour écoute hors-ligne"><i class="fa-solid fa-download"></i></button>
                     </div>
+                </div>
+
+                <!-- Bouton visible pour le pasteur quand connecté -->
+                <div id="pastorHeroPublishPrompt" style="display:none; margin-top:14px; text-align:center;">
+                    <button onclick="switchTab('profile')" style="background:var(--gold-gradient); border:none; padding:10px 20px; border-radius:30px; font-weight:800; color:#070d1e; font-size:0.85rem; cursor:pointer;">
+                        👑 Publier l'Émission du Jour (Espace Pasteur)
+                    </button>
                 </div>
             </div>
         </section>
@@ -1416,6 +1409,46 @@
                 <p style="font-size:0.8rem; color:var(--blue-accent);">Communauté de Prière & Réveil</p>
             </div>
 
+            <!-- ESPACE PASTEUR CONNECTÉ (PUBLICATION DE L'ÉMISSION DU JOUR & STUDIO) -->
+            <div id="pastorProfileBox" style="display:none; background:linear-gradient(135deg, #101f46 0%, #09132d 100%); border:2px solid var(--gold); border-radius:16px; padding:18px; margin-bottom:18px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <h4 style="color:var(--gold-light); font-size:1rem; margin:0;">
+                        <i class="fa-solid fa-crown" style="color:var(--gold); margin-right:6px;"></i> Espace Pasteur & Prédication
+                    </h4>
+                    <button onclick="logoutPastor()" style="background:rgba(239, 68, 68, 0.2); border:1px solid var(--red-live); color:#fca5a5; padding:4px 10px; border-radius:20px; font-size:0.75rem; cursor:pointer;">
+                        Déconnexion
+                    </button>
+                </div>
+
+                <!-- Statut de l'émission actuelle -->
+                <div id="pastorCurrentDailyStatus" style="margin-bottom:12px;"></div>
+
+                <!-- Formulaire de Publication de l'Émission du Jour -->
+                <div style="background:rgba(0,0,0,0.3); border:1px solid var(--border-light); border-radius:12px; padding:14px; margin-bottom:14px;">
+                    <h5 style="color:var(--gold-light); font-size:0.88rem; margin-bottom:8px;">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Publier l'Émission du Jour (Fichier MP3)
+                    </h5>
+                    <input type="text" id="pastorDailyTitle" placeholder="Titre de l'enseignement (ex: La Victoire par la Foi)" style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:10px 12px; border-radius:8px; color:white; font-size:0.85rem; outline:none; margin-bottom:8px;">
+                    <input type="text" id="pastorDailyVerse" placeholder="Verset biblique clé (ex: Romains 8:37)" style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:10px 12px; border-radius:8px; color:white; font-size:0.85rem; outline:none; margin-bottom:10px;">
+                    
+                    <input type="file" id="pastorAudioFileInput" accept="audio/*" style="display:none;" onchange="handlePastorAudioSelect(event)">
+                    
+                    <button type="button" onclick="document.getElementById('pastorAudioFileInput').click()" style="width:100%; background:rgba(255,255,255,0.08); border:1.5px dashed var(--gold); color:var(--gold-light); padding:12px; border-radius:8px; font-weight:700; font-size:0.85rem; cursor:pointer; margin-bottom:8px;">
+                        <i class="fa-solid fa-file-audio"></i> Sélectionner le fichier MP3 sur mon téléphone
+                    </button>
+                    <div id="pastorSelectedFileName" style="display:none; font-size:0.8rem; color:#6ee7b7; margin-bottom:10px; font-weight:700; background:rgba(16,185,129,0.1); padding:8px; border-radius:6px;"></div>
+
+                    <button type="button" onclick="publishPastorDailyEpisode()" style="width:100%; background:var(--gold-gradient); color:#070d1e; border:none; padding:12px; border-radius:30px; font-weight:900; font-size:0.88rem; cursor:pointer; box-shadow:0 4px 15px rgba(212,175,55,0.4);">
+                        🚀 Mettre en Ligne l'Émission du Jour
+                    </button>
+                </div>
+
+                <!-- Bouton rapide vers le Live Studio -->
+                <button onclick="switchTab('live')" style="width:100%; background:rgba(239, 68, 68, 0.2); border:1px solid var(--red-live); color:white; padding:12px; border-radius:10px; font-weight:800; font-size:0.82rem; cursor:pointer;">
+                    🔴 Aller au Studio de Direct & Caméra &rarr;
+                </button>
+            </div>
+
             <!-- SECTION NOM D'UTILISATEUR PERSONNALISÉ -->
             <div style="background:var(--bg-card); border:1px solid var(--border-light); border-radius:16px; padding:18px; margin-bottom:18px;">
                 <h4 style="color:var(--gold-light); font-size:0.95rem; margin-bottom:4px;">
@@ -1433,12 +1466,12 @@
             </div>
 
             <!-- SECTION CONNEXION PASTEUR SÉCURISÉE -->
-            <div style="background:linear-gradient(135deg, #0e1a38 0%, #081024 100%); border:1.5px solid var(--gold); border-radius:16px; padding:18px; margin-bottom:18px;">
+            <div id="pastorLoginSection" style="background:linear-gradient(135deg, #0e1a38 0%, #081024 100%); border:1.5px solid var(--gold); border-radius:16px; padding:18px; margin-bottom:18px;">
                 <h4 style="color:var(--gold-light); font-size:0.95rem; margin-bottom:4px;">
                     <i class="fa-solid fa-key" style="margin-right:6px;"></i> Accès Réservé au Pasteur / Admin
                 </h4>
                 <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:10px;">
-                    Entrez votre code secret pour accéder au Studio de Diffusion et lancer les lives.
+                    Entrez votre code secret pour accéder au Studio de Diffusion et publier les émissions.
                 </p>
                 <div style="display:flex; gap:8px;">
                     <input type="password" id="pastorPinInput" placeholder="Code PIN (ex: 7777)" style="flex:1; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:10px 14px; border-radius:10px; color:white; font-size:0.9rem; outline:none;">
@@ -1542,14 +1575,22 @@
 
         function checkPastorAuth() {
             const adminBox = document.getElementById('pastorAdminBox');
+            const pastorProfileBox = document.getElementById('pastorProfileBox');
+            const pastorLoginSection = document.getElementById('pastorLoginSection');
             const roleText = document.getElementById('userProfileRole');
+
             if (isPastorLoggedIn) {
                 if (adminBox) adminBox.style.display = 'block';
+                if (pastorProfileBox) pastorProfileBox.style.display = 'block';
+                if (pastorLoginSection) pastorLoginSection.style.display = 'none';
                 if (roleText) roleText.innerHTML = '<span style="color:var(--gold-light);">👑 Espace Pasteur (Connecté)</span>';
             } else {
                 if (adminBox) adminBox.style.display = 'none';
+                if (pastorProfileBox) pastorProfileBox.style.display = 'none';
+                if (pastorLoginSection) pastorLoginSection.style.display = 'block';
                 if (roleText) roleText.innerText = 'Espace Fidèle & Disciple';
             }
+            updateDailyEpisodeUI();
         }
 
         function loginPastor() {
@@ -2308,6 +2349,134 @@
             btn.style.color = '#000';
         }
 
+        // PASTOR DAILY EMISSION PUBLISHING
+        let dailyEpisode = JSON.parse(localStorage.getItem('kanguka_daily_episode')) || null;
+        let pastorSelectedAudioUrl = null;
+        let pastorSelectedAudioName = '';
+
+        function handlePastorAudioSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            pastorSelectedAudioUrl = URL.createObjectURL(file);
+            pastorSelectedAudioName = file.name;
+            const nameEl = document.getElementById('pastorSelectedFileName');
+            if (nameEl) {
+                nameEl.innerText = '📁 Fichier prêt : ' + file.name;
+                nameEl.style.display = 'block';
+            }
+            showToast("📁 Audio sélectionné : " + file.name);
+        }
+
+        function publishPastorDailyEpisode() {
+            const titleInput = document.getElementById('pastorDailyTitle');
+            const verseInput = document.getElementById('pastorDailyVerse');
+            const title = titleInput ? titleInput.value.trim() : '';
+            const verse = verseInput ? verseInput.value.trim() : '';
+
+            if (!title) {
+                showCustomAlert("Titre Requis", "Veuillez entrer le titre de l'émission du jour.");
+                if (titleInput) titleInput.focus();
+                return;
+            }
+
+            if (!pastorSelectedAudioUrl) {
+                showCustomAlert("Audio Requis", "Veuillez choisir le fichier audio MP3 de votre enseignement sur votre téléphone.");
+                return;
+            }
+
+            const todayStr = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
+
+            dailyEpisode = {
+                id: 'daily-' + Date.now(),
+                title: title,
+                verse: verse ? `« ${verse} »` : "« Ta parole est une lampe à mes pieds, et une lumière sur mon sentier. » — Psaume 119:105",
+                date: todayStr,
+                audioUrl: pastorSelectedAudioUrl,
+                audioName: pastorSelectedAudioName,
+                duration: "Émission du Jour"
+            };
+
+            localStorage.setItem('kanguka_daily_episode', JSON.stringify({
+                id: dailyEpisode.id,
+                title: dailyEpisode.title,
+                verse: dailyEpisode.verse,
+                date: dailyEpisode.date
+            }));
+
+            EPISODES.unshift(dailyEpisode);
+            currentEpisode = dailyEpisode;
+
+            updateDailyEpisodeUI();
+            renderEpisodes(EPISODES, 'homeEpisodesList');
+            renderEpisodes(EPISODES, 'catalogEpisodesList');
+
+            if (titleInput) titleInput.value = '';
+            if (verseInput) verseInput.value = '';
+
+            showToast("🚀 Émission du Jour publiée avec succès pour tous les fidèles !");
+            switchTab('home');
+        }
+
+        function removePastorDailyEpisode() {
+            showCustomConfirm(
+                "Retirer l'Émission",
+                "Voulez-vous retirer l'émission du jour actuelle ?",
+                () => {
+                    if (dailyEpisode) {
+                        EPISODES = EPISODES.filter(e => e.id !== dailyEpisode.id);
+                    }
+                    dailyEpisode = null;
+                    currentEpisode = EPISODES.length > 0 ? EPISODES[0] : null;
+                    localStorage.removeItem('kanguka_daily_episode');
+                    audioElement.pause();
+                    isPlaying = false;
+                    document.getElementById('playIcon').className = 'fa-solid fa-play';
+                    updateDailyEpisodeUI();
+                    renderEpisodes(EPISODES, 'homeEpisodesList');
+                    renderEpisodes(EPISODES, 'catalogEpisodesList');
+                    showToast("🗑️ Émission du jour retirée.");
+                }
+            );
+        }
+
+        function updateDailyEpisodeUI() {
+            const titleEl = document.getElementById('nowPlayingTitle');
+            const verseEl = document.getElementById('nowPlayingVerse');
+            const badgeEl = document.getElementById('dailyHeroBadge');
+            const statusPastorBox = document.getElementById('pastorCurrentDailyStatus');
+
+            if (dailyEpisode && dailyEpisode.audioUrl) {
+                if (titleEl) titleEl.innerText = dailyEpisode.title;
+                if (verseEl) verseEl.innerText = dailyEpisode.verse;
+                if (badgeEl) badgeEl.innerHTML = `<i class="fa-solid fa-fire"></i> Émission du Jour • ${dailyEpisode.date}`;
+                if (statusPastorBox) {
+                    statusPastorBox.innerHTML = `
+                        <div style="background:rgba(16,185,129,0.15); border:1px solid #10b981; padding:10px 14px; border-radius:10px; margin-bottom:10px;">
+                            <strong style="color:#6ee7b7; font-size:0.85rem;"><i class="fa-solid fa-circle-check"></i> Émission Actuellement en Ligne :</strong>
+                            <p style="color:white; font-size:0.84rem; margin-top:3px; font-weight:700;">"${dailyEpisode.title}"</p>
+                            <button type="button" onclick="removePastorDailyEpisode()" style="background:rgba(239,68,68,0.2); border:1px solid var(--red-live); color:#fca5a5; padding:4px 12px; border-radius:15px; font-size:0.75rem; margin-top:6px; cursor:pointer;">
+                                <i class="fa-solid fa-trash"></i> Retirer cette émission
+                            </button>
+                        </div>
+                    `;
+                }
+            } else {
+                if (titleEl) titleEl.innerText = "En attente de l'Émission du Jour";
+                if (verseEl) verseEl.innerText = "« Le Seigneur donne une parole, et les messagères de bonnes nouvelles sont une grande armée. » — Psaume 68:11";
+                if (badgeEl) badgeEl.innerHTML = `<i class="fa-solid fa-dove"></i> Émission du Jour en Attente`;
+                if (statusPastorBox) {
+                    statusPastorBox.innerHTML = `
+                        <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:10px;">Aucune émission n'est encore publiée aujourd'hui.</p>
+                    `;
+                }
+            }
+
+            const pastorPrompt = document.getElementById('pastorHeroPublishPrompt');
+            if (pastorPrompt) {
+                pastorPrompt.style.display = isPastorLoggedIn ? 'block' : 'none';
+            }
+        }
+
         // INITIALIZE
         const savedUserName = localStorage.getItem('kanguka_user_name') || '';
         if (savedUserName) {
@@ -2318,7 +2487,22 @@
         renderTestimonies();
         renderPrayers();
         checkPastorAuth();
+        updateDailyEpisodeUI();
         updateLiveUI();
     </script>
+
+    <!-- MODAL POSE DE MAIN / GUÉRISON EN DIRECT (CACHÉE PAR DÉFAUT) -->
+    <div id="modalBlessing" class="modal-blessing" style="display:none;" onclick="closeBlessingModal(event)">
+        <div class="hand-blessing-circle" onclick="receiveHealing(event)">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+        </div>
+        <h2 style="font-size: 1.4rem; color: var(--gold-light); margin-bottom: 8px;">PRIÈRE DE GUÉRISON & DÉLIVRANCE</h2>
+        <p style="font-size: 0.9rem; color: #cbd5e1; max-width: 320px; margin-bottom: 20px;">
+            Posez votre main sur le cercle doré ci-dessus avec foi pendant que le Pasteur prie pour vous en ce moment précis.
+        </p>
+        <button onclick="closeBlessingModalDirect()" style="background: rgba(255,255,255,0.15); border: 1px solid var(--border-light); color: white; padding: 10px 24px; border-radius: 50px; font-weight: 700; cursor: pointer;">
+            Fermer & Garder ma Bénédiction 🙏
+        </button>
+    </div>
 </body>
 </html>
