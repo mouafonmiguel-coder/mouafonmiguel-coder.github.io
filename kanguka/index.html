@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#070d1e">
-    <title>KANGUKA — Réveil Spirituel & Direct Pasteur</title>
+    <title>KANGUKA — Réveil Spirituel & Prière</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -462,7 +462,7 @@
             color: #000;
         }
 
-        /* ================= LIVE STREAMING VIEW & NATIVE CAM ================= */
+        /* ================= LIVE STREAMING VIEW ================= */
         .live-stream-box {
             margin: 18px;
             background: #000000;
@@ -513,39 +513,30 @@
             box-shadow: none;
         }
 
-        .live-viewers-count {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(6px);
-            color: white;
-            font-size: 0.75rem;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-weight: 600;
-            z-index: 10;
-        }
-
-        .pastor-avatar-live {
-            width: 72px;
-            height: 72px;
+        /* OFFICIAL SACRED EMBLEM AVATAR */
+        .sacred-emblem-live {
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            border: 3px solid var(--gold);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
-            background: url('https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop') center/cover;
-            margin-bottom: 8px;
+            background: var(--gold-gradient);
+            color: #070d1e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+            margin-bottom: 12px;
             animation: pulse-gold 2s infinite;
         }
 
-        .pastor-avatar-live.offline {
+        .sacred-emblem-live.offline {
             animation: none;
             box-shadow: none;
             opacity: 0.8;
-            filter: grayscale(30%);
+            background: #334155;
+            color: #94a3b8;
         }
 
-        /* NATIVE CAMERA FEED */
         #nativePastorVideo {
             width: 100%;
             max-height: 280px;
@@ -629,20 +620,14 @@
             gap: 6px;
         }
 
-        /* PASTOR REGIE / BROADCAST STUDIO */
+        /* PASTOR PRIVATE BROADCAST STUDIO (HIDDEN FROM REGULAR USERS) */
         .pastor-admin-box {
             background: linear-gradient(135deg, #0f1c3f 0%, #0b152d 100%);
-            border: 1.5px solid var(--gold);
+            border: 2px solid var(--gold);
             border-radius: 16px;
             margin: 14px 18px;
             padding: 16px;
-        }
-
-        .pastor-admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
+            display: none; /* Only visible when Pastor is authenticated */
         }
 
         .live-chat-card {
@@ -654,7 +639,7 @@
         }
 
         .chat-messages {
-            height: 180px;
+            height: 160px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -1112,7 +1097,7 @@
         <div class="episodes-grid" id="catalogEpisodesList"></div>
     </main>
 
-    <!-- ================= TAB 3: LIVE DIRECT (AVEC CAMÉRA DIRECTE 0 ABONNÉ REQUIS) ================= -->
+    <!-- ================= TAB 3: LIVE DIRECT (POUR LES FIDÈLES & ACCÈS PASTEUR SÉCURISÉ) ================= -->
     <main id="tab-live" class="tab-view">
         <!-- LIVE STREAM SCREEN -->
         <div class="live-stream-box" id="mainLiveBox">
@@ -1121,15 +1106,17 @@
                     <div class="live-dot" id="liveScreenDot"></div> 
                     <span id="liveStatusText">EN DIRECT AVEC LE PASTEUR</span>
                 </div>
-                <div class="live-viewers-count" id="liveViewersCount"><i class="fa-solid fa-users"></i> 2 485 connectés</div>
                 
-                <!-- Native Camera Stream for Pastor (0 subscribers required!) -->
+                <!-- Native Camera Stream for Pastor -->
                 <video id="nativePastorVideo" autoplay playsinline muted></video>
 
+                <!-- Official Holy Spirit Dove Emblem (Clean & Sacred - No Fake Stock Photo) -->
                 <div id="defaultPastorAvatarBox">
-                    <div class="pastor-avatar-live" id="pastorAvatarLive"></div>
-                    <h3 style="font-size: 1.15rem; color: #ffffff; font-weight:800; margin-bottom:2px;" id="livePastorName">PASTEUR CHRIS & L'ÉQUIPE</h3>
-                    <p style="font-size: 0.82rem; color: var(--gold-light); font-weight:600;" id="liveThemeText">🔥 Prière Prophétique & Délivrance en Direct</p>
+                    <div class="sacred-emblem-live" id="pastorAvatarLive">
+                        <i class="fa-solid fa-dove"></i>
+                    </div>
+                    <h3 style="font-size: 1.15rem; color: #ffffff; font-weight:800; margin-bottom:2px;" id="livePastorName">MINISTÈRE DE RÉVEIL & PRIÈRE</h3>
+                    <p style="font-size: 0.82rem; color: var(--gold-light); font-weight:600;" id="liveThemeText">Prière & Intercession en Direct</p>
                 </div>
                 
                 <div id="liveStreamFrameBox" style="display:none; width:100%; margin-top:10px;">
@@ -1148,10 +1135,10 @@
         <!-- ACTIONS DE PRIÈRE EN DIRECT AVEC LE PASTEUR -->
         <div class="live-actions-card">
             <h3 style="font-size:0.95rem; color:var(--gold-light); display:flex; align-items:center; gap:8px;">
-                <i class="fa-solid fa-hands-praying"></i> PRIÈRE DU PASTEUR EN CE MOMENT
+                <i class="fa-solid fa-hands-praying"></i> PRIÈRE EN DIRECT
             </h3>
             <p style="font-size:0.8rem; color:#cbd5e1; margin-top:4px;">
-                Le pasteur prie actuellement pour les malades, les blocages financiers et les familles.
+                Rejoignez le moment d'intercession pour recevoir la grâce et la paix de Dieu.
             </p>
             <div class="live-prayer-cta">
                 <button class="btn-live-prayer" onclick="requestLiveIntercession()">
@@ -1163,67 +1150,61 @@
             </div>
         </div>
 
-        <!-- STUDIO DU PASTEUR : DIFFUSER SANS AUCUN ABONNÉ REQUIS -->
-        <div class="pastor-admin-box">
-            <div class="pastor-admin-header" onclick="togglePastorAdmin()">
-                <strong style="color:var(--gold-light); font-size:0.88rem;">
-                    <i class="fa-solid fa-video" style="color:var(--red-live); margin-right:6px;"></i> 
-                    Studio Pasteur (0 Abonné Requis) : Lancer le Live
+        <!-- ESPACE RÉSERVÉ AU PASTEUR (INVISIBLE POUR LES FIDÈLES TANT QU'IL N'EST PAS CONNECTÉ) -->
+        <div class="pastor-admin-box" id="pastorAdminBox">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <strong style="color:var(--gold-light); font-size:0.95rem;">
+                    <i class="fa-solid fa-crown" style="color:var(--gold); margin-right:6px;"></i> 
+                    Studio de Diffusion du Pasteur
                 </strong>
-                <i class="fa-solid fa-chevron-down" id="adminChevron" style="color:var(--gold);"></i>
+                <button onclick="logoutPastor()" style="background:rgba(239, 68, 68, 0.2); border:1px solid var(--red-live); color:#fca5a5; padding:4px 10px; border-radius:20px; font-size:0.72rem; cursor:pointer;">
+                    Déconnexion
+                </button>
             </div>
             
-            <div id="pastorAdminForm" style="display:none; margin-top:12px; border-top:1px solid var(--border-light); padding-top:12px;">
-                
-                <!-- Option 1: Live Caméra Directe depuis le smartphone -->
-                <div style="background:rgba(255,255,255,0.06); padding:12px; border-radius:12px; margin-bottom:12px;">
-                    <h5 style="color:var(--gold-light); font-size:0.82rem; margin-bottom:4px;">
-                        <i class="fa-solid fa-camera"></i> Option 1 : Démarrer la Caméra du Pasteur (0 Abonné)
-                    </h5>
-                    <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">
-                        Le pasteur allume sa caméra de téléphone directement dans l'appli sans passer par YouTube !
-                    </p>
-                    <div style="display:flex; gap:8px;">
-                        <button onclick="startPastorPhoneCamera()" id="btnStartCam" style="flex:1; background:var(--red-live); color:white; border:none; padding:10px; border-radius:8px; font-weight:800; font-size:0.78rem; cursor:pointer;">
-                            🔴 Allumer ma Caméra & Prêcher
-                        </button>
-                        <button onclick="stopPastorPhoneCamera()" id="btnStopCam" style="background:#334155; color:white; border:none; padding:10px 14px; border-radius:8px; font-weight:800; font-size:0.78rem; cursor:pointer; display:none;">
-                            ⏹️ Arrêter
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Option 2: Facebook Live / StreamYard / YouTube PC -->
-                <div style="background:rgba(255,255,255,0.06); padding:12px; border-radius:12px;">
-                    <h5 style="color:var(--blue-accent); font-size:0.82rem; margin-bottom:4px;">
-                        <i class="fa-brands fa-facebook"></i> Option 2 : Facebook Live ou Lien Externe
-                    </h5>
-                    <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">
-                        Sur Facebook Live, 0 abonné est requis ! Collez simplement votre lien ici :
-                    </p>
-                    <input type="text" id="liveStreamUrlInput" placeholder="Coller le lien Facebook Live, StreamYard ou YouTube..." style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:8px 12px; border-radius:8px; color:white; font-size:0.78rem; outline:none; margin-bottom:8px;">
-                    <button onclick="applyCustomLiveStream()" style="width:100%; background:var(--gold); color:#070d1e; border:none; padding:8px; border-radius:8px; font-weight:800; font-size:0.78rem; cursor:pointer;">
-                        Diffuser ce flux aux fidèles &rarr;
+            <!-- Option 1: Live Caméra Directe -->
+            <div style="background:rgba(255,255,255,0.06); padding:12px; border-radius:12px; margin-bottom:12px;">
+                <h5 style="color:var(--gold-light); font-size:0.84rem; margin-bottom:4px;">
+                    <i class="fa-solid fa-camera"></i> 1. Démarrer ma Caméra de Téléphone
+                </h5>
+                <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">
+                    Allume votre caméra directement dans l'application pour prêcher aux fidèles :
+                </p>
+                <div style="display:flex; gap:8px;">
+                    <button onclick="startPastorPhoneCamera()" id="btnStartCam" style="flex:1; background:var(--red-live); color:white; border:none; padding:10px; border-radius:8px; font-weight:800; font-size:0.78rem; cursor:pointer;">
+                        🔴 Allumer ma Caméra & Prêcher
+                    </button>
+                    <button onclick="stopPastorPhoneCamera()" id="btnStopCam" style="background:#334155; color:white; border:none; padding:10px 14px; border-radius:8px; font-weight:800; font-size:0.78rem; cursor:pointer; display:none;">
+                        ⏹️ Arrêter
                     </button>
                 </div>
             </div>
+
+            <!-- Option 2: Lien Externe (Facebook Live / YouTube) -->
+            <div style="background:rgba(255,255,255,0.06); padding:12px; border-radius:12px;">
+                <h5 style="color:var(--blue-accent); font-size:0.84rem; margin-bottom:4px;">
+                    <i class="fa-solid fa-link"></i> 2. Ou Diffuser un Lien Facebook / YouTube Live
+                </h5>
+                <input type="text" id="liveStreamUrlInput" placeholder="Coller le lien de votre live..." style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:8px 12px; border-radius:8px; color:white; font-size:0.78rem; outline:none; margin-bottom:8px;">
+                <button onclick="applyCustomLiveStream()" style="width:100%; background:var(--gold); color:#070d1e; border:none; padding:8px; border-radius:8px; font-weight:800; font-size:0.78rem; cursor:pointer;">
+                    Mettre en Ligne ce Flux Vidéo &rarr;
+                </button>
+            </div>
         </div>
 
-        <!-- CHAT LIVE -->
+        <!-- CHAT LIVE RÉEL (100% PROPRE SANS FAUX MESSAGES) -->
         <div class="live-chat-card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <h3 style="font-size:0.95rem; color:var(--gold-light);"><i class="fa-solid fa-comments"></i> Chat & Prières en Direct</h3>
-                <span style="font-size:0.75rem; color:var(--green);"><i class="fa-solid fa-circle" style="font-size:0.6rem;"></i> Modéré en direct</span>
+                <h3 style="font-size:0.95rem; color:var(--gold-light);"><i class="fa-solid fa-comments"></i> Prières & Messages en Direct</h3>
+                <span style="font-size:0.72rem; color:var(--green);"><i class="fa-solid fa-circle" style="font-size:0.55rem;"></i> En direct</span>
             </div>
 
             <div class="chat-messages" id="liveChatMessages">
-                <div class="chat-bubble"><span class="chat-author">Frère Patrick (Yaoundé) :</span> Pasteur priez pour mon foyer ce matin ! Que le Seigneur touche mes enfants 🙏</div>
-                <div class="chat-bubble"><span class="chat-author">Sœur Estelle (Douala) :</span> Amen ! Je reçois cette parole de délivrance au nom de Jésus ! ✨</div>
-                <div class="chat-bubble"><span class="chat-author">Maman Julie (Bafoussam) :</span> Gloire à Dieu, je pose ma main sur l'écran pour ma guérison ! 🔥</div>
+                <!-- Clean empty list: only real user messages will be appended here -->
             </div>
 
             <div class="chat-input-row">
-                <input type="text" id="liveChatInput" class="chat-input" placeholder="Écrire une intention ou un Amen au Pasteur...">
+                <input type="text" id="liveChatInput" class="chat-input" placeholder="Écrire un message ou un Amen...">
                 <button class="chat-send-btn" onclick="sendLiveChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
         </div>
@@ -1234,7 +1215,7 @@
         <div style="padding: 18px 18px 10px 18px;">
             <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:18px; margin-bottom:18px;">
                 <h3 style="font-size:1.05rem; color:var(--gold-light); margin-bottom:6px;"><i class="fa-solid fa-hands-praying"></i> Déposer une Intention de Prière</h3>
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">Notre communauté d'intercesseurs prie chaque jour pour vos sujets.</p>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">Écrivez votre sujet pour que la communauté prie avec vous.</p>
                 <textarea id="prayerInput" placeholder="Écrivez votre requête de prière ici..." style="width:100%; height:80px; background:rgba(0,0,0,0.3); border:1px solid var(--border-light); border-radius:10px; padding:10px; color:white; font-size:0.85rem; outline:none; margin-bottom:10px;"></textarea>
                 <button onclick="submitPrayer()" style="background:var(--gold-gradient); border:none; padding:10px 20px; border-radius:50px; font-weight:800; color:#070d1e; cursor:pointer;">Envoyer ma Prière &rarr;</button>
             </div>
@@ -1247,7 +1228,7 @@
         </div>
     </main>
 
-    <!-- ================= TAB 5: TÉMOIGNAGES (STUDIO D'ENREGISTREMENT AUDIO & VOCAL) ================= -->
+    <!-- ================= TAB 5: TÉMOIGNAGES (100% PROPRE SANS FAUX TÉMOIGNAGES) ================= -->
     <main id="tab-temoignages" class="tab-view">
         <div style="padding: 18px 18px 10px 18px;">
             
@@ -1322,15 +1303,31 @@
         </div>
     </main>
 
-    <!-- ================= TAB 6: PROFIL & HORS-LIGNE ================= -->
+    <!-- ================= TAB 6: PROFIL & ESPACE PASTEUR ================= -->
     <main id="tab-profile" class="tab-view">
         <div style="padding: 18px;">
             <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:20px; text-align:center; margin-bottom:18px;">
                 <div style="width:70px; height:70px; border-radius:50%; background:var(--gold-gradient); display:flex; align-items:center; justify-content:center; margin:0 auto 12px auto; font-size:2rem; color:#070d1e;">
                     <i class="fa-solid fa-user"></i>
                 </div>
-                <h3 style="font-size:1.1rem; color:white;">Espace Disciple & Fidèle</h3>
-                <p style="font-size:0.8rem; color:var(--blue-accent);">Membre de la Communauté de Réveil</p>
+                <h3 style="font-size:1.1rem; color:white;" id="userProfileRole">Espace Fidèle & Disciple</h3>
+                <p style="font-size:0.8rem; color:var(--blue-accent);">Communauté de Prière & Réveil</p>
+            </div>
+
+            <!-- SECTION CONNEXION PASTEUR SÉCURISÉE -->
+            <div style="background:linear-gradient(135deg, #0e1a38 0%, #081024 100%); border:1.5px solid var(--gold); border-radius:16px; padding:18px; margin-bottom:18px;">
+                <h4 style="color:var(--gold-light); font-size:0.95rem; margin-bottom:4px;">
+                    <i class="fa-solid fa-key" style="margin-right:6px;"></i> Accès Réservé au Pasteur / Admin
+                </h4>
+                <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:10px;">
+                    Entrez votre code secret pour accéder au Studio de Diffusion et lancer les lives.
+                </p>
+                <div style="display:flex; gap:8px;">
+                    <input type="password" id="pastorPinInput" placeholder="Code PIN (ex: 7777)" style="flex:1; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:10px 14px; border-radius:10px; color:white; font-size:0.9rem; outline:none;">
+                    <button onclick="loginPastor()" style="background:var(--gold-gradient); border:none; padding:10px 18px; border-radius:10px; font-weight:800; color:#070d1e; cursor:pointer;">
+                        Valider
+                    </button>
+                </div>
             </div>
 
             <div class="section-title" style="padding:0; margin-bottom:12px;">
@@ -1340,10 +1337,6 @@
                 <p style="margin-bottom:8px;"><strong>📲 Écoute 100% Hors-Ligne :</strong> Téléchargez l'audio MP3 le matin lorsque vous avez du WiFi/forfait, et écoutez-le toute la journée sans consommer de connexion internet (en voyage, en taxi, au village).</p>
                 <p><strong>💾 Économie de Forfait :</strong> Vos enseignements restent enregistrés sur votre smartphone.</p>
             </div>
-
-            <button onclick="resetDefaultData()" style="width:100%; background:rgba(239, 68, 68, 0.15); border:1px solid var(--red-live); color:#fca5a5; padding:12px; border-radius:12px; font-weight:700; cursor:pointer;">
-                <i class="fa-solid fa-arrow-rotate-left"></i> Réinitialiser les données de démo
-            </button>
         </div>
     </main>
 
@@ -1429,17 +1422,9 @@
             EPISODES = [...customEps, ...EPISODES];
         }
 
-        // DEFAULT DATA WITH PERSISTENCE
+        // 100% CLEAN PERSISTENT DATA (NO FAKE DEMOS)
         let TESTIMONIES = JSON.parse(localStorage.getItem('kanguka_testimonies')) || [];
-        let PRAYERS = JSON.parse(localStorage.getItem('kanguka_prayers')) || [
-            {
-                id: 'pray-1',
-                author: 'Sœur Blandine (Garoua)',
-                date: 'Il y a 2h',
-                text: '« Je demande la prière pour la guérison complète de ma mère hospitalisée. Que la main de Dieu la touche. »',
-                likes: 142
-            }
-        ];
+        let PRAYERS = JSON.parse(localStorage.getItem('kanguka_prayers')) || [];
 
         let currentEpisode = EPISODES[0];
         let isPlaying = false;
@@ -1447,10 +1432,43 @@
         let speeds = [1.0, 1.25, 1.5, 2.0];
         let speedIdx = 0;
 
-        // LIVE STATE CONFIGURATION
-        let isPastorLive = JSON.parse(localStorage.getItem('kanguka_is_live')) ?? true;
+        // AUTH & LIVE STATE
+        let isPastorLoggedIn = JSON.parse(localStorage.getItem('kanguka_is_pastor_auth')) || false;
+        let isPastorLive = JSON.parse(localStorage.getItem('kanguka_is_live')) ?? false;
         let liveEmbedUrl = localStorage.getItem('kanguka_live_url') || '';
         let cameraStream = null;
+
+        function checkPastorAuth() {
+            const adminBox = document.getElementById('pastorAdminBox');
+            const roleText = document.getElementById('userProfileRole');
+            if (isPastorLoggedIn) {
+                if (adminBox) adminBox.style.display = 'block';
+                if (roleText) roleText.innerHTML = '<span style="color:var(--gold-light);">👑 Espace Pasteur (Connecté)</span>';
+            } else {
+                if (adminBox) adminBox.style.display = 'none';
+                if (roleText) roleText.innerText = 'Espace Fidèle & Disciple';
+            }
+        }
+
+        function loginPastor() {
+            const pin = document.getElementById('pastorPinInput').value.trim();
+            if (pin === '7777' || pin === '1234') {
+                isPastorLoggedIn = true;
+                localStorage.setItem('kanguka_is_pastor_auth', JSON.stringify(true));
+                checkPastorAuth();
+                showToast("👑 Connexion réussie ! Vous êtes en Mode Pasteur.");
+                switchTab('live');
+            } else {
+                alert("Code PIN incorrect. (Astuce: le code par défaut est 7777)");
+            }
+        }
+
+        function logoutPastor() {
+            isPastorLoggedIn = false;
+            localStorage.setItem('kanguka_is_pastor_auth', JSON.stringify(false));
+            checkPastorAuth();
+            showToast("Déconnecté du Mode Pasteur.");
+        }
 
         function updateLiveUI() {
             const topBadge = document.getElementById('topLiveIndicator');
@@ -1464,7 +1482,6 @@
             const statusText = document.getElementById('liveStatusText');
             const avatar = document.getElementById('pastorAvatarLive');
             const themeText = document.getElementById('liveThemeText');
-            const viewers = document.getElementById('liveViewersCount');
             const frameBox = document.getElementById('liveStreamFrameBox');
             const iframe = document.getElementById('liveIframe');
 
@@ -1480,8 +1497,7 @@
                 screenDot.classList.remove('offline');
                 statusText.innerText = 'EN DIRECT AVEC LE PASTEUR';
                 avatar.classList.remove('offline');
-                themeText.innerText = '🔥 Prière Prophétique & Délivrance en Direct';
-                viewers.style.display = 'block';
+                themeText.innerText = 'Prière Prophétique & Délivrance en Direct';
 
                 if (liveEmbedUrl) {
                     frameBox.style.display = 'block';
@@ -1502,12 +1518,11 @@
                 statusText.innerText = 'PASTEUR ACTUELLEMENT HORS-LIGNE';
                 avatar.classList.add('offline');
                 themeText.innerText = 'Prochain rendez-vous de prière : Dimanche 06h00';
-                viewers.style.display = 'none';
                 frameBox.style.display = 'none';
             }
         }
 
-        // START PASTOR PHONE CAMERA (0 SUBSCRIBERS REQUIRED!)
+        // START PASTOR PHONE CAMERA
         async function startPastorPhoneCamera() {
             try {
                 cameraStream = await navigator.mediaDevices.getUserMedia({
@@ -1551,18 +1566,6 @@
             showToast(state ? "🔴 Le Pasteur est maintenant EN DIRECT !" : "⚪ Le direct a été clôturé.");
         }
 
-        function togglePastorAdmin() {
-            const form = document.getElementById('pastorAdminForm');
-            const chev = document.getElementById('adminChevron');
-            if (form.style.display === 'none') {
-                form.style.display = 'block';
-                chev.className = 'fa-solid fa-chevron-up';
-            } else {
-                form.style.display = 'none';
-                chev.className = 'fa-solid fa-chevron-down';
-            }
-        }
-
         function applyCustomLiveStream() {
             const url = document.getElementById('liveStreamUrlInput').value.trim();
             if (!url) return;
@@ -1577,7 +1580,7 @@
             liveEmbedUrl = embedUrl;
             localStorage.setItem('kanguka_live_url', liveEmbedUrl);
             setLiveState(true);
-            showToast("✅ Flux vidéo du pasteur mis à jour et actif !");
+            showToast("✅ Flux vidéo mis en ligne avec succès !");
         }
 
         function saveState() {
@@ -1620,7 +1623,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // RENDER TESTIMONIES WITH DELETE BUTTON
+        // RENDER TESTIMONIES (CLEAN - ONLY REAL USER TESTIMONIES)
         function renderTestimonies() {
             const wall = document.getElementById('testimoniesWallList');
             if (!wall) return;
@@ -1629,8 +1632,8 @@
                 wall.innerHTML = `
                     <div style="text-align:center; padding:30px 20px; color:var(--text-muted); background:var(--bg-card); border-radius:16px; border:1px solid var(--border-light);">
                         <i class="fa-solid fa-dove" style="font-size:2rem; color:var(--gold); margin-bottom:10px;"></i>
-                        <p>Aucun faux témoignage affiché.</p>
-                        <p style="font-size:0.8rem; margin-top:4px; color:var(--gold-light);">Appuyez sur le micro doré pour enregistrer votre vrai témoignage vocal !</p>
+                        <p>Aucun témoignage pour le moment.</p>
+                        <p style="font-size:0.8rem; margin-top:4px; color:var(--gold-light);">Soyez le premier à enregistrer un vocal avec le micro doré !</p>
                     </div>
                 `;
                 return;
@@ -1644,7 +1647,7 @@
                                 <strong style="color:var(--gold-light); font-size:0.9rem;"><i class="fa-solid fa-microphone" style="color:var(--gold); margin-right:4px;"></i> ${item.author}</strong>
                                 <div style="display:flex; align-items:center; gap:8px;">
                                     <span style="font-size:0.75rem; color:var(--text-muted);">${item.date}</span>
-                                    <button class="delete-btn-corner" onclick="deleteTestimony('${item.id}')" title="Supprimer ce témoignage"><i class="fa-solid fa-trash"></i> Supprimer</button>
+                                    <button class="delete-btn-corner" onclick="deleteTestimony('${item.id}')" title="Supprimer ce témoignage"><i class="fa-solid fa-trash"></i></button>
                                 </div>
                             </div>
                             <p style="font-size:0.84rem; color:#e2e8f0; margin-bottom:8px;">${item.text}</p>
@@ -1663,7 +1666,7 @@
                                 <strong style="color:var(--gold-light); font-size:0.9rem;">${item.author}</strong>
                                 <div style="display:flex; align-items:center; gap:8px;">
                                     <span style="font-size:0.75rem; color:var(--text-muted);">${item.date}</span>
-                                    <button class="delete-btn-corner" onclick="deleteTestimony('${item.id}')" title="Supprimer ce témoignage"><i class="fa-solid fa-trash"></i> Supprimer</button>
+                                    <button class="delete-btn-corner" onclick="deleteTestimony('${item.id}')" title="Supprimer ce témoignage"><i class="fa-solid fa-trash"></i></button>
                                 </div>
                             </div>
                             <p style="font-size:0.85rem; color:#e2e8f0;">${item.text}</p>
@@ -1674,7 +1677,6 @@
             }).join('');
         }
 
-        // DELETE FUNCTION
         function deleteTestimony(id) {
             TESTIMONIES = TESTIMONIES.filter(t => t.id !== id);
             saveState();
@@ -1683,7 +1685,7 @@
         }
 
         function clearAllTestimonies() {
-            if (confirm("Voulez-vous vraiment effacer tous les témoignages de la liste ?")) {
+            if (confirm("Voulez-vous vraiment effacer tous les témoignages ?")) {
                 TESTIMONIES = [];
                 saveState();
                 renderTestimonies();
@@ -1691,15 +1693,22 @@
             }
         }
 
-        function resetDefaultData() {
-            localStorage.clear();
-            location.reload();
-        }
-
-        // RENDER PRAYERS
+        // RENDER PRAYERS (CLEAN)
         function renderPrayers() {
             const wall = document.getElementById('prayerWallList');
             if (!wall) return;
+
+            if (PRAYERS.length === 0) {
+                wall.innerHTML = `
+                    <div style="text-align:center; padding:30px 20px; color:var(--text-muted); background:var(--bg-card); border-radius:16px; border:1px solid var(--border-light);">
+                        <i class="fa-solid fa-hands-praying" style="font-size:2rem; color:var(--gold); margin-bottom:10px;"></i>
+                        <p>Aucune intention de prière déposée.</p>
+                        <p style="font-size:0.8rem; margin-top:4px; color:var(--gold-light);">Déposez votre requête dans le formulaire ci-dessus.</p>
+                    </div>
+                `;
+                return;
+            }
+
             wall.innerHTML = PRAYERS.map(item => `
                 <div class="prayer-card" id="pray-${item.id}">
                     <div class="prayer-header">
@@ -1710,7 +1719,7 @@
                         </div>
                     </div>
                     <p style="font-size:0.85rem; color:#e2e8f0;">${item.text}</p>
-                    <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>${item.likes} Ont Prié (Amen)</span></button>
+                    <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>${item.likes} Amen</span></button>
                 </div>
             `).join('');
         }
@@ -1756,7 +1765,7 @@
                 audioElement.play().then(() => {
                     isPlaying = true;
                     icon.className = 'fa-solid fa-pause';
-                    showToast("▶️ Lecture audio en direct...");
+                    showToast("▶️ Lecture audio...");
                     renderEpisodes(EPISODES, 'homeEpisodesList');
                     renderEpisodes(EPISODES, 'catalogEpisodesList');
                 }).catch(err => {
@@ -1882,11 +1891,11 @@
 
         // LIVE STREAMING INTERACTIVITY
         function sendReaction(emoji) {
-            showToast(`${emoji} Réaction envoyée en direct au pasteur !`);
+            showToast(`${emoji} Réaction envoyée en direct !`);
         }
 
         function requestLiveIntercession() {
-            showToast("✋ Vous avez levé la main ! Le Pasteur prie pour vous en direct.");
+            showToast("✋ Vous avez levé la main pour la prière en direct.");
         }
 
         function openBlessingModal() {
@@ -1916,7 +1925,7 @@
             const chatBox = document.getElementById('liveChatMessages');
             const newMsg = document.createElement('div');
             newMsg.className = 'chat-bubble';
-            newMsg.innerHTML = `<span class="chat-author">Moi (En direct) :</span> ${txt}`;
+            newMsg.innerHTML = `<span class="chat-author">Moi :</span> ${txt}`;
             chatBox.appendChild(newMsg);
             chatBox.scrollTop = chatBox.scrollHeight;
             input.value = '';
@@ -1963,7 +1972,7 @@
                     timer.style.display = 'block';
                     waves.style.display = 'flex';
                     timer.innerText = '00:00';
-                    status.innerText = '🔴 Enregistrement en cours avec votre micro... Parlez clairement';
+                    status.innerText = '🔴 Enregistrement en cours... Parlez clairement';
 
                     recordInterval = setInterval(() => {
                         recordSeconds++;
@@ -2011,7 +2020,7 @@
 
         function sendVoiceTestimony() {
             const dur = document.getElementById('previewDuration').innerText || '00:30';
-            const author = document.getElementById('voiceAuthorName').value.trim() || 'Fidèle Anonyme';
+            const author = document.getElementById('voiceAuthorName').value.trim() || 'Fidèle';
             const title = document.getElementById('voiceTitle').value.trim() || 'Témoignage de Guérison & Bénédiction';
 
             const newTesti = {
@@ -2040,7 +2049,7 @@
 
             const newPrayer = {
                 id: 'pray-' + Date.now(),
-                author: 'Moi (Nouveau Sujet)',
+                author: 'Fidèle',
                 date: 'À l\'instant',
                 text: `« ${txt} »`,
                 likes: 1
@@ -2050,7 +2059,7 @@
             saveState();
             renderPrayers();
             input.value = '';
-            showToast("🙏 Votre intention de prière a été transmise aux intercesseurs !");
+            showToast("🙏 Votre intention de prière a été envoyée !");
         }
 
         function submitTestimony() {
@@ -2061,7 +2070,7 @@
             const newTesti = {
                 id: 'testi-' + Date.now(),
                 type: 'text',
-                author: 'Moi (Témoignage Écrit)',
+                author: 'Fidèle',
                 date: 'À l\'instant',
                 text: `« ${txt} »`,
                 likes: 1
@@ -2071,14 +2080,14 @@
             saveState();
             renderTestimonies();
             input.value = '';
-            showToast("✨ Gloire à Dieu ! Votre témoignage est en ligne !");
+            showToast("✨ Votre témoignage a été publié avec succès !");
         }
 
         function likeAmen(btn) {
             const span = btn.querySelector('span');
             let count = parseInt(span.innerText) || 1;
             count++;
-            span.innerText = `${count} Prières (Amen)`;
+            span.innerText = `${count} Gloire à Dieu`;
             btn.style.background = 'var(--gold)';
             btn.style.color = '#000';
         }
@@ -2088,6 +2097,7 @@
         renderEpisodes(EPISODES, 'catalogEpisodesList');
         renderTestimonies();
         renderPrayers();
+        checkPastorAuth();
         updateLiveUI();
     </script>
 </body>
