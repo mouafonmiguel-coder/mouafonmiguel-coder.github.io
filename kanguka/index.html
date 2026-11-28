@@ -513,7 +513,6 @@
             box-shadow: none;
         }
 
-        /* OFFICIAL SACRED EMBLEM AVATAR */
         .sacred-emblem-live {
             width: 80px;
             height: 80px;
@@ -627,7 +626,7 @@
             border-radius: 16px;
             margin: 14px 18px;
             padding: 16px;
-            display: none; /* Only visible when Pastor is authenticated */
+            display: none;
         }
 
         .live-chat-card {
@@ -917,40 +916,87 @@
             background: #64748b;
         }
 
-        /* MODAL SCREEN TOUCH PRAYER */
-        .modal-blessing {
+        /* CUSTOM IN-APP MODAL (REPLACES BROWSER DIALOG WITH DOMAIN NAME) */
+        .custom-modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.92);
-            backdrop-filter: blur(10px);
-            z-index: 3000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 5000;
             display: none;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 24px;
-            text-align: center;
+            padding: 20px;
         }
 
-        .hand-blessing-circle {
-            width: 130px;
-            height: 130px;
+        .custom-modal-card {
+            background: linear-gradient(145deg, #0e1e45 0%, #071026 100%);
+            border: 1.5px solid var(--gold);
+            border-radius: 20px;
+            padding: 24px 20px;
+            width: 100%;
+            max-width: 320px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            animation: modalPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalPop {
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .custom-modal-icon {
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             background: var(--gold-gradient);
+            color: #070d1e;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3.5rem;
-            color: #070d1e;
-            margin-bottom: 20px;
-            animation: pulse-blessing 1.5s infinite;
-            cursor: pointer;
+            font-size: 1.5rem;
+            margin: 0 auto 12px auto;
         }
 
-        @keyframes pulse-blessing {
-            0% { transform: scale(1); box-shadow: 0 0 30px rgba(212, 175, 55, 0.8); }
-            50% { transform: scale(1.1); box-shadow: 0 0 60px rgba(254, 240, 138, 1); }
-            100% { transform: scale(1); box-shadow: 0 0 30px rgba(212, 175, 55, 0.8); }
+        .custom-modal-title {
+            font-size: 1.1rem;
+            color: var(--gold-light);
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .custom-modal-text {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .custom-modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .custom-modal-btn {
+            flex: 1;
+            padding: 10px 14px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 0.82rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .custom-modal-btn.btn-cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: #cbd5e1;
+            border: 1px solid var(--border-light);
+        }
+
+        .custom-modal-btn.btn-confirm {
+            background: var(--gold-gradient);
+            color: #070d1e;
         }
 
         /* Toast */
@@ -979,6 +1025,19 @@
 
     <!-- TOAST NOTIFICATION -->
     <div id="appToast" class="toast">✨ Téléchargement démarré pour écoute hors-ligne !</div>
+
+    <!-- CUSTOM SPIRITUAL CONFIRM MODAL (NO BROWSER DOMAIN NAME POPUP) -->
+    <div id="customModalOverlay" class="custom-modal-overlay">
+        <div class="custom-modal-card">
+            <div class="custom-modal-icon" id="customModalIcon"><i class="fa-solid fa-dove"></i></div>
+            <h3 class="custom-modal-title" id="customModalTitle">RÉVEIL SPIRITUEL</h3>
+            <p class="custom-modal-text" id="customModalText">Voulez-vous vraiment effectuer cette action ?</p>
+            <div class="custom-modal-buttons" id="customModalButtons">
+                <button class="custom-modal-btn btn-cancel" onclick="closeCustomModal(false)">Annuler</button>
+                <button class="custom-modal-btn btn-confirm" id="customModalOkBtn" onclick="confirmCustomModalAction()">Confirmer</button>
+            </div>
+        </div>
+    </div>
 
     <!-- MODAL POSE DE MAIN / GUÉRISON EN DIRECT -->
     <div id="modalBlessing" class="modal-blessing" onclick="closeBlessingModal(event)">
@@ -1192,16 +1251,14 @@
             </div>
         </div>
 
-        <!-- CHAT LIVE RÉEL (100% PROPRE SANS FAUX MESSAGES) -->
+        <!-- CHAT LIVE RÉEL -->
         <div class="live-chat-card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                 <h3 style="font-size:0.95rem; color:var(--gold-light);"><i class="fa-solid fa-comments"></i> Prières & Messages en Direct</h3>
                 <span style="font-size:0.72rem; color:var(--green);"><i class="fa-solid fa-circle" style="font-size:0.55rem;"></i> En direct</span>
             </div>
 
-            <div class="chat-messages" id="liveChatMessages">
-                <!-- Clean empty list: only real user messages will be appended here -->
-            </div>
+            <div class="chat-messages" id="liveChatMessages"></div>
 
             <div class="chat-input-row">
                 <input type="text" id="liveChatInput" class="chat-input" placeholder="Écrire un message ou un Amen...">
@@ -1228,7 +1285,7 @@
         </div>
     </main>
 
-    <!-- ================= TAB 5: TÉMOIGNAGES (100% PROPRE SANS FAUX TÉMOIGNAGES) ================= -->
+    <!-- ================= TAB 5: TÉMOIGNAGES ================= -->
     <main id="tab-temoignages" class="tab-view">
         <div style="padding: 18px 18px 10px 18px;">
             
@@ -1295,7 +1352,7 @@
 
             <div class="section-title" style="padding:0; margin-bottom:12px;">
                 <h2><i class="fa-solid fa-star" style="color:var(--gold);"></i> Mur des Témoignages & Vocaux</h2>
-                <span class="link" onclick="clearAllTestimonies()" style="color:#fca5a5; font-size:0.75rem;"><i class="fa-solid fa-trash"></i> Tout effacer</span>
+                <span class="link" onclick="triggerClearAllTestimonies()" style="color:#fca5a5; font-size:0.75rem;"><i class="fa-solid fa-trash"></i> Tout effacer</span>
             </div>
 
             <!-- LISTE DES TÉMOIGNAGES -->
@@ -1422,7 +1479,7 @@
             EPISODES = [...customEps, ...EPISODES];
         }
 
-        // 100% CLEAN PERSISTENT DATA (NO FAKE DEMOS)
+        // 100% CLEAN PERSISTENT DATA
         let TESTIMONIES = JSON.parse(localStorage.getItem('kanguka_testimonies')) || [];
         let PRAYERS = JSON.parse(localStorage.getItem('kanguka_prayers')) || [];
 
@@ -1437,6 +1494,38 @@
         let isPastorLive = JSON.parse(localStorage.getItem('kanguka_is_live')) ?? false;
         let liveEmbedUrl = localStorage.getItem('kanguka_live_url') || '';
         let cameraStream = null;
+
+        // CUSTOM IN-APP MODAL HANDLERS
+        let pendingModalAction = null;
+
+        function showCustomConfirm(title, message, onConfirm) {
+            document.getElementById('customModalTitle').innerText = title;
+            document.getElementById('customModalText').innerText = message;
+            document.getElementById('customModalIcon').innerHTML = '<i class="fa-solid fa-dove"></i>';
+            document.getElementById('customModalButtons').style.display = 'flex';
+            pendingModalAction = onConfirm;
+            document.getElementById('customModalOverlay').style.display = 'flex';
+        }
+
+        function showCustomAlert(title, message, iconHtml) {
+            document.getElementById('customModalTitle').innerText = title;
+            document.getElementById('customModalText').innerText = message;
+            document.getElementById('customModalIcon').innerHTML = iconHtml || '<i class="fa-solid fa-circle-exclamation"></i>';
+            document.getElementById('customModalButtons').innerHTML = `
+                <button class="custom-modal-btn btn-confirm" style="width:100%;" onclick="closeCustomModal(false)">D'accord</button>
+            `;
+            document.getElementById('customModalOverlay').style.display = 'flex';
+        }
+
+        function confirmCustomModalAction() {
+            if (pendingModalAction) pendingModalAction();
+            closeCustomModal(true);
+        }
+
+        function closeCustomModal(confirmed) {
+            document.getElementById('customModalOverlay').style.display = 'none';
+            pendingModalAction = null;
+        }
 
         function checkPastorAuth() {
             const adminBox = document.getElementById('pastorAdminBox');
@@ -1459,7 +1548,7 @@
                 showToast("👑 Connexion réussie ! Vous êtes en Mode Pasteur.");
                 switchTab('live');
             } else {
-                alert("Code PIN incorrect. (Astuce: le code par défaut est 7777)");
+                showCustomAlert("Accès Refusé", "Code PIN incorrect. Le code par défaut est 7777.");
             }
         }
 
@@ -1538,9 +1627,9 @@
                 document.getElementById('btnStopCam').style.display = 'block';
 
                 setLiveState(true);
-                showToast("🔴 Votre Caméra est En Direct ! Vous prêchez à vos fidèles !");
+                showToast("🔴 Votre Caméra est En Direct !");
             } catch (err) {
-                alert("Veuillez autoriser l'accès à la caméra et au micro pour démarrer le live.");
+                showCustomAlert("Autorisation Caméra", "Veuillez autoriser l'accès à la caméra et au micro sur votre téléphone.");
             }
         }
 
@@ -1623,7 +1712,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // RENDER TESTIMONIES (CLEAN - ONLY REAL USER TESTIMONIES)
+        // RENDER TESTIMONIES
         function renderTestimonies() {
             const wall = document.getElementById('testimoniesWallList');
             if (!wall) return;
@@ -1684,16 +1773,20 @@
             showToast("🗑️ Témoignage supprimé avec succès !");
         }
 
-        function clearAllTestimonies() {
-            if (confirm("Voulez-vous vraiment effacer tous les témoignages ?")) {
-                TESTIMONIES = [];
-                saveState();
-                renderTestimonies();
-                showToast("🗑️ Tous les témoignages ont été effacés !");
-            }
+        function triggerClearAllTestimonies() {
+            showCustomConfirm(
+                "Effacer les Témoignages",
+                "Voulez-vous vraiment effacer tous les témoignages de la liste ?",
+                () => {
+                    TESTIMONIES = [];
+                    saveState();
+                    renderTestimonies();
+                    showToast("🗑️ Tous les témoignages ont été effacés !");
+                }
+            );
         }
 
-        // RENDER PRAYERS (CLEAN)
+        // RENDER PRAYERS
         function renderPrayers() {
             const wall = document.getElementById('prayerWallList');
             if (!wall) return;
@@ -1972,7 +2065,7 @@
                     timer.style.display = 'block';
                     waves.style.display = 'flex';
                     timer.innerText = '00:00';
-                    status.innerText = '🔴 Enregistrement en cours... Parlez clairement';
+                    status.innerText = '🔴 Enregistrement en cours avec votre micro... Parlez clairement';
 
                     recordInterval = setInterval(() => {
                         recordSeconds++;
@@ -1982,7 +2075,7 @@
                     }, 1000);
 
                 } catch (err) {
-                    alert("Veuillez autoriser l'accès au microphone sur votre téléphone pour enregistrer.");
+                    showCustomAlert("Microphone", "Veuillez autoriser l'accès au microphone sur votre téléphone pour enregistrer.");
                 }
 
             } else {
