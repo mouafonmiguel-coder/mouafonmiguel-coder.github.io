@@ -1001,6 +1001,46 @@
             color: #070d1e;
         }
 
+        /* MODAL POSE DE MAIN & GUÉRISON EN DIRECT */
+        .modal-blessing {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(4, 9, 23, 0.96);
+            backdrop-filter: blur(14px);
+            z-index: 5000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+        }
+
+        .hand-blessing-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--gold-gradient);
+            border: 4px solid rgba(255, 255, 255, 0.4);
+            color: #070d1e;
+            font-size: 2.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px auto;
+            cursor: pointer;
+            box-shadow: 0 0 35px rgba(212, 175, 55, 0.7);
+            animation: pulse-blessing 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-blessing {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.5); }
+            50% { transform: scale(1.08); box-shadow: 0 0 40px rgba(212, 175, 55, 0.85); }
+        }
+
         /* Toast */
         .toast {
             position: fixed;
@@ -1041,8 +1081,8 @@
         </div>
     </div>
 
-    <!-- MODAL POSE DE MAIN / GUÉRISON EN DIRECT -->
-    <div id="modalBlessing" class="modal-blessing" onclick="closeBlessingModal(event)">
+    <!-- MODAL POSE DE MAIN / GUÉRISON EN DIRECT (CACHÉE PAR DÉFAUT) -->
+    <div id="modalBlessing" class="modal-blessing" style="display:none;" onclick="closeBlessingModal(event)">
         <div class="hand-blessing-circle" onclick="receiveHealing(event)">
             <i class="fa-solid fa-hand-holding-heart"></i>
         </div>
@@ -1082,9 +1122,9 @@
         <!-- HERO CARD: MESSAGE DU JOUR -->
         <section class="hero-banner">
             <div class="hero-card">
-                <div class="hero-badge"><i class="fa-solid fa-fire"></i> Émission du Jour • 13 Septembre 2026</div>
-                <h2 class="hero-title" id="nowPlayingTitle">Le Pouvoir de la Persévérance dans la Prière</h2>
-                <p class="hero-verse" id="nowPlayingVerse">« Demandez, et l'on vous donnera ; cherchez, et vous trouverez ; frappez, et l'on vous ouvrira. » — Matthieu 7:7</p>
+                <div class="hero-badge"><i class="fa-solid fa-dove"></i> Réveil Spirituel • Émission Quotidienne</div>
+                <h2 class="hero-title" id="nowPlayingTitle">Sélectionnez ou Importez un Enseignement MP3</h2>
+                <p class="hero-verse" id="nowPlayingVerse">« Ta parole est une lampe à mes pieds, et une lumière sur mon sentier. » — Psaume 119:105</p>
 
                 <!-- Embedded Real Audio Player -->
                 <div class="player-bar">
@@ -1102,7 +1142,7 @@
                         <button class="play-main-btn" id="playBtn" onclick="togglePlay()"><i class="fa-solid fa-play" id="playIcon"></i></button>
                         <button class="sub-player-btn" onclick="skipRealAudio(15)" title="Avancer 15s">15s <i class="fa-solid fa-rotate-right"></i></button>
                         <button class="sub-player-btn" id="speedBtn" onclick="toggleSpeed()">1.0x</button>
-                        <button class="sub-player-btn" onclick="downloadCurrentAudio()" title="Télécharger MP3 pour écoute hors-ligne"><i class="fa-solid fa-download"></i></button>
+                        <button class="sub-player-btn" onclick="triggerFileUpload()" title="Importer un MP3"><i class="fa-solid fa-folder-open"></i></button>
                     </div>
                 </div>
             </div>
@@ -1449,66 +1489,14 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // EPISODES WITH DISTINCT UNIQUE SACRED AUDIO TRACKS
-        let EPISODES = [
-            {
-                id: 1,
-                title: "Le Pouvoir de la Persévérance dans la Prière",
-                verse: "« Demandez, et l'on vous donnera ; cherchez, et vous trouverez. » — Matthieu 7:7",
-                theme: "priere",
-                duration: "00:21",
-                date: "Aujourd'hui • 13 Septembre 2026",
-                audioUrl: "https://mouafonmiguel-coder.github.io/kanguka/audio/audio_perseverance.mp3"
-            },
-            {
-                id: 2,
-                title: "Comment Dépasser la Peur et le Doute",
-                verse: "« Ne crains rien, car je suis avec toi ; ne promène pas des regards inquiets. » — Ésaïe 41:10",
-                theme: "foi",
-                duration: "00:24",
-                date: "Hier • 12 Septembre 2026",
-                audioUrl: "https://mouafonmiguel-coder.github.io/kanguka/audio/audio_foi_victoire.mp3"
-            },
-            {
-                id: 3,
-                title: "La Grâce qui Transforme l'Impossible",
-                verse: "« À Dieu tout est possible. » — Matthieu 19:26",
-                theme: "guerison",
-                duration: "00:21",
-                date: "11 Septembre 2026",
-                audioUrl: "https://mouafonmiguel-coder.github.io/kanguka/audio/audio_grace_guerison.mp3"
-            },
-            {
-                id: 4,
-                title: "Prier avec Autorité dans le Nom de Jésus",
-                verse: "« Tout ce que vous lierez sur la terre sera lié dans le ciel. » — Matthieu 18:18",
-                theme: "delivrance",
-                duration: "00:24",
-                date: "10 Septembre 2026",
-                audioUrl: "https://mouafonmiguel-coder.github.io/kanguka/audio/audio_autorite_priere.mp3"
-            },
-            {
-                id: 5,
-                title: "Marcher Quotidiennement avec le Saint-Esprit",
-                verse: "« Marchez selon l'Esprit, et vous n'accomplirez pas les désirs de la chair. » — Galates 5:16",
-                theme: "saint-esprit",
-                duration: "00:24",
-                date: "09 Septembre 2026",
-                audioUrl: "https://mouafonmiguel-coder.github.io/kanguka/audio/audio_saint_esprit.mp3"
-            }
-        ];
-
-        // LOAD CUSTOM UPLOADED EPISODES IF ANY
-        const customEps = JSON.parse(localStorage.getItem('kanguka_custom_episodes')) || [];
-        if (customEps.length > 0) {
-            EPISODES = [...customEps, ...EPISODES];
-        }
+        // 100% CLEAN REAL AUDIO EPISODES (AUCUNE MUSIQUE DÉMO ARTIFICIELLE)
+        let EPISODES = [];
 
         // 100% CLEAN PERSISTENT DATA
         let TESTIMONIES = JSON.parse(localStorage.getItem('kanguka_testimonies')) || [];
         let PRAYERS = JSON.parse(localStorage.getItem('kanguka_prayers')) || [];
 
-        let currentEpisode = EPISODES[0];
+        let currentEpisode = null;
         let isPlaying = false;
         let audioElement = document.getElementById('realGlobalAudio');
         let speeds = [1.0, 1.25, 1.5, 2.0];
@@ -1854,8 +1842,22 @@
             const container = document.getElementById(containerId);
             if (!container) return;
 
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding:28px 18px; color:var(--text-muted); background:var(--bg-card); border-radius:16px; border:1px solid var(--border-light); margin: 12px 0;">
+                        <i class="fa-solid fa-file-audio" style="font-size:2.2rem; color:var(--gold); margin-bottom:12px;"></i>
+                        <h4 style="color:white; font-size:1rem; margin-bottom:4px;">Aucune Émission Démo Artificielle</h4>
+                        <p style="font-size:0.8rem; color:#94a3b8; margin-bottom:16px;">Touchez le bouton ci-dessous pour importer vos véritables prédications et chants MP3 depuis votre téléphone.</p>
+                        <button onclick="triggerFileUpload()" style="background:var(--gold-gradient); border:none; padding:10px 22px; border-radius:50px; font-weight:800; font-size:0.85rem; color:#070d1e; cursor:pointer;">
+                            <i class="fa-solid fa-circle-plus"></i> Importer un Fichier MP3
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
             container.innerHTML = list.map(ep => `
-                <div class="episode-card ${currentEpisode.id === ep.id && isPlaying ? 'active-playing' : ''}" onclick="playEpisode(${ep.id})">
+                <div class="episode-card ${currentEpisode && currentEpisode.id === ep.id && isPlaying ? 'active-playing' : ''}" onclick="playEpisode(${ep.id})">
                     <div class="ep-left">
                         <div class="ep-icon-box"><i class="fa-solid fa-play"></i></div>
                         <div class="ep-info">
@@ -1865,7 +1867,7 @@
                     </div>
                     <div class="ep-actions" onclick="event.stopPropagation()">
                         <button class="ep-btn" onclick="downloadAudio('${ep.title}')" title="Télécharger MP3"><i class="fa-solid fa-arrow-down"></i></button>
-                        <button class="ep-btn" onclick="shareWa('${ep.title}')" title="Partager WhatsApp"><i class="fa-brands fa-whatsapp"></i></button>
+                        <button class="ep-btn" onclick="deleteCustomEpisode(${ep.id})" title="Supprimer cet audio" style="color:#fca5a5;"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
             `).join('');
@@ -1874,6 +1876,12 @@
         // REAL PLAYER LOGIC
         function togglePlay() {
             const icon = document.getElementById('playIcon');
+
+            if (!currentEpisode || !currentEpisode.audioUrl) {
+                showToast("📂 Touchez le bouton 'Importer' pour charger un vrai audio MP3.");
+                triggerFileUpload();
+                return;
+            }
             
             if (!audioElement.src || audioElement.src !== currentEpisode.audioUrl) {
                 audioElement.src = currentEpisode.audioUrl;
@@ -1883,7 +1891,7 @@
                 audioElement.play().then(() => {
                     isPlaying = true;
                     icon.className = 'fa-solid fa-pause';
-                    showToast("▶️ Lecture audio...");
+                    showToast(`▶️ Lecture de "${currentEpisode.title}"...`);
                     renderEpisodes(EPISODES, 'homeEpisodesList');
                     renderEpisodes(EPISODES, 'catalogEpisodesList');
                 }).catch(err => {
@@ -1918,6 +1926,24 @@
             renderEpisodes(EPISODES, 'catalogEpisodesList');
         }
 
+        function deleteCustomEpisode(id) {
+            EPISODES = EPISODES.filter(e => e.id !== id);
+            if (currentEpisode && currentEpisode.id === id) {
+                audioElement.pause();
+                isPlaying = false;
+                document.getElementById('playIcon').className = 'fa-solid fa-play';
+                currentEpisode = EPISODES.length > 0 ? EPISODES[0] : null;
+                document.getElementById('nowPlayingTitle').innerText = currentEpisode ? currentEpisode.title : "Sélectionnez ou Importez un Enseignement MP3";
+                document.getElementById('nowPlayingVerse').innerText = currentEpisode ? currentEpisode.verse : "« Ta parole est une lampe à mes pieds, et une lumière sur mon sentier. » — Psaume 119:105";
+                document.getElementById('audioProgress').style.width = '0%';
+                document.getElementById('currentTimeLabel').innerText = '00:00';
+                document.getElementById('totalTimeLabel').innerText = '--:--';
+            }
+            renderEpisodes(EPISODES, 'homeEpisodesList');
+            renderEpisodes(EPISODES, 'catalogEpisodesList');
+            showToast("🗑️ Fichier audio retiré de la liste !");
+        }
+
         function seekRealAudio(event) {
             if (audioElement.duration) {
                 const rect = document.getElementById('progressBarContainer').getBoundingClientRect();
@@ -1940,7 +1966,11 @@
         }
 
         function downloadCurrentAudio() {
-            downloadAudio(currentEpisode.title);
+            if (currentEpisode) {
+                downloadAudio(currentEpisode.title);
+            } else {
+                showToast("📂 Aucun audio sélectionné.");
+            }
         }
 
         function downloadAudio(title) {
@@ -1975,19 +2005,20 @@
                 title: file.name.replace(/\.[^/.]+$/, ""),
                 verse: "« Tout est possible à celui qui croit. » — Marc 9:23",
                 theme: "priere",
-                duration: "Audio Perso",
-                date: "Ajouté à l'instant",
+                duration: "Audio Réel",
+                date: "Aujourd'hui",
                 audioUrl: fileUrl
             };
 
             EPISODES.unshift(newEp);
             currentEpisode = newEp;
             document.getElementById('nowPlayingTitle').innerText = newEp.title;
+            document.getElementById('nowPlayingVerse').innerText = newEp.verse;
             
             renderEpisodes(EPISODES, 'homeEpisodesList');
             renderEpisodes(EPISODES, 'catalogEpisodesList');
             
-            showToast(`✅ "${newEp.title}" a été ajouté et prêt à jouer !`);
+            showToast(`✅ "${newEp.title}" importé et prêt à l'écoute !`);
             playEpisode(newEp.id);
         }
 
