@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#070d1e">
-    <title>KANGUKA — Réveil Spirituel & Prédications Réelles</title>
+    <title>KANGUKA — Réveil Spirituel & Direct Pasteur</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -132,12 +132,24 @@
             animation: pulse-live 1.8s infinite;
         }
 
+        .live-indicator.offline {
+            background: rgba(148, 163, 184, 0.15);
+            border-color: rgba(148, 163, 184, 0.3);
+            color: #cbd5e1;
+            animation: none;
+        }
+
         .live-dot {
             width: 8px;
             height: 8px;
             background: var(--red-live);
             border-radius: 50%;
             box-shadow: 0 0 8px var(--red-live);
+        }
+
+        .live-dot.offline {
+            background: #94a3b8;
+            box-shadow: none;
         }
 
         @keyframes pulse-live {
@@ -205,7 +217,7 @@
             margin-bottom: 16px;
         }
 
-        /* REAL AUDIO PLAYER BAR */
+        /* Player Controls */
         .player-bar {
             background: rgba(0, 0, 0, 0.5);
             border-radius: 14px;
@@ -293,7 +305,6 @@
             color: var(--gold);
         }
 
-        /* UPLOAD MP3 BOX */
         .upload-mp3-banner {
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             border: 1px dashed var(--gold);
@@ -304,7 +315,6 @@
             cursor: pointer;
         }
 
-        /* Section Titles */
         .section-title {
             padding: 0 18px;
             margin: 22px 0 12px 0;
@@ -330,7 +340,6 @@
             cursor: pointer;
         }
 
-        /* Filter Chips */
         .cat-scroll {
             display: flex;
             gap: 10px;
@@ -365,7 +374,6 @@
             color: var(--gold-light);
         }
 
-        /* Episodes Grid */
         .episodes-grid {
             padding: 0 18px;
             display: flex;
@@ -454,7 +462,7 @@
             color: #000;
         }
 
-        /* ================= LIVE STREAMING VIEW ================= */
+        /* ================= LIVE STREAMING VIEW & PASTOR DETECTION ================= */
         .live-stream-box {
             margin: 18px;
             background: #000000;
@@ -465,9 +473,14 @@
             box-shadow: 0 8px 30px rgba(239, 68, 68, 0.25);
         }
 
+        .live-stream-box.offline {
+            border-color: rgba(148, 163, 184, 0.3);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
         .live-video-screen {
             width: 100%;
-            height: 230px;
+            min-height: 230px;
             background: radial-gradient(circle at center, #1e1b4b 0%, #060919 100%);
             display: flex;
             flex-direction: column;
@@ -494,6 +507,11 @@
             box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
         }
 
+        .live-badge-overlay.offline {
+            background: #475569;
+            box-shadow: none;
+        }
+
         .live-viewers-count {
             position: absolute;
             top: 14px;
@@ -516,6 +534,13 @@
             background: url('https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop') center/cover;
             margin-bottom: 8px;
             animation: pulse-gold 2s infinite;
+        }
+
+        .pastor-avatar-live.offline {
+            animation: none;
+            box-shadow: none;
+            opacity: 0.8;
+            filter: grayscale(30%);
         }
 
         @keyframes pulse-gold {
@@ -598,6 +623,22 @@
             gap: 6px;
         }
 
+        /* PASTOR REGIE / CONTROL PANEL */
+        .pastor-admin-box {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin: 14px 18px;
+            padding: 14px 16px;
+        }
+
+        .pastor-admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
         .live-chat-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -659,7 +700,7 @@
             font-weight: bold;
         }
 
-        /* ================= TÉMOIGNAGES VOCAUX / AUDIO AVANCÉS ================= */
+        /* ================= TÉMOIGNAGES VOCAUX / AUDIO ================= */
         .voice-section-card {
             background: linear-gradient(145deg, #12224c 0%, #070f25 100%);
             border: 2px solid var(--gold);
@@ -773,22 +814,6 @@
             margin-bottom: 12px;
         }
 
-        .audio-play-round {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--gold);
-            color: #070d1e;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 1.1rem;
-            flex-shrink: 0;
-            box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
-        }
-
         .audio-testi-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -897,6 +922,10 @@
             border-radius: 10px;
         }
 
+        .nav-badge-live.offline {
+            background: #64748b;
+        }
+
         /* MODAL SCREEN TOUCH PRAYER */
         .modal-blessing {
             position: fixed;
@@ -984,9 +1013,9 @@
             </div>
         </div>
         <div class="header-actions">
-            <div class="live-indicator" onclick="switchTab('live')">
-                <div class="live-dot"></div>
-                <span>DIRECT</span>
+            <div class="live-indicator" id="topLiveIndicator" onclick="switchTab('live')">
+                <div class="live-dot" id="topLiveDot"></div>
+                <span id="topLiveText">DIRECT</span>
             </div>
             <button class="icon-btn" onclick="triggerFileUpload()" title="Ajouter mes vrais MP3"><i class="fa-solid fa-file-audio"></i></button>
         </div>
@@ -1077,18 +1106,24 @@
         <div class="episodes-grid" id="catalogEpisodesList"></div>
     </main>
 
-    <!-- ================= TAB 3: LIVE DIRECT (PRIÈRE DU PASTEUR EN DIRECT) ================= -->
+    <!-- ================= TAB 3: LIVE DIRECT (DÉTECTION DU PASTEUR & RÉGIE) ================= -->
     <main id="tab-live" class="tab-view">
-        <div class="live-stream-box">
-            <div class="live-video-screen">
-                <div class="live-badge-overlay"><div class="live-dot"></div> EN DIRECT AVEC LE PASTEUR</div>
-                <div class="live-viewers-count"><i class="fa-solid fa-users"></i> 2 485 connectés</div>
+        <!-- LIVE STREAM SCREEN -->
+        <div class="live-stream-box" id="mainLiveBox">
+            <div class="live-video-screen" id="liveVideoContainer">
+                <div class="live-badge-overlay" id="liveScreenBadge">
+                    <div class="live-dot" id="liveScreenDot"></div> 
+                    <span id="liveStatusText">EN DIRECT AVEC LE PASTEUR</span>
+                </div>
+                <div class="live-viewers-count" id="liveViewersCount"><i class="fa-solid fa-users"></i> 2 485 connectés</div>
                 
-                <div class="pastor-avatar-live"></div>
-                <h3 style="font-size: 1.15rem; color: #ffffff; font-weight:800; margin-bottom:2px;">PASTEUR CHRIS & L'ÉQUIPE</h3>
-                <p style="font-size: 0.82rem; color: var(--gold-light); font-weight:600;">🔥 Prière Prophétique & Délivrance en Direct</p>
-                <div style="display:flex; align-items:center; gap:8px; margin-top:8px;">
-                    <span style="font-size:0.75rem; background:rgba(16, 185, 129, 0.2); border:1px solid var(--green); color:#6ee7b7; padding:2px 8px; border-radius:12px;"><i class="fa-solid fa-microphone-lines"></i> Micro & Prière Ouverts</span>
+                <div class="pastor-avatar-live" id="pastorAvatarLive"></div>
+                <h3 style="font-size: 1.15rem; color: #ffffff; font-weight:800; margin-bottom:2px;" id="livePastorName">PASTEUR CHRIS & L'ÉQUIPE</h3>
+                <p style="font-size: 0.82rem; color: var(--gold-light); font-weight:600;" id="liveThemeText">🔥 Prière Prophétique & Délivrance en Direct</p>
+                
+                <div id="liveStreamFrameBox" style="display:none; width:100%; margin-top:10px;">
+                    <!-- Embedded YouTube / HLS Live Stream if active -->
+                    <iframe id="liveIframe" width="100%" height="200" style="border-radius:12px; border:none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -1100,6 +1135,7 @@
             </div>
         </div>
 
+        <!-- ACTIONS DE PRIÈRE EN DIRECT AVEC LE PASTEUR -->
         <div class="live-actions-card">
             <h3 style="font-size:0.95rem; color:var(--gold-light); display:flex; align-items:center; gap:8px;">
                 <i class="fa-solid fa-hands-praying"></i> PRIÈRE DU PASTEUR EN CE MOMENT
@@ -1117,6 +1153,33 @@
             </div>
         </div>
 
+        <!-- RÉGIE / CONTRÔLE PASTEUR (POUR TESTER / DÉTECTER LE LIVE) -->
+        <div class="pastor-admin-box">
+            <div class="pastor-admin-header" onclick="togglePastorAdmin()">
+                <strong style="color:var(--gold-light); font-size:0.85rem;"><i class="fa-solid fa-sliders"></i> ⚙️ Régie Pasteur : Comment l'appli sait que le pasteur est en direct ?</strong>
+                <i class="fa-solid fa-chevron-down" id="adminChevron" style="color:var(--gold);"></i>
+            </div>
+            
+            <div id="pastorAdminForm" style="display:none; margin-top:12px; border-top:1px solid var(--border-light); padding-top:12px;">
+                <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">
+                    Comme pour <strong>Kanguka</strong>, le live s'active automatiquement via le flux YouTube/Facebook ou lorsque le Pasteur active la diffusion :
+                </p>
+                <div style="display:flex; gap:8px; margin-bottom:10px;">
+                    <button onclick="setLiveState(true)" style="flex:1; background:var(--red-live); color:white; border:none; padding:8px; border-radius:8px; font-weight:800; font-size:0.75rem; cursor:pointer;">
+                        🔴 Lancer le Direct Maintenant
+                    </button>
+                    <button onclick="setLiveState(false)" style="flex:1; background:#334155; color:white; border:none; padding:8px; border-radius:8px; font-weight:800; font-size:0.75rem; cursor:pointer;">
+                        ⚪ Couper le Direct (Hors-Ligne)
+                    </button>
+                </div>
+                <input type="text" id="liveStreamUrlInput" placeholder="Coller le lien YouTube Live ou Facebook du Pasteur..." style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border-light); padding:8px 12px; border-radius:8px; color:white; font-size:0.78rem; outline:none; margin-bottom:8px;">
+                <button onclick="applyCustomLiveStream()" style="width:100%; background:var(--gold); color:#070d1e; border:none; padding:8px; border-radius:8px; font-weight:800; font-size:0.78rem; cursor:pointer;">
+                    Mettre à jour le Flux Vidéo du Pasteur &rarr;
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAT LIVE -->
         <div class="live-chat-card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                 <h3 style="font-size:0.95rem; color:var(--gold-light);"><i class="fa-solid fa-comments"></i> Chat & Prières en Direct</h3>
@@ -1192,7 +1255,7 @@
                     <div class="audio-player-box">
                         <button class="audio-play-round" onclick="playRecordedVoice()"><i class="fa-solid fa-play" id="previewPlayIcon"></i></button>
                         <div style="flex:1;">
-                            <audio id="localRecordedAudio" style="width:100%; height:32px;"></audio>
+                            <audio id="localRecordedAudio" controls style="width:100%; height:32px;"></audio>
                         </div>
                     </div>
 
@@ -1265,8 +1328,8 @@
             <span>Enseignements</span>
         </div>
         <div class="nav-item" id="nav-live" onclick="switchTab('live')">
-            <div class="nav-badge-live">LIVE</div>
-            <i class="fa-solid fa-tower-broadcast" style="color:var(--red-live);"></i>
+            <div class="nav-badge-live" id="bottomNavBadge">LIVE</div>
+            <i class="fa-solid fa-tower-broadcast" id="bottomNavIcon" style="color:var(--red-live);"></i>
             <span>Direct</span>
         </div>
         <div class="nav-item" id="nav-priere" onclick="switchTab('priere')">
@@ -1290,7 +1353,6 @@
                 theme: "priere",
                 duration: "Chant / Prière",
                 date: "Aujourd'hui • 13 Septembre 2026",
-                // Real Christian Worship Gospel Stream
                 audioUrl: "https://stream.zeno.fm/f3wvbbqmdg8uv"
             },
             {
@@ -1337,6 +1399,101 @@
         let speeds = [1.0, 1.25, 1.5, 2.0];
         let speedIdx = 0;
 
+        // LIVE STATE CONFIGURATION
+        let isPastorLive = JSON.parse(localStorage.getItem('kanguka_is_live')) ?? true;
+        let liveEmbedUrl = localStorage.getItem('kanguka_live_url') || '';
+
+        function updateLiveUI() {
+            const topBadge = document.getElementById('topLiveIndicator');
+            const topDot = document.getElementById('topLiveDot');
+            const topText = document.getElementById('topLiveText');
+            const bottomBadge = document.getElementById('bottomNavBadge');
+            const bottomIcon = document.getElementById('bottomNavIcon');
+            const mainBox = document.getElementById('mainLiveBox');
+            const screenBadge = document.getElementById('liveScreenBadge');
+            const screenDot = document.getElementById('liveScreenDot');
+            const statusText = document.getElementById('liveStatusText');
+            const avatar = document.getElementById('pastorAvatarLive');
+            const themeText = document.getElementById('liveThemeText');
+            const viewers = document.getElementById('liveViewersCount');
+            const frameBox = document.getElementById('liveStreamFrameBox');
+            const iframe = document.getElementById('liveIframe');
+
+            if (isPastorLive) {
+                topBadge.classList.remove('offline');
+                topDot.classList.remove('offline');
+                topText.innerText = 'DIRECT';
+                bottomBadge.classList.remove('offline');
+                bottomBadge.innerText = 'LIVE';
+                bottomIcon.style.color = 'var(--red-live)';
+                mainBox.classList.remove('offline');
+                screenBadge.classList.remove('offline');
+                screenDot.classList.remove('offline');
+                statusText.innerText = 'EN DIRECT AVEC LE PASTEUR';
+                avatar.classList.remove('offline');
+                themeText.innerText = '🔥 Prière Prophétique & Délivrance en Direct';
+                viewers.style.display = 'block';
+
+                if (liveEmbedUrl) {
+                    frameBox.style.display = 'block';
+                    iframe.src = liveEmbedUrl;
+                } else {
+                    frameBox.style.display = 'none';
+                }
+            } else {
+                topBadge.classList.add('offline');
+                topDot.classList.add('offline');
+                topText.innerText = 'HORS-LIGNE';
+                bottomBadge.classList.add('offline');
+                bottomBadge.innerText = 'OFF';
+                bottomIcon.style.color = '#94a3b8';
+                mainBox.classList.add('offline');
+                screenBadge.classList.add('offline');
+                screenDot.classList.add('offline');
+                statusText.innerText = 'PASTEUR ACTUELLEMENT HORS-LIGNE';
+                avatar.classList.add('offline');
+                themeText.innerText = 'Prochain rendez-vous de prière : Dimanche 06h00';
+                viewers.style.display = 'none';
+                frameBox.style.display = 'none';
+            }
+        }
+
+        function setLiveState(state) {
+            isPastorLive = state;
+            localStorage.setItem('kanguka_is_live', JSON.stringify(isPastorLive));
+            updateLiveUI();
+            showToast(state ? "🔴 Le Pasteur est maintenant EN DIRECT !" : "⚪ Le direct a été clôturé.");
+        }
+
+        function togglePastorAdmin() {
+            const form = document.getElementById('pastorAdminForm');
+            const chev = document.getElementById('adminChevron');
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+                chev.className = 'fa-solid fa-chevron-up';
+            } else {
+                form.style.display = 'none';
+                chev.className = 'fa-solid fa-chevron-down';
+            }
+        }
+
+        function applyCustomLiveStream() {
+            const url = document.getElementById('liveStreamUrlInput').value.trim();
+            if (!url) return;
+            
+            let embedUrl = url;
+            if (url.includes('youtube.com/watch?v=')) {
+                embedUrl = url.replace('watch?v=', 'embed/');
+            } else if (url.includes('youtu.be/')) {
+                embedUrl = url.replace('youtu.be/', 'www.youtube.com/embed/');
+            }
+
+            liveEmbedUrl = embedUrl;
+            localStorage.setItem('kanguka_live_url', liveEmbedUrl);
+            setLiveState(true);
+            showToast("✅ Flux vidéo du pasteur mis à jour et actif !");
+        }
+
         function saveState() {
             localStorage.setItem('kanguka_testimonies', JSON.stringify(TESTIMONIES));
             localStorage.setItem('kanguka_prayers', JSON.stringify(PRAYERS));
@@ -1356,7 +1513,6 @@
                 const durS = Math.floor(audioElement.duration % 60).toString().padStart(2, '0');
                 document.getElementById('totalTimeLabel').innerText = `${durM}:${durS}`;
             } else {
-                // Live stream
                 const curM = Math.floor(audioElement.currentTime / 60).toString().padStart(2, '0');
                 const curS = Math.floor(audioElement.currentTime % 60).toString().padStart(2, '0');
                 document.getElementById('currentTimeLabel').innerText = `${curM}:${curS}`;
@@ -1367,10 +1523,6 @@
         audioElement.addEventListener('ended', () => {
             isPlaying = false;
             document.getElementById('playIcon').className = 'fa-solid fa-play';
-        });
-
-        audioElement.addEventListener('error', () => {
-            console.log("Audio loading notice");
         });
 
         // TAB SWITCHING FUNCTION
@@ -1528,7 +1680,7 @@
                     renderEpisodes(EPISODES, 'catalogEpisodesList');
                 }).catch(err => {
                     console.log("Audio play err", err);
-                    showToast("🔊 Touchez à nouveau l'écran pour autoriser la lecture audio.");
+                    showToast("🔊 Touchez à nouveau pour autoriser la lecture.");
                 });
             } else {
                 audioElement.pause();
@@ -1705,7 +1857,6 @@
             const status = document.getElementById('recordingStatus');
 
             if (!isRecording) {
-                // START RECORDING WITH REAL PHONE MIC
                 try {
                     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                     mediaRecorder = new MediaRecorder(stream);
@@ -1745,7 +1896,6 @@
                 }
 
             } else {
-                // STOP RECORDING
                 isRecording = false;
                 clearInterval(recordInterval);
                 btn.classList.remove('recording');
@@ -1755,7 +1905,6 @@
 
                 if (mediaRecorder && mediaRecorder.state !== 'inactive') {
                     mediaRecorder.stop();
-                    // Stop tracks to release mic
                     mediaRecorder.stream.getTracks().forEach(track => track.stop());
                 }
 
@@ -1858,6 +2007,7 @@
         renderEpisodes(EPISODES, 'catalogEpisodesList');
         renderTestimonies();
         renderPrayers();
+        updateLiveUI();
     </script>
 </body>
 </html>
