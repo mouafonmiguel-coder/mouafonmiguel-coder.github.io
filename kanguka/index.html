@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0a192f">
-    <title>KANGUKA STYLE — Réveil Spirituel & Enseignements Quotidiens</title>
+    <meta name="theme-color" content="#070d1e">
+    <title>KANGUKA — Réveil Spirituel & Live Direct</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -13,14 +13,15 @@
             --bg-card: #0f1c3f;
             --bg-card-hover: #162756;
             --gold: #d4af37;
-            --gold-light: #f3e5ab;
+            --gold-light: #fef08a;
             --gold-gradient: linear-gradient(135deg, #d4af37 0%, #fef08a 50%, #b45309 100%);
             --blue-accent: #38bdf8;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border: rgba(212, 175, 55, 0.2);
+            --border: rgba(212, 175, 55, 0.25);
             --border-light: rgba(255, 255, 255, 0.08);
             --green: #10b981;
+            --red-live: #ef4444;
         }
 
         * {
@@ -35,13 +36,13 @@
             background-color: var(--bg-dark);
             color: var(--text-main);
             line-height: 1.6;
-            padding-bottom: 90px;
+            padding-bottom: 95px;
         }
 
         /* Top Header */
         .app-header {
-            background: rgba(7, 13, 30, 0.95);
-            backdrop-filter: blur(12px);
+            background: rgba(7, 13, 30, 0.96);
+            backdrop-filter: blur(14px);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -56,20 +57,21 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            cursor: pointer;
         }
 
         .logo-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             background: var(--gold-gradient);
             display: flex;
             align-items: center;
             justify-content: center;
             color: #070d1e;
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: 900;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.35);
         }
 
         .logo-text h1 {
@@ -112,21 +114,63 @@
             color: #000;
         }
 
+        /* LIVE BADGE HEADER */
+        .live-indicator {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--red-live);
+            color: #fca5a5;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            animation: pulse-live 1.8s infinite;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--red-live);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--red-live);
+        }
+
+        @keyframes pulse-live {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.85; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* TAB VIEWS */
+        .tab-view {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* Hero Banner - Today's Message */
         .hero-banner {
-            padding: 20px 18px;
-            background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.15), transparent 70%),
-                        radial-gradient(circle at bottom left, rgba(212, 175, 55, 0.15), transparent 70%);
+            padding: 18px 18px 10px 18px;
         }
 
         .hero-card {
             background: linear-gradient(145deg, #0e1e45 0%, #08122a 100%);
             border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 24px;
+            padding: 22px;
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
             position: relative;
-            overflow: hidden;
         }
 
         .hero-badge {
@@ -140,12 +184,12 @@
             font-weight: 700;
             padding: 4px 12px;
             border-radius: 20px;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             text-transform: uppercase;
         }
 
         .hero-title {
-            font-size: 1.35rem;
+            font-size: 1.3rem;
             font-weight: 800;
             color: #ffffff;
             margin-bottom: 8px;
@@ -153,17 +197,17 @@
         }
 
         .hero-verse {
-            font-size: 0.88rem;
+            font-size: 0.86rem;
             color: var(--blue-accent);
             font-style: italic;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
         /* Player Controls */
         .player-bar {
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(0, 0, 0, 0.4);
             border-radius: 14px;
-            padding: 14px 18px;
+            padding: 14px 16px;
             border: 1px solid var(--border-light);
         }
 
@@ -174,15 +218,16 @@
             border-radius: 3px;
             position: relative;
             cursor: pointer;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .progress-bar {
             height: 100%;
-            width: 32%;
+            width: 0%;
             background: var(--gold-gradient);
             border-radius: 3px;
             position: relative;
+            transition: width 0.1s linear;
         }
 
         .progress-dot {
@@ -234,19 +279,22 @@
             background: none;
             border: none;
             color: var(--text-muted);
-            font-size: 1.1rem;
+            font-size: 1rem;
             cursor: pointer;
             padding: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .sub-player-btn:hover {
             color: var(--gold);
         }
 
-        /* Categories Section */
+        /* Section Titles */
         .section-title {
             padding: 0 18px;
-            margin: 22px 0 14px 0;
+            margin: 22px 0 12px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -261,16 +309,18 @@
             gap: 8px;
         }
 
-        .section-title a {
+        .section-title a, .section-title span.link {
             font-size: 0.8rem;
             color: var(--gold);
             text-decoration: none;
             font-weight: 600;
+            cursor: pointer;
         }
 
+        /* Filter Chips */
         .cat-scroll {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             overflow-x: auto;
             padding: 0 18px 10px 18px;
             scrollbar-width: none;
@@ -284,13 +334,16 @@
             background: var(--bg-card);
             border: 1px solid var(--border-light);
             border-radius: 50px;
-            padding: 8px 18px;
+            padding: 8px 16px;
             white-space: nowrap;
             font-size: 0.82rem;
             font-weight: 600;
             color: var(--text-muted);
             cursor: pointer;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .cat-chip.active, .cat-chip:hover {
@@ -299,23 +352,23 @@
             color: var(--gold-light);
         }
 
-        /* Episodes List */
+        /* Episodes Grid */
         .episodes-grid {
             padding: 0 18px;
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
         }
 
         .episode-card {
             background: var(--bg-card);
             border: 1px solid var(--border-light);
             border-radius: 16px;
-            padding: 16px;
+            padding: 14px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 14px;
+            gap: 12px;
             transition: all 0.2s;
             cursor: pointer;
         }
@@ -329,14 +382,15 @@
         .ep-left {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
+            flex: 1;
         }
 
         .ep-icon-box {
-            width: 44px;
-            height: 44px;
+            width: 42px;
+            height: 42px;
             border-radius: 12px;
-            background: rgba(56, 189, 248, 0.1);
+            background: rgba(56, 189, 248, 0.12);
             border: 1px solid rgba(56, 189, 248, 0.3);
             color: var(--blue-accent);
             display: flex;
@@ -347,14 +401,14 @@
         }
 
         .ep-info h3 {
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             font-weight: 700;
             color: #ffffff;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .ep-info p {
-            font-size: 0.75rem;
+            font-size: 0.74rem;
             color: var(--text-muted);
         }
 
@@ -368,8 +422,8 @@
             background: rgba(255,255,255,0.06);
             border: 1px solid var(--border-light);
             color: var(--text-muted);
-            width: 34px;
-            height: 34px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -382,54 +436,152 @@
             color: #000;
         }
 
-        /* Testimonials Section */
-        .testi-card {
-            background: linear-gradient(135deg, #101c3d 0%, #0b142c 100%);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 18px;
-            margin: 0 18px 14px 18px;
+        /* ================= LIVE STREAMING VIEW ================= */
+        .live-stream-box {
+            margin: 18px;
+            background: #000000;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid var(--red-live);
+            position: relative;
+            box-shadow: 0 8px 30px rgba(239, 68, 68, 0.25);
+        }
+
+        .live-video-placeholder {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             position: relative;
         }
 
-        .testi-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .testi-author {
-            font-weight: 700;
-            font-size: 0.9rem;
-            color: var(--gold-light);
+        .live-badge-overlay {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: var(--red-live);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 900;
+            padding: 4px 10px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             gap: 6px;
         }
 
-        .testi-date {
-            font-size: 0.72rem;
-            color: var(--text-muted);
+        .live-viewers-count {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(6px);
+            color: white;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 6px;
         }
 
-        .testi-body {
-            font-size: 0.86rem;
-            color: #e2e8f0;
-            font-style: italic;
-            margin-bottom: 12px;
+        .live-chat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin: 0 18px 18px 18px;
+            padding: 16px;
         }
 
-        .testi-actions {
+        .chat-messages {
+            height: 180px;
+            overflow-y: auto;
             display: flex;
-            gap: 15px;
-            font-size: 0.8rem;
-            color: var(--text-muted);
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding-right: 6px;
         }
 
-        .testi-tag {
-            color: var(--blue-accent);
+        .chat-bubble {
+            background: rgba(255,255,255,0.05);
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+        }
+
+        .chat-author {
+            color: var(--gold-light);
+            font-weight: 700;
+            margin-right: 6px;
+        }
+
+        .chat-input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-light);
+            padding: 10px 14px;
+            border-radius: 50px;
+            color: white;
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        .chat-send-btn {
+            background: var(--gold-gradient);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: #070d1e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* PRAYER WALL */
+        .prayer-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px;
+            margin: 0 18px 14px 18px;
+        }
+
+        .prayer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .prayer-btn-amen {
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid var(--gold);
+            color: var(--gold-light);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .prayer-btn-amen:active {
+            transform: scale(0.95);
+            background: var(--gold);
+            color: #000;
         }
 
         /* Bottom Floating Navigation */
@@ -438,8 +590,8 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(7, 13, 30, 0.96);
-            backdrop-filter: blur(14px);
+            background: rgba(7, 13, 30, 0.98);
+            backdrop-filter: blur(16px);
             border-top: 1px solid var(--border);
             display: flex;
             justify-content: space-around;
@@ -458,61 +610,55 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
+            position: relative;
         }
 
         .nav-item i {
             font-size: 1.25rem;
         }
 
-        .nav-item.active, .nav-item:hover {
+        .nav-item.active {
             color: var(--gold);
         }
 
-        /* Quick Action Bar */
-        .cta-box {
-            margin: 25px 18px 10px 18px;
-            background: linear-gradient(135deg, #1e3a8a 0%, #0369a1 100%);
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid rgba(56, 189, 248, 0.3);
+        .nav-badge-live {
+            position: absolute;
+            top: -4px;
+            right: -6px;
+            background: var(--red-live);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 900;
+            padding: 1px 5px;
+            border-radius: 10px;
         }
 
-        .cta-box h3 {
-            font-size: 1.1rem;
-            color: #ffffff;
-            margin-bottom: 6px;
-            font-weight: 800;
-        }
-
-        .cta-box p {
-            font-size: 0.82rem;
-            color: #e0f2fe;
-            margin-bottom: 14px;
-        }
-
-        .cta-btn-wa {
-            background: #25d366;
-            color: #ffffff;
-            border: none;
-            padding: 12px 24px;
+        /* Modal / Toast */
+        .toast {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 10px 20px;
             border-radius: 50px;
-            font-weight: 800;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            text-decoration: none;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.35);
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: none;
+            z-index: 2000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
     </style>
 </head>
 <body>
 
+    <!-- TOAST NOTIFICATION -->
+    <div id="appToast" class="toast">✨ Téléchargement démarré pour écoute hors-ligne !</div>
+
     <!-- TOP BAR -->
     <header class="app-header">
-        <div class="logo-box">
+        <div class="logo-box" onclick="switchTab('home')">
             <div class="logo-icon"><i class="fa-solid fa-dove"></i></div>
             <div class="logo-text">
                 <h1>RÉVEIL SPIRITUEL</h1>
@@ -520,169 +666,491 @@
             </div>
         </div>
         <div class="header-actions">
-            <button class="icon-btn" title="Rechercher"><i class="fa-solid fa-magnifying-glass"></i></button>
-            <button class="icon-btn" title="Notifications"><i class="fa-solid fa-bell"></i></button>
-            <button class="icon-btn" title="Téléchargements Hors-Ligne"><i class="fa-solid fa-cloud-arrow-down"></i></button>
+            <div class="live-indicator" onclick="switchTab('live')">
+                <div class="live-dot"></div>
+                <span>DIRECT</span>
+            </div>
+            <button class="icon-btn" onclick="switchTab('profile')" title="Téléchargements"><i class="fa-solid fa-cloud-arrow-down"></i></button>
         </div>
     </header>
 
-    <!-- HERO CARD: MESSAGE DU JOUR -->
-    <section class="hero-banner">
-        <div class="hero-card">
-            <div class="hero-badge"><i class="fa-solid fa-fire"></i> Émission du Jour • 13 Septembre 2026</div>
-            <h2 class="hero-title">Le Pouvoir de la Persévérance dans la Prière</h2>
-            <p class="hero-verse">« Demandez, et l'on vous donnera ; cherchez, et vous trouverez ; frappez, et l'on vous ouvrira. » — Matthieu 7:7</p>
+    <!-- ================= TAB 1: ACCUEIL ================= -->
+    <main id="tab-home" class="tab-view active">
+        <!-- HERO CARD: MESSAGE DU JOUR -->
+        <section class="hero-banner">
+            <div class="hero-card">
+                <div class="hero-badge"><i class="fa-solid fa-fire"></i> Émission du Jour • 13 Septembre 2026</div>
+                <h2 class="hero-title" id="nowPlayingTitle">Le Pouvoir de la Persévérance dans la Prière</h2>
+                <p class="hero-verse" id="nowPlayingVerse">« Demandez, et l'on vous donnera ; cherchez, et vous trouverez ; frappez, et l'on vous ouvrira. » — Matthieu 7:7</p>
 
-            <!-- Embedded Modern Player -->
-            <div class="player-bar">
-                <div class="progress-container">
-                    <div class="progress-bar">
-                        <div class="progress-dot"></div>
+                <!-- Embedded Modern Player -->
+                <div class="player-bar">
+                    <div class="progress-container" id="progressBarContainer" onclick="seekAudio(event)">
+                        <div class="progress-bar" id="audioProgress">
+                            <div class="progress-dot"></div>
+                        </div>
+                    </div>
+                    <div class="time-labels">
+                        <span id="currentTimeLabel">00:00</span>
+                        <span id="totalTimeLabel">14:30</span>
+                    </div>
+                    <div class="player-actions">
+                        <button class="sub-player-btn" onclick="skipAudio(-15)" title="Reculer 15s"><i class="fa-solid fa-rotate-left"></i> 15s</button>
+                        <button class="play-main-btn" id="playBtn" onclick="togglePlay()"><i class="fa-solid fa-play" id="playIcon"></i></button>
+                        <button class="sub-player-btn" onclick="skipAudio(15)" title="Avancer 15s">15s <i class="fa-solid fa-rotate-right"></i></button>
+                        <button class="sub-player-btn" id="speedBtn" onclick="toggleSpeed()">1.0x</button>
+                        <button class="sub-player-btn" onclick="downloadCurrentAudio()" title="Télécharger MP3 pour écoute hors-ligne"><i class="fa-solid fa-download"></i></button>
                     </div>
                 </div>
-                <div class="time-labels">
-                    <span>04:45</span>
-                    <span>14:30</span>
+            </div>
+        </section>
+
+        <!-- THEMATIC CATEGORIES -->
+        <div class="section-title">
+            <h2><i class="fa-solid fa-layer-group" style="color:var(--gold);"></i> Thématiques de Réveil</h2>
+            <span class="link" onclick="switchTab('enseignements')">Tout voir</span>
+        </div>
+
+        <div class="cat-scroll">
+            <div class="cat-chip active" onclick="filterByTheme('all', this)"><i class="fa-solid fa-star"></i> Tous les Récents</div>
+            <div class="cat-chip" onclick="filterByTheme('guerison', this)"><i class="fa-solid fa-heart-pulse"></i> Guérison Divine</div>
+            <div class="cat-chip" onclick="filterByTheme('priere', this)"><i class="fa-solid fa-hands-praying"></i> Prière & Intercession</div>
+            <div class="cat-chip" onclick="filterByTheme('delivrance', this)"><i class="fa-solid fa-shield-halved"></i> Délivrance & Victoire</div>
+            <div class="cat-chip" onclick="filterByTheme('saint-esprit', this)"><i class="fa-solid fa-dove"></i> Saint-Esprit</div>
+            <div class="cat-chip" onclick="filterByTheme('foi', this)"><i class="fa-solid fa-gem"></i> Foi Inébranlable</div>
+        </div>
+
+        <!-- RECENT EPISODES LIST -->
+        <div class="section-title">
+            <h2><i class="fa-solid fa-headphones" style="color:var(--blue-accent);"></i> Dernières Émissions Audio</h2>
+            <span class="link" onclick="switchTab('enseignements')">Catalogue complet</span>
+        </div>
+
+        <div class="episodes-grid" id="homeEpisodesList">
+            <!-- Dynamic Episodes Injected via JS -->
+        </div>
+    </main>
+
+    <!-- ================= TAB 2: ENSEIGNEMENTS (CATALOGUE & SEARCH) ================= -->
+    <main id="tab-enseignements" class="tab-view">
+        <div style="padding: 18px 18px 10px 18px;">
+            <div style="position:relative; margin-bottom:14px;">
+                <input type="text" id="searchInput" oninput="searchEpisodes()" placeholder="🔍 Rechercher un enseignement, un verset, un thème..." style="width:100%; background:var(--bg-card); border:1px solid var(--border); padding:12px 18px 12px 42px; border-radius:50px; color:white; font-size:0.9rem; outline:none;">
+                <i class="fa-solid fa-magnifying-glass" style="position:absolute; left:16px; top:15px; color:var(--text-muted);"></i>
+            </div>
+        </div>
+
+        <div class="cat-scroll" style="margin-bottom: 14px;">
+            <div class="cat-chip active" onclick="filterByTheme('all', this)">Tous les Thèmes</div>
+            <div class="cat-chip" onclick="filterByTheme('guerison', this)">Guérison</div>
+            <div class="cat-chip" onclick="filterByTheme('priere', this)">Prière</div>
+            <div class="cat-chip" onclick="filterByTheme('delivrance', this)">Délivrance</div>
+            <div class="cat-chip" onclick="filterByTheme('foi', this)">Foi</div>
+        </div>
+
+        <div class="episodes-grid" id="catalogEpisodesList">
+            <!-- Full Catalog Injected Here -->
+        </div>
+    </main>
+
+    <!-- ================= TAB 3: LIVE DIRECT ================= -->
+    <main id="tab-live" class="tab-view">
+        <div class="live-stream-box">
+            <div class="live-video-placeholder">
+                <div class="live-badge-overlay"><div class="live-dot"></div> EN DIRECT</div>
+                <div class="live-viewers-count"><i class="fa-solid fa-users"></i> 2 485 connectés</div>
+                
+                <i class="fa-solid fa-video" style="font-size: 3rem; color: var(--gold); margin-bottom: 10px;"></i>
+                <h3 style="font-size: 1.1rem; color: #ffffff;">MOMENT DE RÉVEIL & PRIÈRE EN DIRECT</h3>
+                <p style="font-size: 0.8rem; color: var(--blue-accent);">Diffusion en direct audio & vidéo</p>
+                
+                <button onclick="startLiveDemo()" style="margin-top: 14px; background: var(--red-live); color: white; border: none; padding: 8px 18px; border-radius: 50px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-play"></i> Rejoindre le Flux en Direct
+                </button>
+            </div>
+        </div>
+
+        <!-- LIVE PRAYER CHAT -->
+        <div class="live-chat-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h3 style="font-size:0.95rem; color:var(--gold-light);"><i class="fa-solid fa-comments"></i> Chat & Prières en Direct</h3>
+                <span style="font-size:0.75rem; color:var(--green);"><i class="fa-solid fa-circle" style="font-size:0.6rem;"></i> Modéré en direct</span>
+            </div>
+
+            <div class="chat-messages" id="liveChatMessages">
+                <div class="chat-bubble"><span class="chat-author">Frère Patrick (Yaoundé) :</span> Que le Seigneur guérisse mon foyer ce matin ! 🙏</div>
+                <div class="chat-bubble"><span class="chat-author">Sœur Estelle (Douala) :</span> Amen ! Je reçois cette parole de délivrance au nom de Jésus ! ✨</div>
+                <div class="chat-bubble"><span class="chat-author">Maman Julie (Bafoussam) :</span> Gloire à Dieu pour ce live qui fortifie ma foi ! 🔥</div>
+            </div>
+
+            <div class="chat-input-row">
+                <input type="text" id="liveChatInput" class="chat-input" placeholder="Écrire une prière ou un Amen...">
+                <button class="chat-send-btn" onclick="sendLiveChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================= TAB 4: PRIÈRE & INTERCESSION ================= -->
+    <main id="tab-priere" class="tab-view">
+        <div style="padding: 18px 18px 10px 18px;">
+            <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:18px; margin-bottom:18px;">
+                <h3 style="font-size:1.05rem; color:var(--gold-light); margin-bottom:6px;"><i class="fa-solid fa-hands-praying"></i> Déposer une Intention de Prière</h3>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">Notre communauté d'intercesseurs prie chaque jour pour vos sujets.</p>
+                <textarea id="prayerInput" placeholder="Écrivez votre requête de prière ici..." style="width:100%; height:80px; background:rgba(0,0,0,0.3); border:1px solid var(--border-light); border-radius:10px; padding:10px; color:white; font-size:0.85rem; outline:none; margin-bottom:10px;"></textarea>
+                <button onclick="submitPrayer()" style="background:var(--gold-gradient); border:none; padding:10px 20px; border-radius:50px; font-weight:800; color:#070d1e; cursor:pointer;">Envoyer ma Prière &rarr;</button>
+            </div>
+
+            <div class="section-title" style="padding:0; margin-bottom:12px;">
+                <h2><i class="fa-solid fa-heart" style="color:var(--red-live);"></i> Mur d'Intercession</h2>
+            </div>
+
+            <div id="prayerWallList">
+                <div class="prayer-card">
+                    <div class="prayer-header">
+                        <strong style="color:var(--gold-light); font-size:0.9rem;">Sœur Blandine (Garoua)</strong>
+                        <span style="font-size:0.75rem; color:var(--text-muted);">Il y a 2h</span>
+                    </div>
+                    <p style="font-size:0.85rem; color:#e2e8f0;">« Je demande la prière pour la guérison complète de ma mère hospitalisée. Que la main de Dieu la touche. »</p>
+                    <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>142 Ont Prié (Amen)</span></button>
                 </div>
-                <div class="player-actions">
-                    <button class="sub-player-btn" title="Reculer 15s"><i class="fa-solid fa-rotate-left"></i> 15s</button>
-                    <button class="play-main-btn" id="playBtn" onclick="togglePlay()"><i class="fa-solid fa-play" id="playIcon"></i></button>
-                    <button class="sub-player-btn" title="Avancer 15s">15s <i class="fa-solid fa-rotate-right"></i></button>
-                    <button class="sub-player-btn" title="Vitesse">1.0x</button>
-                    <button class="sub-player-btn" title="Télécharger MP3"><i class="fa-solid fa-download"></i></button>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================= TAB 5: TÉMOIGNAGES ================= -->
+    <main id="tab-temoignages" class="tab-view">
+        <div style="padding: 18px 18px 10px 18px;">
+            <div style="background:linear-gradient(135deg, #101c3d 0%, #0b142c 100%); border:1px solid var(--border); border-radius:16px; padding:18px; margin-bottom:18px;">
+                <h3 style="font-size:1.05rem; color:var(--gold-light); margin-bottom:6px;"><i class="fa-solid fa-certificate"></i> Partager un Témoignage de Miracle</h3>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">Racontez ce que Jésus a fait dans votre vie pour encourager la foi des frères et sœurs !</p>
+                <textarea id="testiInput" placeholder="Racontez votre miracle..." style="width:100%; height:80px; background:rgba(0,0,0,0.3); border:1px solid var(--border-light); border-radius:10px; padding:10px; color:white; font-size:0.85rem; outline:none; margin-bottom:10px;"></textarea>
+                <button onclick="submitTestimony()" style="background:var(--gold-gradient); border:none; padding:10px 20px; border-radius:50px; font-weight:800; color:#070d1e; cursor:pointer;">Publier mon Témoignage &rarr;</button>
+            </div>
+
+            <div class="section-title" style="padding:0; margin-bottom:12px;">
+                <h2><i class="fa-solid fa-star" style="color:var(--gold);"></i> Témoignages Récents</h2>
+            </div>
+
+            <div id="testimoniesWallList">
+                <div class="prayer-card">
+                    <div class="prayer-header">
+                        <strong style="color:var(--gold-light); font-size:0.9rem;">Frère Joseph (Yaoundé)</strong>
+                        <span style="font-size:0.75rem; color:var(--text-muted);">Hier</span>
+                    </div>
+                    <p style="font-size:0.85rem; color:#e2e8f0;">« Gloire à Dieu ! Après 6 mois sans emploi, j'ai été appelé hier pour un poste de responsable commercial ! Dieu est fidèle ! »</p>
+                    <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>389 Gloire à Dieu</span></button>
                 </div>
             </div>
         </div>
-    </section>
+    </main>
 
-    <!-- THEMATIC CATEGORIES -->
-    <div class="section-title">
-        <h2><i class="fa-solid fa-layer-group" style="color:var(--gold);"></i> Thématiques de Réveil</h2>
-        <a href="#">Tout voir</a>
-    </div>
-
-    <div class="cat-scroll">
-        <div class="cat-chip active"><i class="fa-solid fa-star"></i> Tous les Récents</div>
-        <div class="cat-chip"><i class="fa-solid fa-heart-pulse"></i> Guérison Divine</div>
-        <div class="cat-chip"><i class="fa-solid fa-hands-praying"></i> Prière & Intercession</div>
-        <div class="cat-chip"><i class="fa-solid fa-shield-halved"></i> Délivrance & Victoire</div>
-        <div class="cat-chip"><i class="fa-solid fa-dove"></i> Saint-Esprit</div>
-        <div class="cat-chip"><i class="fa-solid fa-gem"></i> Foi Inébranlable</div>
-    </div>
-
-    <!-- RECENT EPISODES LIST -->
-    <div class="section-title">
-        <h2><i class="fa-solid fa-headphones" style="color:var(--blue-accent);"></i> Dernières Émissions Audio</h2>
-        <a href="#">Archives</a>
-    </div>
-
-    <div class="episodes-grid">
-        <!-- Episode 1 -->
-        <div class="episode-card">
-            <div class="ep-left">
-                <div class="ep-icon-box"><i class="fa-solid fa-play"></i></div>
-                <div class="ep-info">
-                    <h3>Comment Dépasser la Peur et le Doute</h3>
-                    <p>Épisode 842 • 14 min • 12 Septembre 2026</p>
+    <!-- ================= TAB 6: PROFIL & HORS-LIGNE ================= -->
+    <main id="tab-profile" class="tab-view">
+        <div style="padding: 18px;">
+            <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:20px; text-align:center; margin-bottom:18px;">
+                <div style="width:70px; height:70px; border-radius:50%; background:var(--gold-gradient); display:flex; align-items:center; justify-content:center; margin:0 auto 12px auto; font-size:2rem; color:#070d1e;">
+                    <i class="fa-solid fa-user"></i>
                 </div>
+                <h3 style="font-size:1.1rem; color:white;">Espace Disciple & Fidèle</h3>
+                <p style="font-size:0.8rem; color:var(--blue-accent);">Membre de la Communauté de Réveil</p>
             </div>
-            <div class="ep-actions">
-                <button class="ep-btn" title="Télécharger"><i class="fa-solid fa-arrow-down"></i></button>
-                <button class="ep-btn" title="Partager WhatsApp"><i class="fa-brands fa-whatsapp"></i></button>
+
+            <div class="section-title" style="padding:0; margin-bottom:12px;">
+                <h2><i class="fa-solid fa-cloud-arrow-down" style="color:var(--green);"></i> Pourquoi Télécharger ?</h2>
+            </div>
+            <div style="background:var(--bg-card); border:1px solid var(--border-light); border-radius:16px; padding:16px; margin-bottom:18px; font-size:0.85rem; color:#cbd5e1;">
+                <p style="margin-bottom:8px;"><strong>📲 Écoute 100% Hors-Ligne :</strong> Téléchargez l'audio MP3 le matin lorsque vous avez du WiFi/forfait, et écoutez-le toute la journée sans consommer de connexion internet (en voyage, en taxi, au village).</p>
+                <p><strong>💾 Économie de Forfait :</strong> Vos enseignements restent enregistrés sur votre smartphone.</p>
             </div>
         </div>
-
-        <!-- Episode 2 -->
-        <div class="episode-card">
-            <div class="ep-left">
-                <div class="ep-icon-box" style="background:rgba(212,175,55,0.1); border-color:var(--gold); color:var(--gold);"><i class="fa-solid fa-play"></i></div>
-                <div class="ep-info">
-                    <h3>La Grâce qui Transforme l'Impossible</h3>
-                    <p>Épisode 841 • 15 min • 11 Septembre 2026</p>
-                </div>
-            </div>
-            <div class="ep-actions">
-                <button class="ep-btn" title="Télécharger"><i class="fa-solid fa-arrow-down"></i></button>
-                <button class="ep-btn" title="Partager WhatsApp"><i class="fa-brands fa-whatsapp"></i></button>
-            </div>
-        </div>
-
-        <!-- Episode 3 -->
-        <div class="episode-card">
-            <div class="ep-left">
-                <div class="ep-icon-box"><i class="fa-solid fa-play"></i></div>
-                <div class="ep-info">
-                    <h3>Prier avec Autorité dans le Nom de Jésus</h3>
-                    <p>Épisode 840 • 16 min • 10 Septembre 2026</p>
-                </div>
-            </div>
-            <div class="ep-actions">
-                <button class="ep-btn" title="Télécharger"><i class="fa-solid fa-arrow-down"></i></button>
-                <button class="ep-btn" title="Partager WhatsApp"><i class="fa-brands fa-whatsapp"></i></button>
-            </div>
-        </div>
-    </div>
-
-    <!-- TESTIMONIALS SECTION -->
-    <div class="section-title">
-        <h2><i class="fa-solid fa-certificate" style="color:var(--gold);"></i> Témoignages & Miracles</h2>
-        <a href="#">Déposer le mien</a>
-    </div>
-
-    <div class="testi-card">
-        <div class="testi-header">
-            <div class="testi-author"><i class="fa-solid fa-user-check"></i> Sœur Marie (Douala)</div>
-            <div class="testi-date">Hier à 18:30</div>
-        </div>
-        <p class="testi-body">« Après 3 mois de blocage financier et de découragement, j'ai prié avec l'émission de mardi sur la fidélité de Dieu. Aujourd'hui, mon contrat a été validé ! Gloire à Jésus ! »</p>
-        <div class="testi-actions">
-            <span class="testi-tag"><i class="fa-solid fa-hands-praying"></i> 248 Amen</span>
-            <span class="testi-tag"><i class="fa-solid fa-share-nodes"></i> Partager</span>
-        </div>
-    </div>
-
-    <!-- WHATSAPP BROADCAST CTA -->
-    <div class="cta-box">
-        <h3><i class="fa-brands fa-whatsapp"></i> Rejoindre la Diffusion Quotidienne</h3>
-        <p>Recevez chaque matin l'audio du réveil spirituel directement sur WhatsApp !</p>
-        <a href="#" class="cta-btn-wa"><i class="fa-brands fa-whatsapp"></i> Rejoindre le Groupe WhatsApp</a>
-    </div>
+    </main>
 
     <!-- FLOATING BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
-        <div class="nav-item active">
+        <div class="nav-item active" id="nav-home" onclick="switchTab('home')">
             <i class="fa-solid fa-house"></i>
             <span>Accueil</span>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" id="nav-enseignements" onclick="switchTab('enseignements')">
             <i class="fa-solid fa-book-bible"></i>
             <span>Enseignements</span>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" id="nav-live" onclick="switchTab('live')">
+            <div class="nav-badge-live">LIVE</div>
+            <i class="fa-solid fa-tower-broadcast" style="color:var(--red-live);"></i>
+            <span>Direct</span>
+        </div>
+        <div class="nav-item" id="nav-priere" onclick="switchTab('priere')">
             <i class="fa-solid fa-hands-praying"></i>
             <span>Prière</span>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" id="nav-temoignages" onclick="switchTab('temoignages')">
             <i class="fa-solid fa-heart"></i>
             <span>Témoignages</span>
         </div>
-        <div class="nav-item">
-            <i class="fa-solid fa-circle-user"></i>
-            <span>Profil</span>
-        </div>
     </nav>
 
+    <!-- JAVASCRIPT LOGIC -->
     <script>
+        const EPISODES = [
+            {
+                id: 1,
+                title: "Le Pouvoir de la Persévérance dans la Prière",
+                verse: "« Demandez, et l'on vous donnera ; cherchez, et vous trouverez. » — Matthieu 7:7",
+                theme: "priere",
+                duration: "14:30",
+                date: "Aujourd'hui • 13 Septembre 2026",
+                audioUrl: "https://mouafonmiguel-coder.github.io/carnet_short_voice1.mp3"
+            },
+            {
+                id: 2,
+                title: "Comment Dépasser la Peur et le Doute",
+                verse: "« Ne crains rien, car je suis avec toi ; ne promène pas des regards inquiets. » — Ésaïe 41:10",
+                theme: "foi",
+                duration: "15:10",
+                date: "Hier • 12 Septembre 2026",
+                audioUrl: "https://mouafonmiguel-coder.github.io/carnet_short_voice2.mp3"
+            },
+            {
+                id: 3,
+                title: "La Grâce qui Transforme l'Impossible",
+                verse: "« À Dieu tout est possible. » — Matthieu 19:26",
+                theme: "guerison",
+                duration: "16:05",
+                date: "11 Septembre 2026",
+                audioUrl: "https://mouafonmiguel-coder.github.io/carnet_short_voice3.mp3"
+            },
+            {
+                id: 4,
+                title: "Prier avec Autorité dans le Nom de Jésus",
+                verse: "« Tout ce que vous lierez sur la terre sera lié dans le ciel. » — Matthieu 18:18",
+                theme: "delivrance",
+                duration: "14:45",
+                date: "10 Septembre 2026",
+                audioUrl: "https://mouafonmiguel-coder.github.io/carnet_short_voice1.mp3"
+            },
+            {
+                id: 5,
+                title: "Marcher Quotidiennement avec le Saint-Esprit",
+                verse: "« Marchez selon l'Esprit, et vous n'accomplirez pas les désirs de la chair. » — Galates 5:16",
+                theme: "saint-esprit",
+                duration: "15:30",
+                date: "09 Septembre 2026",
+                audioUrl: "https://mouafonmiguel-coder.github.io/carnet_short_voice2.mp3"
+            }
+        ];
+
+        let currentEpisode = EPISODES[0];
         let isPlaying = false;
+        let playInterval = null;
+        let currentSeconds = 0;
+        let totalSeconds = 14 * 60 + 30;
+        let speeds = [1.0, 1.25, 1.5, 2.0];
+        let speedIdx = 0;
+
+        // TAB SWITCHING FUNCTION
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-view').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+            const targetTab = document.getElementById('tab-' + tabId);
+            const targetNav = document.getElementById('nav-' + tabId);
+
+            if (targetTab) targetTab.classList.add('active');
+            if (targetNav) targetNav.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // RENDER EPISODES
+        function renderEpisodes(list, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            container.innerHTML = list.map(ep => `
+                <div class="episode-card" onclick="playEpisode(${ep.id})">
+                    <div class="ep-left">
+                        <div class="ep-icon-box"><i class="fa-solid fa-play"></i></div>
+                        <div class="ep-info">
+                            <h3>${ep.title}</h3>
+                            <p>${ep.date} • ${ep.duration}</p>
+                        </div>
+                    </div>
+                    <div class="ep-actions" onclick="event.stopPropagation()">
+                        <button class="ep-btn" onclick="downloadAudio('${ep.title}')" title="Télécharger MP3"><i class="fa-solid fa-arrow-down"></i></button>
+                        <button class="ep-btn" onclick="shareWa('${ep.title}')" title="Partager WhatsApp"><i class="fa-brands fa-whatsapp"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // PLAYER LOGIC
         function togglePlay() {
             isPlaying = !isPlaying;
             const icon = document.getElementById('playIcon');
             if (isPlaying) {
                 icon.className = 'fa-solid fa-pause';
+                playInterval = setInterval(updatePlayerTime, 1000);
             } else {
                 icon.className = 'fa-solid fa-play';
+                clearInterval(playInterval);
             }
         }
+
+        function playEpisode(id) {
+            const ep = EPISODES.find(e => e.id === id);
+            if (!ep) return;
+            currentEpisode = ep;
+            document.getElementById('nowPlayingTitle').innerText = ep.title;
+            document.getElementById('nowPlayingVerse').innerText = ep.verse;
+            currentSeconds = 0;
+            switchTab('home');
+            if (!isPlaying) togglePlay();
+        }
+
+        function updatePlayerTime() {
+            if (currentSeconds < totalSeconds) {
+                currentSeconds++;
+                const pct = (currentSeconds / totalSeconds) * 100;
+                document.getElementById('audioProgress').style.width = pct + '%';
+                
+                const m = Math.floor(currentSeconds / 60).toString().padStart(2, '0');
+                const s = (currentSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('currentTimeLabel').innerText = `${m}:${s}`;
+            } else {
+                togglePlay();
+            }
+        }
+
+        function skipAudio(sec) {
+            currentSeconds = Math.max(0, Math.min(totalSeconds, currentSeconds + sec));
+            const pct = (currentSeconds / totalSeconds) * 100;
+            document.getElementById('audioProgress').style.width = pct + '%';
+        }
+
+        function toggleSpeed() {
+            speedIdx = (speedIdx + 1) % speeds.length;
+            document.getElementById('speedBtn').innerText = speeds[speedIdx] + 'x';
+        }
+
+        function downloadCurrentAudio() {
+            downloadAudio(currentEpisode.title);
+        }
+
+        function downloadAudio(title) {
+            const toast = document.getElementById('appToast');
+            toast.innerText = `📥 Téléchargement de "${title}" démarré !`;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        }
+
+        function shareWa(title) {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent(`Écoutez cet enseignement de réveil spirituel : "${title}" sur Kanguka Style : `);
+            window.open(`https://api.whatsapp.com/send?text=${text}${url}`, '_blank');
+        }
+
+        // FILTER & SEARCH
+        function filterByTheme(theme, el) {
+            document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+            if (el) el.classList.add('active');
+
+            const filtered = theme === 'all' ? EPISODES : EPISODES.filter(e => e.theme === theme);
+            renderEpisodes(filtered, 'homeEpisodesList');
+            renderEpisodes(filtered, 'catalogEpisodesList');
+        }
+
+        function searchEpisodes() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = EPISODES.filter(e => e.title.toLowerCase().includes(query) || e.verse.toLowerCase().includes(query));
+            renderEpisodes(filtered, 'catalogEpisodesList');
+        }
+
+        // LIVE DEMO & CHAT
+        function startLiveDemo() {
+            const toast = document.getElementById('appToast');
+            toast.innerText = "🔴 Vous êtes connecté au direct !";
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        }
+
+        function sendLiveChatMessage() {
+            const input = document.getElementById('liveChatInput');
+            const txt = input.value.trim();
+            if (!txt) return;
+
+            const chatBox = document.getElementById('liveChatMessages');
+            const newMsg = document.createElement('div');
+            newMsg.className = 'chat-bubble';
+            newMsg.innerHTML = `<span class="chat-author">Moi (En direct) :</span> ${txt}`;
+            chatBox.appendChild(newMsg);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            input.value = '';
+        }
+
+        // PRAYER & TESTIMONY
+        function submitPrayer() {
+            const input = document.getElementById('prayerInput');
+            const txt = input.value.trim();
+            if (!txt) return;
+
+            const wall = document.getElementById('prayerWallList');
+            const card = document.createElement('div');
+            card.className = 'prayer-card';
+            card.innerHTML = `
+                <div class="prayer-header">
+                    <strong style="color:var(--gold-light); font-size:0.9rem;">Moi (Nouveau Sujet)</strong>
+                    <span style="font-size:0.75rem; color:var(--green);">À l'instant</span>
+                </div>
+                <p style="font-size:0.85rem; color:#e2e8f0;">« ${txt} »</p>
+                <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>1 Ont Prié (Amen)</span></button>
+            `;
+            wall.prepend(card);
+            input.value = '';
+
+            const toast = document.getElementById('appToast');
+            toast.innerText = "🙏 Votre intention de prière a été publiée avec succès !";
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        }
+
+        function submitTestimony() {
+            const input = document.getElementById('testiInput');
+            const txt = input.value.trim();
+            if (!txt) return;
+
+            const wall = document.getElementById('testimoniesWallList');
+            const card = document.createElement('div');
+            card.className = 'prayer-card';
+            card.innerHTML = `
+                <div class="prayer-header">
+                    <strong style="color:var(--gold-light); font-size:0.9rem;">Moi (Témoignage)</strong>
+                    <span style="font-size:0.75rem; color:var(--gold);">À l'instant</span>
+                </div>
+                <p style="font-size:0.85rem; color:#e2e8f0;">« ${txt} »</p>
+                <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>1 Gloire à Dieu</span></button>
+            `;
+            wall.prepend(card);
+            input.value = '';
+
+            const toast = document.getElementById('appToast');
+            toast.innerText = "✨ Gloire à Dieu ! Votre témoignage est en ligne !";
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        }
+
+        function likeAmen(btn) {
+            const span = btn.querySelector('span');
+            let count = parseInt(span.innerText) || 1;
+            count++;
+            span.innerText = `${count} Prières (Amen)`;
+            btn.style.background = 'var(--gold)';
+            btn.style.color = '#000';
+        }
+
+        // INITIALIZE
+        renderEpisodes(EPISODES, 'homeEpisodesList');
+        renderEpisodes(EPISODES, 'catalogEpisodesList');
     </script>
 </body>
 </html>
