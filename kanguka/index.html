@@ -1401,12 +1401,25 @@
     <!-- ================= TAB 6: PROFIL & ESPACE PASTEUR ================= -->
     <main id="tab-profile" class="tab-view">
         <div style="padding: 18px;">
-            <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:20px; text-align:center; margin-bottom:18px;">
-                <div style="width:70px; height:70px; border-radius:50%; background:var(--gold-gradient); display:flex; align-items:center; justify-content:center; margin:0 auto 12px auto; font-size:2rem; color:#070d1e;">
-                    <i class="fa-solid fa-user"></i>
+            <div style="background:linear-gradient(135deg, #122046 0%, #08122d 100%); border:1.5px solid var(--gold); border-radius:18px; padding:22px 18px; text-align:center; margin-bottom:18px; box-shadow: 0 8px 25px rgba(0,0,0,0.3);">
+                <!-- AVATAR / PHOTO DE PROFIL DU PASTEUR & UTILISATEUR -->
+                <div style="position:relative; width:90px; height:90px; margin:0 auto 12px auto; cursor:pointer;" onclick="triggerProfilePhotoUpload()" title="Touchez pour ajouter/changer votre vraie photo">
+                    <div id="userProfileAvatarDisplay" style="width:90px; height:90px; border-radius:50%; background:var(--gold-gradient); display:flex; align-items:center; justify-content:center; font-size:2.4rem; color:#070d1e; overflow:hidden; border:3px solid var(--gold); box-shadow:0 0 20px rgba(212,175,55,0.4);">
+                        <i class="fa-solid fa-user" id="userProfileIcon"></i>
+                    </div>
+                    <!-- Badge Caméra pour uploader la photo -->
+                    <div style="position:absolute; bottom:0; right:0; width:30px; height:30px; border-radius:50%; background:var(--gold); border:2px solid #070d1e; color:#070d1e; display:flex; align-items:center; justify-content:center; font-size:0.8rem; box-shadow:0 2px 6px rgba(0,0,0,0.5);">
+                        <i class="fa-solid fa-camera"></i>
+                    </div>
                 </div>
-                <h3 style="font-size:1.1rem; color:white;" id="userProfileRole">Espace Fidèle & Disciple</h3>
-                <p style="font-size:0.8rem; color:var(--blue-accent);">Communauté de Prière & Réveil</p>
+
+                <input type="file" id="profilePhotoFileInput" accept="image/*" style="display:none;" onchange="handleProfilePhotoUpload(event)">
+
+                <h3 style="font-size:1.25rem; color:white; font-weight:900; margin-bottom:2px;" id="userProfileNameDisplay">Mon Profil Spirituel</h3>
+                <p style="font-size:0.82rem; color:var(--gold-light); font-weight:600;" id="userProfileRole">Espace Fidèle & Disciple</p>
+                <button type="button" onclick="triggerProfilePhotoUpload()" style="margin-top:10px; background:rgba(255,255,255,0.08); border:1px solid var(--border-light); color:#cbd5e1; font-size:0.75rem; padding:6px 14px; border-radius:20px; cursor:pointer;">
+                    📸 Choisir ma Photo de Profil
+                </button>
             </div>
 
             <!-- ESPACE PASTEUR CONNECTÉ (PUBLICATION DE L'ÉMISSION DU JOUR & STUDIO) -->
@@ -2325,7 +2338,8 @@
             }
             localStorage.setItem('kanguka_user_name', name);
             syncAuthorInputs(name);
-            showToast(`✅ Nom "${name}" enregistré avec succès !`);
+            updateProfileAvatarUI();
+            showToast(`✅ Nom "${name}" enregistré et appliqué au profil et direct !`);
         }
 
         function syncAuthorInputs(name) {
@@ -2338,6 +2352,72 @@
             if (vAuthor) vAuthor.value = name;
             if (pAuthor) pAuthor.value = name;
             if (uAuthor) uAuthor.value = name;
+        }
+
+        // PROFILE PHOTO & PASTOR LIVE AVATAR
+        let savedProfilePhoto = localStorage.getItem('kanguka_profile_photo') || '';
+
+        function triggerProfilePhotoUpload() {
+            document.getElementById('profilePhotoFileInput').click();
+        }
+
+        function handleProfilePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                savedProfilePhoto = e.target.result;
+                try {
+                    localStorage.setItem('kanguka_profile_photo', savedProfilePhoto);
+                } catch(err) {
+                    console.log("Storage quota issue", err);
+                }
+                updateProfileAvatarUI();
+                showToast("📸 Photo de profil mise à jour et visible sur le Direct !");
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateProfileAvatarUI() {
+            const avatarProfile = document.getElementById('userProfileAvatarDisplay');
+            const avatarLive = document.getElementById('pastorAvatarLive');
+            const nameDisplay = document.getElementById('userProfileNameDisplay');
+            const roleDisplay = document.getElementById('userProfileRole');
+            const livePastorName = document.getElementById('livePastorName');
+            const savedName = localStorage.getItem('kanguka_user_name') || '';
+
+            // Update Avatar Image
+            if (savedProfilePhoto) {
+                if (avatarProfile) {
+                    avatarProfile.innerHTML = `<img src="${savedProfilePhoto}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
+                }
+                if (avatarLive) {
+                    avatarLive.innerHTML = `<img src="${savedProfilePhoto}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
+                }
+            } else {
+                if (avatarProfile) {
+                    avatarProfile.innerHTML = `<i class="fa-solid fa-user"></i>`;
+                }
+                if (avatarLive) {
+                    avatarLive.innerHTML = `<i class="fa-solid fa-dove"></i>`;
+                }
+            }
+
+            // Update Names in Profile & Live
+            if (isPastorLoggedIn) {
+                const pastorName = savedName ? (savedName.toLowerCase().startsWith('pasteur') ? savedName : 'Pasteur ' + savedName) : 'Pasteur Paul';
+                if (nameDisplay) nameDisplay.innerHTML = `<span style="color:var(--gold-light);">👑 ${pastorName}</span>`;
+                if (roleDisplay) roleDisplay.innerText = "Ministère & Prédication de Réveil";
+                if (livePastorName) livePastorName.innerText = pastorName.toUpperCase();
+            } else {
+                if (nameDisplay) nameDisplay.innerText = savedName || "Mon Profil Spirituel";
+                if (roleDisplay) roleDisplay.innerText = "Espace Fidèle & Disciple";
+                if (livePastorName) {
+                    const currentPastorName = savedName ? (savedName.toLowerCase().startsWith('pasteur') ? savedName.toUpperCase() : "PASTEUR " + savedName.toUpperCase()) : "MINISTÈRE DE RÉVEIL & PRIÈRE";
+                    livePastorName.innerText = currentPastorName;
+                }
+            }
         }
 
         function likeAmen(btn) {
@@ -2487,6 +2567,7 @@
         renderTestimonies();
         renderPrayers();
         checkPastorAuth();
+        updateProfileAvatarUI();
         updateDailyEpisodeUI();
         updateLiveUI();
     </script>
