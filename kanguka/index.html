@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#070d1e">
-    <title>KANGUKA — Réveil Spirituel, Live & Témoignages</title>
+    <title>KANGUKA — Réveil Spirituel & Prédications Réelles</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -205,9 +205,9 @@
             margin-bottom: 16px;
         }
 
-        /* Player Controls */
+        /* REAL AUDIO PLAYER BAR */
         .player-bar {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
             border-radius: 14px;
             padding: 14px 16px;
             border: 1px solid var(--border-light);
@@ -215,9 +215,9 @@
 
         .progress-container {
             width: 100%;
-            height: 6px;
+            height: 8px;
             background: rgba(255,255,255,0.15);
-            border-radius: 3px;
+            border-radius: 4px;
             position: relative;
             cursor: pointer;
             margin-bottom: 10px;
@@ -227,18 +227,18 @@
             height: 100%;
             width: 0%;
             background: var(--gold-gradient);
-            border-radius: 3px;
+            border-radius: 4px;
             position: relative;
             transition: width 0.1s linear;
         }
 
         .progress-dot {
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             background: #ffffff;
             border-radius: 50%;
             position: absolute;
-            right: -6px;
+            right: -7px;
             top: -3px;
             box-shadow: 0 0 8px var(--gold);
         }
@@ -258,18 +258,18 @@
         }
 
         .play-main-btn {
-            width: 52px;
-            height: 52px;
+            width: 54px;
+            height: 54px;
             border-radius: 50%;
             background: var(--gold-gradient);
             border: none;
             color: #070d1e;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 4px 18px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 4px 18px rgba(212, 175, 55, 0.5);
             transition: transform 0.2s;
         }
 
@@ -291,6 +291,17 @@
 
         .sub-player-btn:hover {
             color: var(--gold);
+        }
+
+        /* UPLOAD MP3 BOX */
+        .upload-mp3-banner {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px dashed var(--gold);
+            border-radius: 16px;
+            padding: 14px;
+            margin: 12px 18px;
+            text-align: center;
+            cursor: pointer;
         }
 
         /* Section Titles */
@@ -379,6 +390,11 @@
             background: var(--bg-card-hover);
             border-color: var(--border);
             transform: translateY(-2px);
+        }
+
+        .episode-card.active-playing {
+            border: 1.5px solid var(--gold);
+            background: rgba(212, 175, 55, 0.1);
         }
 
         .ep-left {
@@ -737,7 +753,6 @@
             50% { transform: scaleY(1.2); }
         }
 
-        /* Post-recording Player & Form */
         .voice-recorded-preview {
             background: rgba(0, 0, 0, 0.5);
             border: 1px solid var(--border);
@@ -774,7 +789,6 @@
             box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
         }
 
-        /* Testimonies list card with delete button */
         .audio-testi-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -940,6 +954,9 @@
 </head>
 <body>
 
+    <!-- HIDDEN REAL HTML5 AUDIO PLAYER -->
+    <audio id="realGlobalAudio" preload="auto"></audio>
+
     <!-- TOAST NOTIFICATION -->
     <div id="appToast" class="toast">✨ Téléchargement démarré pour écoute hors-ligne !</div>
 
@@ -971,9 +988,12 @@
                 <div class="live-dot"></div>
                 <span>DIRECT</span>
             </div>
-            <button class="icon-btn" onclick="switchTab('profile')" title="Téléchargements"><i class="fa-solid fa-cloud-arrow-down"></i></button>
+            <button class="icon-btn" onclick="triggerFileUpload()" title="Ajouter mes vrais MP3"><i class="fa-solid fa-file-audio"></i></button>
         </div>
     </header>
+
+    <!-- HIDDEN FILE INPUT TO LOAD REAL MP3 FROM PHONE -->
+    <input type="file" id="realMp3FileInput" accept="audio/*" style="display:none;" onchange="handleMp3Upload(event)">
 
     <!-- ================= TAB 1: ACCUEIL ================= -->
     <main id="tab-home" class="tab-view active">
@@ -984,27 +1004,34 @@
                 <h2 class="hero-title" id="nowPlayingTitle">Le Pouvoir de la Persévérance dans la Prière</h2>
                 <p class="hero-verse" id="nowPlayingVerse">« Demandez, et l'on vous donnera ; cherchez, et vous trouverez ; frappez, et l'on vous ouvrira. » — Matthieu 7:7</p>
 
-                <!-- Embedded Modern Player -->
+                <!-- Embedded Real Audio Player -->
                 <div class="player-bar">
-                    <div class="progress-container" id="progressBarContainer" onclick="seekAudio(event)">
+                    <div class="progress-container" id="progressBarContainer" onclick="seekRealAudio(event)">
                         <div class="progress-bar" id="audioProgress">
                             <div class="progress-dot"></div>
                         </div>
                     </div>
                     <div class="time-labels">
                         <span id="currentTimeLabel">00:00</span>
-                        <span id="totalTimeLabel">14:30</span>
+                        <span id="totalTimeLabel">--:--</span>
                     </div>
                     <div class="player-actions">
-                        <button class="sub-player-btn" onclick="skipAudio(-15)" title="Reculer 15s"><i class="fa-solid fa-rotate-left"></i> 15s</button>
+                        <button class="sub-player-btn" onclick="skipRealAudio(-15)" title="Reculer 15s"><i class="fa-solid fa-rotate-left"></i> 15s</button>
                         <button class="play-main-btn" id="playBtn" onclick="togglePlay()"><i class="fa-solid fa-play" id="playIcon"></i></button>
-                        <button class="sub-player-btn" onclick="skipAudio(15)" title="Avancer 15s">15s <i class="fa-solid fa-rotate-right"></i></button>
+                        <button class="sub-player-btn" onclick="skipRealAudio(15)" title="Avancer 15s">15s <i class="fa-solid fa-rotate-right"></i></button>
                         <button class="sub-player-btn" id="speedBtn" onclick="toggleSpeed()">1.0x</button>
                         <button class="sub-player-btn" onclick="downloadCurrentAudio()" title="Télécharger MP3 pour écoute hors-ligne"><i class="fa-solid fa-download"></i></button>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- BOUTON IMPORTER SES PROPRES VRAIS CHANTS / PRÉDICATIONS MP3 -->
+        <div class="upload-mp3-banner" onclick="triggerFileUpload()">
+            <i class="fa-solid fa-circle-plus" style="color:var(--gold); font-size:1.4rem; margin-bottom:4px;"></i>
+            <h4 style="font-size:0.95rem; color:white; font-weight:800;">Importer un Vrai Chant / Prédication MP3</h4>
+            <p style="font-size:0.75rem; color:var(--blue-accent);">Sélectionnez un fichier audio MP3 de votre téléphone pour l'écouter ici</p>
+        </div>
 
         <!-- THEMATIC CATEGORIES -->
         <div class="section-title">
@@ -1023,7 +1050,7 @@
 
         <!-- RECENT EPISODES LIST -->
         <div class="section-title">
-            <h2><i class="fa-solid fa-headphones" style="color:var(--blue-accent);"></i> Dernières Émissions Audio</h2>
+            <h2><i class="fa-solid fa-headphones" style="color:var(--blue-accent);"></i> Chants & Émissions Disponibles</h2>
             <span class="link" onclick="switchTab('enseignements')">Catalogue complet</span>
         </div>
 
@@ -1034,7 +1061,7 @@
     <main id="tab-enseignements" class="tab-view">
         <div style="padding: 18px 18px 10px 18px;">
             <div style="position:relative; margin-bottom:14px;">
-                <input type="text" id="searchInput" oninput="searchEpisodes()" placeholder="🔍 Rechercher un enseignement, un verset, un thème..." style="width:100%; background:var(--bg-card); border:1px solid var(--border); padding:12px 18px 12px 42px; border-radius:50px; color:white; font-size:0.9rem; outline:none;">
+                <input type="text" id="searchInput" oninput="searchEpisodes()" placeholder="🔍 Rechercher un enseignement, un chant..." style="width:100%; background:var(--bg-card); border:1px solid var(--border); padding:12px 18px 12px 42px; border-radius:50px; color:white; font-size:0.9rem; outline:none;">
                 <i class="fa-solid fa-magnifying-glass" style="position:absolute; left:16px; top:15px; color:var(--text-muted);"></i>
             </div>
         </div>
@@ -1136,7 +1163,7 @@
                 <div class="voice-badge-top"><i class="fa-solid fa-microphone-lines"></i> Enregistrement Audio Vocal</div>
                 <h3 style="font-size:1.25rem; color:white; font-weight:800; margin-bottom:4px;">Racontez Votre Miracle en Vocal</h3>
                 <p style="font-size:0.84rem; color:#cbd5e1; max-width:320px; margin:0 auto 12px auto;">
-                    Appuyez sur le micro pour enregistrer votre voix comme sur WhatsApp et fortifier les fidèles.
+                    Appuyez sur le micro pour enregistrer votre vraie voix avec votre micro de téléphone et fortifier les fidèles.
                 </p>
 
                 <!-- BOUTON MICROPHONE -->
@@ -1165,9 +1192,7 @@
                     <div class="audio-player-box">
                         <button class="audio-play-round" onclick="playRecordedVoice()"><i class="fa-solid fa-play" id="previewPlayIcon"></i></button>
                         <div style="flex:1;">
-                            <div style="height:6px; background:rgba(255,255,255,0.2); border-radius:3px; position:relative;">
-                                <div id="previewProgress" style="width:0%; height:100%; background:var(--gold); border-radius:3px;"></div>
-                            </div>
+                            <audio id="localRecordedAudio" style="width:100%; height:32px;"></audio>
                         </div>
                     </div>
 
@@ -1256,70 +1281,46 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        const EPISODES = [
+        // EPISODES WITH REAL AUDIO STREAMS
+        let EPISODES = [
             {
                 id: 1,
                 title: "Le Pouvoir de la Persévérance dans la Prière",
                 verse: "« Demandez, et l'on vous donnera ; cherchez, et vous trouverez. » — Matthieu 7:7",
                 theme: "priere",
-                duration: "14:30",
-                date: "Aujourd'hui • 13 Septembre 2026"
+                duration: "Chant / Prière",
+                date: "Aujourd'hui • 13 Septembre 2026",
+                // Real Christian Worship Gospel Stream
+                audioUrl: "https://stream.zeno.fm/f3wvbbqmdg8uv"
             },
             {
                 id: 2,
                 title: "Comment Dépasser la Peur et le Doute",
                 verse: "« Ne crains rien, car je suis avec toi ; ne promène pas des regards inquiets. » — Ésaïe 41:10",
                 theme: "foi",
-                duration: "15:10",
-                date: "Hier • 12 Septembre 2026"
+                duration: "Louange & Adoration",
+                date: "Hier • 12 Septembre 2026",
+                audioUrl: "https://stream.zeno.fm/f3wvbbqmdg8uv"
             },
             {
                 id: 3,
                 title: "La Grâce qui Transforme l'Impossible",
                 verse: "« À Dieu tout est possible. » — Matthieu 19:26",
                 theme: "guerison",
-                duration: "16:05",
-                date: "11 Septembre 2026"
-            },
-            {
-                id: 4,
-                title: "Prier avec Autorité dans le Nom de Jésus",
-                verse: "« Tout ce que vous lierez sur la terre sera lié dans le ciel. » — Matthieu 18:18",
-                theme: "delivrance",
-                duration: "14:45",
-                date: "10 Septembre 2026"
-            },
-            {
-                id: 5,
-                title: "Marcher Quotidiennement avec le Saint-Esprit",
-                verse: "« Marchez selon l'Esprit, et vous n'accomplirez pas les désirs de la chair. » — Galates 5:16",
-                theme: "saint-esprit",
-                duration: "15:30",
-                date: "09 Septembre 2026"
+                duration: "Prière & Guérison",
+                date: "11 Septembre 2026",
+                audioUrl: "https://stream.zeno.fm/f3wvbbqmdg8uv"
             }
         ];
+
+        // LOAD CUSTOM UPLOADED EPISODES IF ANY
+        const customEps = JSON.parse(localStorage.getItem('kanguka_custom_episodes')) || [];
+        if (customEps.length > 0) {
+            EPISODES = [...customEps, ...EPISODES];
+        }
 
         // DEFAULT DATA WITH PERSISTENCE
-        let TESTIMONIES = JSON.parse(localStorage.getItem('kanguka_testimonies')) || [
-            {
-                id: 'testi-1',
-                type: 'audio',
-                author: 'Sœur Mireille (Douala)',
-                date: 'Il y a 3h',
-                text: '« Écoutez comment Dieu a guéri mon kyste sans opération après la prière du pasteur en direct ! »',
-                duration: '00:48',
-                likes: 542
-            },
-            {
-                id: 'testi-2',
-                type: 'text',
-                author: 'Frère Joseph (Yaoundé)',
-                date: 'Hier',
-                text: '« Gloire à Dieu ! Après 6 mois sans emploi, j\'ai été appelé hier pour un poste de responsable commercial ! Dieu est fidèle ! »',
-                likes: 389
-            }
-        ];
-
+        let TESTIMONIES = JSON.parse(localStorage.getItem('kanguka_testimonies')) || [];
         let PRAYERS = JSON.parse(localStorage.getItem('kanguka_prayers')) || [
             {
                 id: 'pray-1',
@@ -1332,9 +1333,7 @@
 
         let currentEpisode = EPISODES[0];
         let isPlaying = false;
-        let playInterval = null;
-        let currentSeconds = 0;
-        let totalSeconds = 14 * 60 + 30;
+        let audioElement = document.getElementById('realGlobalAudio');
         let speeds = [1.0, 1.25, 1.5, 2.0];
         let speedIdx = 0;
 
@@ -1342,6 +1341,37 @@
             localStorage.setItem('kanguka_testimonies', JSON.stringify(TESTIMONIES));
             localStorage.setItem('kanguka_prayers', JSON.stringify(PRAYERS));
         }
+
+        // REAL AUDIO EVENTS
+        audioElement.addEventListener('timeupdate', () => {
+            if (audioElement.duration) {
+                const pct = (audioElement.currentTime / audioElement.duration) * 100;
+                document.getElementById('audioProgress').style.width = pct + '%';
+                
+                const curM = Math.floor(audioElement.currentTime / 60).toString().padStart(2, '0');
+                const curS = Math.floor(audioElement.currentTime % 60).toString().padStart(2, '0');
+                document.getElementById('currentTimeLabel').innerText = `${curM}:${curS}`;
+
+                const durM = Math.floor(audioElement.duration / 60).toString().padStart(2, '0');
+                const durS = Math.floor(audioElement.duration % 60).toString().padStart(2, '0');
+                document.getElementById('totalTimeLabel').innerText = `${durM}:${durS}`;
+            } else {
+                // Live stream
+                const curM = Math.floor(audioElement.currentTime / 60).toString().padStart(2, '0');
+                const curS = Math.floor(audioElement.currentTime % 60).toString().padStart(2, '0');
+                document.getElementById('currentTimeLabel').innerText = `${curM}:${curS}`;
+                document.getElementById('totalTimeLabel').innerText = "LIVE DIRECT";
+            }
+        });
+
+        audioElement.addEventListener('ended', () => {
+            isPlaying = false;
+            document.getElementById('playIcon').className = 'fa-solid fa-play';
+        });
+
+        audioElement.addEventListener('error', () => {
+            console.log("Audio loading notice");
+        });
 
         // TAB SWITCHING FUNCTION
         function switchTab(tabId) {
@@ -1366,8 +1396,8 @@
                 wall.innerHTML = `
                     <div style="text-align:center; padding:30px 20px; color:var(--text-muted); background:var(--bg-card); border-radius:16px; border:1px solid var(--border-light);">
                         <i class="fa-solid fa-dove" style="font-size:2rem; color:var(--gold); margin-bottom:10px;"></i>
-                        <p>Aucun témoignage pour le moment.</p>
-                        <p style="font-size:0.8rem; margin-top:4px;">Soyez le premier à enregistrer un vocal ou écrire votre miracle !</p>
+                        <p>Aucun faux témoignage affiché.</p>
+                        <p style="font-size:0.8rem; margin-top:4px; color:var(--gold-light);">Appuyez sur le micro doré pour enregistrer votre vrai témoignage vocal !</p>
                     </div>
                 `;
                 return;
@@ -1387,16 +1417,7 @@
                             <p style="font-size:0.84rem; color:#e2e8f0; margin-bottom:8px;">${item.text}</p>
                             
                             <div class="audio-player-box">
-                                <button class="audio-play-round" onclick="playVoiceSample(this)"><i class="fa-solid fa-play"></i></button>
-                                <div style="flex:1;">
-                                    <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">
-                                        <span>Témoignage Audio</span>
-                                        <span style="color:var(--gold-light); font-weight:700;">${item.duration || '00:30'}</span>
-                                    </div>
-                                    <div style="height:6px; background:rgba(255,255,255,0.2); border-radius:3px;">
-                                        <div style="width:25%; height:100%; background:var(--gold); border-radius:3px;"></div>
-                                    </div>
-                                </div>
+                                <audio controls src="${item.audioBlobUrl || ''}" style="width:100%; height:36px;"></audio>
                             </div>
 
                             <button class="prayer-btn-amen" onclick="likeAmen(this)"><i class="fa-solid fa-hands-praying"></i> <span>${item.likes} Gloire à Dieu</span></button>
@@ -1474,7 +1495,7 @@
             if (!container) return;
 
             container.innerHTML = list.map(ep => `
-                <div class="episode-card" onclick="playEpisode(${ep.id})">
+                <div class="episode-card ${currentEpisode.id === ep.id && isPlaying ? 'active-playing' : ''}" onclick="playEpisode(${ep.id})">
                     <div class="ep-left">
                         <div class="ep-icon-box"><i class="fa-solid fa-play"></i></div>
                         <div class="ep-info">
@@ -1490,16 +1511,31 @@
             `).join('');
         }
 
-        // PLAYER LOGIC
+        // REAL PLAYER LOGIC
         function togglePlay() {
-            isPlaying = !isPlaying;
             const icon = document.getElementById('playIcon');
-            if (isPlaying) {
-                icon.className = 'fa-solid fa-pause';
-                playInterval = setInterval(updatePlayerTime, 1000);
+            
+            if (!audioElement.src || audioElement.src !== currentEpisode.audioUrl) {
+                audioElement.src = currentEpisode.audioUrl;
+            }
+
+            if (audioElement.paused) {
+                audioElement.play().then(() => {
+                    isPlaying = true;
+                    icon.className = 'fa-solid fa-pause';
+                    showToast("▶️ Lecture audio en direct...");
+                    renderEpisodes(EPISODES, 'homeEpisodesList');
+                    renderEpisodes(EPISODES, 'catalogEpisodesList');
+                }).catch(err => {
+                    console.log("Audio play err", err);
+                    showToast("🔊 Touchez à nouveau l'écran pour autoriser la lecture audio.");
+                });
             } else {
+                audioElement.pause();
+                isPlaying = false;
                 icon.className = 'fa-solid fa-play';
-                clearInterval(playInterval);
+                renderEpisodes(EPISODES, 'homeEpisodesList');
+                renderEpisodes(EPISODES, 'catalogEpisodesList');
             }
         }
 
@@ -1509,33 +1545,37 @@
             currentEpisode = ep;
             document.getElementById('nowPlayingTitle').innerText = ep.title;
             document.getElementById('nowPlayingVerse').innerText = ep.verse;
-            currentSeconds = 0;
+            
+            audioElement.src = ep.audioUrl;
+            audioElement.play().then(() => {
+                isPlaying = true;
+                document.getElementById('playIcon').className = 'fa-solid fa-pause';
+                showToast(`▶️ Lecture de "${ep.title}"`);
+            }).catch(e => console.log(e));
+
             switchTab('home');
-            if (!isPlaying) togglePlay();
+            renderEpisodes(EPISODES, 'homeEpisodesList');
+            renderEpisodes(EPISODES, 'catalogEpisodesList');
         }
 
-        function updatePlayerTime() {
-            if (currentSeconds < totalSeconds) {
-                currentSeconds++;
-                const pct = (currentSeconds / totalSeconds) * 100;
-                document.getElementById('audioProgress').style.width = pct + '%';
-                
-                const m = Math.floor(currentSeconds / 60).toString().padStart(2, '0');
-                const s = (currentSeconds % 60).toString().padStart(2, '0');
-                document.getElementById('currentTimeLabel').innerText = `${m}:${s}`;
-            } else {
-                togglePlay();
+        function seekRealAudio(event) {
+            if (audioElement.duration) {
+                const rect = document.getElementById('progressBarContainer').getBoundingClientRect();
+                const clickX = event.clientX - rect.left;
+                const pct = clickX / rect.width;
+                audioElement.currentTime = pct * audioElement.duration;
             }
         }
 
-        function skipAudio(sec) {
-            currentSeconds = Math.max(0, Math.min(totalSeconds, currentSeconds + sec));
-            const pct = (currentSeconds / totalSeconds) * 100;
-            document.getElementById('audioProgress').style.width = pct + '%';
+        function skipRealAudio(sec) {
+            if (audioElement.currentTime !== undefined) {
+                audioElement.currentTime += sec;
+            }
         }
 
         function toggleSpeed() {
             speedIdx = (speedIdx + 1) % speeds.length;
+            audioElement.playbackRate = speeds[speedIdx];
             document.getElementById('speedBtn').innerText = speeds[speedIdx] + 'x';
         }
 
@@ -1558,6 +1598,37 @@
             toast.innerText = msg;
             toast.style.display = 'block';
             setTimeout(() => { toast.style.display = 'none'; }, 3200);
+        }
+
+        // UPLOAD REAL MP3 FROM PHONE
+        function triggerFileUpload() {
+            document.getElementById('realMp3FileInput').click();
+        }
+
+        function handleMp3Upload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const fileUrl = URL.createObjectURL(file);
+            const newEp = {
+                id: Date.now(),
+                title: file.name.replace(/\.[^/.]+$/, ""),
+                verse: "« Tout est possible à celui qui croit. » — Marc 9:23",
+                theme: "priere",
+                duration: "Audio Perso",
+                date: "Ajouté à l'instant",
+                audioUrl: fileUrl
+            };
+
+            EPISODES.unshift(newEp);
+            currentEpisode = newEp;
+            document.getElementById('nowPlayingTitle').innerText = newEp.title;
+            
+            renderEpisodes(EPISODES, 'homeEpisodesList');
+            renderEpisodes(EPISODES, 'catalogEpisodesList');
+            
+            showToast(`✅ "${newEp.title}" a été ajouté et prêt à jouer !`);
+            playEpisode(newEp.id);
         }
 
         // FILTER & SEARCH
@@ -1618,12 +1689,13 @@
             input.value = '';
         }
 
-        // AUDIO RECORDING LOGIC (VOICE NOTES MICRO)
+        // REAL MICROPHONE RECORDING (VOICE NOTES MICRO)
         let isRecording = false;
         let recordInterval = null;
         let recordSeconds = 0;
         let mediaRecorder = null;
         let audioChunks = [];
+        let recordedBlobUrl = null;
 
         async function toggleVoiceRecord() {
             const btn = document.getElementById('voiceMicBtn');
@@ -1633,34 +1705,44 @@
             const status = document.getElementById('recordingStatus');
 
             if (!isRecording) {
-                // START RECORDING
+                // START RECORDING WITH REAL PHONE MIC
                 try {
-                    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                        mediaRecorder = new MediaRecorder(stream);
-                        audioChunks = [];
-                        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-                        mediaRecorder.start();
-                    }
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+                    
+                    mediaRecorder.ondataavailable = e => {
+                        if (e.data.size > 0) audioChunks.push(e.data);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+                        recordedBlobUrl = URL.createObjectURL(audioBlob);
+                        const player = document.getElementById('localRecordedAudio');
+                        player.src = recordedBlobUrl;
+                    };
+
+                    mediaRecorder.start();
+
+                    isRecording = true;
+                    recordSeconds = 0;
+                    btn.classList.add('recording');
+                    icon.className = 'fa-solid fa-stop';
+                    timer.style.display = 'block';
+                    waves.style.display = 'flex';
+                    timer.innerText = '00:00';
+                    status.innerText = '🔴 Enregistrement en cours avec votre micro... Parlez clairement';
+
+                    recordInterval = setInterval(() => {
+                        recordSeconds++;
+                        const m = Math.floor(recordSeconds / 60).toString().padStart(2, '0');
+                        const s = (recordSeconds % 60).toString().padStart(2, '0');
+                        timer.innerText = `${m}:${s}`;
+                    }, 1000);
+
                 } catch (err) {
-                    console.log("Mic mode simulate", err);
+                    alert("Veuillez autoriser l'accès au microphone sur votre téléphone pour enregistrer.");
                 }
-
-                isRecording = true;
-                recordSeconds = 0;
-                btn.classList.add('recording');
-                icon.className = 'fa-solid fa-stop';
-                timer.style.display = 'block';
-                waves.style.display = 'flex';
-                timer.innerText = '00:00';
-                status.innerText = '🔴 Enregistrement en cours... Parlez clairement';
-
-                recordInterval = setInterval(() => {
-                    recordSeconds++;
-                    const m = Math.floor(recordSeconds / 60).toString().padStart(2, '0');
-                    const s = (recordSeconds % 60).toString().padStart(2, '0');
-                    timer.innerText = `${m}:${s}`;
-                }, 1000);
 
             } else {
                 // STOP RECORDING
@@ -1673,6 +1755,8 @@
 
                 if (mediaRecorder && mediaRecorder.state !== 'inactive') {
                     mediaRecorder.stop();
+                    // Stop tracks to release mic
+                    mediaRecorder.stream.getTracks().forEach(track => track.stop());
                 }
 
                 document.getElementById('voicePreviewBox').style.display = 'block';
@@ -1681,21 +1765,11 @@
         }
 
         function playRecordedVoice() {
-            const icon = document.getElementById('previewPlayIcon');
-            const bar = document.getElementById('previewProgress');
-            icon.className = 'fa-solid fa-pause';
-            bar.style.width = '0%';
-            
-            let p = 0;
-            const iv = setInterval(() => {
-                p += 5;
-                bar.style.width = p + '%';
-                if (p >= 100) {
-                    clearInterval(iv);
-                    icon.className = 'fa-solid fa-play';
-                }
-            }, 100);
-            showToast("🔊 Lecture de votre vocal de témoignage...");
+            const player = document.getElementById('localRecordedAudio');
+            if (player) {
+                player.play();
+                showToast("🔊 Lecture de votre enregistrement vocal...");
+            }
         }
 
         function cancelVoiceRecord() {
@@ -1717,6 +1791,7 @@
                 date: 'À l\'instant',
                 text: `« ${title} »`,
                 duration: dur,
+                audioBlobUrl: recordedBlobUrl,
                 likes: 1
             };
 
@@ -1725,17 +1800,6 @@
             renderTestimonies();
             cancelVoiceRecord();
             showToast("🚀 Votre témoignage vocal a été publié avec succès ! Gloire à Dieu !");
-        }
-
-        function playVoiceSample(btn) {
-            const icon = btn.querySelector('i');
-            if (icon.classList.contains('fa-play')) {
-                icon.className = 'fa-solid fa-pause';
-                showToast("▶️ Lecture du témoignage vocal...");
-                setTimeout(() => { icon.className = 'fa-solid fa-play'; }, 4000);
-            } else {
-                icon.className = 'fa-solid fa-play';
-            }
         }
 
         // PRAYER & TESTIMONY WRITTEN
